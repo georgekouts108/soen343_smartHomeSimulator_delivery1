@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane alignment="center" hgap="10" prefHeight="450.0" prefWidth="800.0" vgap="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
+   <children>
+      <Button fx:id="signInButton" mnemonicParsing="false" onAction="#signIn" text="Sign In" translateX="250.0" translateY="130.0" GridPane.rowIndex="1" />
+      <TextField fx:id="enterUsername" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0" translateX="155.0" translateY="-50.0" GridPane.rowIndex="1" />
+      <PasswordField maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="250.0" translateX="155.0" translateY="80.0" GridPane.rowIndex="1" />
+      <Label text="USERNAME" translateX="240.0" translateY="-80.0" GridPane.rowIndex="1" />
+      <Label text="PASSWORD" translateX="240.0" translateY="50.0" GridPane.rowIndex="1" />
+      <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="Welcome to Smart Home Simulator!" textAlignment="CENTER" textFill="#fc0505" translateY="-175.0" GridPane.rowIndex="1">
+         <font>
+            <Font name="Dom Casual" size="47.0" />
+         </font>
+      </Label>
+   </children>
+</GridPane>

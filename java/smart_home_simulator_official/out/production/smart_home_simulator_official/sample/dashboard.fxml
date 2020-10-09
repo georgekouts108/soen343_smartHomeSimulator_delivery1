@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="680.0" opacity="0.95" stroke="BLACK" strokeType="INSIDE" translateX="-580.0" width="110.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SIMULATION" translateX="-580.0" translateY="-320.0">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Text>
+      <ToggleButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="45.0" prefWidth="75.0" text="ON" translateX="-580.0" translateY="-280.0">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </ToggleButton>
+      <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="55.0" prefWidth="100.0" text="Modify Sim.&#10;Context" textAlignment="CENTER" translateX="-580.0" translateY="-220.0" />
+      <ImageView fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true" translateX="-580.0" translateY="-100.0">
+         <image>
+            <Image url="@../../../soen343_project/static/images/people.jpg" />
+         </image>
+      </ImageView>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Current user:" translateX="-580.0" translateY="-150.0" />
+      <Text fx:id="locationText" strokeType="OUTSIDE" strokeWidth="0.0" text="Location:" translateX="-580.0" />
+      <Hyperlink fx:id="profileLink" text="Parent" textFill="#cd3f3f" translateX="-580.0" translateY="-50.0" />
+      <Hyperlink text="Kitchen" textFill="#e10c0c" translateX="-580.0" translateY="30.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Outisde&#10;Temperature:&#10;&#10;15 C" textAlignment="CENTER" translateX="-580.0" translateY="100.0">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Text>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fri Sep 18 2020&#10;10:38:20&#10;" textAlignment="CENTER" translateX="-580.0" translateY="200.0" />
+      <TextArea maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="1100.0" translateX="50.0" translateY="275.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Output console" translateY="210.0" />
+      <ImageView fitHeight="400.0" fitWidth="700.0" pickOnBounds="true" preserveRatio="true" translateX="250.0" translateY="-100.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="House view" translateX="240.0" translateY="130.0" />
+      <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="400.0" tabClosingPolicy="UNAVAILABLE" translateX="-310.0" translateY="-90.0">
+        <tabs>
+          <Tab fx:id="shsTab" text="SHS" />
+          <Tab fx:id="shcTab" text="SHC" />
+           <Tab fx:id="shpTab" text="SHP" />
+           <Tab fx:id="shhTab" text="SHH" />
+        </tabs>
+      </TabPane>
+   </children>
+</StackPane>
