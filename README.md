@@ -43,7 +43,11 @@ For IntelliJ IDEA:
 4) Choose the directory “lib” within the in soen343_project/java/javaFX/javafx-sdk-15 
 5) Click on “Apply” and then “OK”. Close the Project Structure window.
 6) Click on the dropdown next to the “Build Project” hammer icon, and select “Edit Configurations”
-7) In the “Configuration” tab, expand the text field “VM options:” and paste the following: --module-path “” --add-modules javafx.controls,javafx.fxml
+7) In the “Configuration” tab, expand the text field “VM options:” and paste the following: 
+   
+     --module-path “” --add-modules javafx.controls,javafx.fxml
+     
    Within the quotations (keep the quotation marks), paste the path of the “lib” directory in soen343_project/java/javaFX/javafx-sdk-15 
    NOTE: make sure that you add “/lib” at the end of the path*
+   
 8) Select “Apply” and “OK”. The JavaFX project should now compile without error.
