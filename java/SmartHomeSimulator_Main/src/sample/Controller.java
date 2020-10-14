@@ -1,6 +1,7 @@
 package sample;
 import house.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Line;
 import utilities.*;
 
 import javafx.collections.FXCollections;
@@ -40,66 +41,306 @@ public class Controller {
                 break;
             }
         }
+        String stageTitle = "Smart Home Simulator -- logged in as \""+userProfile.getType().toUpperCase()+"\"";
+        if (userProfile.isAdmin()) {stageTitle+=" (ADMIN)";}
+        Main.main_stage.setTitle(stageTitle);
 
-        Main.main_stage.setTitle("Smart Home Simulator -- logged in as \""+userProfile.getType().toUpperCase()+"\"");
+        if (Main.currentActiveProfile != null) {
+            Main.currentActiveProfile.setLoggedIn(false);
+        }
+
         Main.currentActiveProfile = userProfile;
         Main.main_stage.setScene(Main.dashboardScene);
     }
 
     public static void returnToProfileSelectionPage() {
         Main.profileBox = new Stage();
+        Main.profileBox.setResizable(false);
         Main.profileBox.initModality(Modality.APPLICATION_MODAL);
         Main.profileBox.setTitle("Manage Profiles");
         Main.profileBox.setWidth(600);
         Main.profileBox.setHeight(600);
-
         Main.transformProfileSelectionPageScene();
-
-//        Button closeButton = new Button("Close");
-//        closeButton.setTranslateX(150); closeButton.setTranslateY(350);
-//        closeButton.setOnAction(e->Main.profileBox.close());
-//        Main.profileSelection.getChildren().add(closeButton);
-
-
         Main.profileBox.setScene(Main.profileScene);
         Main.profileBox.showAndWait();
-
-        //////////////////////
-
-
-//        for (int prof = 0; prof < Main.profiles.length; prof++) {
-//            if (Main.profiles[prof].getProfileID()==Main.currentActiveProfile.getProfileID()) {
-//                Main.profiles[prof].setLoggedIn(false);
-//                Main.currentLocation = null;
-//                break;
-//            }
-//        }
-//
-//        Main.currentActiveProfile = null;
-//        Main.stage.setScene(Main.profileScene);
     }
     /**SCENE-SWITCHING METHODS END */
 
     /**DASHBOARD METHODS*/
     public static void startSimulation(ToggleButton t, Button b, TextArea ta, TabPane tab) {
-
-        if (!t.isSelected()) {
-            ta.setDisable(true);
-            b.setDisable(true);
-            tab.setDisable(true);
-            Main.simulationIsOn = false;
-        }
-        else {
-            b.setDisable(false);
-            ta.setDisable(false);
-            tab.setDisable(false);
-            Main.simulationIsOn = true;
-        }
+        if (!t.isSelected()) { t.setText("ON"); ta.setDisable(true); b.setDisable(true); tab.setDisable(true); Main.simulationIsOn = false; }
+        else { t.setText("OFF"); b.setDisable(false); ta.setDisable(false); tab.setDisable(false); Main.simulationIsOn = true; }
     }
 
-    /**TODO: implement the frontend and backend for the Edit Context button
-     * todo: see the "Context of the simulation" section in the grading scheme for its functions
-     * */
+    public static void editContext() {
+        Main.editContextStage = new Stage(); Main.editContextStage.setResizable(false);
+        Main.editContextStage.initModality(Modality.APPLICATION_MODAL); Main.editContextStage.setTitle("Edit Simulation Context");
+        Main.editContextStage.setWidth(650); Main.editContextStage.setHeight(650);
+        generateEditContextScene();
+        Main.editContextStage.setScene(Main.editContextScene);
+        Main.editContextStage.showAndWait();
+    }
+
+    public static void generateEditContextScene() {
+
+            DatePicker datePicker = new DatePicker(); datePicker.setPromptText("select date...");
+            datePicker.setTranslateX(80); datePicker.setTranslateY(30);
+
+            Label datePickerLabel = new Label("Set date:"); datePickerLabel.setTranslateX(20);
+            datePickerLabel.setTranslateY(30);
+
+            Label timePickerLabel = new Label("Set time:"); timePickerLabel.setTranslateX(20);
+            timePickerLabel.setTranslateY(60);
+
+            TextField hourField = new TextField(); hourField.setPrefHeight(30); hourField.setPrefWidth(60);
+            hourField.setTranslateX(100); hourField.setTranslateY(60); hourField.setPromptText("00-23");
+
+            TextField minuteField = new TextField(); minuteField.setPrefHeight(30); minuteField.setPrefWidth(60);
+            minuteField.setTranslateX(180); minuteField.setTranslateY(60); minuteField.setPromptText("00-59");
+
+            Button confirmDTbutton = new Button("Confirm\nDate &\nTime"); confirmDTbutton.setTranslateX(300);
+            confirmDTbutton.setTranslateY(30);
+
+            Main.editContextLayout.getChildren().addAll(datePicker, datePickerLabel, timePickerLabel, hourField,
+                    minuteField, confirmDTbutton);
+
+            Line line1 = new Line(); line1.setStartX(0); line1.setEndX(650); line1.setTranslateY(100);
+            Main.editContextLayout.getChildren().add(line1);
+
+            Line line2 = new Line(); line2.setStartY(0); line2.setEndY(100);
+            line2.setTranslateX(400); Main.editContextLayout.getChildren().add(line2);
+
+            Label temperatureLabel = new Label("Modify\nOutdoor Temperature"); temperatureLabel.setTranslateX(500);
+            temperatureLabel.setTranslateY(20); Main.editContextLayout.getChildren().add(temperatureLabel);
+
+            TextField tempText = new TextField(); tempText.setPrefHeight(30); tempText.setPrefWidth(60);
+            tempText.setTranslateX(450); tempText.setTranslateY(60); tempText.setPromptText("Temp");
+            Main.editContextLayout.getChildren().add(tempText);
+
+            Button tempButton = new Button("Confirm"); tempButton.setTranslateX(540); tempButton.setTranslateY(60);
+            Main.editContextLayout.getChildren().add(tempButton);
+
+            Label roomsLabel = new Label("Click on a room you would like to move to, or change a room's number of occupants");
+            roomsLabel.setTranslateY(105); Main.editContextLayout.getChildren().add(roomsLabel);
+
+            int transY = 120;
+            for (int r = 0; r < Main.householdLocations.length; r++) {
+                Label l1 = new Label("# of people: " + Main.householdLocations[r].getNumberOfPeopleInside());
+                l1.setTranslateX(120); l1.setTranslateY(transY+5); l1.setId("roomID_"+Main.householdLocations[r].getRoomID());
+                int fr = r;
+                Hyperlink hyp = new Hyperlink(Main.householdLocations[r].getName());
+                hyp.setTranslateX(20);
+                hyp.setTranslateY(transY);
+                hyp.setOnAction(e -> {
+
+                    // change the label of the number of people in the origin and destination rooms
+                    Main.householdLocations[fr].setNumberOfPeopleInside(Main.householdLocations[fr].getNumberOfPeopleInside() + 1);
+
+                    try {
+                        Main.currentLocation.setNumberOfPeopleInside(Main.currentLocation.getNumberOfPeopleInside() - 1);
+                    }catch(Exception excep){}
+
+
+                    for (int j = 0; j < Main.editContextLayout.getChildren().size(); j++) {
+                        try {
+                            if (Integer.parseInt(Main.editContextLayout.getChildren().get(j).getId().substring(7)) == Main.currentLocation.getRoomID()) {
+                                Label label = (Label) Main.editContextLayout.getChildren().get(j);
+                                label.setText("# of people: "+Main.currentLocation.getNumberOfPeopleInside());
+                                Main.editContextLayout.getChildren().set(j, label);
+                                break;
+                            }
+                        } catch(Exception ex){}
+                    }
+                    for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
+                        try {
+                            if (Main.editContextLayout.getChildren().get(i).equals(l1)) {
+                                Label label = (Label) Main.editContextLayout.getChildren().get(i);
+                                label.setText("# of people: "+Main.householdLocations[fr].getNumberOfPeopleInside());
+                                Main.editContextLayout.getChildren().set(i, label);
+                                break;
+                            }
+                        } catch(Exception ex){}
+                    }
+                    changeLocation(Main.householdLocations[fr]);
+                });
+                Main.editContextLayout.getChildren().addAll(hyp, l1);
+                transY += 20;
+            }
+            Line line3 = new Line(); line3.setStartX(0); line3.setEndX(650); line3.setTranslateY(350);
+            Main.editContextLayout.getChildren().add(line3);
+
+            Label windowsLabel = new Label("Window-Blocking: Check a box " +
+                    "(or many) whose windows you would like to prevent from opening\n" +
+                    "or closing"); windowsLabel.setTranslateY(360); Main.editContextLayout.getChildren().add(windowsLabel);
+
+            transY = 400;
+            int transX = 20;
+            for (int r = 0; r < Main.householdLocations.length; r++) {
+
+                /*** TODO: inner for loop has "w < Main.householdLocations[r].getWindowCollection().length" */
+                for (int w = 0; w < 5; w++) {
+                    CheckBox checkBox = new CheckBox("Window #"+w);
+                    checkBox.setTranslateX(transX);
+                    checkBox.setTranslateY(transY);
+                    Main.editContextLayout.getChildren().add(checkBox);
+                    if (w <= 6) {
+                        transY += 20;
+                    }
+                    else {
+                        transY = 310;
+                        transX = 80;
+                    }
+                }
+            }
+            Button closeButton = new Button("Close"); closeButton.setTranslateX(325); closeButton.setTranslateY(600);
+            closeButton.setOnAction(e -> Main.editContextStage.close()); Main.editContextLayout.getChildren().add(closeButton);
+
+            Button moreButton = new Button("More..."); moreButton.setTranslateX(400); moreButton.setTranslateY(600);
+            moreButton.setOnAction(e -> {
+                generateEditContextScene2(); // will design Main.editContextLayout2
+                Main.editContextStage.setScene(Main.editContextScene2);
+            });
+            Main.editContextLayout.getChildren().add(moreButton);
+    }
+
+    /**
+     * Build the user interface for modifying the locations of house inhabitants.
+     */
+    public static void generateEditContextScene2() {
+        Label movepplLabel = new Label("Select one non-active Profile, and one Room where you would like to place that user");
+        movepplLabel.setTranslateY(10); Main.editContextLayout2.getChildren().add(movepplLabel);
+
+        Label profilelistLabel = new Label("PROFILES"); profilelistLabel.setTranslateY(60); profilelistLabel.setTranslateX(100);
+        Main.editContextLayout2.getChildren().add(profilelistLabel);
+
+        Label roomlistLabel = new Label("ROOMS"); roomlistLabel.setTranslateY(60); roomlistLabel.setTranslateX(400);
+        Main.editContextLayout2.getChildren().add(roomlistLabel);
+
+        int transY = 80;
+        CheckBox[] profileCheckboxes = null;
+        if (Main.profiles != null) {
+            int index = 0;
+            profileCheckboxes = new CheckBox[Main.profiles.length];
+            for (int p = 0; p < Main.profiles.length; p++) {
+                if (!Main.profiles[p].isLoggedIn()) {
+                    CheckBox checkBox = new CheckBox(Main.profiles[p].getProfileID()+"--"+Main.profiles[p].getType());
+                    checkBox.setTranslateY(transY); checkBox.setTranslateX(100); checkBox.setId("checkboxProfile"+Main.profiles[p].getProfileID());
+                    profileCheckboxes[index++] = checkBox;
+                    Main.editContextLayout2.getChildren().add(checkBox);
+
+                    Label currentRoomLabel = new Label();
+                    currentRoomLabel.setId("currentRoomOfProfile"+Main.profiles[p].getProfileID());
+                    if (Main.profiles[p].getCurrentLocation() != null) {
+                        currentRoomLabel.setText(Main.profiles[p].getCurrentLocation().getName());
+                    }
+                    else {
+                        currentRoomLabel.setText("Null room");
+                    }
+                    currentRoomLabel.setTranslateY(transY); currentRoomLabel.setTranslateX(250);
+                    Main.editContextLayout2.getChildren().add(currentRoomLabel);
+                }
+                transY += 20;
+            }
+        }
+        transY = 80;
+        CheckBox[] roomCheckboxes = new CheckBox[Main.householdLocations.length];
+        for (int r = 0; r < Main.householdLocations.length; r++) {
+            CheckBox checkBox = new CheckBox(Main.householdLocations[r].getName());
+            checkBox.setTranslateY(transY); checkBox.setTranslateX(400); checkBox.setId("checkboxRoom"+Main.householdLocations[r].getRoomID());
+            roomCheckboxes[r] = checkBox;
+            Main.editContextLayout2.getChildren().add(checkBox);
+            transY += 20;
+        }
+
+        Button confirmButton2 = new Button("Relocate Profile"); confirmButton2.setTranslateX(300); confirmButton2.setTranslateY(400);
+        CheckBox[] finalProfileCheckboxes = profileCheckboxes;
+        confirmButton2.setOnAction(e -> relocateProfile(finalProfileCheckboxes, roomCheckboxes));
+        Main.editContextLayout2.getChildren().add(confirmButton2);
+
+        Button closeButton = new Button("Close"); closeButton.setTranslateX(325); closeButton.setTranslateY(600);
+        closeButton.setOnAction(e -> Main.editContextStage.close()); Main.editContextLayout2.getChildren().add(closeButton);
+
+        Button gobackButton = new Button("Go Back"); gobackButton.setTranslateX(225); gobackButton.setTranslateY(600);
+        gobackButton.setOnAction(e -> Main.editContextStage.setScene(Main.editContextScene));
+        Main.editContextLayout2.getChildren().add(gobackButton);
+    }
+
+    /**
+     * Place house inhabitants (created Profiles) in specific rooms, or outside home
+     * @param profileBoxes
+     * @param roomBoxes
+     */
+    public static void relocateProfile(CheckBox[] profileBoxes, CheckBox[] roomBoxes) {
+
+        // find the profile checkbox that was selected
+        for (int pcb = 0; pcb < profileBoxes.length; pcb++) { // exactly 1 checkbox in this array must be selected
+
+            if (profileBoxes[pcb].isSelected()) {
+
+                // find the room checkbox that was selected
+                for (int rcb = 0; rcb < roomBoxes.length; rcb++) { // exactly 1 checkbox in this array must be selected
+                    if (roomBoxes[rcb].isSelected()) {
+
+                        // find the matching profile and room objects
+                        for (int L = 0; L < Main.editContextLayout2.getChildren().size(); L++) {
+
+                            if (Main.editContextLayout2.getChildren().get(L).equals(profileBoxes[pcb])) {
+                               int selectedProfileID = Integer.parseInt(Main.editContextLayout2.getChildren().get(L).getId().substring
+                                        (Main.editContextLayout2.getChildren().get(L).getId().length()-1));
+
+                                CheckBox cb2 = (CheckBox) Main.editContextLayout2.getChildren().get(L);
+                                cb2.setSelected(false);
+                                Main.editContextLayout2.getChildren().set(L, cb2);
+
+                                for (int M = 0; M < Main.editContextLayout2.getChildren().size(); M++){
+
+                                    if (Main.editContextLayout2.getChildren().get(M).equals(roomBoxes[rcb])) {
+                                        int selectedRoomID = Integer.parseInt(Main.editContextLayout2.getChildren().get(M).getId().substring
+                                                (Main.editContextLayout2.getChildren().get(M).getId().length()-1));
+
+
+                                        CheckBox cb1 = (CheckBox) Main.editContextLayout2.getChildren().get(M);
+                                        cb1.setSelected(false);
+                                        Main.editContextLayout2.getChildren().set(M, cb1);
+
+                                        // do the relocation
+
+                                        for (int up = 0; up < Main.profiles.length; up++) {
+                                            if (Main.profiles[up].getProfileID() == selectedProfileID) {
+
+                                                for (int r = 0; r < Main.householdLocations.length; r++) {
+                                                    if (Main.householdLocations[r].getRoomID()==selectedRoomID) {
+                                                        Main.profiles[up].setCurrentLocation(Main.householdLocations[r]);
+                                                        for (int i = 0; i < Main.editContextLayout2.getChildren().size(); i++) {
+                                                            try {
+                                                                if (Main.editContextLayout2.getChildren().get(i).getId().equals("currentRoomOfProfile" +
+                                                                        Main.profiles[up].getProfileID())) {
+                                                                    Label label = (Label) Main.editContextLayout2.getChildren().get(i);
+                                                                    label.setText(Main.profiles[up].getCurrentLocation().getName());
+                                                                    Main.editContextLayout2.getChildren().set(i, label);
+                                                                    break;
+                                                                }
+                                                            } catch(Exception e){}
+                                                        }
+                                                        break;
+                                                    }
+                                                }
+                                                break;
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
 
     /**SHP MODULE METHODS START */
     public static void toggleAwayButton(ToggleButton t, TextField tf, Label tf2, Button b) {
@@ -171,7 +412,7 @@ public class Controller {
 
 
     /**USER PROFILE MANAGEMENT METHODS START HERE*/
-    public static void createNewProfile(TextField textField) {
+    public static void createNewProfile(TextField textField, RadioButton radioButton) {
         UserProfile newProfile;
         try {
             if (!(textField.getText().length() == 1)) {
@@ -181,19 +422,23 @@ public class Controller {
                 switch (textField.getText().charAt(0)) {
                     case 'S':
                     case 's':
-                        newProfile = new UserProfile("Stranger");
+                        if (radioButton.isSelected()) {newProfile = new UserProfile("Stranger", true);}
+                        else {newProfile = new UserProfile("Stranger", false);}
                         break;
                     case 'G':
                     case 'g':
-                        newProfile = new UserProfile("Guest");
+                        if (radioButton.isSelected()) {newProfile = new UserProfile("Guest", true);}
+                        else {newProfile = new UserProfile("Guest", false);}
                         break;
                     case 'C':
                     case 'c':
-                        newProfile = new UserProfile("Child");
+                        if (radioButton.isSelected()) {newProfile = new UserProfile("Child", true);}
+                        else {newProfile = new UserProfile("Child", false);}
                         break;
                     case 'P':
                     case 'p':
-                        newProfile = new UserProfile("Parent");
+                        if (radioButton.isSelected()) {newProfile = new UserProfile("Parent", true);}
+                        else {newProfile = new UserProfile("Parent", false);}
                         break;
                     default:
                         throw new Exception("Invalid");
@@ -237,23 +482,16 @@ public class Controller {
             System.out.println(ex.getMessage());
         }
     }
+
     public static void editProfile(UserProfile profile, Hyperlink hyperlink, Hyperlink editLink) {
 
-
-
-
-
         editLink.setDisable(true);
-
-//        Hyperlink edit = (Hyperlink) Main.profileSelection.getChildren().get(8); edit.setDisable(true);
-//        Main.profileSelection.getChildren().set(8,edit);
 
         for (int prof = 0; prof < Main.profiles.length; prof++) {
             if (Main.profiles[prof].getProfileID()==profile.getProfileID()) {
 
                 Button cancel; Button accept;
                 Label editPromptLabel; TextField editTextField;
-
                 cancel = new Button("Cancel");
 
                 editPromptLabel = new Label("Enter the new\ntype of Profile:");
@@ -265,8 +503,14 @@ public class Controller {
                 editTextField.setTranslateY(110);
                 Main.profileSelection.getChildren().add(editTextField);
 
+                RadioButton editAdmin = new RadioButton("Sed Admin");
+                if (profile.isAdmin()) {editAdmin.setSelected(true);}
+
+                editAdmin.setTranslateX(30); editAdmin.setTranslateY(140);
+                Main.profileSelection.getChildren().add(editAdmin);
+
                 accept = new Button("Modify");
-                accept.setTranslateX(30); accept.setTranslateY(140);
+                accept.setTranslateX(30); accept.setTranslateY(170);
                 int finalProf = prof;
                 accept.setOnAction(e->{
                     String updatedType = "";
@@ -278,36 +522,31 @@ public class Controller {
                             switch (editTextField.getText().charAt(0)) {
                                 case 'S':
                                 case 's':
-                                    updatedType = "{{Stranger}}";
-                                    Main.profiles[finalProf].setType("Stranger");
-//
-//                                    Hyperlink hy1 = (Hyperlink) Main.profileSelection.getChildren().get(6);
-//                                    hy1.setText("{{Stranger}}"); Main.profileSelection.getChildren().set(6,hy1);
-
+                                    updatedType = "Stranger";
+                                    if (editAdmin.isSelected()) {profile.setAdmin(true);updatedType+=" [A]";}
+                                    else {profile.setAdmin(false);}
+                                    Main.profiles[finalProf].setType(updatedType);
                                     break;
                                 case 'G':
                                 case 'g':
-                                    updatedType = "{{Guest}}";
+                                    updatedType = "Guest";
+                                    if (editAdmin.isSelected()) {profile.setAdmin(true);updatedType+=" [A]";}
+                                    else {profile.setAdmin(false);}
                                     Main.profiles[finalProf].setType(updatedType);
-
-//                                    Hyperlink hy2 = (Hyperlink) Main.profileSelection.getChildren().get(6);
-//                                    hy2.setText("{{Guest}}"); Main.profileSelection.getChildren().set(6,hy2);
                                     break;
                                 case 'C':
                                 case 'c':
-                                    updatedType = "{{Child}}";
+                                    updatedType = "Child";
+                                    if (editAdmin.isSelected()) {profile.setAdmin(true);updatedType+=" [A]";}
+                                    else {profile.setAdmin(false);}
                                     Main.profiles[finalProf].setType(updatedType);
-
-//                                    Hyperlink hy3 = (Hyperlink) Main.profileSelection.getChildren().get(6);
-//                                    hy3.setText("{{Child}}"); Main.profileSelection.getChildren().set(6,hy3);
                                     break;
                                 case 'P':
                                 case 'p':
-                                    updatedType = "{{Parent}}";
+                                    updatedType = "Parent";
+                                    if (editAdmin.isSelected()) {profile.setAdmin(true);updatedType+=" [A]";}
+                                    else {profile.setAdmin(false);}
                                     Main.profiles[finalProf].setType(updatedType);
-
-//                                    Hyperlink hy4 = (Hyperlink) Main.profileSelection.getChildren().get(6);
-//                                    hy4.setText("{{Parent}}"); Main.profileSelection.getChildren().set(6,hy4);
                                     break;
                                 default:
                                     throw new Exception("Invalid");
@@ -321,13 +560,8 @@ public class Controller {
                                 break;
                             }
                         }
-
                         editLink.setDisable(false);
-//                        Hyperlink edit2 = (Hyperlink) Main.profileSelection.getChildren().get(8); edit2.setDisable(false);
-//                        Main.profileSelection.getChildren().set(8,edit2);
-
-                        Main.profileSelection.getChildren().removeAll(cancel, accept, editPromptLabel, editTextField);
-
+                        Main.profileSelection.getChildren().removeAll(cancel, accept, editPromptLabel, editTextField, editAdmin);
                         Main.transformProfileSelectionPageScene();
                         Main.profileBox.setScene(Main.profileScene);
                     }
@@ -336,14 +570,9 @@ public class Controller {
                     }
                 });
                 Main.profileSelection.getChildren().add(accept);
-
-
-                cancel.setTranslateX(30); cancel.setTranslateY(170);
-                cancel.setOnAction(event -> {Main.profileSelection.getChildren().removeAll(cancel, accept, editPromptLabel, editTextField);
-
+                cancel.setTranslateX(30); cancel.setTranslateY(200);
+                cancel.setOnAction(event -> {Main.profileSelection.getChildren().removeAll(cancel, accept, editAdmin, editPromptLabel, editTextField);
                 editLink.setDisable(false);
-//                    Hyperlink edit2 = (Hyperlink) Main.profileSelection.getChildren().get(8); edit2.setDisable(false);
-//                    Main.profileSelection.getChildren().set(8,edit2);
                 });
                 Main.profileSelection.getChildren().add(cancel);
                 break;
@@ -409,7 +638,10 @@ public class Controller {
         hyperlink.setTranslateX(translateX);
         hyperlink.setTranslateY(pixelY);
         pixelY += 20;
-        hyperlink.setText("{{"+userProfile.getType()+"}}");
+        String hyperText = "{{"+userProfile.getType()+"}}";
+        if (userProfile.isAdmin()){hyperText+=" [A]";}
+
+        hyperlink.setText(hyperText);
 
         hyperlink.setOnAction(e-> {
 
@@ -442,10 +674,6 @@ public class Controller {
         // FINISH GENERATING A NEW HYPERLINK FOR THE NEW PROFILE
     }
 
-
-
-    /**TODO: implement the frontend** for changing a current user's Room location
-     * TODO: by finishing "Set House Location" in main dashboard module SHS */
     public static void changeLocation(Room newRoom) {
         for (int prof = 0; prof < Main.profiles.length; prof++) {
             if (Main.profiles[prof].getProfileID()==Main.currentActiveProfile.getProfileID()) {
@@ -455,57 +683,4 @@ public class Controller {
             }
         }
     }
-
-    /**MISCELLANEOUS METHODS */
-    public static void countCurrentDateTime(Text text) {
-        while (true){
-            try{
-                Thread.sleep(1000);
-            }
-            catch (Exception e) {
-
-            }
-            finally {
-                text.setText(translateCurrentDateTime());
-            }
-        }
-    }
-
-    // return current date and time
-    public static String translateCurrentDateTime() {
-        String timeDisplay = "";
-
-        String localTime = LocalDateTime.now().toString();
-        String year = localTime.substring(0,4);
-        String month = localTime.substring(5,7);
-        int day = Integer.parseInt(localTime.substring(8,10));
-        String time = localTime.substring(11,19);
-
-        String month_name = "";
-        switch (month.charAt(0)) {
-            case '0':
-                switch (month.charAt(1)) {
-                    case '1': month_name += "Jan"; break;
-                    case '2': month_name += "Feb"; break;
-                    case '3': month_name += "Mar"; break;
-                    case '4': month_name += "Apr"; break;
-                    case '5': month_name += "May"; break;
-                    case '6': month_name += "Jun"; break;
-                    case '7': month_name += "Jul"; break;
-                    case '8': month_name += "Aug"; break;
-                    case '9': month_name += "Sep"; break;
-                }
-                break;
-            case '1':
-                switch (month.charAt(1)) {
-                    case '0': month_name += "Oct"; break;
-                    case '1': month_name += "Nov"; break;
-                    case '2': month_name += "Dec"; break;
-                }
-                break;
-        }
-        timeDisplay += month_name+" "+day+" "+year+" at "+time+"";
-        return timeDisplay;
-    }
-
 }

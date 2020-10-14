@@ -10,11 +10,21 @@ public class UserProfile {
     private boolean loggedIn;
     private int profileID;
     private Room currentLocation;
+    private boolean isAdmin;
 
-    public UserProfile(String type) {
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public UserProfile(String type, boolean isAdmin) {
         this.type = type;
         this.loggedIn = false;
         this.profileID = (PROFILE_ID++);
+        this.isAdmin = isAdmin;
     }
 
     public int getProfileID() {

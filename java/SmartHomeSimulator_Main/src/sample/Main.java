@@ -42,10 +42,15 @@ public class Main extends Application {
     /**FIXED GUI ELEMENTS*/
     protected static Stage main_stage;
     protected static Stage profileBox;
+    protected static Stage editContextStage;
 
-    protected static Scene profileScene;
     protected static Scene dashboardScene;
+    protected static Scene profileScene;
+    protected static Scene editContextScene;
+    protected static Scene editContextScene2; // will be used for moving inhabitants around the house
 
+    protected static AnchorPane editContextLayout2; // will be used for moving inhabitants around the house
+    protected static AnchorPane editContextLayout;
     protected static AnchorPane profileSelection;
     protected static AnchorPane main_dashboard;
 
@@ -72,12 +77,6 @@ public class Main extends Application {
     protected static UserProfile currentActiveProfile; // the current logged in profile
     protected static Hyperlink[] profileLinks;
 
-    /**TODO: SHH module is NOT for delivery #1 -- ignore for now*/
-    // SHH module
-//    protected static int numberOfZones = 1; /*** change back to ZERO after debugging*/
-//    protected static double indoorTemperature;
-//    protected static double outdoorTemperature;
-
     /**HOUSE INFO VARIABLES */
     /**TODO: @AntoTurc -- create more protected static variables houshold elements*/
     protected int numberOfRooms;
@@ -93,23 +92,19 @@ public class Main extends Application {
         /**
          * TODO: create a House object and read the input of a house layout file
          * TODO: and extract information; all global House info will be initialized here... */
+        
+        Room testRoom = new Room("Kitchen");
+        Room testRoom2 = new Room("Dining Room");
+        householdLocations = new Room[]{testRoom, testRoom2};
 
-        main_stage = primaryStage;
-        main_stage.setResizable(false);
-
-        profileSelection = new AnchorPane();
-//        transformProfileSelectionPageScene(profileSelection); // add all children to the profile page scene
-        profileScene = new Scene(profileSelection, LOGINPAGE_HEIGHT, LOGINPAGE_WIDTH);
-
-
-        main_dashboard = new AnchorPane();
-        createMainDashboardNecessities();
-        dashboardScene = new Scene(main_dashboard, DASHBOARD_HEIGHT, DASHBOARD_WIDTH);
-
-        main_stage.setTitle("Smart Home Simulator");
-        main_stage.setScene(dashboardScene);
-        main_stage.show();
+        main_stage = primaryStage; main_stage.setResizable(false);
+        profileSelection = new AnchorPane(); profileScene = new Scene(profileSelection, LOGINPAGE_HEIGHT, LOGINPAGE_WIDTH);
+        main_dashboard = new AnchorPane(); createMainDashboardNecessities(); dashboardScene = new Scene(main_dashboard, DASHBOARD_HEIGHT, DASHBOARD_WIDTH);
+        editContextLayout = new AnchorPane(); editContextScene = new Scene(editContextLayout, 650, 650);
+        editContextLayout2 = new AnchorPane(); editContextScene2 = new Scene(editContextLayout2, 650, 650);
+        main_stage.setTitle("Smart Home Simulator - No user"); main_stage.setScene(dashboardScene); main_stage.show();
     }
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -127,13 +122,16 @@ public class Main extends Application {
 
         TextField newProfileTextField = new TextField(); newProfileTextField.setPromptText("P,C,G,or S...");
         newProfileTextField.setPrefWidth(85); newProfileTextField.setTranslateX(40);
-        newProfileTextField.setTranslateY(310); Main.profileSelection.getChildren().add(newProfileTextField);
+        newProfileTextField.setTranslateY(290); Main.profileSelection.getChildren().add(newProfileTextField);
+
+        RadioButton setAdminitrator = new RadioButton("Set Administrator");
+        setAdminitrator.setTranslateX(40); setAdminitrator.setTranslateY(320);
+        Main.profileSelection.getChildren().add(setAdminitrator);
 
         Button addButton = new Button("Add new\nProfile"); // already implemented
         addButton.setTranslateX(40); addButton.setTranslateY(350);
-        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField)); // this updates the UserProfile[] and profileLinks arrays;
+        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField, setAdminitrator)); // this updates the UserProfile[] and profileLinks arrays;
         Main.profileSelection.getChildren().addAll(addButton);
-
     }
 
     public static void createMainDashboardNecessities() { // THIS ONLY CREATES THE NECESSITIES OF THE MAIN DASHBOARD
@@ -160,6 +158,9 @@ public class Main extends Application {
         editContextButton.setDisable(true);
         editContextButton.prefHeight(45); editContextButton.prefWidth(75); editContextButton.setText("Edit\nContext");
         editContextButton.setTranslateY(90); editContextButton.setTranslateX(15); editContextButton.setTextAlignment(TextAlignment.CENTER);
+
+        editContextButton.setOnAction(e->Controller.editContext());
+
         anchorPane.getChildren().add(editContextButton);
 
         Label temperatureLabel = new Label();
@@ -215,16 +216,12 @@ public class Main extends Application {
     public static AnchorPane makeSHSmodule() {
         AnchorPane shs_module = new AnchorPane();
 
-        //=========================================
-
         Button manageOrSwitchProfileButton = new Button("Manage or\nSwitch Profiles");
         manageOrSwitchProfileButton.setTranslateX(200); manageOrSwitchProfileButton.setTranslateY(20);
         manageOrSwitchProfileButton.setTextAlignment(TextAlignment.CENTER);
         manageOrSwitchProfileButton.setOnAction(e -> Controller.returnToProfileSelectionPage());
 
         Line line = new Line(); line.setStartX(0); line.setEndX(500); line.setTranslateY(100);
-
-        //=========================================
 
         Label setHouseLocationLabel = new Label("Set House Location");
         setHouseLocationLabel.setTranslateX(200); setHouseLocationLabel.setTranslateY(110);
@@ -236,8 +233,6 @@ public class Main extends Application {
         confirmLocationButton.setTranslateX(200); confirmLocationButton.setTranslateY(260);
 
         Line line2 = new Line(); line2.setStartX(0); line2.setEndX(500); line2.setTranslateY(300);
-
-        //=========================================
 
         Label setDateTimeLabel = new Label("Set Date and Time");
         setDateTimeLabel.setTranslateX(200); setDateTimeLabel.setTranslateY(300);
@@ -263,8 +258,6 @@ public class Main extends Application {
         confirmTimeButton.setTextAlignment(TextAlignment.CENTER);
 //        confirmTimeButton.setOnAction(e -> { });
 
-        //=========================================
-
         shs_module.getChildren().addAll(manageOrSwitchProfileButton, line, setDateTimeLabel, datePicker,
                 setTimeLabel, hourField, colon, minuteField, confirmTimeButton, line2, setHouseLocationLabel,
                 confirmLocationButton);
@@ -281,45 +274,10 @@ public class Main extends Application {
     /**THIS IS NOT FOR DELIVERY #1*/
     public static AnchorPane makeSHHmodule() {
         AnchorPane shh_module = new AnchorPane();
-//
-//        Label indoorTemp = new Label("Indoor Temperature: "+indoorTemperature+"^C");
-//        indoorTemp.setTranslateX(40); indoorTemp.setTranslateY(10);
-//
-//        Label outdoorTemp = new Label("Outdoor Temperature: "+outdoorTemperature+"^C");
-//        outdoorTemp.setTranslateX(250); outdoorTemp.setTranslateY(10);
-//
-//        Line line = new Line(); line.setStartX(0); line.setEndX(500); line.setTranslateY(30);
-//
-//        TabPane shh_tabpane = new TabPane();
-//        shh_tabpane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-//        shh_tabpane.setTranslateY(30);
-//
-//        Tab[] zoneTabs = new Tab[3];
-//
-//        // CREATE THE ZONE TABS/INTERFACES
-//        for (int z = 0; z < numberOfZones; z++) {
-//            AnchorPane AP = new AnchorPane();
-//            //================================================
-//            Label p1Temp = new Label("Period 1 Temp: X"); /**TODO: have an array of Zones*/
-//            p1Temp.setTranslateY(100); p1Temp.setTranslateX(30);
-//            AP.getChildren().add(p1Temp);
-//            /**TODO: code backend for functionality */
-//            Button setTemp1 = new Button("Modify"); setTemp1.setTranslateX(30); setTemp1.setTranslateY(130);
-//            AP.getChildren().add(setTemp1);
-//            //================================================
-//            zoneTabs[z] = new Tab("Zone "+(z + 1), AP);
-//        }
-//        for (int zone = 0; zone < zoneTabs.length; zone++) {
-//            if (zoneTabs[zone] != null) {
-//                Node t = (Tab) zoneTabs[zone];
-//                shh_module.getChildren().add(t);
-//            }
-//        }
-//
-//        shh_module.getChildren().addAll(indoorTemp,outdoorTemp, line, shh_tabpane);
         return shh_module;
     }
 
+    /**THIS WAS NOT FOR DELIVERY #1*/
     public static AnchorPane makeSHPmodule(){
         AnchorPane shp_module = new AnchorPane();
 
