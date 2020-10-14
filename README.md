@@ -30,3 +30,24 @@ Learn how to work with a client in an Agile development team to accomplish chang
 
 ## Architecture
 The project architecture is based on the MVC pattern.  
+
+## Setup
+
+Please follow these guidelines before running SmartHomeSimulator_Main: 
+
+For IntelliJ IDEA:
+
+1) After opening the project “SmartHomeSimulator_Main”, click on File -> Project Structure…
+2) In “Project Settings” select “Libraries”
+3) At the top of the window, select “+” and choose “Java”
+4) Choose the directory “lib” within the in soen343_project/java/javaFX/javafx-sdk-15 
+5) Click on “Apply” and then “OK”. Close the Project Structure window.
+6) Click on the dropdown next to the “Build Project” hammer icon, and select “Edit Configurations”
+7) In the “Configuration” tab, expand the text field “VM options:” and paste the following: 
+   
+     --module-path “” --add-modules javafx.controls,javafx.fxml
+     
+   Within the quotations (keep the quotation marks), paste the path of the “lib” directory in soen343_project/java/javaFX/javafx-sdk-15 
+   NOTE: make sure that you add “/lib” at the end of the path*
+   
+8) Select “Apply” and “OK”. The JavaFX project should now compile without error.
