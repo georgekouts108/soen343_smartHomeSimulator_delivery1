@@ -40,9 +40,12 @@ public class Main extends Application {
     protected static final int LOGINPAGE_HEIGHT = 600;
 
     /**FIXED GUI ELEMENTS*/
-    protected static Stage stage;
+    protected static Stage main_stage;
+    protected static Stage profileBox;
+
     protected static Scene profileScene;
     protected static Scene dashboardScene;
+
     protected static AnchorPane profileSelection;
     protected static AnchorPane main_dashboard;
 
@@ -67,7 +70,7 @@ public class Main extends Application {
     /**TODO: implement everything about user profiles*/
     protected static UserProfile[] profiles; // an array of UserProfile objects
     protected static UserProfile currentActiveProfile; // the current logged in profile
-
+    protected static Hyperlink[] profileLinks;
 
     /**TODO: SHH module is NOT for delivery #1 -- ignore for now*/
     // SHH module
@@ -91,86 +94,46 @@ public class Main extends Application {
          * TODO: create a House object and read the input of a house layout file
          * TODO: and extract information; all global House info will be initialized here... */
 
-        stage = primaryStage;
-        stage.setResizable(false);
+        main_stage = primaryStage;
+        main_stage.setResizable(false);
 
         profileSelection = new AnchorPane();
-        transformProfileSelectionPageScene(profileSelection); // add all children to the profile page scene
+//        transformProfileSelectionPageScene(profileSelection); // add all children to the profile page scene
         profileScene = new Scene(profileSelection, LOGINPAGE_HEIGHT, LOGINPAGE_WIDTH);
+
 
         main_dashboard = new AnchorPane();
         createMainDashboardNecessities();
         dashboardScene = new Scene(main_dashboard, DASHBOARD_HEIGHT, DASHBOARD_WIDTH);
 
-        stage.setTitle("Smart Home Simulator");
-        stage.setScene(profileScene);
-        stage.show();
+        main_stage.setTitle("Smart Home Simulator");
+        main_stage.setScene(dashboardScene);
+        main_stage.show();
     }
     public static void main(String[] args) {
         launch(args);
     }
 
-    public static void transformProfileSelectionPageScene(AnchorPane anchorPane) {
+    public static void transformProfileSelectionPageScene() {
 
-        Label noProfilesLabel = new Label();
+        Button closeButton = new Button("Close");
+        closeButton.setTranslateX(150); closeButton.setTranslateY(350);
+        closeButton.setOnAction(e->Main.profileBox.close());
+        Main.profileSelection.getChildren().add(closeButton);
+
+        Label profileListLabel = new Label();
+        profileListLabel.setTranslateX(250); profileListLabel.setTranslateY(40);
+        profileListLabel.setText("LIST OF PROFILES:"); Main.profileSelection.getChildren().add(profileListLabel);
 
         TextField newProfileTextField = new TextField(); newProfileTextField.setPromptText("P,C,G,or S...");
         newProfileTextField.setPrefWidth(85); newProfileTextField.setTranslateX(40);
-        newProfileTextField.setTranslateY(310); anchorPane.getChildren().add(newProfileTextField);
+        newProfileTextField.setTranslateY(310); Main.profileSelection.getChildren().add(newProfileTextField);
 
         Button addButton = new Button("Add new\nProfile"); // already implemented
         addButton.setTranslateX(40); addButton.setTranslateY(350);
-        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField)); // CODE THIS
-        anchorPane.getChildren().addAll(addButton);
+        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField)); // this updates the UserProfile[] and profileLinks arrays;
+        Main.profileSelection.getChildren().addAll(addButton);
 
-        Hyperlink[] profileLinks = new Hyperlink[numberOfProfiles];
-
-        // if there are no profiles, disable all buttons except addButton
-        if (numberOfProfiles == 0) {
-            noProfilesLabel.setTranslateX(250);
-            noProfilesLabel.setTranslateY(250);
-            noProfilesLabel.setText("{No Profiles}");
-            anchorPane.getChildren().add(noProfilesLabel);
-        }
-        else {
-            Label l = (Label) anchorPane.getChildren().get(2);
-            l.setText(""); anchorPane.getChildren().set(2, l);
-
-            Label profilesExistLabel = new Label("Select a profile:");
-
-            profilesExistLabel.setTranslateX(LOGINPAGE_HEIGHT / 2); profilesExistLabel.setTranslateY(50);
-            anchorPane.getChildren().add(profilesExistLabel);
-
-            int translateX = LOGINPAGE_HEIGHT/2; int pixelY = 70;
-            for (int p = 0; p < profiles.length; p++) {
-                Hyperlink hyperlink = new Hyperlink();
-                hyperlink.setTranslateX(translateX);
-                hyperlink.setTranslateY(pixelY);
-                pixelY += 20;
-                hyperlink.setText("{{"+profiles[p].getType()+"}}");
-                int fp = p;
-
-                hyperlink.setOnAction(e-> {
-
-                    Hyperlink deleteLink = new Hyperlink(); deleteLink.setText("[Delete]");
-                    deleteLink.setTranslateX((LOGINPAGE_HEIGHT/2)+100); deleteLink.setTranslateY(hyperlink.getTranslateY());
-                    deleteLink.setOnAction(act -> Controller.deleteProfile(profiles[fp]));
-
-                    Hyperlink editLink = new Hyperlink(); editLink.setText("[Edit]");
-                    editLink.setTranslateX((LOGINPAGE_HEIGHT/2)+175); editLink.setTranslateY(hyperlink.getTranslateY());
-                    editLink.setOnAction(act -> Controller.editProfile(profiles[fp], anchorPane));
-
-                    Hyperlink loginLink = new Hyperlink(); loginLink.setText("[Login]");
-                    loginLink.setTranslateX((LOGINPAGE_HEIGHT/2)+225); loginLink.setTranslateY(hyperlink.getTranslateY());
-                    loginLink.setOnAction(act -> Controller.goToMainDashboardScene(profiles[fp]));
-
-                    anchorPane.getChildren().addAll(deleteLink,editLink,loginLink);
-
-                });
-                profileLinks[p] = hyperlink;
-                anchorPane.getChildren().add(hyperlink);
-            }
-        }
     }
 
     public static void createMainDashboardNecessities() { // THIS ONLY CREATES THE NECESSITIES OF THE MAIN DASHBOARD
