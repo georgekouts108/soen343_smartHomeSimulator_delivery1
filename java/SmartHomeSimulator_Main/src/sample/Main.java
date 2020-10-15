@@ -34,10 +34,14 @@ import java.util.concurrent.*;
 public class Main extends Application {
 
     /**FIXED PIXEL DIMENSIONS*/
-    protected static final int DASHBOARD_WIDTH = 700;
-    protected static final int DASHBOARD_HEIGHT = 1300;
+    protected static final int DASHBOARD_WIDTH = 600;
+    protected static final int DASHBOARD_HEIGHT = 1024;
     protected static final int LOGINPAGE_WIDTH = 400;
     protected static final int LOGINPAGE_HEIGHT = 600;
+
+    /**CONTROL PARAMETER DIMENSIONS*/
+    protected  static final int paraWidth = 400;
+    protected  static final int paraHeight = 500;
 
     /**FIXED GUI ELEMENTS*/
     protected static Stage main_stage;
@@ -187,10 +191,14 @@ public class Main extends Application {
         imageView = new ImageView(); /**TODO: verify pixel translation coordinates*/
         imageView.setFitHeight(400); imageView.setFitWidth(700); imageView.setPickOnBounds(true); imageView.setPreserveRatio(true);
         imageView.setTranslateX(500); imageView.setTranslateY(100);
+        Image im1 = new Image("https://imagesvc.meredithcorp.io/v3/mm/image?q=85&c=sc&poi=%5B800%2C500%5D&w=1600&h=838&url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F28%2F2017%2F05%2Fblue0517.jpg");
+        imageView.setImage(im1);
         anchorPane.getChildren().add(imageView);
 
+        //Parameter control
+
         modulesInterface = createModuleInterface(); modulesInterface.setDisable(true);
-        modulesInterface.setPrefHeight(500); modulesInterface.setPrefWidth(500);
+        modulesInterface.setPrefHeight(paraHeight); modulesInterface.setPrefWidth(paraWidth);
         modulesInterface.setTranslateX(110);
         modulesInterface.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         modulesInterface.setStyle("-fx-border-width: 2; -fx-border-color: black;");

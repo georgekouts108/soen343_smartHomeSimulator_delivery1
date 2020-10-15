@@ -403,8 +403,8 @@ public class Controller {
         /**TODO: depending which tool it was, get it's utility_ID and its associated utility*/
         /**TODO: turn on all lights in and outside the house */
 
-        String report = translateCurrentDateTime() + " -- " + warning;
-        Main.suspBox.appendText(report+"\n");
+        //String report = translateCurrentDateTime() + " -- " + warning;
+        //Main.suspBox.appendText(report+"\n");
     }
 
     /**SHP MODULE METHODS END */
