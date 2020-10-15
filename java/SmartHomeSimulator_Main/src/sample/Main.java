@@ -58,7 +58,7 @@ public class Main extends Application {
     // main dashboard
     protected static Button editContextButton; // LINE 139
     protected static TextArea outputConsole; // LINE 157
-    protected static ImageView imageView; // LINE 169
+    protected static AnchorPane houseLayout; // LINE 169
     protected static TabPane modulesInterface; // LINE 176
     protected static boolean simulationIsOn;
 
@@ -92,17 +92,43 @@ public class Main extends Application {
         /**
          * TODO: create a House object and read the input of a house layout file
          * TODO: and extract information; all global House info will be initialized here... */
-        
-        Room testRoom = new Room("Kitchen");
-        Room testRoom2 = new Room("Dining Room");
-        householdLocations = new Room[]{testRoom, testRoom2};
 
-        main_stage = primaryStage; main_stage.setResizable(false);
-        profileSelection = new AnchorPane(); profileScene = new Scene(profileSelection, LOGINPAGE_HEIGHT, LOGINPAGE_WIDTH);
-        main_dashboard = new AnchorPane(); createMainDashboardNecessities(); dashboardScene = new Scene(main_dashboard, DASHBOARD_HEIGHT, DASHBOARD_WIDTH);
-        editContextLayout = new AnchorPane(); editContextScene = new Scene(editContextLayout, 650, 650);
-        editContextLayout2 = new AnchorPane(); editContextScene2 = new Scene(editContextLayout2, 650, 650);
-        main_stage.setTitle("Smart Home Simulator - No user"); main_stage.setScene(dashboardScene); main_stage.show();
+        House house = new House("dummyfile");
+        Room testRoom = new Room("Kitchen", 2, 1, 5, null);
+        Room testRoom2 = new Room("Bedroom", 1, 1, 2, null);
+        Room testRoom3 = new Room("Dining Room", 1, 1, 2, null);
+        Room testRoom4 = new Room("Bathroom", 2, 1, 5, null);
+        Room testRoom5 = new Room("Family Room", 1, 1, 2, null);
+        Room testRoom6 = new Room("TV Room", 1, 1, 2, null);
+        Room testRoom7 = new Room("Basement", 2, 1, 5, null);
+        Room testRoom8 = new Room("Garage", 1, 1, 2, null);
+        Room testRoom9 = new Room("Bedroom 2", 1, 1, 2, null);
+
+        house.setRooms(new Room[]{testRoom, testRoom2, testRoom3, testRoom4, testRoom5, testRoom6, testRoom7,
+        testRoom8, testRoom9});
+        house.setupHouseLayout(house.getRooms());
+
+        houseLayout = house.getLayout();
+
+        householdLocations = house.getRooms();
+
+        main_stage = primaryStage;
+        main_stage.setResizable(false);
+        profileSelection = new AnchorPane();
+        profileScene = new Scene(profileSelection, LOGINPAGE_HEIGHT, LOGINPAGE_WIDTH);
+
+        main_dashboard = new AnchorPane();
+        createMainDashboardNecessities();
+        dashboardScene = new Scene(main_dashboard, DASHBOARD_HEIGHT, DASHBOARD_WIDTH);
+
+        editContextLayout = new AnchorPane();
+        editContextScene = new Scene(editContextLayout, 650, 650);
+        editContextLayout2 = new AnchorPane();
+        editContextScene2 = new Scene(editContextLayout2, 650, 650);
+
+        main_stage.setTitle("Smart Home Simulator - No user");
+        main_stage.setScene(dashboardScene);
+        main_stage.show();
     }
 
     public static void main(String[] args) {
@@ -112,58 +138,60 @@ public class Main extends Application {
     public static void transformProfileSelectionPageScene() {
 
         Button closeButton = new Button("Close");
+        closeButton.setId("profilePageCloseButton");
         closeButton.setTranslateX(150); closeButton.setTranslateY(350);
         closeButton.setOnAction(e->Main.profileBox.close());
         Main.profileSelection.getChildren().add(closeButton);
 
         Label profileListLabel = new Label();
+        profileListLabel.setId("profileListLabel");
         profileListLabel.setTranslateX(250); profileListLabel.setTranslateY(40);
         profileListLabel.setText("LIST OF PROFILES:"); Main.profileSelection.getChildren().add(profileListLabel);
 
         TextField newProfileTextField = new TextField(); newProfileTextField.setPromptText("P,C,G,or S...");
+        newProfileTextField.setId("newProfileTextField");
         newProfileTextField.setPrefWidth(85); newProfileTextField.setTranslateX(40);
         newProfileTextField.setTranslateY(290); Main.profileSelection.getChildren().add(newProfileTextField);
 
         RadioButton setAdminitrator = new RadioButton("Set Administrator");
+        setAdminitrator.setId("setAdminButton");
         setAdminitrator.setTranslateX(40); setAdminitrator.setTranslateY(320);
         Main.profileSelection.getChildren().add(setAdminitrator);
 
-        Button addButton = new Button("Add new\nProfile"); // already implemented
+        Button addButton = new Button("Add new\nProfile");
+        addButton.setId("addNewProfileButton");
         addButton.setTranslateX(40); addButton.setTranslateY(350);
-        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField, setAdminitrator)); // this updates the UserProfile[] and profileLinks arrays;
+        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField, setAdminitrator));
         Main.profileSelection.getChildren().addAll(addButton);
     }
 
     public static void createMainDashboardNecessities() { // THIS ONLY CREATES THE NECESSITIES OF THE MAIN DASHBOARD
-        /**TODO: give all elements IDs */
 
         AnchorPane anchorPane = new AnchorPane();
 
         Rectangle rectangle = new Rectangle(); rectangle.setVisible(true); rectangle.setStrokeType(StrokeType.INSIDE);
         rectangle.setStroke(javafx.scene.paint.Paint.valueOf("BLACK")); rectangle.setArcWidth(5.0); rectangle.setArcHeight(5.0);
         rectangle.setHeight(DASHBOARD_WIDTH); rectangle.setOpacity(0.95); rectangle.setWidth(110); rectangle.setFill(Color.AQUA);
+        rectangle.setId("rectangle");
         anchorPane.getChildren().add(rectangle);
 
         Label simLabel = new Label(); simLabel.setText("SIMULATION"); simLabel.setTranslateX(15);
+        simLabel.setId("simulationLabel");
         anchorPane.getChildren().add(simLabel);
 
-        ToggleButton triggerSim = new ToggleButton();
+        ToggleButton triggerSim = new ToggleButton(); triggerSim.setId("simulationOnOffButton");
         triggerSim.prefHeight(45); triggerSim.prefWidth(75); triggerSim.setText("Start\nSimulation");
         triggerSim.setTranslateY(30); triggerSim.setTranslateX(15); triggerSim.setTextAlignment(TextAlignment.CENTER);
         triggerSim.setOnAction(e-> sample.Controller.startSimulation(triggerSim, editContextButton, outputConsole, modulesInterface));
         anchorPane.getChildren().add(triggerSim);
 
-        /**TODO: implement backend for Edit Context button. this is frontend only */
-        editContextButton = new Button();
-        editContextButton.setDisable(true);
+        /**TODO: implement the remaining backend for Edit Context button. */
+        editContextButton = new Button(); editContextButton.setDisable(true); editContextButton.setId("editContextButton");
         editContextButton.prefHeight(45); editContextButton.prefWidth(75); editContextButton.setText("Edit\nContext");
         editContextButton.setTranslateY(90); editContextButton.setTranslateX(15); editContextButton.setTextAlignment(TextAlignment.CENTER);
+        editContextButton.setOnAction(e->Controller.editContext()); anchorPane.getChildren().add(editContextButton);
 
-        editContextButton.setOnAction(e->Controller.editContext());
-
-        anchorPane.getChildren().add(editContextButton);
-
-        Label temperatureLabel = new Label();
+        Label temperatureLabel = new Label(); temperatureLabel.setId("outdoorTemperatureLabel");
         temperatureLabel.setText("Outside Temp.\n15 C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
         temperatureLabel.setTranslateY(400); temperatureLabel.setTranslateX(15);
         anchorPane.getChildren().add(temperatureLabel);
@@ -171,27 +199,26 @@ public class Main extends Application {
         /**TODO: find a way to display the real local date and time that updates every second */
         Label localDateTime = new Label(); localDateTime.setTextAlignment(TextAlignment.CENTER);
         localDateTime.setTranslateX(15); localDateTime.setTranslateY(600); localDateTime.setText("LOCAL TIME");
-        anchorPane.getChildren().add(localDateTime);
+        localDateTime.setId("localDateAndTimeLabel"); anchorPane.getChildren().add(localDateTime);
 
-        outputConsole = new TextArea(); outputConsole.setDisable(true);
-        outputConsole.setPrefHeight(75); outputConsole.setPrefWidth(1100); outputConsole.setTranslateY(600);
-        outputConsole.setTranslateX(150);
+        outputConsole = new TextArea(); outputConsole.setDisable(true); outputConsole.setId("OutputConsole");
+        outputConsole.setPrefHeight(130); outputConsole.setPrefWidth(450); outputConsole.setTranslateY(540);
+        outputConsole.setTranslateX(150); outputConsole.setWrapText(true);
         anchorPane.getChildren().add(outputConsole);
 
-        Label outputConsoleLabel = new Label();
+        Label outputConsoleLabel = new Label(); outputConsoleLabel.setId("outputConsoleLabel");
         outputConsoleLabel.setText("Output Console"); outputConsoleLabel.setTextAlignment(TextAlignment.CENTER);
-        outputConsoleLabel.setTranslateY(550); outputConsoleLabel.setTranslateX(700);
+        outputConsoleLabel.setTranslateY(520); outputConsoleLabel.setTranslateX(150);
         anchorPane.getChildren().add(outputConsoleLabel);
 
-        /**TODO: Globalize this variable -- set it to Visible only when SIM is ON [DONE] */
-        imageView = new ImageView(); /**TODO: verify pixel translation coordinates*/
-        imageView.setFitHeight(400); imageView.setFitWidth(700); imageView.setPickOnBounds(true); imageView.setPreserveRatio(true);
-        imageView.setTranslateX(500); imageView.setTranslateY(100);
-        anchorPane.getChildren().add(imageView);
+        houseLayout.setPrefHeight(675); houseLayout.setPrefWidth(675); houseLayout.setId("houseLayout");
+        houseLayout.setTranslateX(615); houseLayout.setTranslateY(10);
+        anchorPane.getChildren().add(houseLayout);
 
         modulesInterface = createModuleInterface(); modulesInterface.setDisable(true);
         modulesInterface.setPrefHeight(500); modulesInterface.setPrefWidth(500);
         modulesInterface.setTranslateX(110);
+        modulesInterface.setId("modulesInterface");
         modulesInterface.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         modulesInterface.setStyle("-fx-border-width: 2; -fx-border-color: black;");
         anchorPane.getChildren().add(modulesInterface);
@@ -202,17 +229,15 @@ public class Main extends Application {
     public static TabPane createModuleInterface() {
         /**TODO: globalize each module */
         TabPane modules = new TabPane();
-        Tab shsTab = new Tab("SHS", makeSHSmodule());
-        Tab shcTab = new Tab("SHC", makeSHCmodule());
-        Tab shpTab = new Tab("SHP", makeSHPmodule());
-        Tab shhTab = new Tab("SHH", makeSHHmodule());
-
-        /**TODO: Add a 5th tab labelled "+" that can add a new Tab, and allow the user to also delete one*/
-
+        Tab shsTab = new Tab("SHS", makeSHSmodule()); shsTab.setId("shsTab");
+        Tab shcTab = new Tab("SHC", makeSHCmodule()); shcTab.setId("shcTab");
+        Tab shpTab = new Tab("SHP", makeSHPmodule()); shpTab.setId("shpTab");
+        Tab shhTab = new Tab("SHH", makeSHHmodule()); shhTab.setId("shhTab");
         modules.getTabs().addAll(shsTab, shcTab, shpTab, shhTab);
         return modules;
     }
 
+    /**TODO: give IDs to each GUI element in here */
     public static AnchorPane makeSHSmodule() {
         AnchorPane shs_module = new AnchorPane();
 
@@ -265,19 +290,21 @@ public class Main extends Application {
         return shs_module;
     }
 
-    public static AnchorPane makeSHCmodule(){
+    /**TODO: give IDs to each GUI element in here */
+    public static AnchorPane makeSHCmodule() {
         AnchorPane shc_module = new AnchorPane();
-
         return shc_module;
     }
 
     /**THIS IS NOT FOR DELIVERY #1*/
+    /**TODO: give IDs to each GUI element in here */
     public static AnchorPane makeSHHmodule() {
         AnchorPane shh_module = new AnchorPane();
         return shh_module;
     }
 
     /**THIS WAS NOT FOR DELIVERY #1*/
+    /**TODO: give IDs to each GUI element in here */
     public static AnchorPane makeSHPmodule(){
         AnchorPane shp_module = new AnchorPane();
 
@@ -309,13 +336,6 @@ public class Main extends Application {
         ToggleButton tb = new ToggleButton(); tb.setText("Set to AWAY mode"); tb.setTranslateX(250);
         tb.setOnAction(e->sample.Controller.toggleAwayButton(tb, timeBox, timeLimit, confirmButton)); shp_module.getChildren().add(tb);
 
-
         return shp_module;
     }
-
-
-
-
-
-
 }

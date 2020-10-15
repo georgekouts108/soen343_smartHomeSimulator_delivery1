@@ -13,7 +13,7 @@ public class Room {
     private int numberOfDoors;
     private int numberOfPeopleInside;
     private boolean isVacant;
-    private double temperature;
+    private double temperature; /**TODO: wait until after delivery 1*/
 
     /** ROOM UTILITIES */
 
@@ -23,20 +23,21 @@ public class Room {
     private Light[] lightCollection;
     private Window[] windowCollection;
 
-    public Room(String roomName) {
+    public Room(String roomName, int numberOfDoors, int numberOfWindows, int numberOfLights,
+                AirConditioner ac) {
         this.name = roomName;
         this.roomID = (ID_count++);
-        this.numberOfDoors = 0;
-        this.numberOfWindows = 0;
-        this.numberOfLights = 0;
+        this.numberOfDoors = numberOfDoors;
+        this.numberOfWindows = numberOfWindows;
+        this.numberOfLights = numberOfLights;
         this.numberOfPeopleInside = 0;
         this.isVacant = true;
         this.temperature = 0;
-        this.ac = new AirConditioner();
+        this.ac = ac;
         this.md = new MotionDetector();
-        this.doorCollection = null;
-        this.lightCollection = null;
-        this.windowCollection = null;
+        this.doorCollection = new Door[numberOfDoors];
+        this.lightCollection = new Light[numberOfLights];
+        this.windowCollection = new Window[numberOfWindows];
     }
     /** ROOM INFORMATION */
     public String getName() {
