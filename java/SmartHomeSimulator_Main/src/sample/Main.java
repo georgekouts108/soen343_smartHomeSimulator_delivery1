@@ -80,7 +80,7 @@ public class Main extends Application {
     /**HOUSE INFO VARIABLES */
     /**TODO: @AntoTurc -- create more protected static variables houshold elements*/
     protected int numberOfRooms;
-    protected double outsideTemperature;
+    protected static String outsideTemperature;
     protected static Room[] householdLocations; // an array of household locations
     protected static Room currentLocation; // the current location or room of the logged in user
 
@@ -192,7 +192,8 @@ public class Main extends Application {
         editContextButton.setOnAction(e->Controller.editContext()); anchorPane.getChildren().add(editContextButton);
 
         Label temperatureLabel = new Label(); temperatureLabel.setId("outdoorTemperatureLabel");
-        temperatureLabel.setText("Outside Temp.\n15 C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
+        temperatureLabel.setId("temp");
+        temperatureLabel.setText("Outside Temp.\n15°C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
         temperatureLabel.setTranslateY(400); temperatureLabel.setTranslateX(15);
         anchorPane.getChildren().add(temperatureLabel);
 
