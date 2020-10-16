@@ -13,7 +13,7 @@ public class Room {
     private int numberOfDoors;
     private int numberOfPeopleInside;
     private boolean isVacant;
-    private double temperature; /**TODO: wait until after delivery 1*/
+    private double temperature;
 
     /** ROOM UTILITIES */
 
@@ -23,21 +23,41 @@ public class Room {
     private Light[] lightCollection;
     private Window[] windowCollection;
 
-    public Room(String roomName, int numberOfDoors, int numberOfWindows, int numberOfLights,
-                AirConditioner ac) {
-        this.name = roomName;
+    public Room(String roomName, int numberOfDoors, int numberOfWindows, int numberOfLights, boolean AC)
+    {
         this.roomID = (ID_count++);
+        this.name = roomName;
         this.numberOfDoors = numberOfDoors;
         this.numberOfWindows = numberOfWindows;
         this.numberOfLights = numberOfLights;
         this.numberOfPeopleInside = 0;
         this.isVacant = true;
         this.temperature = 0;
-        this.ac = ac;
         this.md = new MotionDetector();
+        if (AC) {
+            this.ac = new AirConditioner();
+        }
+        else {
+            this.ac = null;
+        }
+
         this.doorCollection = new Door[numberOfDoors];
+
+        for (int d = 0; d < this.doorCollection.length; d++) {
+            this.doorCollection[d] = new Door();
+        }
+
         this.lightCollection = new Light[numberOfLights];
+
+        for (int L = 0; L < this.lightCollection.length; L++) {
+            this.lightCollection[L] = new Light();
+        }
+
         this.windowCollection = new Window[numberOfWindows];
+
+        for (int w = 0; w < this.windowCollection.length; w++) {
+            this.windowCollection[w] = new Window();
+        }
     }
     /** ROOM INFORMATION */
     public String getName() {
@@ -56,13 +76,27 @@ public class Room {
         this.temperature = temperature;
     }
 
+    public void setNumberOfPeopleInside(int numberOfPeopleInside) {
+        this.numberOfPeopleInside = numberOfPeopleInside;
+    }
     /** ROOM VACANCY */
     public int getNumberOfPeopleInside() {
         return numberOfPeopleInside;
     }
-    public void setNumberOfPeopleInside(int numberOfPeopleInside) {
-        this.numberOfPeopleInside = numberOfPeopleInside;
+    public void incrementNumOfPeopleInside() {
+        this.numberOfPeopleInside++;
     }
+    public void decrementNumOfPeopleInside() {
+        this.numberOfPeopleInside--;
+        try {
+            if (numberOfPeopleInside < 0) {
+                throw new Exception();
+            }
+        }catch(Exception e){
+            this.numberOfPeopleInside = 0;
+        }
+    }
+
     public boolean isVacant() {
         return isVacant;
     }
@@ -88,16 +122,6 @@ public class Room {
     }
     public int getNumberOfDoors() {
         return numberOfDoors;
-    }
-
-    public void setNumberOfWindows(int numberOfWindows) {
-        this.numberOfWindows = numberOfWindows;
-    }
-    public void setNumberOfLights(int numberOfLights) {
-        this.numberOfLights = numberOfLights;
-    }
-    public void setNumberOfDoors(int numberOfDoors) {
-        this.numberOfDoors = numberOfDoors;
     }
 
     public AirConditioner getAc() {

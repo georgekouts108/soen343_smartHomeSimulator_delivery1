@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import utilities.*;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,7 +29,6 @@ import java.awt.*;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
-
 import sample.Main.*;
 
 public class Controller {
@@ -132,19 +130,8 @@ public class Controller {
             timePickerLabel.setTranslateX(20);
             timePickerLabel.setTranslateY(60);
 
-            //////////
-
             TextField hourField = new TextField();
             hourField.setId("hourField");
-            hourField.textProperty().addListener(new ChangeListener<String>() {
-                @Override
-                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                    String newValue) {
-                    if (!newValue.matches("\\d*")) {
-                        hourField.setText(newValue.replaceAll("[^\\d]", ""));
-                    }
-                }
-            });
             hourField.setPrefHeight(30);
             hourField.setPrefWidth(60);
             hourField.setTranslateX(100);
@@ -153,22 +140,11 @@ public class Controller {
 
             TextField minuteField = new TextField();
             minuteField.setId("minuteField");
-            minuteField.textProperty().addListener(new ChangeListener<String>() {
-                @Override
-                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                    String newValue) {
-                    if (!newValue.matches("\\d*")) {
-                        minuteField.setText(newValue.replaceAll("[^\\d]", ""));
-                    }
-                }
-            });
             minuteField.setPrefHeight(30);
             minuteField.setPrefWidth(60);
             minuteField.setTranslateX(180);
             minuteField.setTranslateY(60);
             minuteField.setPromptText("00-59");
-
-            ////////
 
             Button confirmDTbutton = new Button("Confirm\nDate &\nTime");
             confirmDTbutton.setId("confirmDateAndTimeButton");
@@ -200,15 +176,6 @@ public class Controller {
 
             TextField tempText = new TextField();
             tempText.setId("temperatureText");
-            tempText.textProperty().addListener(new ChangeListener<String>() {
-                @Override
-                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                    String newValue) {
-                    if (!newValue.matches("\\d*")) {
-                        tempText.setText(newValue.replaceAll("[^\\d*(\\.)?\\d*$]", ""));
-                    }
-                }
-            });
             tempText.setPrefHeight(30);
             tempText.setPrefWidth(60);
             tempText.setTranslateX(450);
@@ -218,26 +185,11 @@ public class Controller {
 
             Button tempButton = new Button("Confirm");
             tempButton.setId("confirmTemperatureButton");
-            tempButton.setOnAction(e -> {
-                for(int i=0; i < Main.main_dashboard.getChildren().size(); i++){
-                    try{
-                        if (Main.main_dashboard.getChildren().get(i).getId().equals("temp")){
-                            Label label = (Label) Main.main_dashboard.getChildren().get(i);
-                            label.setText("Outside Temp.\n" + tempText.getCharacters().toString() + "°C");
-                            Main.main_dashboard.getChildren().set(i, label);
-                        }
-                    }catch (Exception err){
-                        System.out.print("Null pointer exception.");
-                    }
-                }
-            });
             tempButton.setTranslateX(540);
             tempButton.setTranslateY(60);
             Main.editContextLayout.getChildren().add(tempButton);
 
-            ////////
-
- Label roomsLabel = new Label("Click on a room you would like to move to, or change a room's number of occupants");
+            Label roomsLabel = new Label("Click on a room you would like to move to, or change a room's number of occupants");
             roomsLabel.setTranslateY(105); roomsLabel.setId("roomsLabel");
             Main.editContextLayout.getChildren().add(roomsLabel);
 
@@ -1012,6 +964,13 @@ public class Controller {
             }
         }catch(Exception exc){}
     }
+
+    /** HOUSE LAYOUT METHODS START HERE */
+
+    
+
+
+
 
     /**MISCELLANEOUS METHODS */
     public static void countCurrentDateTime(Text text) {
