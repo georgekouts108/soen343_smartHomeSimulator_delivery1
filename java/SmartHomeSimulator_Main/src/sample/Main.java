@@ -176,20 +176,17 @@ public class Main extends Application {
         localDateTime.setTranslateX(15); localDateTime.setTranslateY(600); localDateTime.setText("LOCAL TIME");
         anchorPane.getChildren().add(localDateTime);
 
-        //kevtest
         Label dateText = new Label(); dateText.setTextAlignment(TextAlignment.CENTER);
-        dateText.setId("dateText"); //how to use these?
         dateText.setTranslateX(15); dateText.setTranslateY(620);
-        anchorPane.getChildren().add(dateText); //dateText.setText("Date"+year+"/"+(month+1)+"/"+day);
+        anchorPane.getChildren().add(dateText);
 
         Label timeText = new Label(); timeText.setTextAlignment(TextAlignment.CENTER);
         timeText.setId("timeText");
         timeText.setTranslateX(15); timeText.setTranslateY(640);
-        anchorPane.getChildren().add(timeText); //timeText.setText("Time "+hour+":"+(minute)+":"+second);
+        anchorPane.getChildren().add(timeText);
 
-        sample.Controller.CurrentDate(dateText, timeText);
-        //endkevtest
-
+        //thread to start the current date/time display when application starts
+        new Thread(()->{sample.Controller.CurrentDate(dateText, timeText);}).start();
 
         outputConsole = new TextArea(); outputConsole.setDisable(true);
         outputConsole.setPrefHeight(75); outputConsole.setPrefWidth(1100); outputConsole.setTranslateY(600);
@@ -216,43 +213,6 @@ public class Main extends Application {
 
         main_dashboard = anchorPane;
     }
-
-   /* public static void CurrentDate(Label dateText, Label timeText){
-
-        Thread clock = new Thread(){
-            public void run(){
-                for(;;){
-
-                    System.out.println(Main.main_dashboard.getChildren().size());
-                    for (int i =0; i < Main.main_dashboard.getChildren().size(); i++) {
-                        if (Main.main_dashboard.getChildren().get(i).getId().equals("timeText")) {
-                            Label label = (Label) Main.main_dashboard.getChildren().get(i);
-                            label.setText("test");
-                        }
-                    }
-
-                    Calendar cal = new GregorianCalendar();
-                    int month = cal.get(Calendar.MONTH);
-                    int year = cal.get(Calendar.YEAR);
-                    int day = cal.get(Calendar.DAY_OF_MONTH);
-                    System.out.println("Date "+year+"/"+(month+1)+"/"+day);
-                    //dateText.setText("Date"+year+"/"+(month+1)+"/"+day); //currently unable to setText for dateText
-                    int second = cal.get(Calendar.SECOND);
-                    int minute = cal.get(Calendar.MINUTE);
-                    int hour = cal.get(Calendar.HOUR);
-                    System.out.println("Time "+hour+":"+(minute)+":"+second);
-                    //timeText.setText("Time "+hour+":"+(minute)+":"+second);
-                        try {
-                            sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                }
-            }
-        };
-        clock.start();
-    }*/
-
 
     public static TabPane createModuleInterface() {
         /**TODO: globalize each module */
@@ -307,19 +267,24 @@ public class Main extends Application {
         TextField minuteField = new TextField(); minuteField.setPrefHeight(30); minuteField.setPrefWidth(40);
         minuteField.setTranslateX(250); minuteField.setTranslateY(400); minuteField.setPromptText("mm");
 
-        //kevtest, date not set yet..., still need to use dynamic CurrentDate() method, will implement soon
-        Label simulationDateAndTime = new Label();
-        simulationDateAndTime.setTranslateX(300); simulationDateAndTime.setTranslateY(380);
+        //position is off, why?
+        Label simulationDate = new Label();
+        simulationDate.setTranslateX(400); simulationDate.setTranslateY(380);
+
+        Label simulationTime = new Label();
+        simulationDate.setTranslateX(300); simulationDate.setTranslateY(380);
 
         /**TODO: code a method in class Controller that will set the new date and time "setDateTime(hourField, minuteField, datePicker)"*/
         Button confirmTimeButton = new Button("Confirm New Time");
         confirmTimeButton.setTranslateX(200); confirmTimeButton.setTranslateY(435);
         confirmTimeButton.setTextAlignment(TextAlignment.CENTER);
         //kevtest
-        confirmTimeButton.setOnAction(e -> {sample.Controller.processTime(datePicker, hourField, minuteField, simulationDateAndTime);});
+        confirmTimeButton.setOnAction(e -> {new Thread(()->{sample.Controller.CurrentDateSimulation(datePicker, simulationDate, simulationTime, hourField, minuteField);}).start();});
+
+        //{new Thread(()->{sample.Controller.CurrentDate(simulationDate, simulationTime);}).start();}
 
         shs_module.getChildren().addAll(manageOrSwitchProfileButton, line, setDateTimeLabel, datePicker,
-                setTimeLabel, simulationDateAndTime, hourField, colon, minuteField, confirmTimeButton, line2, setHouseLocationLabel,
+                setTimeLabel, simulationDate, simulationTime, hourField, colon, minuteField, confirmTimeButton, line2, setHouseLocationLabel,
                 confirmLocationButton);
 
         return shs_module;

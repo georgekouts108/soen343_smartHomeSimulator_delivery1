@@ -1,5 +1,6 @@
 package sample;
 import house.*;
+import javafx.application.Platform;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import utilities.*;
@@ -35,41 +36,55 @@ public class Controller {
     private static int pixelY = 70;
     private static int numberOfTimesProfileHyperlinkClicked = 0;
 
-    //kevtest
-    public static void processTime(DatePicker dateOfSim,TextField hour, TextField minute, Label simulationDateAndTime) {
+    /*public static void processTime(DatePicker dateOfSim,TextField hour, TextField minute, Label simulationDateAndTime) {
         String hours = hour.getText();
         String minutes = minute.getText();
         LocalDate date = dateOfSim.getValue();
         simulationDateAndTime.setText("Date: " + date + "\n" + "Simulation time: " + hours + ":" + minutes);
-    }
+    }*/
 
-    //able to print at every second but unable to display in gui...
+    //for LOCAL TIME
     public static void CurrentDate(Label dateText, Label timeText){
-
-        Thread clock = new Thread(){
-            public void run(){
-                for(;;){
-                    Calendar cal = new GregorianCalendar();
-                    int month = cal.get(Calendar.MONTH);
-                    int year = cal.get(Calendar.YEAR);
-                    int day = cal.get(Calendar.DAY_OF_MONTH);
-                    System.out.println("Date "+year+"/"+(month+1)+"/"+day);
-                    dateText.setText("Date"+year+"/"+(month+1)+"/"+day); //currently unable to setText for dateText
-                    int second = cal.get(Calendar.SECOND);
-                    int minute = cal.get(Calendar.MINUTE);
-                    int hour = cal.get(Calendar.HOUR);
-                    System.out.println("Time "+hour+":"+(minute)+":"+second);
-                    timeText.setText("Time "+hour+":"+(minute)+":"+second);
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+        try{
+            for(;;){
+                Calendar cal = new GregorianCalendar();
+                int month = cal.get(Calendar.MONTH);
+                int year = cal.get(Calendar.YEAR);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                Platform.runLater(()->dateText.setText("Date "+year+"/"+(month+1)+"/"+day));
+                int second = cal.get(Calendar.SECOND);
+                int minute = cal.get(Calendar.MINUTE);
+                int hour = cal.get(Calendar.HOUR);
+                Platform.runLater(()->timeText.setText("Time "+hour+":"+(minute)+":"+second));
+                Thread.sleep(1000);
             }
-        };
-        clock.start();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
+
+    //For SIMULATION TIME, not working properly, for some reason it displays the time on top left corner...
+    //wrong logic
+    public static void CurrentDateSimulation(DatePicker datePicker, Label dateText, Label timeText, TextField hourField, TextField minuteField){
+        try{
+            for(;;){
+                Calendar cal = new GregorianCalendar();
+                Platform.runLater(()->dateText.setText(String.valueOf(datePicker.getValue())));
+                int second = cal.get(Calendar.SECOND);
+                int minute = cal.get(Calendar.MINUTE);
+                int hour = cal.get(Calendar.HOUR);
+                int hoursToAdd = 24-cal.get(Calendar.HOUR);
+                int addHrs = Integer.parseInt(hourField.getText());
+                int minsToAdd = 60-cal.get(Calendar.MINUTE);
+                int addMins = Integer.parseInt(minuteField.getText());
+                Platform.runLater(()->timeText.setText("Time "+(hour + hoursToAdd + addHrs )%24+":"+(minute + minsToAdd + addMins)%60+":"+second));
+                Thread.sleep(1000);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
 
     /**SCENE-SWITCHING METHODS START */
