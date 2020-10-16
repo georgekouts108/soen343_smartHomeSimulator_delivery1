@@ -97,8 +97,8 @@ public class Controller {
 
     /**DASHBOARD METHODS*/
     public static void startSimulation(ToggleButton t, Button b, TextArea ta, TabPane tab) {
-        if (!t.isSelected()) { t.setText("ON"); ta.setDisable(true); b.setDisable(true); tab.setDisable(true); Main.simulationIsOn = false; }
-        else { t.setText("OFF"); b.setDisable(false); ta.setDisable(false); tab.setDisable(false); Main.simulationIsOn = true; }
+        if (!t.isSelected()) { t.setText("ON"); ta.setDisable(true); Main.houseLayout.setDisable(true); b.setDisable(true); tab.setDisable(true); Main.simulationIsOn = false; }
+        else { t.setText("OFF"); b.setDisable(false); Main.houseLayout.setDisable(false); ta.setDisable(false); tab.setDisable(false); Main.simulationIsOn = true; }
     }
 
     public static void editContext() {

@@ -215,7 +215,7 @@ public class Main extends Application {
         anchorPane.getChildren().add(outputConsoleLabel);
 
         houseLayout.setPrefHeight(675); houseLayout.setPrefWidth(675); houseLayout.setId("houseLayout");
-        houseLayout.setTranslateX(615); houseLayout.setTranslateY(10);
+        houseLayout.setTranslateX(615); houseLayout.setTranslateY(10); houseLayout.setDisable(true);
         anchorPane.getChildren().add(houseLayout);
 
         modulesInterface = createModuleInterface(); modulesInterface.setDisable(true);

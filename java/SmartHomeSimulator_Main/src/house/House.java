@@ -191,7 +191,7 @@ public class House {
                     for (int win = 0; win < room.getWindowCollection().length; win++) {
                         if (room.getWindowCollection()[win].getUtilityID() == Integer.parseInt(checkBox.getId().substring(17))) {
                             room.getWindowCollection()[win].setState(true);
-                            appendMessageToConsole("Window #"+room.getDoorCollection()[win].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
+                            appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
                             break;
                         }
                     }
@@ -302,8 +302,9 @@ public class House {
                 try {
                     roomLayout.getChildren().remove(room.getIconMD_view());
                 }catch(Exception ex){}
+                appendMessageToConsole("Motion detector disabled in Room #"+room.getRoomID()+" "+room.getName());
             }
-            appendMessageToConsole("Motion detector disabled in Room #"+room.getRoomID()+" "+room.getName());
+
         });
         roomLayout.getChildren().add(mdCheckbox);
 
