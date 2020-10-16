@@ -1,12 +1,15 @@
 package house;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import sample.*;
 import utilities.*;
+
+import java.time.LocalDateTime;
 
 public class House {
 
@@ -138,6 +141,7 @@ public class House {
                     for (int light = 0; light < room.getLightCollection().length; light++) {
                         if (room.getLightCollection()[light].getUtilityID() == Integer.parseInt(checkBox.getId().substring(16))) {
                             room.getLightCollection()[light].setState(true);
+                            appendMessageToConsole("Light #"+room.getLightCollection()[light].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
                             break;
                         }
                     }
@@ -147,6 +151,7 @@ public class House {
                     for (int light = 0; light < room.getLightCollection().length; light++) {
                         if (room.getLightCollection()[light].getUtilityID() == Integer.parseInt(checkBox.getId().substring(16))) {
                             room.getLightCollection()[light].setState(false);
+                            appendMessageToConsole("Light #"+room.getLightCollection()[light].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
                             break;
                         }
                     }
@@ -186,6 +191,7 @@ public class House {
                     for (int win = 0; win < room.getWindowCollection().length; win++) {
                         if (room.getWindowCollection()[win].getUtilityID() == Integer.parseInt(checkBox.getId().substring(17))) {
                             room.getWindowCollection()[win].setState(true);
+                            appendMessageToConsole("Window #"+room.getDoorCollection()[win].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
                             break;
                         }
                     }
@@ -195,6 +201,7 @@ public class House {
                     for (int win = 0; win < room.getWindowCollection().length; win++) {
                         if (room.getWindowCollection()[win].getUtilityID() == Integer.parseInt(checkBox.getId().substring(17))) {
                             room.getWindowCollection()[win].setState(false);
+                            appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
                             break;
                         }
                     }
@@ -234,15 +241,18 @@ public class House {
                     for (int door = 0; door < room.getDoorCollection().length; door++) {
                         if (room.getDoorCollection()[door].getUtilityID() == Integer.parseInt(checkBox.getId().substring(15))) {
                             room.getDoorCollection()[door].setState(true);
+                            appendMessageToConsole("Door #"+room.getDoorCollection()[door].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
                             break;
                         }
                     }
+
                 }
                 else {
                     // close the door
                     for (int door = 0; door < room.getDoorCollection().length; door++) {
                         if (room.getDoorCollection()[door].getUtilityID() == Integer.parseInt(checkBox.getId().substring(15))) {
                             room.getDoorCollection()[door].setState(false);
+                            appendMessageToConsole("Door #"+room.getDoorCollection()[door].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
                             break;
                         }
                     }
@@ -285,6 +295,7 @@ public class House {
                 if (!isMdIconThere){
                     roomLayout.getChildren().add(room.getIconMD_view());
                 }
+                appendMessageToConsole("Motion detector triggered in Room #"+room.getRoomID()+" "+room.getName());
             }
             else {
                 room.getMd().setState(false);
@@ -292,6 +303,7 @@ public class House {
                     roomLayout.getChildren().remove(room.getIconMD_view());
                 }catch(Exception ex){}
             }
+            appendMessageToConsole("Motion detector disabled in Room #"+room.getRoomID()+" "+room.getName());
         });
         roomLayout.getChildren().add(mdCheckbox);
 
@@ -312,12 +324,14 @@ public class House {
                     if (!isAcIconThere){
                         roomLayout.getChildren().add(room.getIconAC_view());
                     }
+                    appendMessageToConsole("AC turned on in Room #"+room.getRoomID()+" "+room.getName());
                 }
                 else {
                     room.getAc().setState(false);
                     try {
                         roomLayout.getChildren().remove(room.getIconAC_view());
                     }catch(Exception ex){}
+                    appendMessageToConsole("AC turned off in Room #"+room.getRoomID()+" "+room.getName());
                 }
             });
             roomLayout.getChildren().add(acCheckbox);
@@ -383,6 +397,16 @@ public class House {
         return count;
     }
 
+    public void appendMessageToConsole(String message) {
+        for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
+            if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
+                TextArea textArea = (TextArea) Main.getMain_dashboard().getChildren().get(a);
+                textArea.appendText(LocalDateTime.now().toString().substring(0,10)+ " "+
+                                LocalDateTime.now().toString().substring(11,19)+" - "+message+"\n");
+                Main.getMain_dashboard().getChildren().set(a, textArea);
+            }
+        }
+    }
 
 
 
