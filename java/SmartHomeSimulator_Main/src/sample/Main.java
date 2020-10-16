@@ -37,7 +37,7 @@ public class Main extends Application {
     protected static final int DASHBOARD_WIDTH = 700;
     protected static final int DASHBOARD_HEIGHT = 1300;
     protected static final int LOGINPAGE_WIDTH = 400;
-    protected static final int LOGINPAGE_HEIGHT = 600;
+    protected static final int LOGINPAGE_HEIGHT = 700;
 
     /**FIXED GUI ELEMENTS*/
     protected static Stage main_stage;
@@ -79,8 +79,8 @@ public class Main extends Application {
 
     /**HOUSE INFO VARIABLES */
     /**TODO: @AntoTurc -- create more protected static variables houshold elements*/
-    protected int numberOfRooms;
-    protected static String outsideTemperature;
+    protected static int numberOfRooms;
+    protected static double outsideTemperature;
     protected static Room[] householdLocations; // an array of household locations
     protected static Room currentLocation; // the current location or room of the logged in user
 
@@ -145,7 +145,7 @@ public class Main extends Application {
 
         Label profileListLabel = new Label();
         profileListLabel.setId("profileListLabel");
-        profileListLabel.setTranslateX(250); profileListLabel.setTranslateY(40);
+        profileListLabel.setTranslateX(350); profileListLabel.setTranslateY(40);
         profileListLabel.setText("LIST OF PROFILES:"); Main.profileSelection.getChildren().add(profileListLabel);
 
         TextField newProfileTextField = new TextField(); newProfileTextField.setPromptText("P,C,G,or S...");
