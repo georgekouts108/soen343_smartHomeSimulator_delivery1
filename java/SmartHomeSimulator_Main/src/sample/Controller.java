@@ -168,7 +168,7 @@ public class Controller {
 
             Label temperatureLabel = new Label("Modify\nOutdoor Temperature");
             temperatureLabel.setId("temperatureLabel");
-            temperatureLabel.setTranslateX(500);
+            temperatureLabel.setTranslateX(450);
             temperatureLabel.setTranslateY(20);
             Main.editContextLayout.getChildren().add(temperatureLabel);
 
@@ -193,16 +193,19 @@ public class Controller {
             Button tempButton = new Button("Confirm");
             tempButton.setId("confirmTemperatureButton");
             tempButton.setOnAction(e -> {
-                for(int i=0; i < Main.main_dashboard.getChildren().size(); i++){
-                    try{
+                try{
+                    for(int i=0; i < Main.main_dashboard.getChildren().size(); i++){
                         if (Main.main_dashboard.getChildren().get(i).getId().equals("temp")){
-                            Label label = (Label) Main.main_dashboard.getChildren().get(i);
-                            label.setText("Outside Temp.\n" + tempText.getCharacters().toString() + "°C");
-                            Main.main_dashboard.getChildren().set(i, label);
+                            if(!tempText.getCharacters().toString().isEmpty()) {
+                                Label label = (Label) Main.main_dashboard.getChildren().get(i);
+                                label.setText("Outside Temp.\n" + tempText.getCharacters().toString() + "°C");
+                                Main.main_dashboard.getChildren().set(i, label);
+                                break;
+                            }
                         }
-                    }catch (Exception err){
-                        System.out.print("Null pointer exception.");
                     }
+                }catch (Exception err){
+                        System.out.print("There was an error while modifying the outdoor temperature.");
                 }
             });
             tempButton.setTranslateX(540);
@@ -210,7 +213,9 @@ public class Controller {
             Main.editContextLayout.getChildren().add(tempButton);
 
             Label roomsLabel = new Label("Click on a room you would like to move to, or change a room's number of occupants");
-            roomsLabel.setTranslateY(105); roomsLabel.setId("roomsLabel");
+            roomsLabel.setTranslateY(105);
+            roomsLabel.setTranslateX(20);
+            roomsLabel.setId("roomsLabel");
             Main.editContextLayout.getChildren().add(roomsLabel);
 
             int transY = 120;
@@ -283,6 +288,7 @@ public class Controller {
                     "or closing");
             windowsLabel.setId("labelForWindowBlocking");
             windowsLabel.setTranslateY(360);
+            windowsLabel.setTranslateX(20);
             Main.editContextLayout.getChildren().add(windowsLabel);
 
             transY = 400;
@@ -303,22 +309,24 @@ public class Controller {
 //                    }
 //                }
             }
-            Button closeButton = new Button("Close");
-            closeButton.setId("closeEditContextFromScene1Button");
-            closeButton.setTranslateX(325);
-            closeButton.setTranslateY(600);
-            closeButton.setOnAction(e -> Main.editContextStage.close());
-            Main.editContextLayout.getChildren().add(closeButton);
-
             Button moreButton = new Button("More...");
             moreButton.setId("GoToEditContextScene2FromScene1");
-            moreButton.setTranslateX(400);
-            moreButton.setTranslateY(600);
+            moreButton.setTranslateX(200);
+            moreButton.setTranslateY(580);
             moreButton.setOnAction(e -> {
                 generateEditContextScene2(); // will design Main.editContextLayout2
                 Main.editContextStage.setScene(Main.editContextScene2);
             });
             Main.editContextLayout.getChildren().add(moreButton);
+
+            Button closeButton = new Button("Close");
+            closeButton.setId("closeEditContextFromScene1Button");
+            closeButton.setTranslateX(400);
+            closeButton.setTranslateY(580);
+            closeButton.setOnAction(e -> Main.editContextStage.close());
+            Main.editContextLayout.getChildren().add(closeButton);
+
+
 
             numberOfTimesEditContextLinkStage1Accessed++;
         }
@@ -376,7 +384,9 @@ public class Controller {
         if (numberOfTimesEditContextLinkStage2Accessed == 0) {
 
             Label movepplLabel = new Label("Select one or more Profiles, and one Room where you would like to place it/them.");
-            movepplLabel.setTranslateY(10); movepplLabel.setId("movePeopleLabel");
+            movepplLabel.setTranslateY(10);
+            movepplLabel.setTranslateX(20);
+            movepplLabel.setId("movePeopleLabel");
             Main.editContextLayout2.getChildren().add(movepplLabel);
 
             Label profilelistLabel = new Label("Profiles");
@@ -411,7 +421,7 @@ public class Controller {
 
             Button confirmButton2 = new Button("Relocate Profile");
             confirmButton2.setId("relocateProfileButton2");
-            confirmButton2.setTranslateX(300);
+            confirmButton2.setTranslateX(275);
             confirmButton2.setTranslateY(400);
             CheckBox[] finalProfileCheckboxes = profileCheckboxes;
             confirmButton2.setOnAction(e -> relocateProfile(finalProfileCheckboxes, roomCheckboxes));
@@ -419,15 +429,15 @@ public class Controller {
 
             Button closeButton = new Button("Close");
             closeButton.setId("closeFromEditContextScene2Button");
-            closeButton.setTranslateX(325);
-            closeButton.setTranslateY(600);
+            closeButton.setTranslateX(400);
+            closeButton.setTranslateY(580);
             closeButton.setOnAction(e -> Main.editContextStage.close());
             Main.editContextLayout2.getChildren().add(closeButton);
 
             Button gobackButton = new Button("Go Back");
             gobackButton.setId("returnToEditContextScene1Button");
-            gobackButton.setTranslateX(225);
-            gobackButton.setTranslateY(600);
+            gobackButton.setTranslateX(200);
+            gobackButton.setTranslateY(580);
             gobackButton.setOnAction(e -> Main.editContextStage.setScene(Main.editContextScene));
             Main.editContextLayout2.getChildren().add(gobackButton);
 
