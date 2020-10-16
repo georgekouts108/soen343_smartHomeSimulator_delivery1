@@ -22,7 +22,10 @@ import javafx.util.converter.LocalDateTimeStringConverter;
 import javax.swing.*;
 import javax.swing.text.html.ImageView;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
 import sample.Main.*;
@@ -31,6 +34,43 @@ public class Controller {
 
     private static int pixelY = 70;
     private static int numberOfTimesProfileHyperlinkClicked = 0;
+
+    //kevtest
+    public static void processTime(DatePicker dateOfSim,TextField hour, TextField minute, Label simulationDateAndTime) {
+        String hours = hour.getText();
+        String minutes = minute.getText();
+        LocalDate date = dateOfSim.getValue();
+        simulationDateAndTime.setText("Date: " + date + "\n" + "Simulation time: " + hours + ":" + minutes);
+    }
+
+    //able to print at every second but unable to display in gui...
+    public static void CurrentDate(Label dateText, Label timeText){
+
+        Thread clock = new Thread(){
+            public void run(){
+                for(;;){
+                    Calendar cal = new GregorianCalendar();
+                    int month = cal.get(Calendar.MONTH);
+                    int year = cal.get(Calendar.YEAR);
+                    int day = cal.get(Calendar.DAY_OF_MONTH);
+                    System.out.println("Date "+year+"/"+(month+1)+"/"+day);
+                    dateText.setText("Date"+year+"/"+(month+1)+"/"+day); //currently unable to setText for dateText
+                    int second = cal.get(Calendar.SECOND);
+                    int minute = cal.get(Calendar.MINUTE);
+                    int hour = cal.get(Calendar.HOUR);
+                    System.out.println("Time "+hour+":"+(minute)+":"+second);
+                    timeText.setText("Time "+hour+":"+(minute)+":"+second);
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        clock.start();
+    }
+
 
     /**SCENE-SWITCHING METHODS START */
     public static void goToMainDashboardScene(UserProfile userProfile) {
