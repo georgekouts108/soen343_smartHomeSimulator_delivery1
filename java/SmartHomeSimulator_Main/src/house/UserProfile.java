@@ -11,6 +11,7 @@ public class UserProfile {
     private int profileID;
     private Room currentLocation;
     private boolean isAdmin;
+    private int numberOfTimesHyperlinkClicked;
 
     public boolean isAdmin() {
         return isAdmin;
@@ -25,10 +26,27 @@ public class UserProfile {
         this.loggedIn = false;
         this.profileID = (PROFILE_ID++);
         this.isAdmin = isAdmin;
+        this.numberOfTimesHyperlinkClicked = 0;
+    }
+
+    public static int getstaticProfileId() {
+        return PROFILE_ID;
+    }
+
+    public static void setstaticProfileId(int profileId) {
+        PROFILE_ID = profileId;
+    }
+
+    public int getNumberOfTimesHyperlinkClicked() {
+        return numberOfTimesHyperlinkClicked;
+    }
+
+    public void setNumberOfTimesHyperlinkClicked(int numberOfTimesHyperlinkClicked) {
+        this.numberOfTimesHyperlinkClicked = numberOfTimesHyperlinkClicked;
     }
 
     public int getProfileID() {
-        return profileID;
+        return this.profileID;
     }
 
     public void setProfileID(int profileID) {
@@ -36,14 +54,14 @@ public class UserProfile {
     }
 
     public String getType() {
-        return type;
+        return this.type;
     }
     public void setType(String type) {
         this.type = type;
     }
 
     public boolean isLoggedIn() {
-        return loggedIn;
+        return this.loggedIn;
     }
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;

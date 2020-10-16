@@ -1,19 +1,18 @@
 package sample;
 import house.*;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import utilities.*;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,11 +25,10 @@ import javafx.stage.Stage;
 import javafx.util.converter.LocalDateTimeStringConverter;
 import javax.swing.*;
 import javax.swing.text.html.ImageView;
+import java.awt.*;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
-import javafx.concurrent.Task;
-
 import sample.Main.*;
 
 public class Controller {
@@ -41,24 +39,46 @@ public class Controller {
     private static int numberOfTimesEditContextLinkStage2Accessed = 0;
     private static int numberOfAddedProfiles = 0;
 
+    private static CheckBox[] profileCheckboxes;
+    private static CheckBox[] roomCheckboxes;
+
     /**SCENE-SWITCHING METHODS START */
-    public static void goToMainDashboardScene(UserProfile userProfile) {
+    public static void goToMainDashboardScene(UserProfile userProfile, Hyperlink hyperlink) {
         for (int prof = 0; prof < Main.profiles.length; prof++) {
             if (Main.profiles[prof].getProfileID()==userProfile.getProfileID()) {
                 Main.profiles[prof].setLoggedIn(true);
+                Main.currentActiveProfile = Main.profiles[prof];
                 Main.currentLocation = null;
                 break;
             }
         }
+
         String stageTitle = "Smart Home Simulator -- logged in as #"+userProfile.getProfileID()+" \""+userProfile.getType().toUpperCase()+"\"";
         if (userProfile.isAdmin()) {stageTitle+=" (ADMIN)";}
         Main.main_stage.setTitle(stageTitle);
 
-        if (Main.currentActiveProfile != null) {
-            Main.currentActiveProfile.setLoggedIn(false);
-        }
+        ///
+        Hyperlink logoutLink = new Hyperlink("Logout");
+        logoutLink.setId("logoutLinkForProfile"+userProfile.getProfileID());
+        logoutLink.setTranslateX(hyperlink.getTranslateX()+60); logoutLink.setTranslateY(hyperlink.getTranslateY());
 
-        Main.currentActiveProfile = userProfile;
+        logoutLink.setOnAction(ACT2 -> {
+            Main.profiles[userProfile.getProfileID()-1].setCurrentLocation(null);
+            Main.profiles[userProfile.getProfileID() - 1].setLoggedIn(false);
+            Main.currentActiveProfile = null;
+            logoutLink.setDisable(true);
+
+            for (int a = 0; a < Main.profileSelection.getChildren().size(); a++) {
+                if (Main.profileSelection.getChildren().get(a).getId().contains("loginLinkForProfile")) {
+                    Hyperlink hp = (Hyperlink) Main.profileSelection.getChildren().get(a);
+                    hp.setDisable(false);
+                    Main.profileSelection.getChildren().set(a,hp);
+                }
+            }
+            Main.main_stage.setTitle("Smart Home Simulator");
+            Main.profileSelection.getChildren().remove(logoutLink);
+        });
+        Main.profileSelection.getChildren().add(logoutLink);
         Main.main_stage.setScene(Main.dashboardScene);
     }
 
@@ -67,7 +87,7 @@ public class Controller {
         Main.profileBox.setResizable(false);
         Main.profileBox.initModality(Modality.APPLICATION_MODAL);
         Main.profileBox.setTitle("Manage Profiles");
-        Main.profileBox.setWidth(600);
+        Main.profileBox.setWidth(900);
         Main.profileBox.setHeight(600);
         Main.transformProfileSelectionPageScene();
         Main.profileBox.setScene(Main.profileScene);
@@ -77,8 +97,8 @@ public class Controller {
 
     /**DASHBOARD METHODS*/
     public static void startSimulation(ToggleButton t, Button b, TextArea ta, TabPane tab) {
-        if (!t.isSelected()) { t.setText("ON"); ta.setDisable(true); b.setDisable(true); tab.setDisable(true); Main.simulationIsOn = false; }
-        else { t.setText("OFF"); b.setDisable(false); ta.setDisable(false); tab.setDisable(false); Main.simulationIsOn = true; }
+        if (!t.isSelected()) { t.setText("ON"); ta.setDisable(true); Main.houseLayout.setDisable(true); b.setDisable(true); tab.setDisable(true); Main.simulationIsOn = false; }
+        else { t.setText("OFF"); b.setDisable(false); Main.houseLayout.setDisable(false); ta.setDisable(false); tab.setDisable(false); Main.simulationIsOn = true; }
     }
 
     public static void editContext() {
@@ -112,15 +132,6 @@ public class Controller {
 
             TextField hourField = new TextField();
             hourField.setId("hourField");
-            hourField.textProperty().addListener(new ChangeListener<String>() {
-                @Override
-                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                    String newValue) {
-                    if (!newValue.matches("\\d*")) {
-                        hourField.setText(newValue.replaceAll("[^\\d]", ""));
-                    }
-                }
-            });
             hourField.setPrefHeight(30);
             hourField.setPrefWidth(60);
             hourField.setTranslateX(100);
@@ -129,15 +140,6 @@ public class Controller {
 
             TextField minuteField = new TextField();
             minuteField.setId("minuteField");
-            minuteField.textProperty().addListener(new ChangeListener<String>() {
-                @Override
-                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                    String newValue) {
-                    if (!newValue.matches("\\d*")) {
-                        minuteField.setText(newValue.replaceAll("[^\\d]", ""));
-                    }
-                }
-            });
             minuteField.setPrefHeight(30);
             minuteField.setPrefWidth(60);
             minuteField.setTranslateX(180);
@@ -174,15 +176,6 @@ public class Controller {
 
             TextField tempText = new TextField();
             tempText.setId("temperatureText");
-            tempText.textProperty().addListener(new ChangeListener<String>() {
-                @Override
-                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                    String newValue) {
-                    if (!newValue.matches("\\d*")) {
-                        tempText.setText(newValue.replaceAll("[^\\d*(\\.)?\\d*$]", ""));
-                    }
-                }
-            });
             tempText.setPrefHeight(30);
             tempText.setPrefWidth(60);
             tempText.setTranslateX(450);
@@ -337,50 +330,124 @@ public class Controller {
      */
     public static void generateEditContextScene2() {
 
-        CheckBox[] profileCheckboxes = null;
-        ///// show the profile checkboxes
-        if (Main.numberOfProfiles != numberOfAddedProfiles) {
-            numberOfAddedProfiles = Main.numberOfProfiles;
-            int transY2 = 80;
+        Label movepplLabel = new Label("Select one or more Profiles, and only one Room where you would like to place it/them.");
+        movepplLabel.setTranslateY(10); movepplLabel.setId("movePeopleLabel");
 
-            if (Main.profiles != null) {
-                int index = 0;
-                profileCheckboxes = new CheckBox[Main.profiles.length];
-                for (int p = 0; p < Main.profiles.length; p++) {
+        Label profilelistLabel = new Label("Profiles");
+        profilelistLabel.setId("profileListLabel");
+        profilelistLabel.setTranslateY(60);
+        profilelistLabel.setTranslateX(100);
 
-                    if (!Main.profiles[p].isLoggedIn()) {
-                        CheckBox checkBox = new CheckBox(Main.profiles[p].getProfileID() + "--" + Main.profiles[p].getType());
-                        checkBox.setTranslateY(transY2);
-                        checkBox.setTranslateX(100);
-                        checkBox.setId("checkboxProfile" + Main.profiles[p].getProfileID());
-                        profileCheckboxes[index++] = checkBox;
-                        Main.editContextLayout2.getChildren().add(checkBox);
+        Label roomlistLabel = new Label("Rooms");
+        roomlistLabel.setId("roomListLabel");
+        roomlistLabel.setTranslateY(60);
+        roomlistLabel.setTranslateX(400);
 
-                        Label currentRoomLabel = new Label();
-                        currentRoomLabel.setId("currentRoomOfProfile" + Main.profiles[p].getProfileID());
-                        if (Main.profiles[p].getCurrentLocation() != null) {
-                            currentRoomLabel.setText(Main.profiles[p].getCurrentLocation().getName());
-                        } else {
-                            currentRoomLabel.setText("No location");
-                        }
-                        currentRoomLabel.setTranslateY(transY2);
-                        currentRoomLabel.setTranslateX(250);
-                        Main.editContextLayout2.getChildren().add(currentRoomLabel);
-                        transY2 += 20;
-                    }
+        Label currentlocationLabel = new Label("Current Location");
+        currentlocationLabel.setTranslateY(60);
+        currentlocationLabel.setId("currentLocationLabel");
+        currentlocationLabel.setTranslateX(250);
+
+        Button relocateProfileButton = new Button("Relocate Profile(s)");
+        relocateProfileButton.setId("relocateProfileButton2");
+        relocateProfileButton.setTranslateX(300); relocateProfileButton.setTranslateY(400);
+        relocateProfileButton.setDisable(true);
+        relocateProfileButton.setOnAction(e -> relocateProfile(profileCheckboxes, roomCheckboxes));
+
+        Button closeButton = new Button("Close");
+        closeButton.setId("closeFromEditContextScene2Button");
+        closeButton.setTranslateX(325);
+        closeButton.setTranslateY(600);
+        closeButton.setOnAction(e -> Main.editContextStage.close());
+
+        Button gobackButton = new Button("Go Back");
+        gobackButton.setId("returnToEditContextScene1Button");
+        gobackButton.setTranslateX(225);
+        gobackButton.setTranslateY(600);
+        gobackButton.setOnAction(e -> Main.editContextStage.setScene(Main.editContextScene));
+
+        if (numberOfTimesEditContextLinkStage2Accessed == 0 || Main.numberOfProfiles != numberOfAddedProfiles) {
+
+            // GUI elements to add only the first time you enter Scene 2
+            if (numberOfTimesEditContextLinkStage2Accessed == 0) {
+
+                Main.editContextLayout2.getChildren().add(movepplLabel);
+                Main.editContextLayout2.getChildren().add(profilelistLabel);
+                Main.editContextLayout2.getChildren().add(roomlistLabel);
+                Main.editContextLayout2.getChildren().add(currentlocationLabel);
+                Main.editContextLayout2.getChildren().add(relocateProfileButton);
+                Main.editContextLayout2.getChildren().add(closeButton);
+                Main.editContextLayout2.getChildren().add(gobackButton);
+
+                // show the room checkboxes
+                int transY3 = 80;
+                roomCheckboxes = new CheckBox[Main.householdLocations.length];
+                for (int r = 0; r < Main.householdLocations.length; r++) {
+                    CheckBox checkBox = new CheckBox(Main.householdLocations[r].getName());
+                    checkBox.setTranslateY(transY3);
+                    checkBox.setTranslateX(400);
+                    checkBox.setId("checkboxRoom" + Main.householdLocations[r].getRoomID());
+                    roomCheckboxes[r] = checkBox;
+                    Main.editContextLayout2.getChildren().add(checkBox);
+                    transY3 += 20;
                 }
-                for (int a = 0; a < Main.editContextLayout2.getChildren().size(); a++) {
-                    try {
-                        if (Main.editContextLayout2.getChildren().get(a).getId().equals("checkboxProfile" + Main.currentActiveProfile.getProfileID()) ||
-                                Main.editContextLayout2.getChildren().get(a).getId().equals("currentRoomOfProfile" + Main.currentActiveProfile.getProfileID())) {
-                            Main.editContextLayout2.getChildren().remove(a);
+            }
+
+            if (Main.numberOfProfiles != numberOfAddedProfiles) {
+                // show the profile checkboxes
+
+                int transY2 = 80;
+                if (Main.profiles != null) {
+                    int index = 0;
+                    profileCheckboxes = new CheckBox[Main.profiles.length];
+                    for (int p = 0; p < Main.profiles.length; p++) {
+
+                        if (!Main.profiles[p].isLoggedIn()) {
+                            CheckBox checkBox = new CheckBox(Main.profiles[p].getProfileID() + "--" + Main.profiles[p].getType());
+                            checkBox.setTranslateY(transY2);
+                            checkBox.setTranslateX(100);
+                            checkBox.setId("checkboxProfile" + Main.profiles[p].getProfileID());
+
+                            Label currentRoomLabel = new Label();
+                            currentRoomLabel.setId("currentRoomOfProfile" + Main.profiles[p].getProfileID());
+                            if (Main.profiles[p].getCurrentLocation() != null) {
+                                currentRoomLabel.setText(Main.profiles[p].getCurrentLocation().getName());
+                            } else {
+                                currentRoomLabel.setText("No location");
+                            }
+                            currentRoomLabel.setTranslateY(transY2);
+                            currentRoomLabel.setTranslateX(250);
+
+                            boolean alreadyThere = false;
+                            for (int i = 0; i < Main.editContextLayout2.getChildren().size(); i++) {
+                                if (Main.editContextLayout2.getChildren().get(i).getId().equals("checkboxProfile"+Main.profiles[p].getProfileID())) {
+                                    alreadyThere = true;
+                                    break;
+                                }
+                            }
+
+                            if (!alreadyThere) {
+                                profileCheckboxes[index++] = checkBox;
+                                Main.editContextLayout2.getChildren().add(checkBox);
+                                Main.editContextLayout2.getChildren().add(currentRoomLabel);
+                            }
+                            transY2 += 20;
                         }
-                    } catch(Exception e){}
+                    }
+                    for (int a = 0; a < Main.editContextLayout2.getChildren().size(); a++) {
+                        try {
+                            if (Main.editContextLayout2.getChildren().get(a).getId().equals("checkboxProfile" + Main.currentActiveProfile.getProfileID()) ||
+                                    Main.editContextLayout2.getChildren().get(a).getId().equals("currentRoomOfProfile" + Main.currentActiveProfile.getProfileID())) {
+                                Main.editContextLayout2.getChildren().remove(a);
+                            }
+                        } catch (Exception e) {}
+                    }
+                    numberOfAddedProfiles = Main.numberOfProfiles;
                 }
 
             }
         }
-
+      
         if (numberOfTimesEditContextLinkStage2Accessed == 0) {
 
             Label movepplLabel = new Label("Select one or more Profiles, and one Room where you would like to place it/them.");
@@ -442,7 +509,20 @@ public class Controller {
             Main.editContextLayout2.getChildren().add(gobackButton);
 
             numberOfTimesEditContextLinkStage2Accessed++;
+          
+        if (Main.currentActiveProfile != null) {
+            for (int a = 0; a < Main.editContextLayout2.getChildren().size(); a++) {
+                try {
+                    if (Main.editContextLayout2.getChildren().get(a).getId().equals("relocateProfileButton2")) {
+                        Button b = (Button) Main.editContextLayout2.getChildren().get(a);
+                        b.setDisable(false);
+                        Main.editContextLayout2.getChildren().set(a, b);
+                        break;
+                    }
+                }catch(Exception e){}
+            }
         }
+        numberOfTimesEditContextLinkStage2Accessed++;
     }
 
     /**
@@ -454,96 +534,96 @@ public class Controller {
         try {
             // find the profile checkbox that was selected
             for (int pcb = 0; pcb < profileBoxes.length; pcb++) { // exactly 1 checkbox in this array must be selected
+                try {
+                    if (profileBoxes[pcb].isSelected()) {
 
-                if (profileBoxes[pcb].isSelected()) {
+                        // find the room checkbox that was selected
+                        for (int rcb = 0; rcb < roomBoxes.length; rcb++) { // exactly 1 checkbox in this array must be selected
+                            if (roomBoxes[rcb].isSelected()) {
 
-                    // find the room checkbox that was selected
-                    for (int rcb = 0; rcb < roomBoxes.length; rcb++) { // exactly 1 checkbox in this array must be selected
-                        if (roomBoxes[rcb].isSelected()) {
+                                // find the matching profile and room objects
+                                for (int L = 0; L < Main.editContextLayout2.getChildren().size(); L++) {
 
-                            // find the matching profile and room objects
-                            for (int L = 0; L < Main.editContextLayout2.getChildren().size(); L++) {
+                                    if (Main.editContextLayout2.getChildren().get(L).equals(profileBoxes[pcb])) {
+                                        int selectedProfileID = Integer.parseInt(Main.editContextLayout2.getChildren().get(L).getId().substring
+                                                (Main.editContextLayout2.getChildren().get(L).getId().length() - 1));
 
-                                if (Main.editContextLayout2.getChildren().get(L).equals(profileBoxes[pcb])) {
-                                    int selectedProfileID = Integer.parseInt(Main.editContextLayout2.getChildren().get(L).getId().substring
-                                            (Main.editContextLayout2.getChildren().get(L).getId().length() - 1));
+                                        for (int M = 0; M < Main.editContextLayout2.getChildren().size(); M++) {
 
-                                    for (int M = 0; M < Main.editContextLayout2.getChildren().size(); M++) {
+                                            if (Main.editContextLayout2.getChildren().get(M).equals(roomBoxes[rcb])) {
+                                                int selectedRoomID = Integer.parseInt(Main.editContextLayout2.getChildren().get(M).getId().substring
+                                                        (Main.editContextLayout2.getChildren().get(M).getId().length() - 1));
 
-                                        if (Main.editContextLayout2.getChildren().get(M).equals(roomBoxes[rcb])) {
-                                            int selectedRoomID = Integer.parseInt(Main.editContextLayout2.getChildren().get(M).getId().substring
-                                                    (Main.editContextLayout2.getChildren().get(M).getId().length() - 1));
+                                                // do the relocation
 
-                                            // do the relocation
+                                                for (int up = 0; up < Main.profiles.length; up++) {
+                                                    if (Main.profiles[up].getProfileID() == selectedProfileID) {
 
-                                            for (int up = 0; up < Main.profiles.length; up++) {
-                                                if (Main.profiles[up].getProfileID() == selectedProfileID) {
+                                                        for (int r = 0; r < Main.householdLocations.length; r++) {
 
-                                                    for (int r = 0; r < Main.householdLocations.length; r++) {
-
-                                                        if (Main.householdLocations[r].getRoomID() == selectedRoomID) {
-                                                            Room dummyRoom = Main.profiles[up].getCurrentLocation();
-                                                            if (Main.profiles[up].getCurrentLocation() == Main.householdLocations[selectedRoomID - 1]) {
-                                                                System.out.println("Profile #" + Main.profiles[up] + " is already in the " + Main.householdLocations[selectedRoomID - 1].getName());
-                                                            } else {
-                                                                if (Main.profiles[up].getCurrentLocation() != null) {
-                                                                    Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].setNumberOfPeopleInside(
-                                                                            Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].getNumberOfPeopleInside() - 1);
-                                                                }
-                                                                Main.profiles[up].setCurrentLocation(Main.householdLocations[r]); // THE CHANGE OF ROOM***
-
-                                                                Main.householdLocations[r].setNumberOfPeopleInside(Main.householdLocations[r].getNumberOfPeopleInside() + 1);
-                                                            }
-                                                            for (int i = 0; i < Main.editContextLayout2.getChildren().size(); i++) {
-                                                                try {
-                                                                    if (Main.editContextLayout2.getChildren().get(i).getId().equals("currentRoomOfProfile" +
-                                                                            Main.profiles[up].getProfileID())) {
-                                                                        Label label = (Label) Main.editContextLayout2.getChildren().get(i);
-                                                                        label.setText(Main.profiles[up].getCurrentLocation().getName());
-                                                                        Main.editContextLayout2.getChildren().set(i, label);
-                                                                        break;
+                                                            if (Main.householdLocations[r].getRoomID() == selectedRoomID) {
+                                                                Room dummyRoom = Main.profiles[up].getCurrentLocation();
+                                                                if (Main.profiles[up].getCurrentLocation() == Main.householdLocations[selectedRoomID - 1]) {
+                                                                    System.out.println("Profile #" + Main.profiles[up] + " is already in the " + Main.householdLocations[selectedRoomID - 1].getName());
+                                                                } else {
+                                                                    if (Main.profiles[up].getCurrentLocation() != null) {
+                                                                        Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].setNumberOfPeopleInside(
+                                                                                Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].getNumberOfPeopleInside() - 1);
                                                                     }
-                                                                } catch (Exception e) {
-                                                                }
-                                                            }
-                                                            for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
-                                                                try {
-                                                                    if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleInRoom" + Main.householdLocations[r].getRoomID())) {
-                                                                        Label label = (Label) Main.editContextLayout.getChildren().get(a);
-                                                                        label.setText("# of people: " + Main.householdLocations[r].getNumberOfPeopleInside());
-                                                                        Main.editContextLayout.getChildren().set(a, label);
-                                                                    }
-                                                                } catch (Exception e) {
-                                                                }
-                                                            }
-                                                            for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
-                                                                try {
-                                                                    if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleInRoom" + dummyRoom.getRoomID())) {
-                                                                        Label label = (Label) Main.editContextLayout.getChildren().get(a);
-                                                                        label.setText("# of people: " + dummyRoom.getNumberOfPeopleInside());
-                                                                        Main.editContextLayout.getChildren().set(a, label);
-                                                                    }
-                                                                } catch (Exception e) {
-                                                                }
-                                                            }
+                                                                    Main.profiles[up].setCurrentLocation(Main.householdLocations[r]); // THE CHANGE OF ROOM***
 
-                                                            break;
+                                                                    Main.householdLocations[r].setNumberOfPeopleInside(Main.householdLocations[r].getNumberOfPeopleInside() + 1);
+                                                                }
+                                                                for (int i = 0; i < Main.editContextLayout2.getChildren().size(); i++) {
+                                                                    try {
+                                                                        if (Main.editContextLayout2.getChildren().get(i).getId().equals("currentRoomOfProfile" +
+                                                                                Main.profiles[up].getProfileID())) {
+                                                                            Label label = (Label) Main.editContextLayout2.getChildren().get(i);
+                                                                            label.setText(Main.profiles[up].getCurrentLocation().getName());
+                                                                            Main.editContextLayout2.getChildren().set(i, label);
+                                                                            break;
+                                                                        }
+                                                                    } catch (Exception e) {
+                                                                    }
+                                                                }
+                                                                for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
+                                                                    try {
+                                                                        if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleInRoom" + Main.householdLocations[r].getRoomID())) {
+                                                                            Label label = (Label) Main.editContextLayout.getChildren().get(a);
+                                                                            label.setText("# of people: " + Main.householdLocations[r].getNumberOfPeopleInside());
+                                                                            Main.editContextLayout.getChildren().set(a, label);
+                                                                        }
+                                                                    } catch (Exception e) {
+                                                                    }
+                                                                }
+                                                                for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
+                                                                    try {
+                                                                        if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleInRoom" + dummyRoom.getRoomID())) {
+                                                                            Label label = (Label) Main.editContextLayout.getChildren().get(a);
+                                                                            label.setText("# of people: " + dummyRoom.getNumberOfPeopleInside());
+                                                                            Main.editContextLayout.getChildren().set(a, label);
+                                                                        }
+                                                                    } catch (Exception e) {
+                                                                    }
+                                                                }
+
+                                                                break;
+                                                            }
                                                         }
+                                                        break;
                                                     }
-                                                    break;
                                                 }
+                                                break;
                                             }
-                                            break;
                                         }
+                                        break;
                                     }
-                                    break;
                                 }
+                                break;
                             }
-                            break;
                         }
                     }
-                }
-
+                }catch (Exception e){}
             }
         } catch (Exception e){}
     }
@@ -679,7 +759,7 @@ public class Controller {
                 Main.profileLinks = templink;
             }
 
-            Main.transformProfileSelectionPageScene(); // will update "profileSelection"
+            //Main.transformProfileSelectionPageScene(); // will update "profileSelection"
             Main.profileBox.setScene(Main.profileScene);
         }
         catch(Exception ex){
@@ -709,7 +789,7 @@ public class Controller {
                 editTextField.setTranslateY(110); editTextField.setId("editProfileTextField");
                 Main.profileSelection.getChildren().add(editTextField);
 
-                RadioButton editAdmin = new RadioButton("Sed Admin");
+                RadioButton editAdmin = new RadioButton("Set Admin");
                 editAdmin.setId("editAdminButton");
                 if (profile.isAdmin()) {editAdmin.setSelected(true);}
 
@@ -770,7 +850,7 @@ public class Controller {
                         }
                         editLink.setDisable(false);
                         Main.profileSelection.getChildren().removeAll(cancel, accept, editPromptLabel, editTextField, editAdmin);
-                        Main.transformProfileSelectionPageScene();
+                        //Main.transformProfileSelectionPageScene();
                         Main.profileBox.setScene(Main.profileScene);
                     }
                     catch(Exception ex){
@@ -783,7 +863,6 @@ public class Controller {
                 editLink.setDisable(false);
                 });
                 Main.profileSelection.getChildren().add(cancel);
-
                 break;
             }
         }
@@ -791,54 +870,76 @@ public class Controller {
 
     public static void deleteProfile(UserProfile UP, Hyperlink hyperlink) {
 
-        if (UP.isLoggedIn()) {
+        if (!UP.isLoggedIn()) {
             Main.main_stage.setTitle("Smart Home Simulator");
-        }
 
-        // UPDATE THE HYPERLINK ARRAY
-        Hyperlink[] temp = new Hyperlink[Main.profileLinks.length - 1];
 
-        for (int hyper = 0; hyper < Main.profileLinks.length; hyper++) {
-            if (Main.profileLinks[hyper]==hyperlink) {
-                Main.profileLinks[hyper] = null;
+            try{Main.householdLocations[UP.getCurrentLocation().getRoomID() - 1].setNumberOfPeopleInside(
+                    Main.householdLocations[UP.getCurrentLocation().getRoomID() - 1].getNumberOfPeopleInside() - 1);}catch (Exception e){}
 
-                int index = 0;
-                for (int h2 = 0; h2 < Main.profileLinks.length; h2++) {
-                    if (Main.profileLinks[h2] != null) {
-                        temp[index++] = Main.profileLinks[h2];
+            for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
+                try {
+                    if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleInRoom" + UP.getCurrentLocation().getRoomID())) {
+                        Label label = (Label) Main.editContextLayout.getChildren().get(a);
+                        label.setText("# of people: " + UP.getCurrentLocation().getNumberOfPeopleInside());
+                        Main.editContextLayout.getChildren().set(a, label);
                     }
+                } catch (Exception e) {
                 }
-                break;
             }
-        }
-        Main.profileLinks = temp;
+            UP.setCurrentLocation(null);
 
-        // UPDATE THE PROFILE OBJECT ARRAY
-        for (int prof = 0; prof < Main.profiles.length; prof++) {
-            if (Main.profiles[prof].getProfileID()==UP.getProfileID()) {
-                Main.profiles[prof] = null;
-                break;
+
+            // UPDATE THE HYPERLINK ARRAY
+            Hyperlink[] temp = new Hyperlink[Main.profileLinks.length - 1];
+
+            for (int hyper = 0; hyper < Main.profileLinks.length; hyper++) {
+                if (Main.profileLinks[hyper] == hyperlink) {
+                    Main.profileLinks[hyper] = null;
+
+                    int index = 0;
+                    for (int h2 = 0; h2 < Main.profileLinks.length; h2++) {
+                        if (Main.profileLinks[h2] != null) {
+                            temp[index++] = Main.profileLinks[h2];
+                        }
+                    }
+                    break;
+                }
             }
-        }
+            Main.profileLinks = temp;
 
-        UserProfile[] temp2 = new UserProfile[Main.numberOfProfiles - 1];
-        int tempIndex = 0;
-        for (int i = 0; i < Main.profiles.length; i++) {
-            if (Main.profiles[i] != null) {
-                temp2[tempIndex++] = Main.profiles[i];
+            // UPDATE THE PROFILE OBJECT ARRAY
+            for (int prof = 0; prof < Main.profiles.length; prof++) {
+                if (Main.profiles[prof].getProfileID() == UP.getProfileID()) {
+                    Main.profiles[prof] = null;
+                    break;
+                }
             }
-        }
-        Main.profiles = temp2;
 
-        Main.profileSelection.getChildren().removeAll(hyperlink);
-        Main.numberOfProfiles--;
-        Main.transformProfileSelectionPageScene();
-        Main.profileBox.setScene(Main.profileScene);
+            UserProfile[] temp2 = new UserProfile[Main.numberOfProfiles - 1];
+            int tempIndex = 0;
+            for (int i = 0; i < Main.profiles.length; i++) {
+                if (Main.profiles[i] != null) {
+                    temp2[tempIndex++] = Main.profiles[i];
+                }
+            }
+            Main.profiles = temp2;
+
+            for (int p = 0; p < Main.profiles.length; p++) {
+                Main.profiles[p].setProfileID(p + 1);
+            }
+            UserProfile.setstaticProfileId(UserProfile.getstaticProfileId() - 1);
+
+            Main.profileSelection.getChildren().removeAll(hyperlink);
+            Main.numberOfProfiles--;
+            Main.profileBox.setScene(Main.profileScene);
+        }
+        else {
+            System.out.println("cannot delete if logged in!");
+        }
     }
 
     public static Hyperlink generateProfileHyperlink(UserProfile userProfile) {
-
-        // START TO GENERATE A NEW HYPERLINK FOR THE NEW PROFILE
 
         int translateX = Main.LOGINPAGE_HEIGHT/2;
 
@@ -854,37 +955,82 @@ public class Controller {
 
         hyperlink.setOnAction(e-> {
 
-            if (numberOfTimesProfileHyperlinkClicked == 0) {
+            if (userProfile.getNumberOfTimesHyperlinkClicked()==0) {
                 Hyperlink editLink = new Hyperlink(); editLink.setText("[Edit]");
                 editLink.setId("editLinkForProfile"+userProfile.getProfileID());
                 editLink.setTranslateX((Main.LOGINPAGE_HEIGHT/2)+175); editLink.setTranslateY(hyperlink.getTranslateY());
-                editLink.setOnAction(act -> Controller.editProfile(userProfile, hyperlink, editLink));
+                editLink.setOnAction(act -> {
+                    if (!userProfile.isLoggedIn()) {
+                        Controller.editProfile(userProfile, hyperlink, editLink);
+                    }
+                });
 
                 Hyperlink loginLink = new Hyperlink(); loginLink.setText("[Login]");
                 loginLink.setId("loginLinkForProfile"+userProfile.getProfileID());
                 loginLink.setTranslateX((Main.LOGINPAGE_HEIGHT/2)+225); loginLink.setTranslateY(hyperlink.getTranslateY());
-                loginLink.setOnAction(act -> {Controller.goToMainDashboardScene(userProfile); Main.profileBox.close();});
+                loginLink.setOnAction(act -> {
+                    if (Main.currentActiveProfile==null) {
+                        Controller.goToMainDashboardScene(userProfile, loginLink); Main.profileBox.close();
 
-                Main.profileSelection.getChildren().addAll(editLink,loginLink);
+                        for (int a = 0; a < Main.profileSelection.getChildren().size(); a++) {
+                            if (Main.profileSelection.getChildren().get(a).getId().contains("loginLinkForProfile")) {
+                                Hyperlink hp = (Hyperlink) Main.profileSelection.getChildren().get(a);
+                                hp.setDisable(true);
+                                Main.profileSelection.getChildren().set(a,hp);
+                            }
+                        }
+
+                    }
+                    else {
+                        Label errorLabel = new Label("Please wait until\nProfile #"+Main.currentActiveProfile.getProfileID() + " "+
+                                Main.currentActiveProfile.getType()+ "\nis logged out."); errorLabel.setId("loginErrorLabel");
+                        errorLabel.setTranslateX(30); errorLabel.setTranslateY(250);
+                        Main.profileSelection.getChildren().add(errorLabel);
+                        try {Thread.sleep(3000);}catch (Exception ex){}
+                        Main.profileSelection.getChildren().remove(errorLabel);
+                    }
+                });
 
                 Hyperlink deleteLink = new Hyperlink(); deleteLink.setText("[Delete]");
                 deleteLink.setId("deleteLinkForProfile"+userProfile.getProfileID());
                 deleteLink.setTranslateX((Main.LOGINPAGE_HEIGHT/2)+100); deleteLink.setTranslateY(hyperlink.getTranslateY());
                 deleteLink.setOnAction(act -> {
-                    numberOfTimesProfileHyperlinkClicked = 0;
-                    Main.profileSelection.getChildren().removeAll(editLink, loginLink, deleteLink);
 
-                    // delete the profile object and hyperlink for it
-                    Controller.deleteProfile(userProfile,hyperlink);
+                    if (!userProfile.isLoggedIn())
+                    {
+                        Main.profileSelection.getChildren().removeAll(editLink, loginLink, deleteLink);
+                        Controller.deleteProfile(userProfile,hyperlink);
+                        userProfile.setNumberOfTimesHyperlinkClicked(0);
+                    }
                 });
-                Main.profileSelection.getChildren().add(deleteLink);
+
+                Main.profileSelection.getChildren().addAll(deleteLink, editLink);
+                Main.profileSelection.getChildren().addAll(loginLink);
+                if (Main.currentActiveProfile != null) {
+                    for (int a = 0; a < Main.profileSelection.getChildren().size(); a++) {
+                        if (Main.profileSelection.getChildren().get(a).getId().equals("loginLinkForProfile" + userProfile.getProfileID())) {
+                            Hyperlink hp = (Hyperlink) Main.profileSelection.getChildren().get(a);
+                            hp.setDisable(true);
+                        }
+                    }
+                }
+                else {
+                    for (int a = 0; a < Main.profileSelection.getChildren().size(); a++) {
+                        if (Main.profileSelection.getChildren().get(a).getId().equals("loginLinkForProfile" + userProfile.getProfileID())) {
+                            Hyperlink hp = (Hyperlink) Main.profileSelection.getChildren().get(a);
+                            hp.setDisable(false);
+                        }
+                    }
+                }
             }
-            numberOfTimesProfileHyperlinkClicked++;
+
+            userProfile.setNumberOfTimesHyperlinkClicked(userProfile.getNumberOfTimesHyperlinkClicked()+1);
+
         });
+
         Main.profileSelection.getChildren().add(hyperlink);
 
         return hyperlink;
-        // FINISH GENERATING A NEW HYPERLINK FOR THE NEW PROFILE
     }
 
     public static void changeLocation(Room newRoom) {
@@ -901,6 +1047,13 @@ public class Controller {
             }
         }catch(Exception exc){}
     }
+
+    /** HOUSE LAYOUT METHODS START HERE */
+
+    
+
+
+
 
     /**MISCELLANEOUS METHODS */
     public static void countCurrentDateTime(Text text) {

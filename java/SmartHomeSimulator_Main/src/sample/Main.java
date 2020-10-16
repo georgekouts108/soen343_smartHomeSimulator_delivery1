@@ -37,7 +37,7 @@ public class Main extends Application {
     protected static final int DASHBOARD_WIDTH = 700;
     protected static final int DASHBOARD_HEIGHT = 1300;
     protected static final int LOGINPAGE_WIDTH = 400;
-    protected static final int LOGINPAGE_HEIGHT = 600;
+    protected static final int LOGINPAGE_HEIGHT = 700;
 
     /**FIXED GUI ELEMENTS*/
     protected static Stage main_stage;
@@ -79,10 +79,14 @@ public class Main extends Application {
 
     /**HOUSE INFO VARIABLES */
     /**TODO: @AntoTurc -- create more protected static variables houshold elements*/
-    protected int numberOfRooms;
-    protected static String outsideTemperature;
+    protected static int numberOfRooms;
+    protected static double outsideTemperature;
     protected static Room[] householdLocations; // an array of household locations
     protected static Room currentLocation; // the current location or room of the logged in user
+
+    public static Room[] getHouseholdLocations() {
+        return householdLocations;
+    }
 
     /**GLOBAL SIMULATION VARIBLES - END*/
 
@@ -93,24 +97,23 @@ public class Main extends Application {
          * TODO: create a House object and read the input of a house layout file
          * TODO: and extract information; all global House info will be initialized here... */
 
+//        House house = new House("dummyfile");
+
+        Room testRoom = new Room("Kitchen", 2, 1, 5, true);
+        Room testRoom2 = new Room("Bedroom", 1, 2, 2, true);
+        Room testRoom3 = new Room("Dining Room", 1, 1, 2, true);
+        Room testRoom4 = new Room("Bathroom", 2, 2, 5,  true);
+        Room testRoom5 = new Room("Family Room", 1, 1, 4, false);
+        Room testRoom6 = new Room("TV Room", 1, 2, 3, false);
+        Room testRoom7 = new Room("Basement", 2, 1, 5, false);
+        Room testRoom8 = new Room("Garage", 1, 2, 2, false);
+        Room testRoom9 = new Room("Bedroom 2", 1, 1, 2, false);
+
+        householdLocations = new Room[]{testRoom, testRoom2, testRoom3, testRoom4, testRoom5, testRoom6, testRoom7,
+        testRoom8, testRoom9};
+
         House house = new House("dummyfile");
-        Room testRoom = new Room("Kitchen", 2, 1, 5, null);
-        Room testRoom2 = new Room("Bedroom", 1, 1, 2, null);
-        Room testRoom3 = new Room("Dining Room", 1, 1, 2, null);
-        Room testRoom4 = new Room("Bathroom", 2, 1, 5, null);
-        Room testRoom5 = new Room("Family Room", 1, 1, 2, null);
-        Room testRoom6 = new Room("TV Room", 1, 1, 2, null);
-        Room testRoom7 = new Room("Basement", 2, 1, 5, null);
-        Room testRoom8 = new Room("Garage", 1, 1, 2, null);
-        Room testRoom9 = new Room("Bedroom 2", 1, 1, 2, null);
-
-        house.setRooms(new Room[]{testRoom, testRoom2, testRoom3, testRoom4, testRoom5, testRoom6, testRoom7,
-        testRoom8, testRoom9});
-        house.setupHouseLayout(house.getRooms());
-
         houseLayout = house.getLayout();
-
-        householdLocations = house.getRooms();
 
         main_stage = primaryStage;
         main_stage.setResizable(false);
@@ -145,7 +148,7 @@ public class Main extends Application {
 
         Label profileListLabel = new Label();
         profileListLabel.setId("profileListLabel");
-        profileListLabel.setTranslateX(250); profileListLabel.setTranslateY(40);
+        profileListLabel.setTranslateX(350); profileListLabel.setTranslateY(40);
         profileListLabel.setText("LIST OF PROFILES:"); Main.profileSelection.getChildren().add(profileListLabel);
 
         TextField newProfileTextField = new TextField(); newProfileTextField.setPromptText("P,C,G,or S...");
@@ -192,8 +195,7 @@ public class Main extends Application {
         editContextButton.setOnAction(e->Controller.editContext()); anchorPane.getChildren().add(editContextButton);
 
         Label temperatureLabel = new Label(); temperatureLabel.setId("outdoorTemperatureLabel");
-        temperatureLabel.setId("temp");
-        temperatureLabel.setText("Outside Temp.\n15°C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
+        temperatureLabel.setText("Outside Temp.\n15 C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
         temperatureLabel.setTranslateY(400); temperatureLabel.setTranslateX(15);
         anchorPane.getChildren().add(temperatureLabel);
 
@@ -213,7 +215,7 @@ public class Main extends Application {
         anchorPane.getChildren().add(outputConsoleLabel);
 
         houseLayout.setPrefHeight(675); houseLayout.setPrefWidth(675); houseLayout.setId("houseLayout");
-        houseLayout.setTranslateX(615); houseLayout.setTranslateY(10);
+        houseLayout.setTranslateX(615); houseLayout.setTranslateY(10); houseLayout.setDisable(true);
         anchorPane.getChildren().add(houseLayout);
 
         modulesInterface = createModuleInterface(); modulesInterface.setDisable(true);
