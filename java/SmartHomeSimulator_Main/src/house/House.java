@@ -10,19 +10,6 @@ import utilities.*;
 
 public class House {
 
-    /** ICON IMAGES */
-    private Image iconAC = new Image("https://image.flaticon.com/icons/png/512/114/114735.png");
-    private Image iconLight = new Image("https://www.vhv.rs/viewpic/hbwiihT_lightbulb-icon-png-icon-for-light-bulb-transparent/#");
-    private Image iconMotionDet = new Image("https://icon-library.com/images/motion-sensor-icon/motion-sensor-icon-16.jpg");
-    private Image iconDoor = new Image("https://image.flaticon.com/icons/png/512/59/59801.png");
-    private Image iconWindow = new Image("https://img.icons8.com/ios/452/open-window.png");
-
-    private ImageView iconAC_view = new ImageView(iconAC);
-    private ImageView iconLight_view = new ImageView(iconLight);
-    private ImageView iconMD_view = new ImageView(iconMotionDet);
-    private ImageView iconDoor_view = new ImageView(iconDoor);
-    private ImageView iconWindow_view = new ImageView(iconWindow);
-
     private int numOfRooms;
     private Room[] rooms;
     private AnchorPane layout;
@@ -32,27 +19,6 @@ public class House {
 
     public House(String houseLayoutFileName) {
         this.layout = new AnchorPane();
-
-        this.iconLight_view.setImage(iconLight);
-        this.iconLight_view.setFitWidth(45); this.iconLight_view.setFitHeight(25);
-        this.iconLight_view.setTranslateX(0); this.iconLight_view.setTranslateY(180);
-
-        this.iconWindow_view.setImage(iconWindow);
-        this.iconWindow_view.setFitWidth(45); this.iconWindow_view.setFitHeight(25);
-        this.iconWindow_view.setTranslateX(45); this.iconWindow_view.setTranslateY(180);
-
-        this.iconDoor_view.setImage(iconDoor);
-        this.iconDoor_view.setFitWidth(45); this.iconDoor_view.setFitHeight(25);
-        this.iconDoor_view.setTranslateX(90); this.iconDoor_view.setTranslateY(180);
-
-        this.iconMD_view.setImage(iconMotionDet);
-        this.iconMD_view.setFitWidth(45); this.iconMD_view.setFitHeight(25);
-        this.iconMD_view.setTranslateX(135); this.iconMD_view.setTranslateY(180);
-
-        this.iconAC_view.setImage(iconAC);
-        this.iconAC_view.setFitWidth(45); this.iconAC_view.setFitHeight(25);
-        this.iconAC_view.setTranslateX(180); this.iconAC_view.setTranslateY(180);
-
 
         /**TODO: using File IO, read a plain text (.txt) file called "houseLayoutFileName"
          * TODO: and assign the values accordingly
@@ -188,18 +154,18 @@ public class House {
                 if (anyLightsOn(room)) {
                     boolean isLightIconThere = false;
                     for (int a = 0; a < roomLayout.getChildren().size(); a++) {
-                        if (roomLayout.getChildren().contains(iconLight_view)) {
+                        if (roomLayout.getChildren().contains(room.getIconLight_view())) {
                             isLightIconThere = true;
                             break;
                         }
                     }
                     if (!isLightIconThere){
-                        roomLayout.getChildren().add(iconLight_view);
+                        roomLayout.getChildren().add(room.getIconLight_view());
                     }
                 }
                 else {
                     try {
-                        roomLayout.getChildren().remove(iconLight_view);
+                        roomLayout.getChildren().remove(room.getIconLight_view());
                     }catch (Exception ex){}
                 }
             });
@@ -236,18 +202,18 @@ public class House {
                 if (anyWindowsOpen(room)) {
                     boolean isWindowIconThere = false;
                     for (int a = 0; a < roomLayout.getChildren().size(); a++) {
-                        if (roomLayout.getChildren().contains(iconWindow_view)) {
+                        if (roomLayout.getChildren().contains(room.getIconWindow_view())) {
                             isWindowIconThere = true;
                             break;
                         }
                     }
                     if (!isWindowIconThere){
-                        roomLayout.getChildren().add(iconWindow_view);
+                        roomLayout.getChildren().add(room.getIconWindow_view());
                     }
                 }
                 else {
                     try {
-                        roomLayout.getChildren().remove(iconWindow_view);
+                        roomLayout.getChildren().remove(room.getIconWindow_view());
                     }catch (Exception ex){}
                 }
             });
@@ -284,18 +250,18 @@ public class House {
                 if (anyDoorsOpen(room)) {
                     boolean isDoorIconThere = false;
                     for (int a = 0; a < roomLayout.getChildren().size(); a++) {
-                        if (roomLayout.getChildren().contains(iconDoor_view)) {
+                        if (roomLayout.getChildren().contains(room.getIconDoor_view())) {
                             isDoorIconThere = true;
                             break;
                         }
                     }
                     if (!isDoorIconThere){
-                        roomLayout.getChildren().add(iconDoor_view);
+                        roomLayout.getChildren().add(room.getIconDoor_view());
                     }
                 }
                 else {
                     try {
-                        roomLayout.getChildren().remove(iconDoor_view);
+                        roomLayout.getChildren().remove(room.getIconDoor_view());
                     }catch (Exception ex){}
                 }
             });
@@ -311,19 +277,19 @@ public class House {
                 room.getMd().setState(true);
                 boolean isMdIconThere = false;
                 for (int a = 0; a < roomLayout.getChildren().size(); a++) {
-                    if (roomLayout.getChildren().contains(iconMD_view)) {
+                    if (roomLayout.getChildren().contains(room.getIconMD_view())) {
                         isMdIconThere = true;
                         break;
                     }
                 }
                 if (!isMdIconThere){
-                    roomLayout.getChildren().add(iconMD_view);
+                    roomLayout.getChildren().add(room.getIconMD_view());
                 }
             }
             else {
                 room.getMd().setState(false);
                 try {
-                    roomLayout.getChildren().remove(iconMD_view);
+                    roomLayout.getChildren().remove(room.getIconMD_view());
                 }catch(Exception ex){}
             }
         });
@@ -338,19 +304,19 @@ public class House {
                     room.getAc().setState(true);
                     boolean isAcIconThere = false;
                     for (int a = 0; a < roomLayout.getChildren().size(); a++) {
-                        if (roomLayout.getChildren().contains(iconAC_view)) {
+                        if (roomLayout.getChildren().contains(room.getIconAC_view())) {
                             isAcIconThere = true;
                             break;
                         }
                     }
                     if (!isAcIconThere){
-                        roomLayout.getChildren().add(iconAC_view);
+                        roomLayout.getChildren().add(room.getIconAC_view());
                     }
                 }
                 else {
                     room.getAc().setState(false);
                     try {
-                        roomLayout.getChildren().remove(iconAC_view);
+                        roomLayout.getChildren().remove(room.getIconAC_view());
                     }catch(Exception ex){}
                 }
             });

@@ -99,10 +99,10 @@ public class Main extends Application {
 
 //        House house = new House("dummyfile");
 
-        Room testRoom = new Room("Kitchen", 2, 1, 5, false);
-        Room testRoom2 = new Room("Bedroom", 1, 2, 2, false);
-        Room testRoom3 = new Room("Dining Room", 1, 1, 2, false);
-        Room testRoom4 = new Room("Bathroom", 2, 2, 5,  false);
+        Room testRoom = new Room("Kitchen", 2, 1, 5, true);
+        Room testRoom2 = new Room("Bedroom", 1, 2, 2, true);
+        Room testRoom3 = new Room("Dining Room", 1, 1, 2, true);
+        Room testRoom4 = new Room("Bathroom", 2, 2, 5,  true);
         Room testRoom5 = new Room("Family Room", 1, 1, 4, false);
         Room testRoom6 = new Room("TV Room", 1, 2, 3, false);
         Room testRoom7 = new Room("Basement", 2, 1, 5, false);
