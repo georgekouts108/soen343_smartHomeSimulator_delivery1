@@ -185,9 +185,26 @@ public class Controller {
 
             Button tempButton = new Button("Confirm");
             tempButton.setId("confirmTemperatureButton");
+            tempButton.setOnAction(e -> {
+                try {
+                    for(int i=0; i < Main.main_dashboard.getChildren().size(); i++){
+                        if (Main.main_dashboard.getChildren().get(i).getId().equals("temp")){
+                            if(!tempText.getCharacters().toString().isEmpty()) {
+                                Label label = (Label) Main.main_dashboard.getChildren().get(i);
+                                label.setText("Outside Temp.\n" + tempText.getCharacters().toString() + "°C");
+                                Main.main_dashboard.getChildren().set(i, label);
+                                break;
+                            }
+                        }
+                    }
+                }catch (Exception err){
+                    System.out.print("There was an error while modifying the outdoor temperature.");
+                }
+            });
             tempButton.setTranslateX(540);
             tempButton.setTranslateY(60);
             Main.editContextLayout.getChildren().add(tempButton);
+
 
             Label roomsLabel = new Label("Click on a room you would like to move to, or change a room's number of occupants");
             roomsLabel.setTranslateY(105); roomsLabel.setId("roomsLabel");
@@ -606,8 +623,8 @@ public class Controller {
         /**TODO: depending which tool it was, get it's utility_ID and its associated utility*/
         /**TODO: turn on all lights in and outside the house */
 
-        String report = translateCurrentDateTime() + " -- " + warning;
-        Main.suspBox.appendText(report+"\n");
+        //String report = translateCurrentDateTime() + " -- " + warning;
+        //Main.suspBox.appendText(report+"\n");
     }
 
     /**SHP MODULE METHODS END */
@@ -964,58 +981,4 @@ public class Controller {
             }
         }catch(Exception exc){}
     }
-
-    /** HOUSE LAYOUT METHODS START HERE */
-
-    
-
-
-
-
-    /**MISCELLANEOUS METHODS */
-    public static void countCurrentDateTime(Text text) {
-        while (true){
-            try{ Thread.sleep(1000); }
-            catch (Exception e) {}
-            finally { text.setText(translateCurrentDateTime()); }
-        }
-    }
-
-    // return current date and time
-    public static String translateCurrentDateTime() {
-        String timeDisplay = "";
-
-        String localTime = LocalDateTime.now().toString();
-        String year = localTime.substring(0,4);
-        String month = localTime.substring(5,7);
-        int day = Integer.parseInt(localTime.substring(8,10));
-        String time = localTime.substring(11,19);
-
-        String month_name = "";
-        switch (month.charAt(0)) {
-            case '0':
-                switch (month.charAt(1)) {
-                    case '1': month_name += "Jan"; break;
-                    case '2': month_name += "Feb"; break;
-                    case '3': month_name += "Mar"; break;
-                    case '4': month_name += "Apr"; break;
-                    case '5': month_name += "May"; break;
-                    case '6': month_name += "Jun"; break;
-                    case '7': month_name += "Jul"; break;
-                    case '8': month_name += "Aug"; break;
-                    case '9': month_name += "Sep"; break;
-                }
-                break;
-            case '1':
-                switch (month.charAt(1)) {
-                    case '0': month_name += "Oct"; break;
-                    case '1': month_name += "Nov"; break;
-                    case '2': month_name += "Dec"; break;
-                }
-                break;
-        }
-        timeDisplay += month_name+" "+day+" "+year+" at "+time+"";
-        return timeDisplay;
-    }
-
 }
