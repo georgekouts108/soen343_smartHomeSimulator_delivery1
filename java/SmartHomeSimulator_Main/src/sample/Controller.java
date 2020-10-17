@@ -286,6 +286,7 @@ public class Controller {
 
             transY = 400;
             int transX = 20;
+            int windowCount = 0;
             for (int r = 0; r < Main.householdLocations.length; r++) {
 
                 /**for window-blocking purposes */
