@@ -88,6 +88,7 @@ public class Main extends Application {
         return householdLocations;
     }
 
+    public static AnchorPane getMain_dashboard() {return main_dashboard;}
     /**GLOBAL SIMULATION VARIBLES - END*/
 
     @Override
