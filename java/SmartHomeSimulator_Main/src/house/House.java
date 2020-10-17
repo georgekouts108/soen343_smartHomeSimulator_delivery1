@@ -1,9 +1,8 @@
 package house;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import sample.*;
@@ -13,15 +12,17 @@ import java.time.LocalDateTime;
 
 public class House {
 
+    private static AnchorPane superHousePane = new AnchorPane();
+
     private int numOfRooms;
     private Room[] rooms;
-    private AnchorPane layout;
+    private AnchorPane layout; // a layout of rooms only
 
     /**TODO: create attributes for the small image icons of utilities (i.e. lightbulb, AC, window, etc.)*/
     /**TODO: create an attribute for a house layout 2D drawing */
 
     public House(String houseLayoutFileName) {
-        this.layout = new AnchorPane();
+        //this.layout = new AnchorPane();
 
         /**TODO: using File IO, read a plain text (.txt) file called "houseLayoutFileName"
          * TODO: and assign the values accordingly
@@ -99,23 +100,32 @@ public class House {
     /**TODO: finish this method */
     public AnchorPane constructRoomLayout(Room room) {
         AnchorPane roomLayout = new AnchorPane();
+        roomLayout.setId("roomLayoutID"+room.getRoomID());
         roomLayout.setPrefWidth(225); roomLayout.setPrefHeight(225);
         roomLayout.setStyle("-fx-border-color:#000000");
 
         int ID = room.getRoomID();
         String name = room.getName();
-        Door[] doors = room.getDoorCollection();
-        Window[] windows = room.getWindowCollection();
-        Light[] lights = room.getLightCollection();
-        AirConditioner airConditioner = room.getAc();
-        MotionDetector motionDetector = room.getMd();
 
         // labels (no need IDs)
-        Label roomIDNameLabel = new Label("#"+ID+" "+name); roomIDNameLabel.setTranslateX(10); roomLayout.getChildren().add(roomIDNameLabel);
-        Label populationLabel = new Label("Pop: "+room.getNumberOfPeopleInside()); populationLabel.setTranslateX(175); roomLayout.getChildren().add(populationLabel);
-        Label lightsLabel = new Label("Lights"); lightsLabel.setTranslateX(20); lightsLabel.setTranslateY(20); roomLayout.getChildren().add(lightsLabel);
-        Label windowsLabel = new Label("Windows"); windowsLabel.setTranslateX(85); windowsLabel.setTranslateY(20); roomLayout.getChildren().add(windowsLabel);
-        Label doorsLabel = new Label("Doors"); doorsLabel.setTranslateX(170); doorsLabel.setTranslateY(20); roomLayout.getChildren().add(doorsLabel);
+        Label roomIDNameLabel = new Label("#"+ID+" "+name);
+        roomIDNameLabel.setTranslateX(10);
+        roomLayout.getChildren().add(roomIDNameLabel);
+
+        Label lightsLabel = new Label("Lights");
+        lightsLabel.setTranslateX(20);
+        lightsLabel.setTranslateY(20);
+        roomLayout.getChildren().add(lightsLabel);
+
+        Label windowsLabel = new Label("Windows");
+        windowsLabel.setTranslateX(85);
+        windowsLabel.setTranslateY(20);
+        roomLayout.getChildren().add(windowsLabel);
+
+        Label doorsLabel = new Label("Doors");
+        doorsLabel.setTranslateX(170);
+        doorsLabel.setTranslateY(20);
+        roomLayout.getChildren().add(doorsLabel);
 
         // borderlines (no need IDs)
         Line line1 = new Line(); line1.setStartX(0); line1.setEndX(225); line1.setTranslateY(20); roomLayout.getChildren().add(line1);
@@ -129,7 +139,6 @@ public class House {
         Line line9 = new Line(); line9.setStartY(180); line9.setEndY(205); line9.setTranslateX(180); roomLayout.getChildren().add(line9);
 
         // checkboxes for Lights
-        /**todo: replace the count limit with the actual size of the lights collection array -- dummy limit for now*/
         int translate_y = 50;
         for (int L = 0; L < room.getLightCollection().length; L++) {
             CheckBox checkBox = new CheckBox("L#"+room.getLightCollection()[L].getUtilityID());
@@ -179,7 +188,6 @@ public class House {
         }
 
         // checkboxes for Windows
-        /**todo: replace the count limit with the actual size of the windows collection array -- dummy limit for now*/
         translate_y = 50;
         for (int w = 0; w < room.getWindowCollection().length; w++) {
             CheckBox checkBox = new CheckBox("W#"+room.getWindowCollection()[w].getUtilityID());
@@ -187,11 +195,17 @@ public class House {
             checkBox.setTranslateX(85); checkBox.setTranslateY(translate_y);
             checkBox.setOnAction(e->{
                 if (checkBox.isSelected()) {
-                    // open the window
+                    // open the window (if not blocked)
                     for (int win = 0; win < room.getWindowCollection().length; win++) {
                         if (room.getWindowCollection()[win].getUtilityID() == Integer.parseInt(checkBox.getId().substring(17))) {
-                            room.getWindowCollection()[win].setState(true);
-                            appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
+                            if (!room.getWindowCollection()[win].isBlocked()) {
+                                room.getWindowCollection()[win].setState(true);
+                                appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
+                            }
+                            else {
+                                appendMessageToConsole("User attempted to open blocked Window #"+room.getWindowCollection()[win].getUtilityID()+" in Room #"+room.getRoomID()+" "+room.getName());
+                                checkBox.setSelected(false);
+                            }
                             break;
                         }
                     }
@@ -200,8 +214,15 @@ public class House {
                     // close the window
                     for (int win = 0; win < room.getWindowCollection().length; win++) {
                         if (room.getWindowCollection()[win].getUtilityID() == Integer.parseInt(checkBox.getId().substring(17))) {
-                            room.getWindowCollection()[win].setState(false);
-                            appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
+                            if (!room.getWindowCollection()[win].isBlocked()) {
+                                room.getWindowCollection()[win].setState(false);
+                                appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
+                            }
+                            else {
+                                appendMessageToConsole("User attempted to close blocked Window #"+room.getWindowCollection()[win].getUtilityID()+" in Room #"+room.getRoomID()+" "+room.getName());
+                                checkBox.setSelected(true);
+
+                            }
                             break;
                         }
                     }
@@ -229,7 +250,6 @@ public class House {
         }
 
         // checkboxes for Doors
-        /**todo: replace the count limit with the actual size of the doors collection array -- dummy limit for now*/
         translate_y = 50;
         for (int d = 0; d < room.getDoorCollection().length; d++) {
             CheckBox checkBox = new CheckBox("D#"+room.getDoorCollection()[d].getUtilityID());
@@ -245,7 +265,6 @@ public class House {
                             break;
                         }
                     }
-
                 }
                 else {
                     // close the door
@@ -304,11 +323,11 @@ public class House {
                 }catch(Exception ex){}
                 appendMessageToConsole("Motion detector disabled in Room #"+room.getRoomID()+" "+room.getName());
             }
-
         });
         roomLayout.getChildren().add(mdCheckbox);
 
-        if (room.getAc()!=null) {
+
+        if (room.getAc() != null) {
             CheckBox acCheckbox = new CheckBox("AC on");
             acCheckbox.setId("airConditionerID#"+room.getAc().getUtilityID());
             acCheckbox.setTranslateX(150); acCheckbox.setTranslateY(206);
@@ -324,6 +343,7 @@ public class House {
                     }
                     if (!isAcIconThere){
                         roomLayout.getChildren().add(room.getIconAC_view());
+
                     }
                     appendMessageToConsole("AC turned on in Room #"+room.getRoomID()+" "+room.getName());
                 }
@@ -403,31 +423,10 @@ public class House {
             if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
                 TextArea textArea = (TextArea) Main.getMain_dashboard().getChildren().get(a);
                 textArea.appendText(LocalDateTime.now().toString().substring(0,10)+ " "+
-                                LocalDateTime.now().toString().substring(11,19)+" - "+message+"\n");
+                                LocalDateTime.now().toString().substring(11,19)+" -- "+message+"\n");
                 Main.getMain_dashboard().getChildren().set(a, textArea);
+                break;
             }
         }
     }
-
-
-
-    /**TODO: implement methods for setting and getting the appropriate attributes,
-     * TODO: accessing and modifying the house layout view depending on what happens during the simulation
-     * TODO: (for example, if a Light is turned on, determine the Room where the light is, and on the
-     * TODO: 2D layout make visible a light bulb icon in that Room)
-     *
-     * TODO: implement methods for updating information about objects around the house
-     * TODO: [for example, if a Light is turned on, determine the Room where the light is, and on the
-     * TODO: 2D layout make visible a light bulb icon in that Room]
-     *
-     *
-     * TODO: implement a method "outputMessage(String message, TextArea outputConsole)" that will
-     * TODO: print "message" to the main dashboard's output console
-     * TODO: [HINT == use the "Main" class to access its main_dashboard scene, and further its output console,
-     * TODO: to which you will append "message"]
-     * TODO: for example, if a Light is turned on, generate a string with the current Local Time and the room where
-     * TODO: the light was turned on, and append this string to the outputConsole
-     * */
-
-
 }

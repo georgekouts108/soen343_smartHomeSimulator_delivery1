@@ -83,6 +83,7 @@ public class Main extends Application {
     protected static double outsideTemperature;
     protected static Room[] householdLocations; // an array of household locations
     protected static Room currentLocation; // the current location or room of the logged in user
+    protected static House house;
 
     public static Room[] getHouseholdLocations() {
         return householdLocations;
@@ -98,7 +99,7 @@ public class Main extends Application {
          * TODO: create a House object and read the input of a house layout file
          * TODO: and extract information; all global House info will be initialized here... */
 
-//        House house = new House("dummyfile");
+
 
         Room testRoom = new Room("Kitchen", 2, 1, 5, true);
         Room testRoom2 = new Room("Bedroom", 1, 2, 2, true);
@@ -113,7 +114,7 @@ public class Main extends Application {
         householdLocations = new Room[]{testRoom, testRoom2, testRoom3, testRoom4, testRoom5, testRoom6, testRoom7,
         testRoom8, testRoom9};
 
-        House house = new House("dummyfile");
+        house = new House("dummyfile");
         houseLayout = house.getLayout();
 
         main_stage = primaryStage;

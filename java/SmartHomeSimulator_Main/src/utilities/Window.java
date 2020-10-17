@@ -9,6 +9,7 @@ public class Window extends Utility {
     private final int TIME_TO_OPEN_OR_CLOSE = 5000; // it takes 5 seconds for a window to open or close
     private Sensor sensor; // a window's sensor
     private Room room; // the room that the window is located in.
+    private boolean isBlocked;
 
     /**
      * Window constructor
@@ -18,6 +19,15 @@ public class Window extends Utility {
         this.isOpening = false;
         this.isClosing = false;
         this.sensor = new Sensor();
+        this.isBlocked = false;
+    }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
     }
 
     /**

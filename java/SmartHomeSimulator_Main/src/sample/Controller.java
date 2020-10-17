@@ -288,19 +288,33 @@ public class Controller {
             int transX = 20;
             for (int r = 0; r < Main.householdLocations.length; r++) {
 
-                /**todo: uncomment this when rooms have valid Window objects */
-//                for (int w = 0; w < Main.householdLocations[r].getWindowCollection().length; w++) {
-//                    CheckBox checkBox = new CheckBox("Window #" + Main.householdLocations[r].getWindowCollection()[w].getUtilityID());
-//                    checkBox.setTranslateX(transX);
-//                    checkBox.setTranslateY(transY);
-//                    Main.editContextLayout.getChildren().add(checkBox);
-//                    if (w <= 6) {
-//                        transY += 20;
-//                    } else {
-//                        transY = 310;
-//                        transX = 80;
-//                    }
-//                }
+                /**for window-blocking purposes */
+                for (int w = 0; w < Main.householdLocations[r].getWindowCollection().length; w++) {
+                    windowCount++;
+                    CheckBox checkBox = new CheckBox("W#"+Main.householdLocations[r].getWindowCollection()[w].getUtilityID()+
+                            " in "+Main.householdLocations[r].getName());
+                    checkBox.setTranslateX(transX);
+                    checkBox.setTranslateY(transY);
+                    int finalR = r;
+                    int finalW = w;
+                    checkBox.setOnAction(e->{
+                        if (checkBox.isSelected()) {
+                            Main.householdLocations[finalR].getWindowCollection()[finalW].setBlocked(true);
+                        }
+                        else {
+                            Main.householdLocations[finalR].getWindowCollection()[finalW].setBlocked(false);
+                        }
+                    });
+
+                    Main.editContextLayout.getChildren().add(checkBox);
+                    if (windowCount % 8 != 0) {
+                        transY += 20;
+                    }
+                    else {
+                        transY = 400;
+                        transX += 180;
+                    }
+                }
             }
             Button moreButton = new Button("More...");
             moreButton.setId("GoToEditContextScene2FromScene1");
@@ -496,7 +510,7 @@ public class Controller {
 
                                                 for (int up = 0; up < Main.profiles.length; up++) {
                                                     if (Main.profiles[up].getProfileID() == selectedProfileID) {
-                                                        /**DEBUG*/System.out.println("Profile "+Main.profiles[up].getProfileID()+" should be moved");
+
                                                         for (int r = 0; r < Main.householdLocations.length; r++) {
 
                                                             if (Main.householdLocations[r].getRoomID() == selectedRoomID) {
@@ -509,7 +523,6 @@ public class Controller {
                                                                                 Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].getNumberOfPeopleInside() - 1);
                                                                     }
                                                                     Main.profiles[up].setCurrentLocation(Main.householdLocations[r]); // THE CHANGE OF ROOM***
-                                                                    /**DEBUG*/System.out.println("Profile "+Main.profiles[up].getProfileID()+" was moved");
 
                                                                     Main.householdLocations[r].setNumberOfPeopleInside(Main.householdLocations[r].getNumberOfPeopleInside() + 1);
                                                                 }
