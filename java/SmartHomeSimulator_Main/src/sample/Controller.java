@@ -484,7 +484,7 @@ public class Controller {
 
                                     if (Main.editContextLayout2.getChildren().get(L).equals(profileBoxes[pcb])) {
                                         int selectedProfileID = Integer.parseInt(Main.editContextLayout2.getChildren().get(L).getId().substring
-                                                (Main.editContextLayout2.getChildren().get(L).getId().length() - 1));
+                                                (15));
 
                                         for (int M = 0; M < Main.editContextLayout2.getChildren().size(); M++) {
 
@@ -496,7 +496,7 @@ public class Controller {
 
                                                 for (int up = 0; up < Main.profiles.length; up++) {
                                                     if (Main.profiles[up].getProfileID() == selectedProfileID) {
-
+                                                        /**DEBUG*/System.out.println("Profile "+Main.profiles[up].getProfileID()+" should be moved");
                                                         for (int r = 0; r < Main.householdLocations.length; r++) {
 
                                                             if (Main.householdLocations[r].getRoomID() == selectedRoomID) {
@@ -509,6 +509,7 @@ public class Controller {
                                                                                 Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].getNumberOfPeopleInside() - 1);
                                                                     }
                                                                     Main.profiles[up].setCurrentLocation(Main.householdLocations[r]); // THE CHANGE OF ROOM***
+                                                                    /**DEBUG*/System.out.println("Profile "+Main.profiles[up].getProfileID()+" was moved");
 
                                                                     Main.householdLocations[r].setNumberOfPeopleInside(Main.householdLocations[r].getNumberOfPeopleInside() + 1);
                                                                 }
