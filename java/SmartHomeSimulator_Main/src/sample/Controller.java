@@ -186,29 +186,27 @@ public class Controller {
             Button tempButton = new Button("Confirm");
             tempButton.setId("confirmTemperatureButton");
             tempButton.setOnAction(e -> {
-<<<<<<< HEAD
+
                 try {
-=======
-                try{
->>>>>>> 719deeae33d45ad04bdcf953b6166d2a405e2265
-                    for(int i=0; i < Main.main_dashboard.getChildren().size(); i++){
-                        if (Main.main_dashboard.getChildren().get(i).getId().equals("temp")){
-                            if(!tempText.getCharacters().toString().isEmpty()) {
-                                Label label = (Label) Main.main_dashboard.getChildren().get(i);
-                                label.setText("Outside Temp.\n" + tempText.getCharacters().toString() + "°C");
-                                Main.main_dashboard.getChildren().set(i, label);
-                                break;
+                    try {
+                        for (int i = 0; i < Main.main_dashboard.getChildren().size(); i++) {
+                            if (Main.main_dashboard.getChildren().get(i).getId().equals("temp")) {
+                                if (!tempText.getCharacters().toString().isEmpty()) {
+                                    Label label = (Label) Main.main_dashboard.getChildren().get(i);
+                                    label.setText("Outside Temp.\n" + tempText.getCharacters().toString() + "°C");
+                                    Main.main_dashboard.getChildren().set(i, label);
+                                    break;
+                                }
                             }
                         }
-                    }
-                }catch (Exception err){
-<<<<<<< HEAD
-                    System.out.print("There was an error while modifying the outdoor temperature.");
-=======
+                    } catch (Exception err) {
                         System.out.print("There was an error while modifying the outdoor temperature.");
->>>>>>> 719deeae33d45ad04bdcf953b6166d2a405e2265
+                        System.out.print("There was an error while modifying the outdoor temperature.");
+                    }
+                } catch (Exception exception) {
                 }
             });
+
             tempButton.setTranslateX(540);
             tempButton.setTranslateY(60);
             Main.editContextLayout.getChildren().add(tempButton);
@@ -456,69 +454,7 @@ public class Controller {
 
             }
         }
-      
-        if (numberOfTimesEditContextLinkStage2Accessed == 0) {
 
-            Label movepplLabel = new Label("Select one or more Profiles, and one Room where you would like to place it/them.");
-            movepplLabel.setTranslateY(10);
-            movepplLabel.setTranslateX(20);
-            movepplLabel.setId("movePeopleLabel");
-            Main.editContextLayout2.getChildren().add(movepplLabel);
-
-            Label profilelistLabel = new Label("Profiles");
-            profilelistLabel.setId("profileListLabel");
-            profilelistLabel.setTranslateY(60);
-            profilelistLabel.setTranslateX(100);
-            Main.editContextLayout2.getChildren().add(profilelistLabel);
-
-            Label roomlistLabel = new Label("Rooms");
-            roomlistLabel.setId("roomListLabel");
-            roomlistLabel.setTranslateY(60);
-            roomlistLabel.setTranslateX(400);
-            Main.editContextLayout2.getChildren().add(roomlistLabel);
-
-            Label currentlocationLabel = new Label("Current Location");
-            currentlocationLabel.setTranslateY(60);
-            currentlocationLabel.setId("currentLocationLabel");
-            currentlocationLabel.setTranslateX(250);
-            Main.editContextLayout2.getChildren().add(currentlocationLabel);
-
-            int transY3 = 80;
-            CheckBox[] roomCheckboxes = new CheckBox[Main.householdLocations.length];
-            for (int r = 0; r < Main.householdLocations.length; r++) {
-                CheckBox checkBox = new CheckBox(Main.householdLocations[r].getName());
-                checkBox.setTranslateY(transY3);
-                checkBox.setTranslateX(400);
-                checkBox.setId("checkboxRoom" + Main.householdLocations[r].getRoomID());
-                roomCheckboxes[r] = checkBox;
-                Main.editContextLayout2.getChildren().add(checkBox);
-                transY3 += 20;
-            }
-
-            Button confirmButton2 = new Button("Relocate Profile");
-            confirmButton2.setId("relocateProfileButton2");
-            confirmButton2.setTranslateX(275);
-            confirmButton2.setTranslateY(400);
-            CheckBox[] finalProfileCheckboxes = profileCheckboxes;
-            confirmButton2.setOnAction(e -> relocateProfile(finalProfileCheckboxes, roomCheckboxes));
-            Main.editContextLayout2.getChildren().add(confirmButton2);
-
-            Button closeButton = new Button("Close");
-            closeButton.setId("closeFromEditContextScene2Button");
-            closeButton.setTranslateX(400);
-            closeButton.setTranslateY(580);
-            closeButton.setOnAction(e -> Main.editContextStage.close());
-            Main.editContextLayout2.getChildren().add(closeButton);
-
-            Button gobackButton = new Button("Go Back");
-            gobackButton.setId("returnToEditContextScene1Button");
-            gobackButton.setTranslateX(200);
-            gobackButton.setTranslateY(580);
-            gobackButton.setOnAction(e -> Main.editContextStage.setScene(Main.editContextScene));
-            Main.editContextLayout2.getChildren().add(gobackButton);
-
-            numberOfTimesEditContextLinkStage2Accessed++;
-          
         if (Main.currentActiveProfile != null) {
             for (int a = 0; a < Main.editContextLayout2.getChildren().size(); a++) {
                 try {
