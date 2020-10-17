@@ -195,8 +195,8 @@ public class Main extends Application {
         editContextButton.setTranslateY(90); editContextButton.setTranslateX(15); editContextButton.setTextAlignment(TextAlignment.CENTER);
         editContextButton.setOnAction(e->Controller.editContext()); anchorPane.getChildren().add(editContextButton);
 
-        Label temperatureLabel = new Label(); temperatureLabel.setId("outdoorTemperatureLabel");
-        temperatureLabel.setText("Outside Temp.\n15 C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
+        Label temperatureLabel = new Label(); temperatureLabel.setId("temp");
+        temperatureLabel.setText("Outside Temp.\n15°C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
         temperatureLabel.setTranslateY(400); temperatureLabel.setTranslateX(15);
         anchorPane.getChildren().add(temperatureLabel);
 

@@ -186,31 +186,24 @@ public class Controller {
             Button tempButton = new Button("Confirm");
             tempButton.setId("confirmTemperatureButton");
             tempButton.setOnAction(e -> {
-
-                try {
-                    try {
-                        for (int i = 0; i < Main.main_dashboard.getChildren().size(); i++) {
-                            if (Main.main_dashboard.getChildren().get(i).getId().equals("temp")) {
-                                if (!tempText.getCharacters().toString().isEmpty()) {
-                                    Label label = (Label) Main.main_dashboard.getChildren().get(i);
-                                    label.setText("Outside Temp.\n" + tempText.getCharacters().toString() + "°C");
-                                    Main.main_dashboard.getChildren().set(i, label);
-                                    break;
-                                }
+                try{
+                    for(int i=0; i < Main.main_dashboard.getChildren().size(); i++){
+                        if (Main.main_dashboard.getChildren().get(i).getId().equals("temp")){
+                            if(!tempText.getCharacters().toString().isEmpty()) {
+                                Label label = (Label) Main.main_dashboard.getChildren().get(i);
+                                label.setText("Outside Temp.\n" + tempText.getCharacters().toString() + "°C");
+                                Main.main_dashboard.getChildren().set(i, label);
+                                break;
                             }
                         }
-                    } catch (Exception err) {
-                        System.out.print("There was an error while modifying the outdoor temperature.");
-                        System.out.print("There was an error while modifying the outdoor temperature.");
                     }
-                } catch (Exception exception) {
+                }catch (Exception err){
+                    System.out.print("There was an error while modifying the outdoor temperature.");
                 }
             });
-
             tempButton.setTranslateX(540);
             tempButton.setTranslateY(60);
             Main.editContextLayout.getChildren().add(tempButton);
-
 
             Label roomsLabel = new Label("Click on a room you would like to move to, or change a room's number of occupants");
             roomsLabel.setTranslateY(105);
