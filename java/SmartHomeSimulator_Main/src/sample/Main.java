@@ -278,10 +278,7 @@ public class Main extends Application {
         Button confirmTimeButton = new Button("Confirm New Time");
         confirmTimeButton.setTranslateX(200); confirmTimeButton.setTranslateY(435);
         confirmTimeButton.setTextAlignment(TextAlignment.CENTER);
-        //kevtest
         confirmTimeButton.setOnAction(e -> {new Thread(()->{sample.Controller.CurrentDateSimulation(datePicker, simulationDate, simulationTime, hourField, minuteField);}).start();});
-
-        //{new Thread(()->{sample.Controller.CurrentDate(simulationDate, simulationTime);}).start();}
 
         shs_module.getChildren().addAll(manageOrSwitchProfileButton, line, setDateTimeLabel, datePicker,
                 setTimeLabel, simulationDate, simulationTime, hourField, colon, minuteField, confirmTimeButton, line2, setHouseLocationLabel,

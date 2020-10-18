@@ -36,13 +36,6 @@ public class Controller {
     private static int pixelY = 70;
     private static int numberOfTimesProfileHyperlinkClicked = 0;
 
-    /*public static void processTime(DatePicker dateOfSim,TextField hour, TextField minute, Label simulationDateAndTime) {
-        String hours = hour.getText();
-        String minutes = minute.getText();
-        LocalDate date = dateOfSim.getValue();
-        simulationDateAndTime.setText("Date: " + date + "\n" + "Simulation time: " + hours + ":" + minutes);
-    }*/
-
     //for LOCAL TIME
     public static void CurrentDate(Label dateText, Label timeText){
         try{
@@ -65,7 +58,6 @@ public class Controller {
 
     //set date and time of simulation in SHS tab
     //issue left: need to update the date at 24 hour mark
-    //ok
     public static void CurrentDateSimulation(DatePicker datePicker, Label dateText, Label timeText, TextField hourField, TextField minuteField){
         try{
             int second = 0;
