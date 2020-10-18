@@ -8,7 +8,10 @@ import javafx.scene.shape.Line;
 import sample.*;
 import utilities.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
+import java.util.Scanner;
 
 public class House {
 
@@ -21,29 +24,55 @@ public class House {
     /**TODO: create attributes for the small image icons of utilities (i.e. lightbulb, AC, window, etc.)*/
     /** create an attribute for a house layout 2D drawing */
 
-    public House(String houseLayoutFileName) {
+    public House(String houseLayoutFileName) throws FileNotFoundException {
         /**TODO: using File IO, read a plain text (.txt) file called "houseLayoutFileName"*/
-
+        File house = new File(houseLayoutFileName);
+        Scanner scan = new Scanner(house);
+        numOfRooms = scan.nextInt();
         /** TODO: in the file, the number of rooms should come first (initialize to "numOfRooms"
          *   and set the length of "roomArray" to this value)*/
-
+        this.rooms = new Room[numOfRooms];
         /**dummy for now*/
         this.rooms = Main.getHouseholdLocations();
 
-        for (int r = 0; r < this.rooms.length; r++) {
+        int x = 0;
+        String room_name = "";
+        int numOfDoors = 0;
+        int numOfWindows = 0;
+        int numOfLights = 0;
+        boolean has_ac = true;
 
-            /**TODO: from the text file, read the information about each room: room name,
-             *  number of doors, windows, lights, and a boolean indicating if it has an AC machine)
-             *  and initialize these values to the appropriate variables listed below.
-             **/
-//            String room_name = "";
-//            int numOfDoors = 0;
-//            int numOfWindows = 0;
-//            int numOfLights = 0;
-//            boolean has_ac = true;
+        while (scan.hasNextLine()) {
+            String line = scan.nextLine();
+            if (line.contains("Name=")){
+                room_name = line.substring(6);
+                //System.out.println(room_name);
+            }
+            if (line.contains("Doors=")){
+                numOfDoors = Integer.parseInt(line.substring(7));
+                //System.out.println(numOfDoors);
+            }
+            if (line.contains("Windows=")){
+                numOfWindows = Integer.parseInt(line.substring(9));
+                //System.out.println(numOfWindows);
+            }
+            if (line.contains("Lights=")){
+                numOfLights = Integer.parseInt(line.substring(8));
+                //System.out.println(numOfLights);
+            }
+            if (line.contains("Ac=")){
+                has_ac = Boolean.parseBoolean(line.substring(4));
+                //System.out.println(has_ac);
+            }
+            if (line.contains("-end-")){
+                this.rooms[x] = new Room(room_name, numOfDoors, numOfWindows, numOfLights, has_ac);
+                x++;
+            }
+        }
 
-            /**TODO: create a new Room object with these attributes*/
-//            this.rooms[r] = new Room(room_name, numOfDoors, numOfWindows, numOfLights, has_ac);
+        //testing output of the rooms
+        for (int r = 0; r < this.numOfRooms; r++){
+            System.out.println(rooms[r]);
         }
 
         // after all Room initializations, the house layout will be set up

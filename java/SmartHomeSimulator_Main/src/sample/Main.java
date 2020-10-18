@@ -130,7 +130,7 @@ public class Main extends Application {
         householdLocations = new Room[]{testRoom, testRoom2, testRoom3, testRoom4, testRoom5, testRoom6, testRoom7,
                 testRoom8, testRoom9};
 
-        house = new House("dummyfile");
+        //house = new House("dummyfile"); commented out for testing
         //houseLayout = house.getLayout();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -283,7 +283,11 @@ public class Main extends Application {
                 houseLayoutFileName = houseLayoutFile.getName();
                 houseLayoutFilePathName = houseLayoutFile.getPath();
                 houseLayoutFile.setReadOnly();
-                house = new House(houseLayoutFilePathName); /**TODO: implement File IO for reading a text file in
+                try {
+                    house = new House(houseLayoutFilePathName);
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } /**TODO: implement File IO for reading a text file in
                  the constructor of the House class */
                 householdLocations = house.getRooms();
                 houseLayout = house.getLayout();
