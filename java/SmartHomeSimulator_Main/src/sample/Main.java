@@ -54,6 +54,13 @@ public class Main extends Application {
     protected static AnchorPane profileSelection;
     protected static AnchorPane main_dashboard;
 
+    // modules
+    protected static AnchorPane SHS_MODULE;
+    protected static AnchorPane SHC_MODULE;
+    protected static AnchorPane SHP_MODULE;
+    protected static AnchorPane SHH_MODULE;
+
+
     /**GLOBAL SIMULATION VARIABLES - START*/
     // main dashboard
     protected static Button editContextButton; // LINE 139
@@ -71,6 +78,8 @@ public class Main extends Application {
 
     // SHS module
     protected static int numberOfProfiles = 0; // the number of user profiles for a House
+    protected static int numberOfTimesDashboardPageLoaded = 0;
+    protected static int numberOfTimesProfilePageSelected = 0;
 
     /**TODO: implement everything about user profiles*/
     protected static UserProfile[] profiles; // an array of UserProfile objects
@@ -112,24 +121,36 @@ public class Main extends Application {
         Room testRoom9 = new Room("Bedroom 2", 1, 1, 2, false);
 
         householdLocations = new Room[]{testRoom, testRoom2, testRoom3, testRoom4, testRoom5, testRoom6, testRoom7,
-        testRoom8, testRoom9};
+                testRoom8, testRoom9};
 
         house = new House("dummyfile");
         houseLayout = house.getLayout();
 
         main_stage = primaryStage;
         main_stage.setResizable(false);
+
+        /**PROFILE SELECTION PAGE INITIALIZATION*/
         profileSelection = new AnchorPane();
         profileScene = new Scene(profileSelection, LOGINPAGE_HEIGHT, LOGINPAGE_WIDTH);
 
+        /**MODULE INITIALIZATIONS */
+        SHS_MODULE = new AnchorPane();
+        SHC_MODULE = new AnchorPane();
+        SHP_MODULE = new AnchorPane();
+        SHH_MODULE = new AnchorPane();
+
+        /**MAIN DASHBOARD INITIALIZATIONS */
         main_dashboard = new AnchorPane();
         createMainDashboardNecessities();
         dashboardScene = new Scene(main_dashboard, DASHBOARD_HEIGHT, DASHBOARD_WIDTH);
 
+        /**EDIT SIMULATION CONTEXT INITIALIZATIONS */
         editContextLayout = new AnchorPane();
         editContextScene = new Scene(editContextLayout, 650, 650);
         editContextLayout2 = new AnchorPane();
         editContextScene2 = new Scene(editContextLayout2, 650, 650);
+
+
 
         main_stage.setTitle("Smart Home Simulator - No user");
         main_stage.setScene(dashboardScene);
@@ -146,107 +167,207 @@ public class Main extends Application {
         closeButton.setId("profilePageCloseButton");
         closeButton.setTranslateX(150); closeButton.setTranslateY(350);
         closeButton.setOnAction(e->Main.profileBox.close());
-        Main.profileSelection.getChildren().add(closeButton);
+//        Main.profileSelection.getChildren().add(closeButton);
 
         Label profileListLabel = new Label();
         profileListLabel.setId("profileListLabel");
         profileListLabel.setTranslateX(350); profileListLabel.setTranslateY(40);
-        profileListLabel.setText("LIST OF PROFILES:"); Main.profileSelection.getChildren().add(profileListLabel);
+        profileListLabel.setText("LIST OF PROFILES:");
+        //Main.profileSelection.getChildren().add(profileListLabel);
 
         TextField newProfileTextField = new TextField(); newProfileTextField.setPromptText("P,C,G,or S...");
         newProfileTextField.setId("newProfileTextField");
         newProfileTextField.setPrefWidth(85); newProfileTextField.setTranslateX(40);
-        newProfileTextField.setTranslateY(290); Main.profileSelection.getChildren().add(newProfileTextField);
+        newProfileTextField.setTranslateY(290);
 
-        RadioButton setAdminitrator = new RadioButton("Set Administrator");
-        setAdminitrator.setId("setAdminButton");
-        setAdminitrator.setTranslateX(40); setAdminitrator.setTranslateY(320);
-        Main.profileSelection.getChildren().add(setAdminitrator);
+        RadioButton setAdministrator = new RadioButton("Set Administrator");
+        setAdministrator.setId("setAdminButton");
+        setAdministrator.setTranslateX(40); setAdministrator.setTranslateY(320);
+        //Main.profileSelection.getChildren().add(setAdministrator);
 
         Button addButton = new Button("Add new\nProfile");
         addButton.setId("addNewProfileButton");
         addButton.setTranslateX(40); addButton.setTranslateY(350);
-        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField, setAdminitrator));
-        Main.profileSelection.getChildren().addAll(addButton);
+        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField, setAdministrator));
+        //Main.profileSelection.getChildren().addAll(addButton);
+
+        if (numberOfTimesProfilePageSelected == 0) {
+            Main.profileSelection.getChildren().addAll(addButton);
+            Main.profileSelection.getChildren().add(setAdministrator);
+            Main.profileSelection.getChildren().add(newProfileTextField);
+            Main.profileSelection.getChildren().add(profileListLabel);
+            Main.profileSelection.getChildren().add(closeButton);
+        }
+        numberOfTimesProfilePageSelected++;
     }
 
-    public static void createMainDashboardNecessities() { // THIS ONLY CREATES THE NECESSITIES OF THE MAIN DASHBOARD
-
-        AnchorPane anchorPane = new AnchorPane();
+    public static void createMainDashboardNecessities() {
 
         Rectangle rectangle = new Rectangle(); rectangle.setVisible(true); rectangle.setStrokeType(StrokeType.INSIDE);
         rectangle.setStroke(javafx.scene.paint.Paint.valueOf("BLACK")); rectangle.setArcWidth(5.0); rectangle.setArcHeight(5.0);
         rectangle.setHeight(DASHBOARD_WIDTH); rectangle.setOpacity(0.95); rectangle.setWidth(110); rectangle.setFill(Color.AQUA);
         rectangle.setId("rectangle");
-        anchorPane.getChildren().add(rectangle);
 
         Label simLabel = new Label(); simLabel.setText("SIMULATION"); simLabel.setTranslateX(15);
         simLabel.setId("simulationLabel");
-        anchorPane.getChildren().add(simLabel);
 
         ToggleButton triggerSim = new ToggleButton(); triggerSim.setId("simulationOnOffButton");
         triggerSim.prefHeight(45); triggerSim.prefWidth(75); triggerSim.setText("Start\nSimulation");
         triggerSim.setTranslateY(30); triggerSim.setTranslateX(15); triggerSim.setTextAlignment(TextAlignment.CENTER);
         triggerSim.setOnAction(e-> sample.Controller.startSimulation(triggerSim, editContextButton, outputConsole, modulesInterface));
-        anchorPane.getChildren().add(triggerSim);
+        triggerSim.setDisable(true);
 
         /**TODO: implement the remaining backend for Edit Context button. */
-        editContextButton = new Button(); editContextButton.setDisable(true); editContextButton.setId("editContextButton");
+        editContextButton = new Button(); editContextButton.setId("editContextButton");
         editContextButton.prefHeight(45); editContextButton.prefWidth(75); editContextButton.setText("Edit\nContext");
         editContextButton.setTranslateY(90); editContextButton.setTranslateX(15); editContextButton.setTextAlignment(TextAlignment.CENTER);
-        editContextButton.setOnAction(e->Controller.editContext()); anchorPane.getChildren().add(editContextButton);
+        editContextButton.setOnAction(e->Controller.editContext());
+        editContextButton.setDisable(true);
 
         Label temperatureLabel = new Label(); temperatureLabel.setId("temp");
         temperatureLabel.setText("Outside Temp.\n15°C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
         temperatureLabel.setTranslateY(400); temperatureLabel.setTranslateX(15);
-        anchorPane.getChildren().add(temperatureLabel);
 
         /**TODO: find a way to display the real local date and time that updates every second */
         Label localDateTime = new Label(); localDateTime.setTextAlignment(TextAlignment.CENTER);
         localDateTime.setTranslateX(15); localDateTime.setTranslateY(600); localDateTime.setText("LOCAL TIME");
-        localDateTime.setId("localDateAndTimeLabel"); anchorPane.getChildren().add(localDateTime);
+        localDateTime.setId("localDateAndTimeLabel");
 
-        outputConsole = new TextArea(); outputConsole.setDisable(true); outputConsole.setId("OutputConsole");
+        outputConsole = new TextArea(); outputConsole.setId("OutputConsole");
         outputConsole.setPrefHeight(130); outputConsole.setPrefWidth(450); outputConsole.setTranslateY(540);
         outputConsole.setTranslateX(150); outputConsole.setWrapText(true);
-        anchorPane.getChildren().add(outputConsole);
+        outputConsole.setDisable(true);
 
         Label outputConsoleLabel = new Label(); outputConsoleLabel.setId("outputConsoleLabel");
         outputConsoleLabel.setText("Output Console"); outputConsoleLabel.setTextAlignment(TextAlignment.CENTER);
         outputConsoleLabel.setTranslateY(520); outputConsoleLabel.setTranslateX(150);
-        anchorPane.getChildren().add(outputConsoleLabel);
 
         houseLayout.setPrefHeight(675); houseLayout.setPrefWidth(675); houseLayout.setId("houseLayout");
-        houseLayout.setTranslateX(615); houseLayout.setTranslateY(10); houseLayout.setDisable(true);
-        anchorPane.getChildren().add(houseLayout);
+        houseLayout.setTranslateX(615); houseLayout.setTranslateY(10);
+        houseLayout.setDisable(true);
 
-        modulesInterface = createModuleInterface(); modulesInterface.setDisable(true);
+        modulesInterface = createModuleInterface();
         modulesInterface.setPrefHeight(500); modulesInterface.setPrefWidth(500);
         modulesInterface.setTranslateX(110);
         modulesInterface.setId("modulesInterface");
         modulesInterface.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         modulesInterface.setStyle("-fx-border-width: 2; -fx-border-color: black;");
-        anchorPane.getChildren().add(modulesInterface);
 
-        main_dashboard = anchorPane;
+        if (numberOfTimesDashboardPageLoaded == 0) {
+            main_dashboard.getChildren().add(rectangle);
+            main_dashboard.getChildren().add(simLabel);
+            main_dashboard.getChildren().add(triggerSim);
+            main_dashboard.getChildren().add(editContextButton);
+            main_dashboard.getChildren().add(temperatureLabel);
+            main_dashboard.getChildren().add(localDateTime);
+            main_dashboard.getChildren().add(outputConsole);
+            main_dashboard.getChildren().add(outputConsoleLabel);
+            main_dashboard.getChildren().add(houseLayout);
+            main_dashboard.getChildren().add(modulesInterface);
+        }
+
+        // is someone logged in?
+        if (currentActiveProfile != null) {
+            for (int a = 0; a < main_dashboard.getChildren().size(); a++) {
+                if (main_dashboard.getChildren().get(a).getId().equals("simulationOnOffButton")) {
+                    ToggleButton tb = (ToggleButton) main_dashboard.getChildren().get(a);
+                    tb.setDisable(false);
+                    main_dashboard.getChildren().set(a, tb);
+                }
+                else if (main_dashboard.getChildren().get(a).getId().equals("editContextButton")) {
+                    Button b = (Button) main_dashboard.getChildren().get(a);
+                    b.setDisable(false);
+                    main_dashboard.getChildren().set(a, b);
+                }
+                else if (main_dashboard.getChildren().get(a).getId().equals("OutputConsole")) {
+                    TextArea ta = (TextArea) main_dashboard.getChildren().get(a);
+                    if (simulationIsOn) {
+                        ta.setDisable(false);
+                    }
+                    else {
+                        ta.setDisable(true);
+                    }
+                    main_dashboard.getChildren().set(a, ta);
+                }
+                else if (main_dashboard.getChildren().get(a).getId().equals("houseLayout")) {
+                    AnchorPane hl = (AnchorPane) main_dashboard.getChildren().get(a);
+                    if (simulationIsOn) {
+                        hl.setDisable(false);
+                    }
+                    else {
+                        hl.setDisable(true);
+                    }
+                    main_dashboard.getChildren().set(a, hl);
+                }
+                else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
+                    SHS_MODULE = makeSHSmodule();
+                    TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
+                    Tab innerTab = tabPane.getTabs().get(0);
+                    innerTab.setContent(SHS_MODULE);
+                    tabPane.getTabs().set(0, innerTab);
+                    main_dashboard.getChildren().set(a, tabPane);
+
+                    // repeat for other modules
+                }
+            }
+        }
+        // is nobody logged in?
+        else {
+            for (int a = 0; a < main_dashboard.getChildren().size(); a++) {
+                if (main_dashboard.getChildren().get(a).getId().equals("simulationOnOffButton")) {
+                    ToggleButton tb = (ToggleButton) main_dashboard.getChildren().get(a);
+                    tb.setDisable(true);
+                    main_dashboard.getChildren().set(a, tb);
+                }
+                else if (main_dashboard.getChildren().get(a).getId().equals("editContextButton")) {
+                    Button b = (Button) main_dashboard.getChildren().get(a);
+                    b.setDisable(true);
+                    main_dashboard.getChildren().set(a, b);
+                }
+                else if (main_dashboard.getChildren().get(a).getId().equals("OutputConsole")) {
+                    TextArea ta = (TextArea) main_dashboard.getChildren().get(a);
+                    ta.setDisable(true);
+                    main_dashboard.getChildren().set(a, ta);
+                }
+                else if (main_dashboard.getChildren().get(a).getId().equals("houseLayout")) {
+                    AnchorPane hl = (AnchorPane) main_dashboard.getChildren().get(a);
+                    hl.setDisable(true);
+                    main_dashboard.getChildren().set(a, hl);
+                }
+                else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
+                    SHS_MODULE = makeSHSmodule();
+                    TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
+                    Tab innerTab = tabPane.getTabs().get(0);
+                    innerTab.setContent(SHS_MODULE);
+                    tabPane.getTabs().set(0, innerTab);
+                    main_dashboard.getChildren().set(a, tabPane);
+
+                    // repeat for other modules
+                }
+            }
+        }
+        numberOfTimesDashboardPageLoaded++;
     }
 
+    //change this
     public static TabPane createModuleInterface() {
         /**TODO: globalize each module */
         TabPane modules = new TabPane();
-        Tab shsTab = new Tab("SHS", makeSHSmodule()); shsTab.setId("shsTab");
+
         Tab shcTab = new Tab("SHC", makeSHCmodule()); shcTab.setId("shcTab");
         Tab shpTab = new Tab("SHP", makeSHPmodule()); shpTab.setId("shpTab");
         Tab shhTab = new Tab("SHH", makeSHHmodule()); shhTab.setId("shhTab");
+        Tab shsTab = new Tab("SHS", makeSHSmodule()); shsTab.setId("shsTab");
+
         modules.getTabs().addAll(shsTab, shcTab, shpTab, shhTab);
         return modules;
     }
 
-    /**TODO: give IDs to each GUI element in here */
     public static AnchorPane makeSHSmodule() {
-        AnchorPane shs_module = new AnchorPane();
+        SHS_MODULE = new AnchorPane();
 
         Button manageOrSwitchProfileButton = new Button("Manage or\nSwitch Profiles");
+        manageOrSwitchProfileButton.setId("manageOrSwitchProfileButton");
         manageOrSwitchProfileButton.setTranslateX(200); manageOrSwitchProfileButton.setTranslateY(20);
         manageOrSwitchProfileButton.setTextAlignment(TextAlignment.CENTER);
         manageOrSwitchProfileButton.setOnAction(e -> Controller.returnToProfileSelectionPage());
@@ -256,43 +377,100 @@ public class Main extends Application {
         Label setHouseLocationLabel = new Label("Set House Location");
         setHouseLocationLabel.setTranslateX(200); setHouseLocationLabel.setTranslateY(110);
 
-        /**TODO: for each room in the house, create a radio button with the room name; */
-
         /**TODO: code a method that will set the location when clicking this button */
-        Button confirmLocationButton = new Button("Set Location");
+        Button confirmLocationButton = new Button("Set Location"); confirmLocationButton.setId("confirmLocationButton");
         confirmLocationButton.setTranslateX(200); confirmLocationButton.setTranslateY(260);
+        if ((currentActiveProfile==null)) {
+            confirmLocationButton.setDisable(true);
+        }
+        else {
+            if (simulationIsOn) {
+                confirmLocationButton.setDisable(true);
+            }
+            else {
+                confirmLocationButton.setDisable(false);
+            }
+        }
 
         Line line2 = new Line(); line2.setStartX(0); line2.setEndX(500); line2.setTranslateY(300);
 
         Label setDateTimeLabel = new Label("Set Date and Time");
         setDateTimeLabel.setTranslateX(200); setDateTimeLabel.setTranslateY(300);
 
-        DatePicker datePicker = new DatePicker();
+        DatePicker datePicker = new DatePicker(); datePicker.setId("datePicker");
         datePicker.setTranslateX(150); datePicker.setTranslateY(340); datePicker.setPromptText("Select date...");
+        if ((currentActiveProfile==null)) {
+            datePicker.setDisable(true);
+        }
+        else {
+            if (simulationIsOn) {
+                datePicker.setDisable(true);
+            }
+            else {
+                datePicker.setDisable(false);
+            }
+        }
 
         Label setTimeLabel = new Label("Hour     Minute");
         setTimeLabel.setTranslateX(200); setTimeLabel.setTranslateY(380);
 
         TextField hourField = new TextField(); hourField.setPrefHeight(30); hourField.setPrefWidth(40);
         hourField.setTranslateX(200); hourField.setTranslateY(400); hourField.setPromptText("hh");
+        hourField.setId("hourField");
+        if ((currentActiveProfile==null)) {
+            hourField.setDisable(true);
+        }
+        else {
+            if (simulationIsOn) {
+                hourField.setDisable(true);
+            }
+            else {
+                hourField.setDisable(false);
+            }
+        }
 
         Label colon = new Label(":");
         colon.setTranslateX(245); colon.setTranslateY(400);
 
         TextField minuteField = new TextField(); minuteField.setPrefHeight(30); minuteField.setPrefWidth(40);
+        minuteField.setId("minuteField");
         minuteField.setTranslateX(250); minuteField.setTranslateY(400); minuteField.setPromptText("mm");
+        if ((currentActiveProfile==null)) {
+            minuteField.setDisable(true);
+        }
+        else {
+            if (simulationIsOn) {
+                minuteField.setDisable(true);
+            }
+            else {
+                minuteField.setDisable(false);
+            }
+        }
 
-        /**TODO: code a method in class Controller that will set the new date and time "setDateTime(hourField, minuteField, datePicker)"*/
-        Button confirmTimeButton = new Button("Confirm New Time");
+        /**TODO: code a method in class Controller that will set the new date and time*/
+        Button confirmTimeButton = new Button("Confirm New Time"); confirmTimeButton.setId("confirmTimeButton");
         confirmTimeButton.setTranslateX(200); confirmTimeButton.setTranslateY(435);
         confirmTimeButton.setTextAlignment(TextAlignment.CENTER);
-//        confirmTimeButton.setOnAction(e -> { });
+        //confirmTimeButton.setOnAction(e -> { });
+        if ((currentActiveProfile==null)) {
+            confirmTimeButton.setDisable(true);
+        }
+        else {
+            if (simulationIsOn) {
+                confirmTimeButton.setDisable(true);
+            }
+            else {
+                confirmTimeButton.setDisable(false);
+            }
+        }
 
-        shs_module.getChildren().addAll(manageOrSwitchProfileButton, line, setDateTimeLabel, datePicker,
-                setTimeLabel, hourField, colon, minuteField, confirmTimeButton, line2, setHouseLocationLabel,
-                confirmLocationButton);
+        try {
+            SHS_MODULE.getChildren().addAll(manageOrSwitchProfileButton, line, setDateTimeLabel, datePicker,
+                    setTimeLabel, hourField, colon, minuteField, confirmTimeButton, line2, setHouseLocationLabel,
+                    confirmLocationButton);
+        }catch (Exception e){}
 
-        return shs_module;
+        return SHS_MODULE;
     }
 
     /**TODO: give IDs to each GUI element in here */

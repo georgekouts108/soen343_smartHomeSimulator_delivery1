@@ -48,6 +48,7 @@ public class Controller {
             if (Main.profiles[prof].getProfileID()==userProfile.getProfileID()) {
                 Main.profiles[prof].setLoggedIn(true);
                 Main.currentActiveProfile = Main.profiles[prof];
+                /**DEBUGGING*/ System.out.println(Main.currentActiveProfile.getProfileID()+" - "+ Main.currentActiveProfile.getType());
                 Main.currentLocation = null;
                 break;
             }
@@ -66,6 +67,9 @@ public class Controller {
             Main.profiles[userProfile.getProfileID()-1].setCurrentLocation(null);
             Main.profiles[userProfile.getProfileID() - 1].setLoggedIn(false);
             Main.currentActiveProfile = null;
+
+            Main.createMainDashboardNecessities();
+
             logoutLink.setDisable(true);
 
             for (int a = 0; a < Main.profileSelection.getChildren().size(); a++) {
@@ -79,6 +83,8 @@ public class Controller {
             Main.profileSelection.getChildren().remove(logoutLink);
         });
         Main.profileSelection.getChildren().add(logoutLink);
+
+        Main.createMainDashboardNecessities();
         Main.main_stage.setScene(Main.dashboardScene);
     }
 
@@ -97,8 +103,26 @@ public class Controller {
 
     /**DASHBOARD METHODS*/
     public static void startSimulation(ToggleButton t, Button b, TextArea ta, TabPane tab) {
-        if (!t.isSelected()) { t.setText("ON"); ta.setDisable(true); Main.houseLayout.setDisable(true); b.setDisable(true); tab.setDisable(true); Main.simulationIsOn = false; }
-        else { t.setText("OFF"); b.setDisable(false); Main.houseLayout.setDisable(false); ta.setDisable(false); tab.setDisable(false); Main.simulationIsOn = true; }
+        Main.createMainDashboardNecessities();
+        if (!t.isSelected()) {
+            t.setText("Start\nSimulation");
+            t.setPrefWidth(t.getPrefWidth()); t.setPrefHeight(t.getPrefHeight());
+            ta.setDisable(true);
+            Main.houseLayout.setDisable(true);
+            b.setDisable(true);
+            tab.setDisable(true);
+            Main.simulationIsOn = false;
+        }
+        else {
+            t.setText("Stop\nSimulation");
+            t.setPrefWidth(t.getPrefWidth()); t.setPrefHeight(t.getPrefHeight());
+            b.setDisable(false);
+            Main.houseLayout.setDisable(false);
+            ta.setDisable(false);
+            tab.setDisable(false);
+            Main.simulationIsOn = true;
+        }
+        Main.createMainDashboardNecessities();
     }
 
     public static void editContext() {
@@ -647,7 +671,7 @@ public class Controller {
     }
 
     /**SHP MODULE METHODS END */
-    
+
     /**USER PROFILE MANAGEMENT METHODS START HERE*/
     public static void createNewProfile(TextField textField, RadioButton radioButton) {
         UserProfile newProfile;
@@ -813,7 +837,7 @@ public class Controller {
                 Main.profileSelection.getChildren().add(accept);
                 cancel.setTranslateX(30); cancel.setTranslateY(200);
                 cancel.setOnAction(event -> {Main.profileSelection.getChildren().removeAll(cancel, accept, editAdmin, editPromptLabel, editTextField);
-                editLink.setDisable(false);
+                    editLink.setDisable(false);
                 });
                 Main.profileSelection.getChildren().add(cancel);
                 break;
@@ -923,7 +947,8 @@ public class Controller {
                 loginLink.setTranslateX((Main.LOGINPAGE_HEIGHT/2)+225); loginLink.setTranslateY(hyperlink.getTranslateY());
                 loginLink.setOnAction(act -> {
                     if (Main.currentActiveProfile==null) {
-                        Controller.goToMainDashboardScene(userProfile, loginLink); Main.profileBox.close();
+                        Controller.goToMainDashboardScene(userProfile, loginLink);
+                        Main.profileBox.close();
 
                         for (int a = 0; a < Main.profileSelection.getChildren().size(); a++) {
                             if (Main.profileSelection.getChildren().get(a).getId().contains("loginLinkForProfile")) {
