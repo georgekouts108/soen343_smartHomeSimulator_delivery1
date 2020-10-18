@@ -63,29 +63,55 @@ public class Controller {
         }
     }
 
-    //For SIMULATION TIME, not working properly, for some reason it displays the time on top left corner...
-    //wrong logic
+    //set date and time of simulation in SHS tab
+    //issue left: need to update the date at 24 hour mark
+    //ok
     public static void CurrentDateSimulation(DatePicker datePicker, Label dateText, Label timeText, TextField hourField, TextField minuteField){
         try{
-            for(;;){
+            int second = 0;
+            int minute = 0;
+            int hour = 0;
+            minute = Integer.parseInt(minuteField.getText());
+            hour = Integer.parseInt(hourField.getText());
+            for(int i = 0;;i++){
                 Calendar cal = new GregorianCalendar();
                 Platform.runLater(()->dateText.setText(String.valueOf(datePicker.getValue())));
-                int second = cal.get(Calendar.SECOND);
-                int minute = cal.get(Calendar.MINUTE);
-                int hour = cal.get(Calendar.HOUR);
-                int hoursToAdd = 24-cal.get(Calendar.HOUR);
-                int addHrs = Integer.parseInt(hourField.getText());
-                int minsToAdd = 60-cal.get(Calendar.MINUTE);
-                int addMins = Integer.parseInt(minuteField.getText());
-                Platform.runLater(()->timeText.setText("Time "+(hour + hoursToAdd + addHrs )%24+":"+(minute + minsToAdd + addMins)%60+":"+second));
-                Thread.sleep(1000);
-            }
+                if (i == 0) {
+                    second = 0;
+                    int finalSecond = second;
+                    int finalHour = hour;
+                    int finalMinute = minute;
+                    Platform.runLater(()->timeText.setText("Time "+(finalHour)%24+":"+(finalMinute)%60+":"+ finalSecond%60));
+                    Thread.sleep(1000);
+                }
+                else
+                    {
+                        second = second + 1;
+                        int finalSecond = second;
+
+                        if (finalSecond == 60){
+                            minute = minute + 1;
+                            second = 0;
+                        }
+                        int finalMinute = minute;
+                        if (finalMinute == 60 && finalSecond == 60){
+                            hour = hour + 1;
+                            minute = 0;
+                        }
+                        int finalHour = hour;
+                        if (finalHour == 23 && finalMinute == 60 && finalSecond == 60){
+                            hour = 0;
+                            minute = 0;
+                            second = 0;
+                        }
+                        Platform.runLater(()->timeText.setText("Time "+(finalHour%24)+":"+(finalMinute%60)+":"+ finalSecond%60));
+                        Thread.sleep(1000);
+                    }
+                }
         }catch (Exception e){
             e.printStackTrace();
         }
     }
-
-
 
     /**SCENE-SWITCHING METHODS START */
     public static void goToMainDashboardScene(UserProfile userProfile) {
