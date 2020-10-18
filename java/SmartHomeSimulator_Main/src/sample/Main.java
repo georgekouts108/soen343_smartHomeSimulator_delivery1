@@ -233,6 +233,18 @@ public class Main extends Application {
         localDateTime.setTranslateX(15); localDateTime.setTranslateY(600); localDateTime.setText("LOCAL TIME");
         localDateTime.setId("localDateAndTimeLabel");
 
+        Label dateText = new Label(); dateText.setTextAlignment(TextAlignment.CENTER);
+        dateText.setId("dateText");
+        dateText.setTranslateX(15); dateText.setTranslateY(620);
+
+        Label timeText = new Label(); timeText.setTextAlignment(TextAlignment.CENTER);
+        timeText.setId("timeText");
+        timeText.setTranslateX(15); timeText.setTranslateY(640);
+        timeText.setText("TEST");
+
+        //thread to start the current date/time display when application starts
+        new Thread(()->{sample.Controller.CurrentDate(dateText, timeText);}).start();
+
         outputConsole = new TextArea(); outputConsole.setId("OutputConsole");
         outputConsole.setPrefHeight(130); outputConsole.setPrefWidth(450); outputConsole.setTranslateY(540);
         outputConsole.setTranslateX(150); outputConsole.setWrapText(true);
@@ -264,6 +276,8 @@ public class Main extends Application {
             main_dashboard.getChildren().add(outputConsoleLabel);
             main_dashboard.getChildren().add(houseLayout);
             main_dashboard.getChildren().add(modulesInterface);
+            main_dashboard.getChildren().add(dateText);
+            main_dashboard.getChildren().add(timeText);
         }
 
         // is someone logged in?
@@ -289,6 +303,26 @@ public class Main extends Application {
                     }
                     main_dashboard.getChildren().set(a, ta);
                 }
+                else if (main_dashboard.getChildren().get(a).getId().equals("simulationDate")) {
+                    Label ta = (Label) main_dashboard.getChildren().get(a);
+                    if (simulationIsOn) {
+                        ta.setDisable(true);
+                    }
+                    else {
+                        ta.setDisable(true);
+                    }
+                    main_dashboard.getChildren().set(a, ta);
+                }
+              /*  else if (main_dashboard.getChildren().get(a).getId().equals("simulationTime")) {
+                    Label ta = (Label) main_dashboard.getChildren().get(a);
+                    if (simulationIsOn) {
+                        ta.setDisable(true);
+                    }
+                    else {
+                        ta.setDisable(true);
+                    }
+                    main_dashboard.getChildren().set(a, ta);
+                }
                 else if (main_dashboard.getChildren().get(a).getId().equals("houseLayout")) {
                     AnchorPane hl = (AnchorPane) main_dashboard.getChildren().get(a);
                     if (simulationIsOn) {
@@ -298,12 +332,29 @@ public class Main extends Application {
                         hl.setDisable(true);
                     }
                     main_dashboard.getChildren().set(a, hl);
-                }
+                }*/
                 else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
                     SHS_MODULE = makeSHSmodule();
                     TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
                     Tab innerTab = tabPane.getTabs().get(0);
                     innerTab.setContent(SHS_MODULE);
+                    //added code attempting to render simulationDate/Time visible
+                    for (int i = 0; i < SHS_MODULE.getChildren().size() ; i++ ){
+                        try{
+                            if (SHS_MODULE.getChildren().get(i).getId().equals("simulationDate")){
+                                Label l1 = (Label) SHS_MODULE.getChildren().get(i);
+                                l1.setVisible(true);
+                                SHS_MODULE.getChildren().set(i, l1);
+                                break;
+                            }
+                        }catch(Exception e){
+
+                        }
+
+                    }
+
+                    innerTab.setContent(SHS_MODULE);
+
                     tabPane.getTabs().set(0, innerTab);
                     main_dashboard.getChildren().set(a, tabPane);
 
@@ -447,11 +498,18 @@ public class Main extends Application {
             }
         }
 
+        Label simulationDate = new Label(); simulationDate.setId("simulationDate");
+        simulationDate.setTranslateX(400); simulationDate.setTranslateY(380);
+
+        Label simulationTime = new Label(); simulationTime.setId("simulationTime");
+        simulationTime.setTranslateX(400); simulationTime.setTranslateY(400);
+
         /**TODO: code a method in class Controller that will set the new date and time*/
         Button confirmTimeButton = new Button("Confirm New Time"); confirmTimeButton.setId("confirmTimeButton");
         confirmTimeButton.setTranslateX(200); confirmTimeButton.setTranslateY(435);
         confirmTimeButton.setTextAlignment(TextAlignment.CENTER);
-        //confirmTimeButton.setOnAction(e -> { });
+        confirmTimeButton.setOnAction(e -> {new Thread(()->{sample.Controller.CurrentDateSimulation(datePicker, simulationDate, simulationTime, hourField, minuteField);}).start();});
+
         if ((currentActiveProfile==null)) {
             confirmTimeButton.setDisable(true);
         }
@@ -466,7 +524,7 @@ public class Main extends Application {
 
         try {
             SHS_MODULE.getChildren().addAll(manageOrSwitchProfileButton, line, setDateTimeLabel, datePicker,
-                    setTimeLabel, hourField, colon, minuteField, confirmTimeButton, line2, setHouseLocationLabel,
+                    setTimeLabel, simulationDate, simulationTime, hourField, colon, minuteField, confirmTimeButton, line2, setHouseLocationLabel,
                     confirmLocationButton);
         }catch (Exception e){}
 

@@ -1,5 +1,6 @@
 package sample;
 import house.*;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -28,6 +29,8 @@ import javax.swing.text.html.ImageView;
 import java.awt.*;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 import sample.Main.*;
 
@@ -41,6 +44,76 @@ public class Controller {
 
     private static CheckBox[] profileCheckboxes;
     private static CheckBox[] roomCheckboxes;
+
+    //for LOCAL TIME
+    public static void CurrentDate(Label dateText, Label timeText){
+        try{
+            for(;;){
+                Calendar cal = new GregorianCalendar();
+                int month = cal.get(Calendar.MONTH);
+                int year = cal.get(Calendar.YEAR);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                Platform.runLater(()->dateText.setText("Date "+year+"/"+(month+1)+"/"+day));
+                int second = cal.get(Calendar.SECOND);
+                int minute = cal.get(Calendar.MINUTE);
+                int hour = cal.get(Calendar.HOUR);
+                Platform.runLater(()->timeText.setText("Time "+hour+":"+(minute)+":"+second));
+                Thread.sleep(1000);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    //Sets date and time of simulation in SHS tab
+    //issue: need to update the date at 24 hour mark
+    //issue: clicking multiple times on confirm new time will start multiple thread and overlap display (to fix)
+    public static void CurrentDateSimulation(DatePicker datePicker, Label dateText, Label timeText, TextField hourField, TextField minuteField){
+        try{
+            int second = 0;
+            int minute = 0;
+            int hour = 0;
+            minute = Integer.parseInt(minuteField.getText());
+            hour = Integer.parseInt(hourField.getText());
+            for(int i = 0;;i++){
+                Calendar cal = new GregorianCalendar();
+                Platform.runLater(()->dateText.setText(String.valueOf(datePicker.getValue())));
+                if (i == 0) {
+                    second = 0;
+                    int finalSecond = second;
+                    int finalHour = hour;
+                    int finalMinute = minute;
+                    Platform.runLater(()->timeText.setText("Time "+(finalHour)%24+":"+(finalMinute)%60+":"+ finalSecond%60));
+                    Thread.sleep(1000);
+                }
+                else
+                {
+                    second = second + 1;
+                    int finalSecond = second;
+
+                    if (finalSecond == 60){
+                        minute = minute + 1;
+                        second = 0;
+                    }
+                    int finalMinute = minute;
+                    if (finalMinute == 60 && finalSecond == 60){
+                        hour = hour + 1;
+                        minute = 0;
+                    }
+                    int finalHour = hour;
+                    if (finalHour == 23 && finalMinute == 60 && finalSecond == 60){
+                        hour = 0;
+                        minute = 0;
+                        second = 0;
+                    }
+                    Platform.runLater(()->timeText.setText("Time "+(finalHour%24)+":"+(finalMinute%60)+":"+ finalSecond%60));
+                    Thread.sleep(1000);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     /**SCENE-SWITCHING METHODS START */
     public static void goToMainDashboardScene(UserProfile userProfile, Hyperlink hyperlink) {
@@ -103,6 +176,7 @@ public class Controller {
 
     /**DASHBOARD METHODS*/
     public static void startSimulation(ToggleButton t, Button b, TextArea ta, TabPane tab) {
+
         Main.createMainDashboardNecessities();
         if (!t.isSelected()) {
             t.setText("Start\nSimulation");
