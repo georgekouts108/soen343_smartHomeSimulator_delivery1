@@ -1,7 +1,11 @@
 package sample;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import utilities.*;
 import house.*;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -22,11 +26,10 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
 import sample.Controller.*;
-
 import javax.sound.sampled.Control;
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.concurrent.*;
@@ -39,75 +42,79 @@ public class Main extends Application {
     protected static final int LOGINPAGE_WIDTH = 400;
     protected static final int LOGINPAGE_HEIGHT = 700;
 
-    /**FIXED GUI ELEMENTS*/
+    /**STAGE ELEMENTS*/
     protected static Stage main_stage;
     protected static Stage profileBox;
     protected static Stage editContextStage;
 
+    /**SCENE ELEMENTS*/
     protected static Scene dashboardScene;
     protected static Scene profileScene;
     protected static Scene editContextScene;
-    protected static Scene editContextScene2; // will be used for moving inhabitants around the house
+    protected static Scene editContextScene2;
 
-    protected static AnchorPane editContextLayout2; // will be used for moving inhabitants around the house
+    /**PANES FOR USER-INTERFACE ELEMENTS*/
+    protected static AnchorPane editContextLayout2;
     protected static AnchorPane editContextLayout;
     protected static AnchorPane profileSelection;
     protected static AnchorPane main_dashboard;
 
-    // modules
+    /**PANES FOR SIMULATION MODULES*/
     protected static AnchorPane SHS_MODULE;
     protected static AnchorPane SHC_MODULE;
     protected static AnchorPane SHP_MODULE;
     protected static AnchorPane SHH_MODULE;
 
-
-    /**GLOBAL SIMULATION VARIABLES - START*/
-    // main dashboard
-    protected static Button editContextButton; // LINE 139
-    protected static TextArea outputConsole; // LINE 157
-    protected static AnchorPane houseLayout; // LINE 169
-    protected static TabPane modulesInterface; // LINE 176
+    /**G.U.I ELEMENTS FOR THE MAIN DASHBOARD */
+    protected static Button editContextButton;
+    protected static TextArea outputConsole;
+    protected static AnchorPane houseLayout;
+    protected static TabPane modulesInterface;
     protected static boolean simulationIsOn;
 
-    // SHP module
+    /**todo: use these variables to load a house layout text file */
+    protected static FileChooser fileChooser;
+    protected static String houseLayoutFileName;
+    protected static File houseLayoutFile;
+    protected static String houseLayoutFilePathName;
+
+    /**G.U.I ELEMENTS FOR THE SHP MODULE */
     protected static boolean is_away;
     protected static int timeLimitBeforeAlert;
     protected static TextArea suspBox;
 
-    // SHC module
-
-    // SHS module
-    protected static int numberOfProfiles = 0; // the number of user profiles for a House
+    /**G.U.I ELEMENTS FOR THE SHS MODULE */
+    protected static int numberOfProfiles = 0;
     protected static int numberOfTimesDashboardPageLoaded = 0;
     protected static int numberOfTimesProfilePageSelected = 0;
 
-    /**TODO: implement everything about user profiles*/
-    protected static UserProfile[] profiles; // an array of UserProfile objects
-    protected static UserProfile currentActiveProfile; // the current logged in profile
+    /**USER PROFILE STATIC VARIABLES */
+    protected static UserProfile[] profiles;
+    protected static UserProfile currentActiveProfile;
     protected static Hyperlink[] profileLinks;
 
-    /**HOUSE INFO VARIABLES */
-    /**TODO: @AntoTurc -- create more protected static variables houshold elements*/
-    protected static int numberOfRooms;
+    /**STATIC VARIABLES AND METHODS FOR THE HOUSE */
+    /**TODO: create more protected static variables household elements*/
     protected static double outsideTemperature;
-    protected static Room[] householdLocations; // an array of household locations
-    protected static Room currentLocation; // the current location or room of the logged in user
+    protected static Room[] householdLocations;
+    protected static Room currentLocation;
     protected static House house;
-
     public static Room[] getHouseholdLocations() {
         return householdLocations;
     }
-
     public static AnchorPane getMain_dashboard() {return main_dashboard;}
-    /**GLOBAL SIMULATION VARIBLES - END*/
 
+    /**
+     * START method for the JavaFX Application "Smart Home Simulator"
+     * @param primaryStage
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
         /**
          * TODO: create a House object and read the input of a house layout file
          * TODO: and extract information; all global House info will be initialized here... */
-
 
 
         Room testRoom = new Room("Kitchen", 2, 1, 5, true);
@@ -124,7 +131,9 @@ public class Main extends Application {
                 testRoom8, testRoom9};
 
         house = new House("dummyfile");
-        houseLayout = house.getLayout();
+        //houseLayout = house.getLayout();
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         main_stage = primaryStage;
         main_stage.setResizable(false);
@@ -141,7 +150,11 @@ public class Main extends Application {
 
         /**MAIN DASHBOARD INITIALIZATIONS */
         main_dashboard = new AnchorPane();
-        createMainDashboardNecessities();
+
+        // when first running the program, there should be a file selector button where the house layout image will go
+
+        createMainDashboardNecessities(); /**TODO: see the "TODO" instructions in this method...*/
+
         dashboardScene = new Scene(main_dashboard, DASHBOARD_HEIGHT, DASHBOARD_WIDTH);
 
         /**EDIT SIMULATION CONTEXT INITIALIZATIONS */
@@ -150,30 +163,34 @@ public class Main extends Application {
         editContextLayout2 = new AnchorPane();
         editContextScene2 = new Scene(editContextLayout2, 650, 650);
 
-
-
+        /**SET THE MAIN STAGE*/
         main_stage.setTitle("Smart Home Simulator - No user");
         main_stage.setScene(dashboardScene);
         main_stage.show();
     }
 
+    /**
+     * MAIN method to launch the JavaFX Application
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Create or update the window for adding, editing, deleting, or managing user Profiles.
+     */
     public static void transformProfileSelectionPageScene() {
 
         Button closeButton = new Button("Close");
         closeButton.setId("profilePageCloseButton");
         closeButton.setTranslateX(150); closeButton.setTranslateY(350);
         closeButton.setOnAction(e->Main.profileBox.close());
-//        Main.profileSelection.getChildren().add(closeButton);
 
         Label profileListLabel = new Label();
         profileListLabel.setId("profileListLabel");
         profileListLabel.setTranslateX(350); profileListLabel.setTranslateY(40);
         profileListLabel.setText("LIST OF PROFILES:");
-        //Main.profileSelection.getChildren().add(profileListLabel);
 
         TextField newProfileTextField = new TextField(); newProfileTextField.setPromptText("P,C,G,or S...");
         newProfileTextField.setId("newProfileTextField");
@@ -183,13 +200,11 @@ public class Main extends Application {
         RadioButton setAdministrator = new RadioButton("Set Administrator");
         setAdministrator.setId("setAdminButton");
         setAdministrator.setTranslateX(40); setAdministrator.setTranslateY(320);
-        //Main.profileSelection.getChildren().add(setAdministrator);
 
         Button addButton = new Button("Add new\nProfile");
         addButton.setId("addNewProfileButton");
         addButton.setTranslateX(40); addButton.setTranslateY(350);
         addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField, setAdministrator));
-        //Main.profileSelection.getChildren().addAll(addButton);
 
         if (numberOfTimesProfilePageSelected == 0) {
             Main.profileSelection.getChildren().addAll(addButton);
@@ -201,6 +216,9 @@ public class Main extends Application {
         numberOfTimesProfilePageSelected++;
     }
 
+    /**
+     * Create or update the window for the main dashboard.
+     */
     public static void createMainDashboardNecessities() {
 
         Rectangle rectangle = new Rectangle(); rectangle.setVisible(true); rectangle.setStrokeType(StrokeType.INSIDE);
@@ -254,9 +272,32 @@ public class Main extends Application {
         outputConsoleLabel.setText("Output Console"); outputConsoleLabel.setTextAlignment(TextAlignment.CENTER);
         outputConsoleLabel.setTranslateY(520); outputConsoleLabel.setTranslateX(150);
 
-        houseLayout.setPrefHeight(675); houseLayout.setPrefWidth(675); houseLayout.setId("houseLayout");
-        houseLayout.setTranslateX(615); houseLayout.setTranslateY(10);
-        houseLayout.setDisable(true);
+        fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+        fileChooser.setTitle("Load House Layout File");
+        Button chooseFileButton = new Button("Select a .txt file\nfor house layout...");
+        chooseFileButton.setTranslateY(300); chooseFileButton.setTranslateX(900);
+        chooseFileButton.setOnAction(e -> {
+            houseLayoutFile = fileChooser.showOpenDialog(main_stage);
+            if (houseLayoutFile != null) {
+                houseLayoutFileName = houseLayoutFile.getName();
+                houseLayoutFilePathName = houseLayoutFile.getPath();
+                houseLayoutFile.setReadOnly();
+                house = new House(houseLayoutFilePathName); /**TODO: implement File IO for reading a text file in
+                 the constructor of the House class */
+                householdLocations = house.getRooms();
+                houseLayout = house.getLayout();
+                houseLayout.setPrefHeight(675);
+                houseLayout.setPrefWidth(675);
+                houseLayout.setId("houseLayout");
+                houseLayout.setTranslateX(615);
+                houseLayout.setTranslateY(10);
+                houseLayout.setDisable(true);
+                main_dashboard.getChildren().remove(chooseFileButton);
+                main_dashboard.getChildren().add(houseLayout);
+                createMainDashboardNecessities();
+            }
+        });
 
         modulesInterface = createModuleInterface();
         modulesInterface.setPrefHeight(500); modulesInterface.setPrefWidth(500);
@@ -274,8 +315,9 @@ public class Main extends Application {
             main_dashboard.getChildren().add(localDateTime);
             main_dashboard.getChildren().add(outputConsole);
             main_dashboard.getChildren().add(outputConsoleLabel);
-            main_dashboard.getChildren().add(houseLayout);
+            //main_dashboard.getChildren().add(houseLayout);
             main_dashboard.getChildren().add(modulesInterface);
+            main_dashboard.getChildren().add(chooseFileButton);
             main_dashboard.getChildren().add(dateText);
             main_dashboard.getChildren().add(timeText);
         }
@@ -283,36 +325,36 @@ public class Main extends Application {
         // is someone logged in?
         if (currentActiveProfile != null) {
             for (int a = 0; a < main_dashboard.getChildren().size(); a++) {
-                if (main_dashboard.getChildren().get(a).getId().equals("simulationOnOffButton")) {
-                    ToggleButton tb = (ToggleButton) main_dashboard.getChildren().get(a);
-                    tb.setDisable(false);
-                    main_dashboard.getChildren().set(a, tb);
-                }
-                else if (main_dashboard.getChildren().get(a).getId().equals("editContextButton")) {
-                    Button b = (Button) main_dashboard.getChildren().get(a);
-                    b.setDisable(false);
-                    main_dashboard.getChildren().set(a, b);
-                }
-                else if (main_dashboard.getChildren().get(a).getId().equals("OutputConsole")) {
-                    TextArea ta = (TextArea) main_dashboard.getChildren().get(a);
-                    if (simulationIsOn) {
-                        ta.setDisable(false);
+                try {
+                    if (main_dashboard.getChildren().get(a).getId().equals("simulationOnOffButton")) {
+                        if (houseLayout != null) {
+                            ToggleButton tb = (ToggleButton) main_dashboard.getChildren().get(a);
+                            tb.setDisable(false);
+                            main_dashboard.getChildren().set(a, tb);
+                        }
+                    } else if (main_dashboard.getChildren().get(a).getId().equals("editContextButton")) {
+                        if (houseLayout != null) {
+                            Button b = (Button) main_dashboard.getChildren().get(a);
+                            b.setDisable(false);
+                            main_dashboard.getChildren().set(a, b);
+                        }
+                    } else if (main_dashboard.getChildren().get(a).getId().equals("OutputConsole")) {
+                        TextArea ta = (TextArea) main_dashboard.getChildren().get(a);
+                        if (simulationIsOn) {
+                            ta.setDisable(false);
+                        } else {
+                            ta.setDisable(true);
+                        }
+                        main_dashboard.getChildren().set(a, ta);
+                    } else if (main_dashboard.getChildren().get(a).getId().equals("simulationDate")) {
+                        Label ta = (Label) main_dashboard.getChildren().get(a);
+                        if (simulationIsOn) {
+                            ta.setDisable(true);
+                        } else {
+                            ta.setDisable(true);
+                        }
+                        main_dashboard.getChildren().set(a, ta);
                     }
-                    else {
-                        ta.setDisable(true);
-                    }
-                    main_dashboard.getChildren().set(a, ta);
-                }
-                else if (main_dashboard.getChildren().get(a).getId().equals("simulationDate")) {
-                    Label ta = (Label) main_dashboard.getChildren().get(a);
-                    if (simulationIsOn) {
-                        ta.setDisable(true);
-                    }
-                    else {
-                        ta.setDisable(true);
-                    }
-                    main_dashboard.getChildren().set(a, ta);
-                }
               /*  else if (main_dashboard.getChildren().get(a).getId().equals("simulationTime")) {
                     Label ta = (Label) main_dashboard.getChildren().get(a);
                     if (simulationIsOn) {
@@ -322,98 +364,97 @@ public class Main extends Application {
                         ta.setDisable(true);
                     }
                     main_dashboard.getChildren().set(a, ta);
-                }
-                else if (main_dashboard.getChildren().get(a).getId().equals("houseLayout")) {
-                    AnchorPane hl = (AnchorPane) main_dashboard.getChildren().get(a);
-                    if (simulationIsOn) {
-                        hl.setDisable(false);
-                    }
-                    else {
-                        hl.setDisable(true);
-                    }
-                    main_dashboard.getChildren().set(a, hl);
                 }*/
-                else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
-                    SHS_MODULE = makeSHSmodule();
-                    TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
-                    Tab innerTab = tabPane.getTabs().get(0);
-                    innerTab.setContent(SHS_MODULE);
-                    //added code attempting to render simulationDate/Time visible
-                    for (int i = 0; i < SHS_MODULE.getChildren().size() ; i++ ){
-                        try{
-                            if (SHS_MODULE.getChildren().get(i).getId().equals("simulationDate")){
-                                Label l1 = (Label) SHS_MODULE.getChildren().get(i);
-                                l1.setVisible(true);
-                                SHS_MODULE.getChildren().set(i, l1);
-                                break;
-                            }
-                        }catch(Exception e){
+                    else if (main_dashboard.getChildren().get(a).getId().equals("houseLayout")) {
+                        AnchorPane hl = (AnchorPane) main_dashboard.getChildren().get(a);
+                        if (simulationIsOn) {
+                            hl.setDisable(false);
+                        } else {
+                            hl.setDisable(true);
+                        }
+                        main_dashboard.getChildren().set(a, hl);
+                    } else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
+                        SHS_MODULE = makeSHSmodule();
+                        TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
+                        Tab innerTab = tabPane.getTabs().get(0);
+                        innerTab.setContent(SHS_MODULE);
 
+                        //added code attempting to render simulationDate/Time visible
+                        for (int i = 0; i < SHS_MODULE.getChildren().size(); i++) {
+                            try {
+                                if (SHS_MODULE.getChildren().get(i).getId().equals("simulationDate")) {
+                                    Label l1 = (Label) SHS_MODULE.getChildren().get(i);
+                                    l1.setVisible(true);
+                                    SHS_MODULE.getChildren().set(i, l1);
+                                    break;
+                                }
+                            } catch (Exception e) {
+                            }
                         }
 
+                        innerTab.setContent(SHS_MODULE);
+                        tabPane.getTabs().set(0, innerTab);
+                        main_dashboard.getChildren().set(a, tabPane);
+
+                        // repeat for other modules
                     }
-
-                    innerTab.setContent(SHS_MODULE);
-
-                    tabPane.getTabs().set(0, innerTab);
-                    main_dashboard.getChildren().set(a, tabPane);
-
-                    // repeat for other modules
-                }
+                } catch(Exception e){}
             }
         }
         // is nobody logged in?
         else {
             for (int a = 0; a < main_dashboard.getChildren().size(); a++) {
-                if (main_dashboard.getChildren().get(a).getId().equals("simulationOnOffButton")) {
-                    ToggleButton tb = (ToggleButton) main_dashboard.getChildren().get(a);
-                    tb.setDisable(true);
-                    main_dashboard.getChildren().set(a, tb);
-                }
-                else if (main_dashboard.getChildren().get(a).getId().equals("editContextButton")) {
-                    Button b = (Button) main_dashboard.getChildren().get(a);
-                    b.setDisable(true);
-                    main_dashboard.getChildren().set(a, b);
-                }
-                else if (main_dashboard.getChildren().get(a).getId().equals("OutputConsole")) {
-                    TextArea ta = (TextArea) main_dashboard.getChildren().get(a);
-                    ta.setDisable(true);
-                    main_dashboard.getChildren().set(a, ta);
-                }
-                else if (main_dashboard.getChildren().get(a).getId().equals("houseLayout")) {
-                    AnchorPane hl = (AnchorPane) main_dashboard.getChildren().get(a);
-                    hl.setDisable(true);
-                    main_dashboard.getChildren().set(a, hl);
-                }
-                else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
-                    SHS_MODULE = makeSHSmodule();
-                    TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
-                    Tab innerTab = tabPane.getTabs().get(0);
-                    innerTab.setContent(SHS_MODULE);
-                    tabPane.getTabs().set(0, innerTab);
-                    main_dashboard.getChildren().set(a, tabPane);
+                try {
+                    if (main_dashboard.getChildren().get(a).getId().equals("simulationOnOffButton")) {
+                        ToggleButton tb = (ToggleButton) main_dashboard.getChildren().get(a);
+                        tb.setDisable(true);
+                        main_dashboard.getChildren().set(a, tb);
+                    } else if (main_dashboard.getChildren().get(a).getId().equals("editContextButton")) {
+                        Button b = (Button) main_dashboard.getChildren().get(a);
+                        b.setDisable(true);
+                        main_dashboard.getChildren().set(a, b);
+                    } else if (main_dashboard.getChildren().get(a).getId().equals("OutputConsole")) {
+                        TextArea ta = (TextArea) main_dashboard.getChildren().get(a);
+                        ta.setDisable(true);
+                        main_dashboard.getChildren().set(a, ta);
+                    } else if (main_dashboard.getChildren().get(a).getId().equals("houseLayout")) {
+                        AnchorPane hl = (AnchorPane) main_dashboard.getChildren().get(a);
+                        hl.setDisable(true);
+                        main_dashboard.getChildren().set(a, hl);
+                    } else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
+                        SHS_MODULE = makeSHSmodule();
+                        TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
+                        Tab innerTab = tabPane.getTabs().get(0);
+                        innerTab.setContent(SHS_MODULE);
+                        tabPane.getTabs().set(0, innerTab);
+                        main_dashboard.getChildren().set(a, tabPane);
 
-                    // repeat for other modules
-                }
+                        // repeat for other modules
+                    }
+                }catch(Exception e){}
             }
         }
         numberOfTimesDashboardPageLoaded++;
     }
 
-    //change this
+    /**
+     * Instantiate the interface for the tabs of modules SHS, SHC, SHP, and SHH.
+     * @return
+     */
     public static TabPane createModuleInterface() {
-        /**TODO: globalize each module */
         TabPane modules = new TabPane();
-
         Tab shcTab = new Tab("SHC", makeSHCmodule()); shcTab.setId("shcTab");
         Tab shpTab = new Tab("SHP", makeSHPmodule()); shpTab.setId("shpTab");
         Tab shhTab = new Tab("SHH", makeSHHmodule()); shhTab.setId("shhTab");
         Tab shsTab = new Tab("SHS", makeSHSmodule()); shsTab.setId("shsTab");
-
         modules.getTabs().addAll(shsTab, shcTab, shpTab, shhTab);
         return modules;
     }
 
+    /**
+     * Create or update the SHS module interface.
+     * @return
+     */
     public static AnchorPane makeSHSmodule() {
         SHS_MODULE = new AnchorPane();
 
@@ -504,7 +545,6 @@ public class Main extends Application {
         Label simulationTime = new Label(); simulationTime.setId("simulationTime");
         simulationTime.setTranslateX(400); simulationTime.setTranslateY(400);
 
-        /**TODO: code a method in class Controller that will set the new date and time*/
         Button confirmTimeButton = new Button("Confirm New Time"); confirmTimeButton.setId("confirmTimeButton");
         confirmTimeButton.setTranslateX(200); confirmTimeButton.setTranslateY(435);
         confirmTimeButton.setTextAlignment(TextAlignment.CENTER);
@@ -570,12 +610,12 @@ public class Main extends Application {
         suspBox.setTranslateX(50); suspBox.setTranslateY(140); suspBox.setWrapText(true);
         shp_module.getChildren().add(suspBox);
 
-        Button confirmButton = new Button("Confirm"); confirmButton.setTranslateY(70); confirmButton.setTranslateX(270); confirmButton.setDisable(true);
-        confirmButton.setOnAction(e->sample.Controller.setTimeLimitAwayMode(timeBox, timeLimit));
-        shp_module.getChildren().add(confirmButton);
-
-        ToggleButton tb = new ToggleButton(); tb.setText("Set to AWAY mode"); tb.setTranslateX(250);
-        tb.setOnAction(e->sample.Controller.toggleAwayButton(tb, timeBox, timeLimit, confirmButton)); shp_module.getChildren().add(tb);
+//        Button confirmButton = new Button("Confirm"); confirmButton.setTranslateY(70); confirmButton.setTranslateX(270); confirmButton.setDisable(true);
+//        confirmButton.setOnAction(e->sample.Controller.setTimeLimitAwayMode(timeBox, timeLimit));
+//        shp_module.getChildren().add(confirmButton);
+//
+//        ToggleButton tb = new ToggleButton(); tb.setText("Set to AWAY mode"); tb.setTranslateX(250);
+//        tb.setOnAction(e->sample.Controller.toggleAwayButton(tb, timeBox, timeLimit, confirmButton)); shp_module.getChildren().add(tb);
 
         return shp_module;
     }

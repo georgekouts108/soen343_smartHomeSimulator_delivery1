@@ -46,6 +46,11 @@ public class Controller {
     private static CheckBox[] roomCheckboxes;
 
     //for LOCAL TIME
+    /**
+     * Display the local date and time in the main dashboard
+     * @param dateText
+     * @param timeText
+     */
     public static void CurrentDate(Label dateText, Label timeText){
         try{
             for(;;){
@@ -68,6 +73,14 @@ public class Controller {
     //Sets date and time of simulation in SHS tab
     //issue: need to update the date at 24 hour mark
     //issue: clicking multiple times on confirm new time will start multiple thread and overlap display (to fix)
+    /**
+     * Set the date and time of the simulation
+     * @param datePicker
+     * @param dateText
+     * @param timeText
+     * @param hourField
+     * @param minuteField
+     */
     public static void CurrentDateSimulation(DatePicker datePicker, Label dateText, Label timeText, TextField hourField, TextField minuteField){
         try{
             int second = 0;
@@ -115,7 +128,11 @@ public class Controller {
         }
     }
 
-    /**SCENE-SWITCHING METHODS START */
+    /**
+     * Launch or return to the default dashboard.
+     * @param userProfile
+     * @param hyperlink
+     */
     public static void goToMainDashboardScene(UserProfile userProfile, Hyperlink hyperlink) {
         for (int prof = 0; prof < Main.profiles.length; prof++) {
             if (Main.profiles[prof].getProfileID()==userProfile.getProfileID()) {
@@ -137,23 +154,25 @@ public class Controller {
         logoutLink.setTranslateX(hyperlink.getTranslateX()+60); logoutLink.setTranslateY(hyperlink.getTranslateY());
 
         logoutLink.setOnAction(ACT2 -> {
-            Main.profiles[userProfile.getProfileID()-1].setCurrentLocation(null);
-            Main.profiles[userProfile.getProfileID() - 1].setLoggedIn(false);
-            Main.currentActiveProfile = null;
+            if (!Main.simulationIsOn) {
+                Main.profiles[userProfile.getProfileID()-1].setCurrentLocation(null);
+                Main.profiles[userProfile.getProfileID() - 1].setLoggedIn(false);
+                Main.currentActiveProfile = null;
 
-            Main.createMainDashboardNecessities();
+                Main.createMainDashboardNecessities();
 
-            logoutLink.setDisable(true);
+                logoutLink.setDisable(true);
 
-            for (int a = 0; a < Main.profileSelection.getChildren().size(); a++) {
-                if (Main.profileSelection.getChildren().get(a).getId().contains("loginLinkForProfile")) {
-                    Hyperlink hp = (Hyperlink) Main.profileSelection.getChildren().get(a);
-                    hp.setDisable(false);
-                    Main.profileSelection.getChildren().set(a,hp);
+                for (int a = 0; a < Main.profileSelection.getChildren().size(); a++) {
+                    if (Main.profileSelection.getChildren().get(a).getId().contains("loginLinkForProfile")) {
+                        Hyperlink hp = (Hyperlink) Main.profileSelection.getChildren().get(a);
+                        hp.setDisable(false);
+                        Main.profileSelection.getChildren().set(a,hp);
+                    }
                 }
+                Main.main_stage.setTitle("Smart Home Simulator");
+                Main.profileSelection.getChildren().remove(logoutLink);
             }
-            Main.main_stage.setTitle("Smart Home Simulator");
-            Main.profileSelection.getChildren().remove(logoutLink);
         });
         Main.profileSelection.getChildren().add(logoutLink);
 
@@ -161,6 +180,9 @@ public class Controller {
         Main.main_stage.setScene(Main.dashboardScene);
     }
 
+    /**
+     * Access the window for managing, adding, editing, and deleting user Profiles.
+     */
     public static void returnToProfileSelectionPage() {
         Main.profileBox = new Stage();
         Main.profileBox.setResizable(false);
@@ -172,11 +194,15 @@ public class Controller {
         Main.profileBox.setScene(Main.profileScene);
         Main.profileBox.showAndWait();
     }
-    /**SCENE-SWITCHING METHODS END */
 
-    /**DASHBOARD METHODS*/
+    /**
+     * Start the simulation.
+     * @param t
+     * @param b
+     * @param ta
+     * @param tab
+     */
     public static void startSimulation(ToggleButton t, Button b, TextArea ta, TabPane tab) {
-
         Main.createMainDashboardNecessities();
         if (!t.isSelected()) {
             t.setText("Start\nSimulation");
@@ -199,6 +225,9 @@ public class Controller {
         Main.createMainDashboardNecessities();
     }
 
+    /**
+     * Access the window for editing the context of the simulation.
+     */
     public static void editContext() {
         Main.editContextStage = new Stage(); Main.editContextStage.setResizable(false);
         Main.editContextStage.initModality(Modality.APPLICATION_MODAL);
@@ -209,6 +238,9 @@ public class Controller {
         Main.editContextStage.showAndWait();
     }
 
+    /**
+     * Create or update the default scene for editing the context of the simulation.
+     */
     public static void generateEditContextScene() {
         if (numberOfTimesEditContextLinkStage1Accessed == 0) {
 
@@ -439,7 +471,7 @@ public class Controller {
     }
 
     /**
-     * Build the user interface for modifying the locations of house inhabitants.
+     * Create or update the user interface for modifying the locations of house inhabitants.
      */
     public static void generateEditContextScene2() {
 
@@ -679,74 +711,11 @@ public class Controller {
         } catch (Exception e){}
     }
 
-    /**SHP MODULE METHODS START */
-    public static void toggleAwayButton(ToggleButton t, TextField tf, Label tf2, Button b) {
-        if (!t.isSelected()) {
-            tf.setText("");
-            tf.setDisable(true);
-            b.setDisable(true);
-            tf2.setText("Time before Alert: 0 min.");
-            tf2.setVisible(false);
-            sample.Main.is_away = false;
-            Main.timeLimitBeforeAlert = 0;
-        }
-        else {
-            tf2.setVisible(true);
-            tf.setDisable(false);
-            b.setDisable(false);
-            Main.is_away = true;
-        }
-    }
-
-    public static void setTimeLimitAwayMode(TextField tf, Label label) {
-        String time_limit = "";
-        try {
-            for (int c = 0; c < tf.getText().length(); c++) {
-                char character = tf.getText().charAt(c);
-                switch (character) {
-                    case '0':
-                    case '1':
-                    case '2':
-                    case '3':
-                    case '4':
-                    case '5':
-                    case '6':
-                    case '7':
-                    case '8':
-                    case '9':
-                        time_limit += character;
-                        break;
-                    default:
-                        throw new Exception();
-                }
-            }
-            int limit = Integer.parseInt(time_limit);
-            if (limit > 10) {
-                throw new Exception();
-            }
-            label.setText("Time before Alert: "+ limit +" min.");
-            Main.timeLimitBeforeAlert = limit;
-        } catch (Exception e) {
-            label.setText("Invalid. Must be a\nnon-negative # <= 10 min.");
-        }
-    }
-
-    /**TODO: create a method that will send an alert message to the output console
-     * TODO: called "notifySuspiciousAct(String warning, MotionDetector md, Sensor sensor)"
-     * */
-    public static void notifySuspiciousAct(String warning, MotionDetector motionDetector, Sensor sensor) {
-
-        /**TODO: figure out if it was a sensor or motion detector that went off*/
-        /**TODO: depending which tool it was, get it's utility_ID and its associated utility*/
-        /**TODO: turn on all lights in and outside the house */
-
-        //String report = translateCurrentDateTime() + " -- " + warning;
-        //Main.suspBox.appendText(report+"\n");
-    }
-
-    /**SHP MODULE METHODS END */
-
-    /**USER PROFILE MANAGEMENT METHODS START HERE*/
+    /**
+     * Create a new user Profile
+     * @param textField
+     * @param radioButton
+     */
     public static void createNewProfile(TextField textField, RadioButton radioButton) {
         UserProfile newProfile;
         try {
@@ -818,6 +787,12 @@ public class Controller {
         }
     }
 
+    /**
+     * Edit an existing user Profile
+     * @param profile
+     * @param hyperlink
+     * @param editLink
+     */
     public static void editProfile(UserProfile profile, Hyperlink hyperlink, Hyperlink editLink) {
 
         editLink.setDisable(true);
@@ -919,6 +894,11 @@ public class Controller {
         }
     }
 
+    /**
+     * Delete an existing user profile.
+     * @param UP
+     * @param hyperlink
+     */
     public static void deleteProfile(UserProfile UP, Hyperlink hyperlink) {
 
         if (!UP.isLoggedIn()) {
@@ -990,6 +970,11 @@ public class Controller {
         }
     }
 
+    /**
+     * Upon creating a new Profile, create a hyperlink that will present the options to edit, delete, or login/logout.
+     * @param userProfile
+     * @return
+     */
     public static Hyperlink generateProfileHyperlink(UserProfile userProfile) {
 
         int translateX = Main.LOGINPAGE_HEIGHT/2;
@@ -1085,6 +1070,10 @@ public class Controller {
         return hyperlink;
     }
 
+    /**
+     * Alter the room location of a user Profile
+     * @param newRoom
+     */
     public static void changeLocation(Room newRoom) {
         try {
             for (int prof = 0; prof < Main.profiles.length; prof++) {
@@ -1099,4 +1088,5 @@ public class Controller {
             }
         }catch(Exception exc){}
     }
+
 }
