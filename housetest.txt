@@ -1,0 +1,14 @@
+2
+-
+Name= masterbedroom
+Doors= 1
+Windows= 3
+Lights= 2
+Ac= true
+-end-
+Name= bedroom
+Doors= 1
+Windows= 2
+Lights= 2
+Ac= true
+-end-
