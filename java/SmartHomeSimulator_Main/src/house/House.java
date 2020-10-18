@@ -19,37 +19,34 @@ public class House {
     private AnchorPane layout; // a layout of rooms only
 
     /**TODO: create attributes for the small image icons of utilities (i.e. lightbulb, AC, window, etc.)*/
-    /**TODO: create an attribute for a house layout 2D drawing */
+    /** create an attribute for a house layout 2D drawing */
 
     public House(String houseLayoutFileName) {
-        //this.layout = new AnchorPane();
-
-        /**TODO: using File IO, read a plain text (.txt) file called "houseLayoutFileName"
-         * TODO: and assign the values accordingly
-         *
-         *
-         * */
+        /**TODO: using File IO, read a plain text (.txt) file called "houseLayoutFileName"*/
 
         /** TODO: in the file, the number of rooms should come first (initialize to "numOfRooms"
-         * TODO: and set the length of "roomArray" to this value)*/
+         *   and set the length of "roomArray" to this value)*/
 
         /**dummy for now*/
         this.rooms = Main.getHouseholdLocations();
 
-//        for (int r = 0; r < this.rooms.length; r++) {
-//
-//            /**TODO: from the text file, read the information about each room: room name,
-//             * TODO: number of doors, windows, lights, and if it has an AC machine) */
+        for (int r = 0; r < this.rooms.length; r++) {
+
+            /**TODO: from the text file, read the information about each room: room name,
+             *  number of doors, windows, lights, and a boolean indicating if it has an AC machine)
+             *  and initialize these values to the appropriate variables listed below.
+             **/
 //            String room_name = "";
 //            int numOfDoors = 0;
 //            int numOfWindows = 0;
 //            int numOfLights = 0;
 //            boolean has_ac = true;
-//
-//            /**TODO: create a new Room object with these attributes*/
-//            this.rooms[r] = new Room(room_name, numOfDoors, numOfWindows, numOfLights, has_ac);
-//        }
 
+            /**TODO: create a new Room object with these attributes*/
+//            this.rooms[r] = new Room(room_name, numOfDoors, numOfWindows, numOfLights, has_ac);
+        }
+
+        // after all Room initializations, the house layout will be set up
         setupHouseLayout(this.rooms);
     }
 
@@ -423,7 +420,7 @@ public class House {
             if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
                 TextArea textArea = (TextArea) Main.getMain_dashboard().getChildren().get(a);
                 textArea.appendText(LocalDateTime.now().toString().substring(0,10)+ " "+
-                                LocalDateTime.now().toString().substring(11,19)+" -- "+message+"\n");
+                        LocalDateTime.now().toString().substring(11,19)+" -- "+message+"\n");
                 Main.getMain_dashboard().getChildren().set(a, textArea);
                 break;
             }
