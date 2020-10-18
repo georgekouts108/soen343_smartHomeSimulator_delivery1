@@ -1,0 +1,32 @@
+5
+-
+Name= masterbedroom
+Doors= 1
+Windows= 3
+Lights= 2
+Ac= true
+-end-
+Name= bedroom
+Doors= 1
+Windows= 2
+Lights= 2
+Ac= true
+-end-
+Name= living room
+Doors= 1
+Windows= 4
+Lights= 6
+Ac= true
+-end-
+Name= bathroom
+Doors= 1
+Windows= 1
+Lights= 1
+Ac= false
+-end-
+Name= kitchen
+Doors= 0
+Windows= 3
+Lights= 6
+Ac= true
+-end-

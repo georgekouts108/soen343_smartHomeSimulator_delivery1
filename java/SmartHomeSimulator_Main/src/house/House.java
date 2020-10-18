@@ -25,13 +25,14 @@ public class House {
     /** create an attribute for a house layout 2D drawing */
 
     public House(String houseLayoutFileName) throws FileNotFoundException {
-        /**TODO: using File IO, read a plain text (.txt) file called "houseLayoutFileName"*/
+
+        //using File IO, read a plain text (.txt) file called "houseLayoutFileName"
         File house = new File(houseLayoutFileName);
         Scanner scan = new Scanner(house);
         numOfRooms = scan.nextInt();
-        /** TODO: in the file, the number of rooms should come first (initialize to "numOfRooms"
-         *   and set the length of "roomArray" to this value)*/
+
         this.rooms = new Room[numOfRooms];
+
         /**dummy for now*/
         this.rooms = Main.getHouseholdLocations();
 
@@ -46,33 +47,23 @@ public class House {
             String line = scan.nextLine();
             if (line.contains("Name=")){
                 room_name = line.substring(6);
-                //System.out.println(room_name);
             }
             if (line.contains("Doors=")){
                 numOfDoors = Integer.parseInt(line.substring(7));
-                //System.out.println(numOfDoors);
             }
             if (line.contains("Windows=")){
                 numOfWindows = Integer.parseInt(line.substring(9));
-                //System.out.println(numOfWindows);
             }
             if (line.contains("Lights=")){
                 numOfLights = Integer.parseInt(line.substring(8));
-                //System.out.println(numOfLights);
             }
             if (line.contains("Ac=")){
                 has_ac = Boolean.parseBoolean(line.substring(4));
-                //System.out.println(has_ac);
             }
             if (line.contains("-end-")){
                 this.rooms[x] = new Room(room_name, numOfDoors, numOfWindows, numOfLights, has_ac);
                 x++;
             }
-        }
-
-        //testing output of the rooms
-        for (int r = 0; r < this.numOfRooms; r++){
-            System.out.println(rooms[r]);
         }
 
         // after all Room initializations, the house layout will be set up
