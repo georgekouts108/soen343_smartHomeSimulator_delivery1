@@ -117,18 +117,18 @@ public class Main extends Application {
          * TODO: and extract information; all global House info will be initialized here... */
 
 
-        Room testRoom = new Room("Kitchen", 2, 1, 5, true);
-        Room testRoom2 = new Room("Bedroom", 1, 2, 2, true);
-        Room testRoom3 = new Room("Dining Room", 1, 1, 2, true);
-        Room testRoom4 = new Room("Bathroom", 2, 2, 5,  true);
-        Room testRoom5 = new Room("Family Room", 1, 1, 4, false);
-        Room testRoom6 = new Room("TV Room", 1, 2, 3, false);
-        Room testRoom7 = new Room("Basement", 2, 1, 5, false);
-        Room testRoom8 = new Room("Garage", 1, 2, 2, false);
-        Room testRoom9 = new Room("Bedroom 2", 1, 1, 2, false);
+//        Room testRoom = new Room("Kitchen", 2, 1, 5, true);
+//        Room testRoom2 = new Room("Bedroom", 1, 2, 2, true);
+//        Room testRoom3 = new Room("Dining Room", 1, 1, 2, true);
+//        Room testRoom4 = new Room("Bathroom", 2, 2, 5,  true);
+//        Room testRoom5 = new Room("Family Room", 1, 1, 4, false);
+//        Room testRoom6 = new Room("TV Room", 1, 2, 3, false);
+//        Room testRoom7 = new Room("Basement", 2, 1, 5, false);
+//        Room testRoom8 = new Room("Garage", 1, 2, 2, false);
+//        Room testRoom9 = new Room("Bedroom 2", 1, 1, 2, false);
 
-        householdLocations = new Room[]{testRoom, testRoom2, testRoom3, testRoom4, testRoom5, testRoom6, testRoom7,
-                testRoom8, testRoom9};
+//        householdLocations = new Room[]{testRoom, testRoom2, testRoom3, testRoom4, testRoom5, testRoom6, testRoom7,
+//                testRoom8, testRoom9};
 
         //house = new House("dummyfile"); commented out for testing
         //houseLayout = house.getLayout();
@@ -246,7 +246,6 @@ public class Main extends Application {
         temperatureLabel.setText("Outside Temp.\n15°C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
         temperatureLabel.setTranslateY(400); temperatureLabel.setTranslateX(15);
 
-        /**TODO: find a way to display the real local date and time that updates every second */
         Label localDateTime = new Label(); localDateTime.setTextAlignment(TextAlignment.CENTER);
         localDateTime.setTranslateX(15); localDateTime.setTranslateY(600); localDateTime.setText("LOCAL TIME");
         localDateTime.setId("localDateAndTimeLabel");
@@ -287,8 +286,7 @@ public class Main extends Application {
                     house = new House(houseLayoutFilePathName);
                 } catch (FileNotFoundException fileNotFoundException) {
                     fileNotFoundException.printStackTrace();
-                } /**TODO: implement File IO for reading a text file in
-                 the constructor of the House class */
+                }
                 householdLocations = house.getRooms();
                 houseLayout = house.getLayout();
                 houseLayout.setPrefHeight(675);
@@ -319,7 +317,6 @@ public class Main extends Application {
             main_dashboard.getChildren().add(localDateTime);
             main_dashboard.getChildren().add(outputConsole);
             main_dashboard.getChildren().add(outputConsoleLabel);
-            //main_dashboard.getChildren().add(houseLayout);
             main_dashboard.getChildren().add(modulesInterface);
             main_dashboard.getChildren().add(chooseFileButton);
             main_dashboard.getChildren().add(dateText);

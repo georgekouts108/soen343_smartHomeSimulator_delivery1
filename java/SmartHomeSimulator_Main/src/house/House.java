@@ -21,9 +21,6 @@ public class House {
     private Room[] rooms;
     private AnchorPane layout; // a layout of rooms only
 
-    /**TODO: create attributes for the small image icons of utilities (i.e. lightbulb, AC, window, etc.)*/
-    /** create an attribute for a house layout 2D drawing */
-
     public House(String houseLayoutFileName) throws FileNotFoundException {
 
         //using File IO, read a plain text (.txt) file called "houseLayoutFileName"
@@ -32,9 +29,6 @@ public class House {
         numOfRooms = scan.nextInt();
 
         this.rooms = new Room[numOfRooms];
-
-        /**dummy for now*/
-        this.rooms = Main.getHouseholdLocations();
 
         int x = 0;
         String room_name = "";
@@ -209,7 +203,7 @@ public class House {
         for (int w = 0; w < room.getWindowCollection().length; w++) {
             CheckBox checkBox = new CheckBox("W#"+room.getWindowCollection()[w].getUtilityID());
             checkBox.setId("windowCheckboxID#"+room.getWindowCollection()[w].getUtilityID());
-            checkBox.setTranslateX(85); checkBox.setTranslateY(translate_y);
+            checkBox.setTranslateX(80); checkBox.setTranslateY(translate_y);
             checkBox.setOnAction(e->{
                 if (checkBox.isSelected()) {
                     // open the window (if not blocked)
@@ -263,7 +257,7 @@ public class House {
                 }
             });
             roomLayout.getChildren().add(checkBox);
-            translate_y += 60;
+            translate_y += 20;
         }
 
         // checkboxes for Doors
@@ -312,7 +306,7 @@ public class House {
                 }
             });
             roomLayout.getChildren().add(checkBox);
-            translate_y += 60;
+            translate_y += 20;
         }
 
         CheckBox mdCheckbox = new CheckBox("MD triggered");
