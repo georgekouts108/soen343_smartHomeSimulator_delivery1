@@ -27,6 +27,7 @@ Learn how to work with a client in an Agile development team to accomplish chang
 - Java
 - JavaFX
 - Scene Builder
+- CSS
 
 ## Architecture
 The project architecture is based on the MVC pattern.  
