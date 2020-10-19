@@ -138,7 +138,6 @@ public class Controller {
             if (Main.profiles[prof].getProfileID()==userProfile.getProfileID()) {
                 Main.profiles[prof].setLoggedIn(true);
                 Main.currentActiveProfile = Main.profiles[prof];
-                /**DEBUGGING*/ System.out.println(Main.currentActiveProfile.getProfileID()+" - "+ Main.currentActiveProfile.getType());
                 Main.currentLocation = null;
                 break;
             }
@@ -342,66 +341,165 @@ public class Controller {
             Main.editContextLayout.getChildren().add(roomsLabel);
 
             int transY = 120;
-            for (int r = 0; r < Main.householdLocations.length; r++) {
-                Label l1 = new Label("# of people: " + Main.householdLocations[r].getNumberOfPeopleInside());
-                l1.setId("numOfPeopleInRoom"+Main.householdLocations[r].getRoomID());
-                l1.setTranslateX(120);
-                l1.setTranslateY(transY + 5);
-                int fr = r;
-                Hyperlink hyp = new Hyperlink(Main.householdLocations[r].getName());
-                hyp.setId("hyperlinkForRoom-"+Main.householdLocations[r].getName());
-                hyp.setTranslateX(20);
-                hyp.setTranslateY(transY);
-                int finalR = r;
-                hyp.setOnAction(e -> {
+            for (int r = 0; r < Main.householdLocations.length + 1; r++) {
 
-                    // change the label of the number of people in the origin and destination rooms
-                    if ( (Main.currentActiveProfile != null)) {
-                        if (Main.currentLocation == null) {
-                            Main.householdLocations[fr].setNumberOfPeopleInside(Main.householdLocations[fr].getNumberOfPeopleInside() + 1);
-                        }
-                        else {
-                            if (!(Main.currentLocation == Main.householdLocations[fr])) {
+                if (r != Main.householdLocations.length) {
+                    Label l1 = new Label("# of people: " + Main.householdLocations[r].getNumberOfPeopleInside());
+                    l1.setId("numOfPeopleInRoom"+Main.householdLocations[r].getRoomID());
+                    l1.setTranslateX(120);
+                    l1.setTranslateY(transY + 5);
+                    int fr = r;
+                    Hyperlink hyp = new Hyperlink(Main.householdLocations[r].getName());
+                    hyp.setId("hyperlinkForRoom-"+Main.householdLocations[r].getName());
+                    hyp.setTranslateX(20);
+                    hyp.setTranslateY(transY);
+                    int finalR = r;
+                    hyp.setOnAction(e -> {
+
+                        // change the label of the number of people in the origin and destination rooms
+                        if ( (Main.currentActiveProfile != null)) {
+                            if (Main.currentLocation == null) {
                                 Main.householdLocations[fr].setNumberOfPeopleInside(Main.householdLocations[fr].getNumberOfPeopleInside() + 1);
+
+                                // put that for loop here
+                                for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
+                                    try {
+                                        if (Main.editContextLayout.getChildren().get(i).getId().equals("numOfPeopleOutside")) {
+                                            Label label = (Label) Main.editContextLayout.getChildren().get(i);
+                                            int numberOfPeopleInHouse = 0;
+                                            int numberOfPeopleOutside;
+                                            for (int p = 0; p < Main.householdLocations.length; p++) {
+                                                numberOfPeopleInHouse += Main.householdLocations[p].getNumberOfPeopleInside();
+                                            }
+                                            numberOfPeopleOutside = Main.profiles.length - numberOfPeopleInHouse;
+
+                                            label.setText("# of people: " + numberOfPeopleOutside);
+                                            Main.editContextLayout.getChildren().set(i, label);
+                                            break;
+                                        }
+                                    } catch (Exception ex) {}
+                                }
+                            }
+                            else {
+                                if (!(Main.currentLocation == Main.householdLocations[fr])) {
+                                    Main.householdLocations[fr].setNumberOfPeopleInside(Main.householdLocations[fr].getNumberOfPeopleInside() + 1);
+                                    Main.currentLocation.setNumberOfPeopleInside(Main.currentLocation.getNumberOfPeopleInside() - 1);
+                                }
+                            }
+                        }
+                        for (int j = 0; j < Main.editContextLayout.getChildren().size(); j++) {
+                            try {
+                                if (Main.editContextLayout.getChildren().get(j).getId().equals("numOfPeopleInRoom" + Main.householdLocations[finalR].getRoomID())) {
+                                    Label label = (Label) Main.editContextLayout.getChildren().get(j);
+                                    label.setText("# of people: " + Main.householdLocations[finalR].getNumberOfPeopleInside());
+                                    Main.editContextLayout.getChildren().set(j, label);
+                                    break;
+                                }
+                            } catch (Exception ex) {}
+                        }
+
+                        for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
+                            try {
+                                if (Main.editContextLayout.getChildren().get(i).getId().equals("numOfPeopleInRoom"+Main.currentLocation.getRoomID())) {
+                                    Label label = (Label) Main.editContextLayout.getChildren().get(i);
+                                    label.setText("# of people: " + Main.currentLocation.getNumberOfPeopleInside());
+                                    Main.editContextLayout.getChildren().set(i, label);
+                                    break;
+                                }
+                            } catch (Exception ex) {}
+                        }
+                        changeLocation(Main.householdLocations[fr]);
+                        for (int a = 0; a < Main.editContextLayout2.getChildren().size(); a++) {
+                            try {
+                                if (Main.editContextLayout2.getChildren().get(a).getId().equals("currentRoomOfProfile" + Main.currentActiveProfile.getProfileID())){
+                                    Label label = (Label) Main.editContextLayout2.getChildren().get(a);
+                                    label.setText(Main.currentLocation.getName());
+                                    Main.editContextLayout2.getChildren().set(a, label);
+                                    break;
+                                }
+                            }catch (Exception ex){}
+                        }
+                    });
+                    Main.editContextLayout.getChildren().addAll(hyp, l1);
+                    transY += 20;
+                }
+                else {
+                    int numOfPeopleInHouse = 0;
+                    int numOfPeopleOutside;
+                    for (int p = 0; p < Main.householdLocations.length; p++) {
+                        numOfPeopleInHouse += Main.householdLocations[p].getNumberOfPeopleInside();
+                    }
+                    numOfPeopleOutside = Main.profiles.length - numOfPeopleInHouse;
+
+
+                    Label l1 = new Label("# of people: "+numOfPeopleOutside);
+                    l1.setId("numOfPeopleOutside");
+                    l1.setTranslateX(120);
+                    l1.setTranslateY(transY + 5);
+                    int fr = r;
+                    Hyperlink hyp = new Hyperlink("Outside");
+                    hyp.setId("hyperlinkForOutside");
+                    hyp.setTranslateX(20);
+                    hyp.setTranslateY(transY);
+                    int finalR = r;
+                    hyp.setOnAction(e -> {
+
+                        // change the label of the number of people in the origin and destination rooms
+                        if ( (Main.currentActiveProfile != null)) {
+
+                            // if the logged in user is outside...
+                            if (Main.currentLocation == null) {
+                                //Main.householdLocations[fr].setNumberOfPeopleInside(Main.householdLocations[fr].getNumberOfPeopleInside() + 1);
+                            }
+                            else {
                                 Main.currentLocation.setNumberOfPeopleInside(Main.currentLocation.getNumberOfPeopleInside() - 1);
                             }
                         }
-                    }
-                    for (int j = 0; j < Main.editContextLayout.getChildren().size(); j++) {
-                        try {
-                            if (Main.editContextLayout.getChildren().get(j).getId().equals("numOfPeopleInRoom" + Main.householdLocations[finalR].getRoomID())) {
-                                Label label = (Label) Main.editContextLayout.getChildren().get(j);
-                                label.setText("# of people: " + Main.householdLocations[finalR].getNumberOfPeopleInside());
-                                Main.editContextLayout.getChildren().set(j, label);
-                                break;
-                            }
-                        } catch (Exception ex) {}
-                    }
+                        for (int j = 0; j < Main.editContextLayout.getChildren().size(); j++) {
+                            try {
+                                if (Main.editContextLayout.getChildren().get(j).getId().equals("numOfPeopleInRoom" + Main.currentLocation.getRoomID())) {
+                                    Label label = (Label) Main.editContextLayout.getChildren().get(j);
+                                    label.setText("# of people: " + Main.currentLocation.getNumberOfPeopleInside());
+                                    Main.editContextLayout.getChildren().set(j, label);
+                                    break;
+                                }
+                            } catch (Exception ex) {}
+                        }
 
-                    for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
-                        try {
-                            if (Main.editContextLayout.getChildren().get(i).getId().equals("numOfPeopleInRoom"+Main.currentLocation.getRoomID())) {
-                                Label label = (Label) Main.editContextLayout.getChildren().get(i);
-                                label.setText("# of people: " + Main.currentLocation.getNumberOfPeopleInside());
-                                Main.editContextLayout.getChildren().set(i, label);
-                                break;
-                            }
-                        } catch (Exception ex) {}
-                    }
-                    changeLocation(Main.householdLocations[fr]);
-                    for (int a = 0; a < Main.editContextLayout2.getChildren().size(); a++) {
-                        try {
-                            if (Main.editContextLayout2.getChildren().get(a).getId().equals("currentRoomOfProfile" + Main.currentActiveProfile.getProfileID())){
-                                Label label = (Label) Main.editContextLayout2.getChildren().get(a);
-                                label.setText(Main.currentLocation.getName());
-                                Main.editContextLayout2.getChildren().set(a, label);
-                                break;
-                            }
-                        }catch (Exception ex){}
-                    }
-                });
-                Main.editContextLayout.getChildren().addAll(hyp, l1);
-                transY += 20;
+                        for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
+                            try {
+                                if (Main.editContextLayout.getChildren().get(i).getId().equals("numOfPeopleOutside")) {
+                                    Label label = (Label) Main.editContextLayout.getChildren().get(i);
+                                    int numberOfPeopleInHouse = 0;
+                                    int numberOfPeopleOutside;
+                                    for (int p = 0; p < Main.householdLocations.length; p++) {
+                                        numberOfPeopleInHouse += Main.householdLocations[p].getNumberOfPeopleInside();
+                                    }
+                                    numberOfPeopleOutside = Main.profiles.length - numberOfPeopleInHouse;
+
+                                    label.setText("# of people: " + numberOfPeopleOutside);
+                                    Main.editContextLayout.getChildren().set(i, label);
+                                    break;
+                                }
+                            } catch (Exception ex) {}
+                        }
+                        changeLocation(null);
+                        for (int a = 0; a < Main.editContextLayout2.getChildren().size(); a++) {
+                            try {
+                                if (Main.editContextLayout2.getChildren().get(a).getId().equals("currentRoomOfProfile" + Main.currentActiveProfile.getProfileID())){
+                                    Label label = (Label) Main.editContextLayout2.getChildren().get(a);
+                                    if (Main.currentLocation == null) {
+                                        label.setText("Outside");
+                                    }
+                                    Main.editContextLayout2.getChildren().set(a, label);
+                                    break;
+                                }
+                            }catch (Exception ex){}
+                        }
+                    });
+                    Main.editContextLayout.getChildren().addAll(hyp, l1);
+                    transY += 20;
+                }
             }
             Line line3 = new Line(); line3.setId("line3"); line3.setStartX(0); line3.setEndX(650); line3.setTranslateY(350);
             Main.editContextLayout.getChildren().add(line3);
@@ -464,8 +562,6 @@ public class Controller {
             closeButton.setOnAction(e -> Main.editContextStage.close());
             Main.editContextLayout.getChildren().add(closeButton);
 
-
-
             numberOfTimesEditContextLinkStage1Accessed++;
         }
     }
@@ -526,14 +622,24 @@ public class Controller {
 
                 // show the room checkboxes
                 int transY3 = 80;
-                roomCheckboxes = new CheckBox[Main.householdLocations.length];
-                for (int r = 0; r < Main.householdLocations.length; r++) {
-                    CheckBox checkBox = new CheckBox(Main.householdLocations[r].getName());
-                    checkBox.setTranslateY(transY3);
-                    checkBox.setTranslateX(400);
-                    checkBox.setId("checkboxRoom" + Main.householdLocations[r].getRoomID());
-                    roomCheckboxes[r] = checkBox;
-                    Main.editContextLayout2.getChildren().add(checkBox);
+                roomCheckboxes = new CheckBox[Main.householdLocations.length + 1];
+                for (int r = 0; r < Main.householdLocations.length + 1; r++) {
+                    if (r != Main.householdLocations.length) {
+                        CheckBox checkBox = new CheckBox(Main.householdLocations[r].getName());
+                        checkBox.setTranslateY(transY3);
+                        checkBox.setTranslateX(400);
+                        checkBox.setId("checkboxRoom" + Main.householdLocations[r].getRoomID());
+                        roomCheckboxes[r] = checkBox;
+                        Main.editContextLayout2.getChildren().add(checkBox);
+                    }
+                    else {
+                        CheckBox checkBox = new CheckBox("Outside");
+                        checkBox.setTranslateY(transY3);
+                        checkBox.setTranslateX(400);
+                        checkBox.setId("checkboxRoomOutside");
+                        roomCheckboxes[r] = checkBox;
+                        Main.editContextLayout2.getChildren().add(checkBox);
+                    }
                     transY3 += 20;
                 }
             }
@@ -558,7 +664,7 @@ public class Controller {
                             if (Main.profiles[p].getCurrentLocation() != null) {
                                 currentRoomLabel.setText(Main.profiles[p].getCurrentLocation().getName());
                             } else {
-                                currentRoomLabel.setText("No location");
+                                currentRoomLabel.setText("Outside");
                             }
                             currentRoomLabel.setTranslateY(transY2);
                             currentRoomLabel.setTranslateX(250);
@@ -634,64 +740,191 @@ public class Controller {
                                         for (int M = 0; M < Main.editContextLayout2.getChildren().size(); M++) {
 
                                             if (Main.editContextLayout2.getChildren().get(M).equals(roomBoxes[rcb])) {
-                                                int selectedRoomID = Integer.parseInt(Main.editContextLayout2.getChildren().get(M).getId().substring
-                                                        (Main.editContextLayout2.getChildren().get(M).getId().length() - 1));
 
+                                                int selectedRoomID = 0;
+                                                // does the profile want to be relocated outside?
+                                                if (!Main.editContextLayout2.getChildren().get(M).getId().equals("checkboxRoomOutside")) {
+                                                    selectedRoomID = Integer.parseInt(Main.editContextLayout2.getChildren().get(M).getId().substring
+                                                            (Main.editContextLayout2.getChildren().get(M).getId().length() - 1));
+                                                }
                                                 // do the relocation
 
                                                 for (int up = 0; up < Main.profiles.length; up++) {
                                                     if (Main.profiles[up].getProfileID() == selectedProfileID) {
 
+                                                        Room dummyRoom = Main.profiles[up].getCurrentLocation();
+
                                                         for (int r = 0; r < Main.householdLocations.length; r++) {
 
-                                                            if (Main.householdLocations[r].getRoomID() == selectedRoomID) {
-                                                                Room dummyRoom = Main.profiles[up].getCurrentLocation();
-                                                                if (Main.profiles[up].getCurrentLocation() == Main.householdLocations[selectedRoomID - 1]) {
-                                                                    System.out.println("Profile #" + Main.profiles[up] + " is already in the " + Main.householdLocations[selectedRoomID - 1].getName());
-                                                                } else {
-                                                                    if (Main.profiles[up].getCurrentLocation() != null) {
-                                                                        Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].setNumberOfPeopleInside(
-                                                                                Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].getNumberOfPeopleInside() - 1);
+                                                            // if you wanted move a user outside, from a room inside
+                                                            if (selectedRoomID==0) {
+
+                                                                if (Main.profiles[up].getCurrentLocation() != null) {
+                                                                    Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].setNumberOfPeopleInside(
+                                                                            Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].getNumberOfPeopleInside() - 1);
+
+                                                                    Main.profiles[up].setCurrentLocation(null);
+
+                                                                    // UPDATE THE LABEL FOR THE DESTINATION ROOM, IN SCENE 2
+                                                                    for (int i = 0; i < Main.editContextLayout2.getChildren().size(); i++) {
+                                                                        try {
+                                                                            if (Main.editContextLayout2.getChildren().get(i).getId().equals("currentRoomOfProfile" +
+                                                                                    Main.profiles[up].getProfileID())) {
+                                                                                Label label = (Label) Main.editContextLayout2.getChildren().get(i);
+                                                                                label.setText("Outside");
+                                                                                Main.editContextLayout2.getChildren().set(i, label);
+                                                                                break;
+                                                                            }
+                                                                        } catch (Exception e) {}
                                                                     }
 
-                                                                    Main.profiles[up].setCurrentLocation(Main.householdLocations[r]); // THE CHANGE OF ROOM***
+                                                                    // UPDATE THE LABEL FOR THE NUMBER OF PEOPLE OUTSIDE, IN SCENE 1
+                                                                    for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
+                                                                        try {
+                                                                            if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleOutside")) {
+                                                                                Label label = (Label) Main.editContextLayout.getChildren().get(a);
 
-                                                                    Main.householdLocations[r].setNumberOfPeopleInside(Main.householdLocations[r].getNumberOfPeopleInside() + 1);
-                                                                }
-                                                                for (int i = 0; i < Main.editContextLayout2.getChildren().size(); i++) {
-                                                                    try {
-                                                                        if (Main.editContextLayout2.getChildren().get(i).getId().equals("currentRoomOfProfile" +
-                                                                                Main.profiles[up].getProfileID())) {
-                                                                            Label label = (Label) Main.editContextLayout2.getChildren().get(i);
-                                                                            label.setText(Main.profiles[up].getCurrentLocation().getName());
-                                                                            Main.editContextLayout2.getChildren().set(i, label);
-                                                                            break;
-                                                                        }
-                                                                    } catch (Exception e) {
-                                                                    }
-                                                                }
-                                                                for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
-                                                                    try {
-                                                                        if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleInRoom" + Main.householdLocations[r].getRoomID())) {
-                                                                            Label label = (Label) Main.editContextLayout.getChildren().get(a);
-                                                                            label.setText("# of people: " + Main.householdLocations[r].getNumberOfPeopleInside());
-                                                                            Main.editContextLayout.getChildren().set(a, label);
-                                                                        }
-                                                                    } catch (Exception e) {
-                                                                    }
-                                                                }
-                                                                for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
-                                                                    try {
-                                                                        if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleInRoom" + dummyRoom.getRoomID())) {
-                                                                            Label label = (Label) Main.editContextLayout.getChildren().get(a);
-                                                                            label.setText("# of people: " + dummyRoom.getNumberOfPeopleInside());
-                                                                            Main.editContextLayout.getChildren().set(a, label);
-                                                                        }
-                                                                    } catch (Exception e) {
-                                                                    }
-                                                                }
+                                                                                int numOfPeopleInHouse = 0;
+                                                                                int numOfPeopleOutside;
+                                                                                for (int p = 0; p < Main.householdLocations.length; p++) {
+                                                                                    numOfPeopleInHouse += Main.householdLocations[p].getNumberOfPeopleInside();
+                                                                                }
+                                                                                numOfPeopleOutside = Main.profiles.length - numOfPeopleInHouse;
 
-                                                                break;
+                                                                                label.setText("# of people: " + numOfPeopleOutside);
+                                                                                Main.editContextLayout.getChildren().set(a, label);
+                                                                            }
+                                                                        } catch (Exception e) {}
+                                                                    }
+
+                                                                    // UPDATE THE LABEL FOR THE NUMBER OF PEOPLE IN THE ORIGIN ROOM, IN SCENE 1
+                                                                    for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
+                                                                        try {
+                                                                            if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleInRoom" + dummyRoom.getRoomID())) {
+                                                                                Label label = (Label) Main.editContextLayout.getChildren().get(a);
+                                                                                label.setText("# of people: " + dummyRoom.getNumberOfPeopleInside());
+                                                                                Main.editContextLayout.getChildren().set(a, label);
+                                                                            }
+                                                                        } catch (Exception e) {}
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            else {
+                                                                if (Main.householdLocations[r].getRoomID() == selectedRoomID) {
+
+                                                                    dummyRoom = Main.profiles[up].getCurrentLocation();
+
+                                                                    // IS THE USER BEING MOVED TRYING TO GO INTO A ROOM IT'S ALREADY IN?
+                                                                    if (Main.profiles[up].getCurrentLocation() == Main.householdLocations[selectedRoomID - 1]) {
+                                                                        System.out.println("Profile #" + Main.profiles[up] + " is already in the " + Main.householdLocations[selectedRoomID - 1].getName());
+                                                                    }
+                                                                    else {
+                                                                        // IS THE USER BEING MOVED COMING FROM ANOTHER ROOM INDOORS?
+                                                                        if (Main.profiles[up].getCurrentLocation() != null) {
+
+                                                                            Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].setNumberOfPeopleInside(
+                                                                                    Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].getNumberOfPeopleInside() - 1);
+
+                                                                            Main.profiles[up].setCurrentLocation(Main.householdLocations[r]); // THE CHANGE OF ROOM***
+                                                                            Main.householdLocations[r].setNumberOfPeopleInside(Main.householdLocations[r].getNumberOfPeopleInside() + 1);
+
+                                                                            //update the label in SCENE 2 for the room location of the profile that was just moved.
+                                                                            for (int i = 0; i < Main.editContextLayout2.getChildren().size(); i++) {
+                                                                                try {
+                                                                                    if (Main.editContextLayout2.getChildren().get(i).getId().equals("currentRoomOfProfile" +
+                                                                                            Main.profiles[up].getProfileID())) {
+                                                                                        Label label = (Label) Main.editContextLayout2.getChildren().get(i);
+                                                                                        label.setText(Main.profiles[up].getCurrentLocation().getName());
+                                                                                        Main.editContextLayout2.getChildren().set(i, label);
+                                                                                        break;
+                                                                                    }
+                                                                                } catch (Exception e) {}
+                                                                            }
+
+                                                                            //update the label in SCENE 1 for number of people in the destination room location of the profile that was just moved.
+                                                                            for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
+                                                                                try {
+                                                                                    if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleInRoom" + Main.householdLocations[r].getRoomID())) {
+                                                                                        Label label = (Label) Main.editContextLayout.getChildren().get(a);
+                                                                                        label.setText("# of people: " + Main.householdLocations[r].getNumberOfPeopleInside());
+                                                                                        Main.editContextLayout.getChildren().set(a, label);
+                                                                                    }
+                                                                                } catch (Exception e) {
+                                                                                }
+                                                                            }
+
+                                                                            //update the label in SCENE 1 for number of people in the origin room location of the profile that was just moved.
+                                                                            for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
+                                                                                try {
+                                                                                    if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleInRoom" + dummyRoom.getRoomID())) {
+                                                                                        Label label = (Label) Main.editContextLayout.getChildren().get(a);
+                                                                                        label.setText("# of people: " + dummyRoom.getNumberOfPeopleInside());
+                                                                                        Main.editContextLayout.getChildren().set(a, label);
+                                                                                    }
+                                                                                } catch (Exception e) {}
+                                                                            }
+                                                                        }
+
+                                                                        // OR IS THE USER BEING MOVED COMING FROM OUTSIDE?
+                                                                        else {
+                                                                            Main.profiles[up].setCurrentLocation(Main.householdLocations[r]); // THE CHANGE OF ROOM***
+                                                                            Main.householdLocations[r].setNumberOfPeopleInside(Main.householdLocations[r].getNumberOfPeopleInside() + 1);
+
+                                                                            // update the label in SCENE 1 of the number of people who are in the destination room
+                                                                            for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
+                                                                                try {
+                                                                                    if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleInRoom" + Main.householdLocations[r].getRoomID())) {
+                                                                                        Label label = (Label) Main.editContextLayout.getChildren().get(a);
+                                                                                        label.setText("# of people: " + Main.householdLocations[r].getNumberOfPeopleInside());
+                                                                                        Main.editContextLayout.getChildren().set(a, label);
+                                                                                    }
+                                                                                } catch (Exception e) { }
+                                                                            }
+
+                                                                            // update the label in SCENE 1 of the number of people who are outside (the "origin" room)
+                                                                            for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
+                                                                                try {
+                                                                                    if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleOutside")) {
+                                                                                        Label label = (Label) Main.editContextLayout.getChildren().get(a);
+
+                                                                                        int numOfPeopleInHouse = 0;
+                                                                                        int numOfPeopleOutside;
+                                                                                        for (int p = 0; p < Main.householdLocations.length; p++) {
+                                                                                            numOfPeopleInHouse += Main.householdLocations[p].getNumberOfPeopleInside();
+                                                                                        }
+                                                                                        numOfPeopleOutside = Main.profiles.length - numOfPeopleInHouse;
+
+                                                                                        label.setText("# of people: " + numOfPeopleOutside);
+                                                                                        Main.editContextLayout.getChildren().set(a, label);
+                                                                                    }
+                                                                                } catch (Exception e) {}
+                                                                            }
+
+                                                                            //update the label in SCENE 2 for the room location of the profile that was just moved.
+                                                                            for (int i = 0; i < Main.editContextLayout2.getChildren().size(); i++) {
+                                                                                try {
+                                                                                    if (Main.editContextLayout2.getChildren().get(i).getId().equals("currentRoomOfProfile" +
+                                                                                            Main.profiles[up].getProfileID())) {
+                                                                                        Label label = (Label) Main.editContextLayout2.getChildren().get(i);
+                                                                                        label.setText(Main.profiles[up].getCurrentLocation().getName());
+                                                                                        Main.editContextLayout2.getChildren().set(i, label);
+                                                                                        break;
+                                                                                    }
+                                                                                } catch (Exception e) {}
+                                                                            }
+
+
+                                                                        }
+
+//                                                                        Main.profiles[up].setCurrentLocation(Main.householdLocations[r]); // THE CHANGE OF ROOM***
+//
+//                                                                        Main.householdLocations[r].setNumberOfPeopleInside(Main.householdLocations[r].getNumberOfPeopleInside() + 1);
+                                                                    }
+
+
+                                                                    break;
+                                                                }
                                                             }
                                                         }
                                                         break;

@@ -112,29 +112,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        /**
-         * TODO: create a House object and read the input of a house layout file
-         * TODO: and extract information; all global House info will be initialized here... */
-
-
-//        Room testRoom = new Room("Kitchen", 2, 1, 5, true);
-//        Room testRoom2 = new Room("Bedroom", 1, 2, 2, true);
-//        Room testRoom3 = new Room("Dining Room", 1, 1, 2, true);
-//        Room testRoom4 = new Room("Bathroom", 2, 2, 5,  true);
-//        Room testRoom5 = new Room("Family Room", 1, 1, 4, false);
-//        Room testRoom6 = new Room("TV Room", 1, 2, 3, false);
-//        Room testRoom7 = new Room("Basement", 2, 1, 5, false);
-//        Room testRoom8 = new Room("Garage", 1, 2, 2, false);
-//        Room testRoom9 = new Room("Bedroom 2", 1, 1, 2, false);
-
-//        householdLocations = new Room[]{testRoom, testRoom2, testRoom3, testRoom4, testRoom5, testRoom6, testRoom7,
-//                testRoom8, testRoom9};
-
-        //house = new House("dummyfile"); commented out for testing
-        //houseLayout = house.getLayout();
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
         main_stage = primaryStage;
         main_stage.setResizable(false);
 
@@ -151,9 +128,7 @@ public class Main extends Application {
         /**MAIN DASHBOARD INITIALIZATIONS */
         main_dashboard = new AnchorPane();
 
-        // when first running the program, there should be a file selector button where the house layout image will go
-
-        createMainDashboardNecessities(); /**TODO: see the "TODO" instructions in this method...*/
+        createMainDashboardNecessities();
 
         dashboardScene = new Scene(main_dashboard, DASHBOARD_HEIGHT, DASHBOARD_WIDTH);
 
