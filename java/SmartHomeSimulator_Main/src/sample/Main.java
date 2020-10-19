@@ -372,7 +372,13 @@ public class Main extends Application {
                         tabPane.getTabs().set(0, innerTab);
                         main_dashboard.getChildren().set(a, tabPane);
 
-                        // repeat for other modules
+                         // repeat for other modules
+                        SHC_MODULE = makeSHCmodule();
+                        TabPane tabPane2 = (TabPane) main_dashboard.getChildren().get(a);
+                        Tab innerTab2 = tabPane2.getTabs().get(1);
+                        innerTab2.setDisable(false);
+                        tabPane2.getTabs().set(1, innerTab2);
+                        main_dashboard.getChildren().set(a, tabPane2);
                     }
                 } catch(Exception e){}
             }
@@ -406,6 +412,12 @@ public class Main extends Application {
                         main_dashboard.getChildren().set(a, tabPane);
 
                         // repeat for other modules
+                        SHC_MODULE = makeSHCmodule();
+                        TabPane tabPane2 = (TabPane) main_dashboard.getChildren().get(a);
+                        Tab innerTab2 = tabPane2.getTabs().get(1);
+                        innerTab2.setDisable(true);
+                        tabPane2.getTabs().set(1, innerTab2);
+                        main_dashboard.getChildren().set(a, tabPane2);
                     }
                 }catch(Exception e){}
             }
@@ -547,10 +559,50 @@ public class Main extends Application {
         return SHS_MODULE;
     }
 
-    /**TODO: give IDs to each GUI element in here */
+    /**
+     * Create or update the SHC module interface.
+     * @return
+     */
     public static AnchorPane makeSHCmodule() {
-        AnchorPane shc_module = new AnchorPane();
-        return shc_module;
+
+        Label label = new Label("Select a room that you would like to configure");
+        label.setTranslateX(20);
+        label.setTranslateY(20);
+        SHC_MODULE.getChildren().add(label);
+
+        if (houseLayout != null) {
+            int trans_X = 150; int trans_Y = 40;
+            for (int room = 0; room < householdLocations.length; room++) {
+                Button roomButton = new Button(householdLocations[room].getName());
+
+                roomButton.setTranslateX(trans_X);
+                roomButton.setTranslateY(trans_Y += 30);
+                int finalRoom = room;
+                roomButton.setOnAction(e -> {
+                    Stage tempStage = new Stage();
+                    tempStage.setResizable(false);
+                    tempStage.setHeight(350);
+                    tempStage.setWidth(225);
+                    tempStage.setTitle("SHC - " + householdLocations[finalRoom].getName());
+
+                    for (int panes = 0; panes < houseLayout.getChildren().size(); panes++) {
+                        try {
+                            if (houseLayout.getChildren().get(panes).getId().equals("roomLayoutID"+householdLocations[finalRoom].getRoomID()))
+                            {
+                                tempStage.setScene(new Scene(house.constructRoomLayoutSHCversion(householdLocations[panes],
+                                        (AnchorPane) houseLayout.getChildren().get(panes),
+                                        householdLocations[panes].getNumberOfPeopleInside(), tempStage)));
+                                tempStage.showAndWait();
+                                break;
+                            }
+                        }
+                        catch (Exception ex) {}
+                    }
+                });
+                SHC_MODULE.getChildren().addAll(roomButton);
+            }
+        }
+        return SHC_MODULE;
     }
 
     /**THIS IS NOT FOR DELIVERY #1*/

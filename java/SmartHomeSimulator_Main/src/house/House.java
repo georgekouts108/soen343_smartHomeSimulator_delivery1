@@ -1,10 +1,12 @@
 package house;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
+import javafx.stage.Stage;
 import sample.*;
 import utilities.*;
 
@@ -108,11 +110,10 @@ public class House {
         }
     }
 
-    /**TODO: finish this method */
-    public AnchorPane constructRoomLayout(Room room) {
+    public AnchorPane constructRoomLayoutSHCversion(Room room, AnchorPane room_layout, int population, Stage stage) {
         AnchorPane roomLayout = new AnchorPane();
         roomLayout.setId("roomLayoutID"+room.getRoomID());
-        roomLayout.setPrefWidth(225); roomLayout.setPrefHeight(225);
+        roomLayout.setPrefWidth(225); roomLayout.setPrefHeight(350);
         roomLayout.setStyle("-fx-border-color:#000000");
 
         int ID = room.getRoomID();
@@ -144,17 +145,22 @@ public class House {
         Line line5 = new Line(); line5.setStartY(20); line5.setEndY(180); line5.setTranslateX(150); roomLayout.getChildren().add(line5);
         Line line3 = new Line(); line3.setStartX(0); line3.setEndX(225); line3.setTranslateY(180); roomLayout.getChildren().add(line3);
         Line line2 = new Line(); line2.setStartX(0); line2.setEndX(225); line2.setTranslateY(205); roomLayout.getChildren().add(line2);
-        Line line6 = new Line(); line6.setStartY(180); line6.setEndY(205); line6.setTranslateX(45); roomLayout.getChildren().add(line6);
-        Line line7 = new Line(); line7.setStartY(180); line7.setEndY(205); line7.setTranslateX(90); roomLayout.getChildren().add(line7);
-        Line line8 = new Line(); line8.setStartY(180); line8.setEndY(205); line8.setTranslateX(135); roomLayout.getChildren().add(line8);
-        Line line9 = new Line(); line9.setStartY(180); line9.setEndY(205); line9.setTranslateX(180); roomLayout.getChildren().add(line9);
 
         // checkboxes for Lights
         int translate_y = 50;
         for (int L = 0; L < room.getLightCollection().length; L++) {
+
             CheckBox checkBox = new CheckBox("L#"+room.getLightCollection()[L].getUtilityID());
             checkBox.setId("lightCheckboxID#"+room.getLightCollection()[L].getUtilityID());
             checkBox.setTranslateX(5); checkBox.setTranslateY(translate_y);
+
+            if (room.getLightCollection()[L].getState()) {
+                checkBox.setSelected(true);
+            }
+            else {
+                checkBox.setSelected(false);
+            }
+
             checkBox.setOnAction(e->{
                 if (checkBox.isSelected()) {
                     // turn the light on
@@ -178,19 +184,19 @@ public class House {
                 }
                 if (anyLightsOn(room)) {
                     boolean isLightIconThere = false;
-                    for (int a = 0; a < roomLayout.getChildren().size(); a++) {
-                        if (roomLayout.getChildren().contains(room.getIconLight_view())) {
+                    for (int a = 0; a < room_layout.getChildren().size(); a++) {
+                        if (room_layout.getChildren().contains(room.getIconLight_view())) {
                             isLightIconThere = true;
                             break;
                         }
                     }
                     if (!isLightIconThere){
-                        roomLayout.getChildren().add(room.getIconLight_view());
+                        room_layout.getChildren().add(room.getIconLight_view());
                     }
                 }
                 else {
                     try {
-                        roomLayout.getChildren().remove(room.getIconLight_view());
+                        room_layout.getChildren().remove(room.getIconLight_view());
                     }catch (Exception ex){}
                 }
             });
@@ -203,7 +209,15 @@ public class House {
         for (int w = 0; w < room.getWindowCollection().length; w++) {
             CheckBox checkBox = new CheckBox("W#"+room.getWindowCollection()[w].getUtilityID());
             checkBox.setId("windowCheckboxID#"+room.getWindowCollection()[w].getUtilityID());
-            checkBox.setTranslateX(80); checkBox.setTranslateY(translate_y);
+            checkBox.setTranslateX(85); checkBox.setTranslateY(translate_y);
+
+            if (room.getWindowCollection()[w].getState()) {
+                checkBox.setSelected(true);
+            }
+            else {
+                checkBox.setSelected(false);
+            }
+
             checkBox.setOnAction(e->{
                 if (checkBox.isSelected()) {
                     // open the window (if not blocked)
@@ -240,19 +254,19 @@ public class House {
                 }
                 if (anyWindowsOpen(room)) {
                     boolean isWindowIconThere = false;
-                    for (int a = 0; a < roomLayout.getChildren().size(); a++) {
-                        if (roomLayout.getChildren().contains(room.getIconWindow_view())) {
+                    for (int a = 0; a < room_layout.getChildren().size(); a++) {
+                        if (room_layout.getChildren().contains(room.getIconWindow_view())) {
                             isWindowIconThere = true;
                             break;
                         }
                     }
                     if (!isWindowIconThere){
-                        roomLayout.getChildren().add(room.getIconWindow_view());
+                        room_layout.getChildren().add(room.getIconWindow_view());
                     }
                 }
                 else {
                     try {
-                        roomLayout.getChildren().remove(room.getIconWindow_view());
+                        room_layout.getChildren().remove(room.getIconWindow_view());
                     }catch (Exception ex){}
                 }
             });
@@ -266,6 +280,14 @@ public class House {
             CheckBox checkBox = new CheckBox("D#"+room.getDoorCollection()[d].getUtilityID());
             checkBox.setId("doorCheckboxID#"+room.getDoorCollection()[d].getUtilityID());
             checkBox.setTranslateX(160); checkBox.setTranslateY(translate_y);
+
+            if (room.getDoorCollection()[d].getState()) {
+                checkBox.setSelected(true);
+            }
+            else {
+                checkBox.setSelected(false);
+            }
+
             checkBox.setOnAction(e->{
                 if (checkBox.isSelected()) {
                     // open the door
@@ -289,19 +311,19 @@ public class House {
                 }
                 if (anyDoorsOpen(room)) {
                     boolean isDoorIconThere = false;
-                    for (int a = 0; a < roomLayout.getChildren().size(); a++) {
-                        if (roomLayout.getChildren().contains(room.getIconDoor_view())) {
+                    for (int a = 0; a < room_layout.getChildren().size(); a++) {
+                        if (room_layout.getChildren().contains(room.getIconDoor_view())) {
                             isDoorIconThere = true;
                             break;
                         }
                     }
                     if (!isDoorIconThere){
-                        roomLayout.getChildren().add(room.getIconDoor_view());
+                        room_layout.getChildren().add(room.getIconDoor_view());
                     }
                 }
                 else {
                     try {
-                        roomLayout.getChildren().remove(room.getIconDoor_view());
+                        room_layout.getChildren().remove(room.getIconDoor_view());
                     }catch (Exception ex){}
                 }
             });
@@ -310,27 +332,36 @@ public class House {
         }
 
         CheckBox mdCheckbox = new CheckBox("MD triggered");
-        mdCheckbox.setId("motionDetectorID#"+room.getMd().getUtilityID());
+        mdCheckbox.setId("motionDetectorCheckboxID#"+room.getMd().getUtilityID());
         mdCheckbox.setTranslateX(5); mdCheckbox.setTranslateY(206);
+
+
+        if (room.getMd().getState()) {
+            mdCheckbox.setSelected(true);
+        }
+        else {
+            mdCheckbox.setSelected(false);
+        }
+
         mdCheckbox.setOnAction(e->{
             if (mdCheckbox.isSelected()) {
                 room.getMd().setState(true);
                 boolean isMdIconThere = false;
-                for (int a = 0; a < roomLayout.getChildren().size(); a++) {
-                    if (roomLayout.getChildren().contains(room.getIconMD_view())) {
+                for (int a = 0; a < room_layout.getChildren().size(); a++) {
+                    if (room_layout.getChildren().contains(room.getIconMD_view())) {
                         isMdIconThere = true;
                         break;
                     }
                 }
                 if (!isMdIconThere){
-                    roomLayout.getChildren().add(room.getIconMD_view());
+                    room_layout.getChildren().add(room.getIconMD_view());
                 }
                 appendMessageToConsole("Motion detector triggered in Room #"+room.getRoomID()+" "+room.getName());
             }
             else {
                 room.getMd().setState(false);
                 try {
-                    roomLayout.getChildren().remove(room.getIconMD_view());
+                    room_layout.getChildren().remove(room.getIconMD_view());
                 }catch(Exception ex){}
                 appendMessageToConsole("Motion detector disabled in Room #"+room.getRoomID()+" "+room.getName());
             }
@@ -340,34 +371,71 @@ public class House {
 
         if (room.getAc() != null) {
             CheckBox acCheckbox = new CheckBox("AC on");
-            acCheckbox.setId("airConditionerID#"+room.getAc().getUtilityID());
+            acCheckbox.setId("airConditionerCheckboxID#"+room.getAc().getUtilityID());
             acCheckbox.setTranslateX(150); acCheckbox.setTranslateY(206);
+
+            if (room.getAc().getState()) {
+                acCheckbox.setSelected(true);
+            }
+            else {
+                acCheckbox.setSelected(false);
+            }
+
             acCheckbox.setOnAction(e->{
                 if (acCheckbox.isSelected()) {
                     room.getAc().setState(true);
                     boolean isAcIconThere = false;
-                    for (int a = 0; a < roomLayout.getChildren().size(); a++) {
-                        if (roomLayout.getChildren().contains(room.getIconAC_view())) {
+                    for (int a = 0; a < room_layout.getChildren().size(); a++) {
+                        if (room_layout.getChildren().contains(room.getIconAC_view())) {
                             isAcIconThere = true;
                             break;
                         }
                     }
                     if (!isAcIconThere){
-                        roomLayout.getChildren().add(room.getIconAC_view());
-
+                        room_layout.getChildren().add(room.getIconAC_view());
                     }
                     appendMessageToConsole("AC turned on in Room #"+room.getRoomID()+" "+room.getName());
                 }
                 else {
                     room.getAc().setState(false);
                     try {
-                        roomLayout.getChildren().remove(room.getIconAC_view());
+                        room_layout.getChildren().remove(room.getIconAC_view());
                     }catch(Exception ex){}
                     appendMessageToConsole("AC turned off in Room #"+room.getRoomID()+" "+room.getName());
                 }
             });
             roomLayout.getChildren().add(acCheckbox);
         }
+
+        Label populationLabel = new Label();
+        populationLabel.setText("Population: "+population);
+        populationLabel.setTranslateX(20); populationLabel.setTranslateY(240);
+        roomLayout.getChildren().add(populationLabel);
+
+        Button closeButton = new Button("Return");
+        closeButton.setOnAction(ev-> stage.close());
+        closeButton.setTranslateX(20); closeButton.setTranslateY(270);
+        closeButton.setId("closeButtonFor"+roomLayout.getId());
+        roomLayout.getChildren().add(closeButton);
+
+        return roomLayout;
+    }
+
+    public AnchorPane constructRoomLayout(Room room) {
+        AnchorPane roomLayout = new AnchorPane();
+        roomLayout.setId("roomLayoutID"+room.getRoomID());
+        roomLayout.setPrefWidth(225); roomLayout.setPrefHeight(225);
+        roomLayout.setStyle("-fx-border-color:#000000");
+
+        Label roomIDNameLabel = new Label("#"+room.getRoomID()+"\n"+room.getName());
+        roomIDNameLabel.setTranslateX(50); roomIDNameLabel.setTranslateY(60);
+        roomLayout.getChildren().add(roomIDNameLabel);
+
+        Line line6 = new Line(); line6.setStartY(180); line6.setEndY(205); line6.setTranslateX(45); roomLayout.getChildren().add(line6);
+        Line line7 = new Line(); line7.setStartY(180); line7.setEndY(205); line7.setTranslateX(90); roomLayout.getChildren().add(line7);
+        Line line8 = new Line(); line8.setStartY(180); line8.setEndY(205); line8.setTranslateX(135); roomLayout.getChildren().add(line8);
+        Line line9 = new Line(); line9.setStartY(180); line9.setEndY(205); line9.setTranslateX(180); roomLayout.getChildren().add(line9);
+
         return roomLayout;
     }
 
