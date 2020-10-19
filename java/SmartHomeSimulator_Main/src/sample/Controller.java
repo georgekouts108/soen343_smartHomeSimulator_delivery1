@@ -147,7 +147,6 @@ public class Controller {
         if (userProfile.isAdmin()) {stageTitle+=" (ADMIN)";}
         Main.main_stage.setTitle(stageTitle);
 
-        ///
         Hyperlink logoutLink = new Hyperlink("Logout");
         logoutLink.setId("logoutLinkForProfile"+userProfile.getProfileID());
         logoutLink.setTranslateX(hyperlink.getTranslateX()+60); logoutLink.setTranslateY(hyperlink.getTranslateY());
@@ -334,11 +333,16 @@ public class Controller {
             tempButton.setTranslateY(60);
             Main.editContextLayout.getChildren().add(tempButton);
 
-            Label roomsLabel = new Label("Click on a room you would like to move to, or change a room's number of occupants");
+            Label roomsLabel = new Label("Click on a room you would like to move to.");
             roomsLabel.setTranslateY(105);
             roomsLabel.setTranslateX(20);
             roomsLabel.setId("roomsLabel");
             Main.editContextLayout.getChildren().add(roomsLabel);
+
+            Label currentRoom = new Label("Your location: ");
+            currentRoom.setId("currentRoomOfLoggedInUser");
+            currentRoom.setTranslateY(200); currentRoom.setTranslateX(450);
+            Main.editContextLayout.getChildren().add(currentRoom);
 
             int transY = 120;
             for (int r = 0; r < Main.householdLocations.length + 1; r++) {
@@ -419,6 +423,16 @@ public class Controller {
                                 }
                             }catch (Exception ex){}
                         }
+                        for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
+                            try {
+                                if (Main.editContextLayout.getChildren().get(i).getId().equals("currentRoomOfLoggedInUser")) {
+                                    Label label = (Label) Main.editContextLayout.getChildren().get(i);
+                                    label.setText("Your location:\n" + Main.currentLocation.getName());
+                                    Main.editContextLayout.getChildren().set(i, label);
+                                    break;
+                                }
+                            } catch (Exception ex) {}
+                        }
                     });
                     Main.editContextLayout.getChildren().addAll(hyp, l1);
                     transY += 20;
@@ -495,6 +509,16 @@ public class Controller {
                                     break;
                                 }
                             }catch (Exception ex){}
+                        }
+                        for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
+                            try {
+                                if (Main.editContextLayout.getChildren().get(i).getId().equals("currentRoomOfLoggedInUser")) {
+                                    Label label = (Label) Main.editContextLayout.getChildren().get(i);
+                                    label.setText("Your location:\nOutside");
+                                    Main.editContextLayout.getChildren().set(i, label);
+                                    break;
+                                }
+                            } catch (Exception ex) {}
                         }
                     });
                     Main.editContextLayout.getChildren().addAll(hyp, l1);
