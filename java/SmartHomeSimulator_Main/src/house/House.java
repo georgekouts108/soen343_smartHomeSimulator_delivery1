@@ -20,6 +20,7 @@ public class House {
     private int numOfRooms;
     private Room[] rooms;
     private AnchorPane layout; // a layout of rooms only
+    private String location;
 
     public House(String houseLayoutFileName) throws FileNotFoundException {
 
@@ -62,6 +63,14 @@ public class House {
 
         // after all Room initializations, the house layout will be set up
         setupHouseLayout(this.rooms);
+    }
+
+    public void setLocation(String loc) {
+        this.location = loc;
+    }
+
+    public String getLocation() {
+        return this.location;
     }
 
     public int getNumOfRooms() {

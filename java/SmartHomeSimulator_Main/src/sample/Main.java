@@ -1,4 +1,6 @@
 package sample;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -32,9 +34,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.concurrent.*;
 
 public class Main extends Application {
+
+    protected static String[] countries = Locale.getISOCountries();
 
     /**FIXED PIXEL DIMENSIONS*/
     protected static final int DASHBOARD_WIDTH = 700;
@@ -457,9 +462,44 @@ public class Main extends Application {
         Label setHouseLocationLabel = new Label("Set House Location");
         setHouseLocationLabel.setTranslateX(200); setHouseLocationLabel.setTranslateY(110);
 
+        ComboBox locationMenu = new ComboBox();
+        locationMenu.setId("locationMenu");
+        locationMenu.setTranslateX(160); locationMenu.setTranslateY(180);
+        locationMenu.setItems(FXCollections.observableArrayList(countries));
+        locationMenu.setPrefWidth(200); locationMenu.setPromptText("Select country...");
+        if ((currentActiveProfile==null)) {
+            locationMenu.setDisable(true);
+        }
+        else {
+            if (simulationIsOn) {
+                locationMenu.setDisable(true);
+            }
+            else {
+                locationMenu.setDisable(false);
+            }
+        }
+
+        Label locationLabel = new Label("Location: [not set]");
+        locationLabel.setId("locationLabel");
+        locationLabel.setTranslateX(160); locationLabel.setTranslateY(150);
+
         /**TODO: code a method that will set the location when clicking this button */
         Button confirmLocationButton = new Button("Set Location"); confirmLocationButton.setId("confirmLocationButton");
         confirmLocationButton.setTranslateX(200); confirmLocationButton.setTranslateY(260);
+        confirmLocationButton.setOnAction(e->{
+            for (int a = 0; a < SHS_MODULE.getChildren().size(); a++) {
+                try {
+                    if (SHS_MODULE.getChildren().get(a).getId().equals("locationLabel")) {
+                        Label updatedLabel = (Label) SHS_MODULE.getChildren().get(a);
+                        updatedLabel.setText("Location: " + locationMenu.getValue().toString());
+                        /**DEBUG: */System.out.println(locationMenu.getValue().toString());
+                        SHS_MODULE.getChildren().set(a, updatedLabel);
+                        break;
+                    }
+                } catch(Exception ex){}
+            }
+            house.setLocation(locationMenu.getValue().toString());
+        });
         if ((currentActiveProfile==null)) {
             confirmLocationButton.setDisable(true);
         }
@@ -553,7 +593,7 @@ public class Main extends Application {
         try {
             SHS_MODULE.getChildren().addAll(manageOrSwitchProfileButton, line, setDateTimeLabel, datePicker,
                     setTimeLabel, simulationDate, simulationTime, hourField, colon, minuteField, confirmTimeButton, line2, setHouseLocationLabel,
-                    confirmLocationButton);
+                    confirmLocationButton, locationMenu, locationLabel);
         }catch (Exception e){}
 
         return SHS_MODULE;
