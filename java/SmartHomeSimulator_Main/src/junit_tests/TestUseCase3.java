@@ -100,4 +100,21 @@ public class TestUseCase3 extends ApplicationTest {
 
         assertEquals("Child", Main.getProfiles()[0].getType());
     }
+
+    @org.junit.Test
+    public void testCase3_removeProfile() {
+
+        Controller.createNewProfile(new TextField("P"), new RadioButton());
+
+        for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
+            if (Main.getProfileSelection().getChildren().get(a).getId()
+                    .equals("deleteLinkForProfile" + Main.getProfiles()[0].getProfileID())) {
+                Controller.deleteProfile(Main.getProfiles()[0],
+                        (Hyperlink)Main.getProfileSelection().getChildren().get(a));
+                assertEquals(true, Main.getProfiles().length==0);
+                break;
+            }
+        }
+
+    }
 }

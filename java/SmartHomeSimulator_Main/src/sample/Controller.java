@@ -130,48 +130,55 @@ public class Controller {
      * @param hyperlink
      */
     public static void goToMainDashboardScene(UserProfile userProfile, Hyperlink hyperlink) {
-        for (int prof = 0; prof < Main.profiles.length; prof++) {
-            if (Main.profiles[prof].getProfileID()==userProfile.getProfileID()) {
-                Main.profiles[prof].setLoggedIn(true);
-                Main.currentActiveProfile = Main.profiles[prof];
-                Main.currentLocation = null;
-                break;
-            }
-        }
-
-        String stageTitle = "Smart Home Simulator -- logged in as #"+userProfile.getProfileID()+" \""+userProfile.getType().toUpperCase()+"\"";
-        if (userProfile.isAdmin()) {stageTitle+=" (ADMIN)";}
-        Main.main_stage.setTitle(stageTitle);
-
-        Hyperlink logoutLink = new Hyperlink("Logout");
-        logoutLink.setId("logoutLinkForProfile"+userProfile.getProfileID());
-        logoutLink.setTranslateX(hyperlink.getTranslateX()+60); logoutLink.setTranslateY(hyperlink.getTranslateY());
-
-        logoutLink.setOnAction(ACT2 -> {
-            if (!Main.simulationIsOn) {
-                Main.profiles[userProfile.getProfileID()-1].setCurrentLocation(null);
-                Main.profiles[userProfile.getProfileID() - 1].setLoggedIn(false);
-                Main.currentActiveProfile = null;
-
-                Main.createMainDashboardNecessities();
-
-                logoutLink.setDisable(true);
-
-                for (int a = 0; a < Main.profileSelection.getChildren().size(); a++) {
-                    if (Main.profileSelection.getChildren().get(a).getId().contains("loginLinkForProfile")) {
-                        Hyperlink hp = (Hyperlink) Main.profileSelection.getChildren().get(a);
-                        hp.setDisable(false);
-                        Main.profileSelection.getChildren().set(a,hp);
-                    }
+        try {
+            for (int prof = 0; prof < Main.profiles.length; prof++) {
+                if (Main.profiles[prof].getProfileID() == userProfile.getProfileID()) {
+                    Main.profiles[prof].setLoggedIn(true);
+                    Main.currentActiveProfile = Main.profiles[prof];
+                    Main.currentLocation = null;
+                    break;
                 }
-                Main.main_stage.setTitle("Smart Home Simulator");
-                Main.profileSelection.getChildren().remove(logoutLink);
             }
-        });
-        Main.profileSelection.getChildren().add(logoutLink);
 
-        Main.createMainDashboardNecessities();
-        Main.main_stage.setScene(Main.dashboardScene);
+            String stageTitle = "Smart Home Simulator -- logged in as #" + userProfile.getProfileID() + " \"" + userProfile.getType().toUpperCase() + "\"";
+            if (userProfile.isAdmin()) {
+                stageTitle += " (ADMIN)";
+            }
+            Main.main_stage.setTitle(stageTitle);
+
+            Hyperlink logoutLink = new Hyperlink("Logout");
+            logoutLink.setId("logoutLinkForProfile" + userProfile.getProfileID());
+            logoutLink.setTranslateX(hyperlink.getTranslateX() + 60);
+            logoutLink.setTranslateY(hyperlink.getTranslateY());
+
+            logoutLink.setOnAction(ACT2 -> {
+                if (!Main.simulationIsOn) {
+                    Main.profiles[userProfile.getProfileID() - 1].setCurrentLocation(null);
+                    Main.profiles[userProfile.getProfileID() - 1].setLoggedIn(false);
+                    Main.currentActiveProfile = null;
+
+                    Main.createMainDashboardNecessities();
+
+                    logoutLink.setDisable(true);
+
+                    for (int a = 0; a < Main.profileSelection.getChildren().size(); a++) {
+                        if (Main.profileSelection.getChildren().get(a).getId().contains("loginLinkForProfile")) {
+                            Hyperlink hp = (Hyperlink) Main.profileSelection.getChildren().get(a);
+                            hp.setDisable(false);
+                            Main.profileSelection.getChildren().set(a, hp);
+                        }
+                    }
+                    Main.main_stage.setTitle("Smart Home Simulator");
+                    Main.profileSelection.getChildren().remove(logoutLink);
+                }
+            });
+            Main.profileSelection.getChildren().add(logoutLink);
+
+            Main.createMainDashboardNecessities();
+
+            Main.main_stage.setScene(Main.dashboardScene);
+        }catch (Exception e){}
+
     }
 
     /**
@@ -1154,74 +1161,76 @@ public class Controller {
      * @param hyperlink
      */
     public static void deleteProfile(UserProfile UP, Hyperlink hyperlink) {
+        try {
+            if (!UP.isLoggedIn()) {
+                Main.main_stage.setTitle("Smart Home Simulator");
 
-        if (!UP.isLoggedIn()) {
-            Main.main_stage.setTitle("Smart Home Simulator");
-
-
-            try{Main.householdLocations[UP.getCurrentLocation().getRoomID() - 1].setNumberOfPeopleInside(
-                    Main.householdLocations[UP.getCurrentLocation().getRoomID() - 1].getNumberOfPeopleInside() - 1);}catch (Exception e){}
-
-            for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
                 try {
-                    if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleInRoom" + UP.getCurrentLocation().getRoomID())) {
-                        Label label = (Label) Main.editContextLayout.getChildren().get(a);
-                        label.setText("# of people: " + UP.getCurrentLocation().getNumberOfPeopleInside());
-                        Main.editContextLayout.getChildren().set(a, label);
-                    }
+                    Main.householdLocations[UP.getCurrentLocation().getRoomID() - 1].setNumberOfPeopleInside(
+                            Main.householdLocations[UP.getCurrentLocation().getRoomID() - 1].getNumberOfPeopleInside() - 1);
                 } catch (Exception e) {
                 }
-            }
-            UP.setCurrentLocation(null);
 
-
-            // UPDATE THE HYPERLINK ARRAY
-            Hyperlink[] temp = new Hyperlink[Main.profileLinks.length - 1];
-
-            for (int hyper = 0; hyper < Main.profileLinks.length; hyper++) {
-                if (Main.profileLinks[hyper] == hyperlink) {
-                    Main.profileLinks[hyper] = null;
-
-                    int index = 0;
-                    for (int h2 = 0; h2 < Main.profileLinks.length; h2++) {
-                        if (Main.profileLinks[h2] != null) {
-                            temp[index++] = Main.profileLinks[h2];
+                for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
+                    try {
+                        if (Main.editContextLayout.getChildren().get(a).getId().equals("numOfPeopleInRoom" + UP.getCurrentLocation().getRoomID())) {
+                            Label label = (Label) Main.editContextLayout.getChildren().get(a);
+                            label.setText("# of people: " + UP.getCurrentLocation().getNumberOfPeopleInside());
+                            Main.editContextLayout.getChildren().set(a, label);
                         }
+                    } catch (Exception e) {
                     }
-                    break;
                 }
-            }
-            Main.profileLinks = temp;
+                UP.setCurrentLocation(null);
 
-            // UPDATE THE PROFILE OBJECT ARRAY
-            for (int prof = 0; prof < Main.profiles.length; prof++) {
-                if (Main.profiles[prof].getProfileID() == UP.getProfileID()) {
-                    Main.profiles[prof] = null;
-                    break;
+
+                // UPDATE THE HYPERLINK ARRAY
+                Hyperlink[] temp = new Hyperlink[Main.profileLinks.length - 1];
+
+                for (int hyper = 0; hyper < Main.profileLinks.length; hyper++) {
+                    if (Main.profileLinks[hyper] == hyperlink) {
+                        Main.profileLinks[hyper] = null;
+
+                        int index = 0;
+                        for (int h2 = 0; h2 < Main.profileLinks.length; h2++) {
+                            if (Main.profileLinks[h2] != null) {
+                                temp[index++] = Main.profileLinks[h2];
+                            }
+                        }
+                        break;
+                    }
                 }
-            }
+                Main.profileLinks = temp;
 
-            UserProfile[] temp2 = new UserProfile[Main.numberOfProfiles - 1];
-            int tempIndex = 0;
-            for (int i = 0; i < Main.profiles.length; i++) {
-                if (Main.profiles[i] != null) {
-                    temp2[tempIndex++] = Main.profiles[i];
+                // UPDATE THE PROFILE OBJECT ARRAY
+                for (int prof = 0; prof < Main.profiles.length; prof++) {
+                    if (Main.profiles[prof].getProfileID() == UP.getProfileID()) {
+                        Main.profiles[prof] = null;
+                        break;
+                    }
                 }
-            }
-            Main.profiles = temp2;
 
-            for (int p = 0; p < Main.profiles.length; p++) {
-                Main.profiles[p].setProfileID(p + 1);
-            }
-            UserProfile.setstaticProfileId(UserProfile.getstaticProfileId() - 1);
+                UserProfile[] temp2 = new UserProfile[Main.numberOfProfiles - 1];
+                int tempIndex = 0;
+                for (int i = 0; i < Main.profiles.length; i++) {
+                    if (Main.profiles[i] != null) {
+                        temp2[tempIndex++] = Main.profiles[i];
+                    }
+                }
+                Main.profiles = temp2;
 
-            Main.profileSelection.getChildren().removeAll(hyperlink);
-            Main.numberOfProfiles--;
-            Main.profileBox.setScene(Main.profileScene);
-        }
-        else {
-            System.out.println("cannot delete if logged in!");
-        }
+                for (int p = 0; p < Main.profiles.length; p++) {
+                    Main.profiles[p].setProfileID(p + 1);
+                }
+                UserProfile.setstaticProfileId(UserProfile.getstaticProfileId() - 1);
+
+                Main.profileSelection.getChildren().removeAll(hyperlink);
+                Main.numberOfProfiles--;
+                Main.profileBox.setScene(Main.profileScene);
+            } else {
+                System.out.println("cannot delete if logged in!");
+            }
+        }catch (Exception e){}
     }
 
     /**

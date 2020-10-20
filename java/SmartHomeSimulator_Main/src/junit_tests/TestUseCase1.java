@@ -79,28 +79,23 @@ public class TestUseCase1 extends ApplicationTest {
                 }
             }
 
-            Main.setHouseLayoutFile(new File("/Users/georgekoutsaris/Desktop/UNIVERSITY/Concordia/SEMESTERS/FALL 2020/SOEN 343/SOEN 343 PROJECT/soen343_project/housetest.txt"));
-            //House h = new House(Main.getHouseLayoutFileName());
-            //Main.setHouse(h);
-            //Main.setHouseLayout(h.getLayout());
         }catch (Exception e){}
-
     }
 
-    @org.junit.Test
-    public void testUseCase1_1() {
-        for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
-            if (Main.getMain_dashboard().getChildren().get(a).getId().equals("simulationOnOffButton")) {
-                ToggleButton tb = (ToggleButton) Main.getMain_dashboard().getChildren().get(a);
-                tb.setSelected(true);
-                break;
-            }
-        }
-        assertEquals(true, Main.isSimulationIsOn());
-    }
+//    @org.junit.Test
+//    public void testUseCase1_turnOnSim() {
+//        for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
+//            if (Main.getMain_dashboard().getChildren().get(a).getId().equals("simulationOnOffButton")) {
+//                ToggleButton tb = (ToggleButton) Main.getMain_dashboard().getChildren().get(a);
+//                tb.setSelected(true);
+//                break;
+//            }
+//        }
+//        assertEquals(true, Main.isSimulationIsOn());
+//    }
 
     @org.junit.Test
-    public void testUseCase1_2() {
+    public void testUseCase1_turnOffSim() {
         for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
             if (Main.getMain_dashboard().getChildren().get(a).getId().equals("simulationOnOffButton")) {
                 ToggleButton tb = (ToggleButton) Main.getMain_dashboard().getChildren().get(a);

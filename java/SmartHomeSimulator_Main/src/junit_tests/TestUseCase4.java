@@ -33,8 +33,8 @@ public class TestUseCase4 extends ApplicationTest {
 
         /**PROFILE SELECTION PAGE INITIALIZATION*/
         Main.setProfileSelection(new AnchorPane());
-        Main.setProfileScene(new Scene(Main.getProfileSelection()
-                , Main.getLoginpageHeight(), Main.getLoginpageWidth()));
+        Main.setProfileScene(new Scene(Main.getProfileSelection(),
+                Main.getLoginpageHeight(), Main.getLoginpageWidth()));
 
         /**MODULE INITIALIZATIONS */
         Main.setShsModule(new AnchorPane());
@@ -61,17 +61,22 @@ public class TestUseCase4 extends ApplicationTest {
         Main.getMain_stage().show();
     }
 
-//    @org.junit.Test
-//    public void testCase4() {
-//        Controller.createNewProfile(new TextField("P"), new RadioButton());
-//        for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
-//            if (Main.getProfileSelection().getChildren().get(a).getId()
-//                    .equals("hyperlinkForProfile"+Main.getProfiles()[0].getProfileID())) {
-//                Hyperlink loginLink = (Hyperlink) Main.getProfileSelection().getChildren().get(a);
-//                loginLink.fire();
-//                break;
-//            }
-//        }
-//        assertEquals(true, Main.getProfiles()[0].isLoggedIn());
-//    }
+    @org.junit.Test
+    public void testCase4() {
+        Controller.createNewProfile(new TextField("P"), new RadioButton());
+        System.out.println("Debug 1 -- "+Main.getProfiles().length);
+
+        Hyperlink loginLink = new Hyperlink();
+        for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
+            try {
+                if (Main.getProfileSelection().getChildren().get(a).getId()
+                        .equals("hyperlinkForProfile" + Main.getProfiles()[0].getProfileID())) {
+                    loginLink = (Hyperlink) Main.getProfileSelection().getChildren().get(a);
+                    break;
+                }
+            }catch (Exception e){}
+        }
+        Controller.goToMainDashboardScene(Main.getProfiles()[0], loginLink);
+        assertEquals(true, Main.getProfiles()[0].isLoggedIn());
+    }
 }
