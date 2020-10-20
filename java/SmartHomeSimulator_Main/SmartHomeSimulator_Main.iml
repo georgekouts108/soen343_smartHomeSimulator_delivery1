@@ -19,5 +19,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="org.testfx:testfx-core:4.0.16-alpha" level="project" />
+    <orderEntry type="library" name="jar_files" level="project" />
   </component>
 </module>
