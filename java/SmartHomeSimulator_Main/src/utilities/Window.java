@@ -1,5 +1,4 @@
 package utilities;
-
 import house.*;
 
 public class Window extends Utility {
@@ -22,10 +21,18 @@ public class Window extends Utility {
         this.isBlocked = false;
     }
 
+    /**
+     * Return a boolean indicating if a window is blocked
+     * @return
+     */
     public boolean isBlocked() {
         return isBlocked;
     }
 
+    /**
+     * Set a window's blocked state
+     * @param blocked
+     */
     public void setBlocked(boolean blocked) {
         isBlocked = blocked;
     }

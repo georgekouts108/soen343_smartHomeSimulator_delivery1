@@ -5,9 +5,7 @@ import house.*;
 
 public class MotionDetector extends Utility {
 
-    // if motion detectors are activated for longer this amount of time, alert authorities.
     private int timeBeforeCopsAlert;
-
     private Room room;
 
     /**
@@ -80,5 +78,4 @@ public class MotionDetector extends Utility {
     public int getUtilityID() {
         return super.getUtilityID();
     }
-
 }

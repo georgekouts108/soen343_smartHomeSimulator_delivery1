@@ -8,6 +8,9 @@ public class Light extends Utility {
 
     private Room room; // the room that the window is located in.
 
+    /**
+     * Light constructor
+     */
     public Light() {
         super();
     }

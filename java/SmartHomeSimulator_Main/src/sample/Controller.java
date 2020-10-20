@@ -69,9 +69,6 @@ public class Controller {
         }
     }
 
-    //Sets date and time of simulation in SHS tab
-    //issue: need to update the date at 24 hour mark
-    //issue: clicking multiple times on confirm new time will start multiple thread and overlap display (to fix)
     /**
      * Set the date and time of the simulation
      * @param datePicker

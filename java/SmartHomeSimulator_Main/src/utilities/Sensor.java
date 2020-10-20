@@ -1,7 +1,5 @@
 package utilities;
 
-
-
 public class Sensor extends Utility {
 
     /**

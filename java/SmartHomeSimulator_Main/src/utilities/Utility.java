@@ -9,6 +9,9 @@ public class Utility {
     private Room room; // the room that the utility is located within, if any
     private int utility_ID; // the ID of the utility
 
+    /**
+     * Utility constructor
+     */
     public Utility() {
         this.isOpen = false; // by default, windows, doors, lights, A.C. are all closed.
         this.room = null; // by default, a utility should have no valid room (a 'null' room)
