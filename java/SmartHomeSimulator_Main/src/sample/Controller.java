@@ -41,7 +41,6 @@ public class Controller {
     private static int numberOfTimesEditContextLinkStage1Accessed = 0;
     private static int numberOfTimesEditContextLinkStage2Accessed = 0;
     private static int numberOfAddedProfiles = 0;
-
     private static CheckBox[] profileCheckboxes;
     private static CheckBox[] roomCheckboxes;
 
@@ -58,7 +57,7 @@ public class Controller {
                 int month = cal.get(Calendar.MONTH);
                 int year = cal.get(Calendar.YEAR);
                 int day = cal.get(Calendar.DAY_OF_MONTH);
-                Platform.runLater(()->dateText.setText("Date "+year+"/"+(month+1)+"/"+day));
+                Platform.runLater(()->dateText.setText(year+"/"+(month+1)+"/"+day));
                 int second = cal.get(Calendar.SECOND);
                 int minute = cal.get(Calendar.MINUTE);
                 int hour = cal.get(Calendar.HOUR);

@@ -39,6 +39,7 @@ import java.util.concurrent.*;
 
 public class Main extends Application {
 
+    /**STRING ARRAY FOR COUNTRIES (USER FOR SETTING HOUSE LOCATION) */
     protected static String[] countries = Locale.getISOCountries();
 
     /**FIXED PIXEL DIMENSIONS*/
@@ -77,7 +78,6 @@ public class Main extends Application {
     protected static TabPane modulesInterface;
     protected static boolean simulationIsOn;
 
-    /**todo: use these variables to load a house layout text file */
     protected static FileChooser fileChooser;
     protected static String houseLayoutFileName;
     protected static File houseLayoutFile;
@@ -88,10 +88,14 @@ public class Main extends Application {
     protected static int timeLimitBeforeAlert;
     protected static TextArea suspBox;
 
-    /**G.U.I ELEMENTS FOR THE SHS MODULE */
+    /**VARIABLES FOR COUNTING ACCESSES TO CERTAIN SCENES */
     protected static int numberOfProfiles = 0;
     protected static int numberOfTimesDashboardPageLoaded = 0;
     protected static int numberOfTimesProfilePageSelected = 0;
+    protected static int numberOfTimesSHSModuleCreated = 0;
+    protected static int numberOfTimesSHCModuleCreated = 0;
+    protected static int numberOfTimesSHPModuleCreated = 0;
+    protected static int numberOfTimesSHHModuleCreated = 0;
 
     /**USER PROFILE STATIC VARIABLES */
     protected static UserProfile[] profiles;
@@ -99,14 +103,23 @@ public class Main extends Application {
     protected static Hyperlink[] profileLinks;
 
     /**STATIC VARIABLES AND METHODS FOR THE HOUSE */
-    /**TODO: create more protected static variables household elements*/
     protected static double outsideTemperature;
     protected static Room[] householdLocations;
     protected static Room currentLocation;
     protected static House house;
+
+    /**
+     * Access the default house's array of Rooms
+     * @return
+     */
     public static Room[] getHouseholdLocations() {
         return householdLocations;
     }
+
+    /**
+     * Access the UI of the main dashboard
+     * @return
+     */
     public static AnchorPane getMain_dashboard() {return main_dashboard;}
 
     /**
@@ -215,12 +228,24 @@ public class Main extends Application {
         triggerSim.setOnAction(e-> sample.Controller.startSimulation(triggerSim, editContextButton, outputConsole, modulesInterface));
         triggerSim.setDisable(true);
 
-        /**TODO: implement the remaining backend for Edit Context button. */
         editContextButton = new Button(); editContextButton.setId("editContextButton");
         editContextButton.prefHeight(45); editContextButton.prefWidth(75); editContextButton.setText("Edit\nContext");
         editContextButton.setTranslateY(90); editContextButton.setTranslateX(15); editContextButton.setTextAlignment(TextAlignment.CENTER);
         editContextButton.setOnAction(e->Controller.editContext());
         editContextButton.setDisable(true);
+
+        Label locationLabel = new Label("House\nLocation:\n[not set]");
+        locationLabel.setId("locationLabel");
+        locationLabel.setTranslateX(30); locationLabel.setTranslateY(170);
+
+        Label simDateAndTimeLabel = new Label("SIM TIME");
+        simDateAndTimeLabel.setTranslateX(20); simDateAndTimeLabel.setTranslateY(300);
+
+        Label simulationDate = new Label(); simulationDate.setId("simulationDate");
+        simulationDate.setTranslateX(20); simulationDate.setTranslateY(320);
+
+        Label simulationTime = new Label(); simulationTime.setId("simulationTime");
+        simulationTime.setTranslateX(20); simulationTime.setTranslateY(340);
 
         Label temperatureLabel = new Label(); temperatureLabel.setId("temp");
         temperatureLabel.setText("Outside Temp.\n15°C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
@@ -301,6 +326,10 @@ public class Main extends Application {
             main_dashboard.getChildren().add(chooseFileButton);
             main_dashboard.getChildren().add(dateText);
             main_dashboard.getChildren().add(timeText);
+            main_dashboard.getChildren().add(locationLabel);
+            main_dashboard.getChildren().add(simulationDate);
+            main_dashboard.getChildren().add(simulationTime);
+            main_dashboard.getChildren().add(simDateAndTimeLabel);
         }
 
         // is someone logged in?
@@ -327,25 +356,8 @@ public class Main extends Application {
                             ta.setDisable(true);
                         }
                         main_dashboard.getChildren().set(a, ta);
-                    } else if (main_dashboard.getChildren().get(a).getId().equals("simulationDate")) {
-                        Label ta = (Label) main_dashboard.getChildren().get(a);
-                        if (simulationIsOn) {
-                            ta.setDisable(true);
-                        } else {
-                            ta.setDisable(true);
-                        }
-                        main_dashboard.getChildren().set(a, ta);
                     }
-              /*  else if (main_dashboard.getChildren().get(a).getId().equals("simulationTime")) {
-                    Label ta = (Label) main_dashboard.getChildren().get(a);
-                    if (simulationIsOn) {
-                        ta.setDisable(true);
-                    }
-                    else {
-                        ta.setDisable(true);
-                    }
-                    main_dashboard.getChildren().set(a, ta);
-                }*/
+
                     else if (main_dashboard.getChildren().get(a).getId().equals("houseLayout")) {
                         AnchorPane hl = (AnchorPane) main_dashboard.getChildren().get(a);
                         if (simulationIsOn) {
@@ -360,34 +372,35 @@ public class Main extends Application {
                         Tab innerTab = tabPane.getTabs().get(0);
                         innerTab.setContent(SHS_MODULE);
 
-                        //added code attempting to render simulationDate/Time visible
-                        for (int i = 0; i < SHS_MODULE.getChildren().size(); i++) {
-                            try {
-                                if (SHS_MODULE.getChildren().get(i).getId().equals("simulationDate")) {
-                                    Label l1 = (Label) SHS_MODULE.getChildren().get(i);
-                                    l1.setVisible(true);
-                                    SHS_MODULE.getChildren().set(i, l1);
-                                    break;
-                                }
-                            } catch (Exception e) {
-                            }
-                        }
-
                         innerTab.setContent(SHS_MODULE);
                         tabPane.getTabs().set(0, innerTab);
                         main_dashboard.getChildren().set(a, tabPane);
 
-                         // repeat for other modules
                         SHC_MODULE = makeSHCmodule();
                         TabPane tabPane2 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab2 = tabPane2.getTabs().get(1);
                         innerTab2.setDisable(false);
                         tabPane2.getTabs().set(1, innerTab2);
                         main_dashboard.getChildren().set(a, tabPane2);
+
+                        SHP_MODULE = makeSHPmodule();
+                        TabPane tabPane3 = (TabPane) main_dashboard.getChildren().get(a);
+                        Tab innerTab3 = tabPane3.getTabs().get(2);
+                        innerTab3.setDisable(false);
+                        tabPane3.getTabs().set(2, innerTab3);
+                        main_dashboard.getChildren().set(a, tabPane3);
+
+                        SHH_MODULE = makeSHHmodule();
+                        TabPane tabPane4 = (TabPane) main_dashboard.getChildren().get(a);
+                        Tab innerTab4 = tabPane4.getTabs().get(3);
+                        innerTab4.setDisable(false);
+                        tabPane4.getTabs().set(3, innerTab4);
+                        main_dashboard.getChildren().set(a, tabPane4);
                     }
                 } catch(Exception e){}
             }
         }
+
         // is nobody logged in?
         else {
             for (int a = 0; a < main_dashboard.getChildren().size(); a++) {
@@ -416,13 +429,26 @@ public class Main extends Application {
                         tabPane.getTabs().set(0, innerTab);
                         main_dashboard.getChildren().set(a, tabPane);
 
-                        // repeat for other modules
                         SHC_MODULE = makeSHCmodule();
                         TabPane tabPane2 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab2 = tabPane2.getTabs().get(1);
                         innerTab2.setDisable(true);
                         tabPane2.getTabs().set(1, innerTab2);
                         main_dashboard.getChildren().set(a, tabPane2);
+
+                        SHP_MODULE = makeSHPmodule();
+                        TabPane tabPane3 = (TabPane) main_dashboard.getChildren().get(a);
+                        Tab innerTab3 = tabPane3.getTabs().get(2);
+                        innerTab3.setDisable(true);
+                        tabPane3.getTabs().set(2, innerTab3);
+                        main_dashboard.getChildren().set(a, tabPane3);
+
+                        SHH_MODULE = makeSHHmodule();
+                        TabPane tabPane4 = (TabPane) main_dashboard.getChildren().get(a);
+                        Tab innerTab4 = tabPane4.getTabs().get(3);
+                        innerTab4.setDisable(true);
+                        tabPane4.getTabs().set(3, innerTab4);
+                        main_dashboard.getChildren().set(a, tabPane4);
                     }
                 }catch(Exception e){}
             }
@@ -479,21 +505,15 @@ public class Main extends Application {
             }
         }
 
-        Label locationLabel = new Label("Location: [not set]");
-        locationLabel.setId("locationLabel");
-        locationLabel.setTranslateX(160); locationLabel.setTranslateY(150);
-
-        /**TODO: code a method that will set the location when clicking this button */
         Button confirmLocationButton = new Button("Set Location"); confirmLocationButton.setId("confirmLocationButton");
         confirmLocationButton.setTranslateX(200); confirmLocationButton.setTranslateY(260);
         confirmLocationButton.setOnAction(e->{
-            for (int a = 0; a < SHS_MODULE.getChildren().size(); a++) {
+            for (int a = 0; a < main_dashboard.getChildren().size(); a++) {
                 try {
-                    if (SHS_MODULE.getChildren().get(a).getId().equals("locationLabel")) {
-                        Label updatedLabel = (Label) SHS_MODULE.getChildren().get(a);
-                        updatedLabel.setText("Location: " + locationMenu.getValue().toString());
-                        /**DEBUG: */System.out.println(locationMenu.getValue().toString());
-                        SHS_MODULE.getChildren().set(a, updatedLabel);
+                    if (main_dashboard.getChildren().get(a).getId().equals("locationLabel")) {
+                        Label updatedLabel = (Label) main_dashboard.getChildren().get(a);
+                        updatedLabel.setText("House\nLocation:\n" + locationMenu.getValue().toString());
+                        main_dashboard.getChildren().set(a, updatedLabel);
                         break;
                     }
                 } catch(Exception ex){}
@@ -567,16 +587,26 @@ public class Main extends Application {
             }
         }
 
-        Label simulationDate = new Label(); simulationDate.setId("simulationDate");
-        simulationDate.setTranslateX(400); simulationDate.setTranslateY(380);
-
-        Label simulationTime = new Label(); simulationTime.setId("simulationTime");
-        simulationTime.setTranslateX(400); simulationTime.setTranslateY(400);
-
         Button confirmTimeButton = new Button("Confirm New Time"); confirmTimeButton.setId("confirmTimeButton");
         confirmTimeButton.setTranslateX(200); confirmTimeButton.setTranslateY(435);
         confirmTimeButton.setTextAlignment(TextAlignment.CENTER);
-        confirmTimeButton.setOnAction(e -> {new Thread(()->{sample.Controller.CurrentDateSimulation(datePicker, simulationDate, simulationTime, hourField, minuteField);}).start();});
+        confirmTimeButton.setOnAction(e -> {new Thread(()->{
+
+            int indexOfSimDateLabel = 0, indexOfSimTimeLabel = 0;
+
+            for (int a = 0; a < main_dashboard.getChildren().size(); a++) {
+                try {
+                    if (main_dashboard.getChildren().get(a).getId().equals("simulationDate")) {
+                        indexOfSimDateLabel = a;
+                    } else if (main_dashboard.getChildren().get(a).getId().equals("simulationTime")) {
+                        indexOfSimTimeLabel = a;
+                    }
+                }catch (Exception excep){}
+            }
+            sample.Controller.CurrentDateSimulation(datePicker, (Label) main_dashboard.getChildren().get(indexOfSimDateLabel),
+                    (Label) main_dashboard.getChildren().get(indexOfSimTimeLabel), hourField, minuteField);}).start();
+
+        });
 
         if ((currentActiveProfile==null)) {
             confirmTimeButton.setDisable(true);
@@ -592,10 +622,10 @@ public class Main extends Application {
 
         try {
             SHS_MODULE.getChildren().addAll(manageOrSwitchProfileButton, line, setDateTimeLabel, datePicker,
-                    setTimeLabel, simulationDate, simulationTime, hourField, colon, minuteField, confirmTimeButton, line2, setHouseLocationLabel,
-                    confirmLocationButton, locationMenu, locationLabel);
+                    setTimeLabel, hourField, colon, minuteField, confirmTimeButton, line2, setHouseLocationLabel,
+                    confirmLocationButton, locationMenu);
         }catch (Exception e){}
-
+        numberOfTimesSHSModuleCreated++;
         return SHS_MODULE;
     }
 
@@ -608,7 +638,6 @@ public class Main extends Application {
         Label label = new Label("Select a room that you would like to configure");
         label.setTranslateX(20);
         label.setTranslateY(20);
-        SHC_MODULE.getChildren().add(label);
 
         if (houseLayout != null) {
             int trans_X = 150; int trans_Y = 40;
@@ -619,6 +648,7 @@ public class Main extends Application {
                 roomButton.setTranslateY(trans_Y += 30);
                 int finalRoom = room;
                 roomButton.setOnAction(e -> {
+
                     Stage tempStage = new Stage();
                     tempStage.setResizable(false);
                     tempStage.setHeight(350);
@@ -627,64 +657,119 @@ public class Main extends Application {
 
                     for (int panes = 0; panes < houseLayout.getChildren().size(); panes++) {
                         try {
-                            if (houseLayout.getChildren().get(panes).getId().equals("roomLayoutID"+householdLocations[finalRoom].getRoomID()))
-                            {
-                                tempStage.setScene(new Scene(house.constructRoomLayoutSHCversion(householdLocations[panes],
-                                        (AnchorPane) houseLayout.getChildren().get(panes),
-                                        householdLocations[panes].getNumberOfPeopleInside(), tempStage)));
-                                tempStage.showAndWait();
-                                break;
+                            if (simulationIsOn) {
+                                if (houseLayout.getChildren().get(panes).getId().equals("roomLayoutID" + householdLocations[finalRoom].getRoomID())) {
+                                    tempStage.setScene(new Scene(house.constructRoomLayoutSHCversion(householdLocations[panes],
+                                            (AnchorPane) houseLayout.getChildren().get(panes),
+                                            householdLocations[panes].getNumberOfPeopleInside(), tempStage)));
+                                    tempStage.showAndWait();
+                                    break;
+                                }
                             }
                         }
                         catch (Exception ex) {}
                     }
                 });
-                SHC_MODULE.getChildren().addAll(roomButton);
+                SHC_MODULE.getChildren().add(roomButton);
             }
         }
+        if (numberOfTimesSHCModuleCreated==0) {
+            SHC_MODULE.getChildren().add(label);
+        }
+
+        numberOfTimesSHCModuleCreated++;
         return SHC_MODULE;
     }
 
-    /**THIS IS NOT FOR DELIVERY #1*/
-    /**TODO: give IDs to each GUI element in here */
+    /**
+     * Create or update the SHH module interface.
+     * @return
+     */
     public static AnchorPane makeSHHmodule() {
-        AnchorPane shh_module = new AnchorPane();
-        return shh_module;
+        /**TODO: give IDs to each GUI element in here */
+        numberOfTimesSHHModuleCreated++;
+        return SHH_MODULE;
     }
 
-    /**THIS WAS NOT FOR DELIVERY #1*/
-    /**TODO: give IDs to each GUI element in here */
+    /**
+     * Create or update the SHH module interface.
+     * @return
+     */
     public static AnchorPane makeSHPmodule(){
-        AnchorPane shp_module = new AnchorPane();
+        /**TODO: give IDs to each GUI element in here */
+        SHP_MODULE = new AnchorPane();
 
         Text warningText = new Text(); warningText.setTranslateY(40);
         warningText.setText("Enter the amount of time (minutes) " +
                 "before alerting the authorities after any motion detectors are triggered (AWAY mode only):");
-        warningText.setTextAlignment(TextAlignment.CENTER); warningText.setWrappingWidth(480); shp_module.getChildren().add(warningText);
+        warningText.setTextAlignment(TextAlignment.CENTER); warningText.setWrappingWidth(480);
 
         TextField timeBox = new TextField(); timeBox.setPrefHeight(Region.USE_COMPUTED_SIZE); timeBox.setPrefWidth(60);
-        timeBox.setTranslateX(200); timeBox.setTranslateY(70); timeBox.setDisable(true);
-        shp_module.getChildren().add(timeBox);
+        timeBox.setTranslateX(200); timeBox.setTranslateY(70);
+        if ((currentActiveProfile==null)) {
+            timeBox.setDisable(true);
+        }
+        else {
+            if (simulationIsOn) {
+                timeBox.setDisable(true);
+            }
+            else {
+                timeBox.setDisable(false);
+            }
+        }
 
         Label timeLimit = new Label(); timeLimit.setText("Time before Alert: 0 min."); timeLimit.setTranslateY(70); timeLimit.setTranslateX(10);
-        shp_module.getChildren().add(timeLimit); timeLimit.setVisible(false);
 
-        Line line = new Line(); line.setStartX(0);line.setEndX(500); line.setTranslateY(120); shp_module.getChildren().add(line);
+        Line line = new Line(); line.setStartX(0);line.setEndX(500); line.setTranslateY(120);
 
         Label suspiciousLabel = new Label("Suspicious Activity Log"); suspiciousLabel.setTranslateY(120); suspiciousLabel.setTranslateX(50);
-        shp_module.getChildren().add(suspiciousLabel);
 
         suspBox = new TextArea(); suspBox.setPrefHeight(253); suspBox.setPrefWidth(357);
         suspBox.setTranslateX(50); suspBox.setTranslateY(140); suspBox.setWrapText(true);
-        shp_module.getChildren().add(suspBox);
+        if ((currentActiveProfile==null)) {
+            suspBox.setDisable(true);
+        }
+        else {
+            if (simulationIsOn) {
+                suspBox.setDisable(true);
+            }
+            else {
+                suspBox.setDisable(false);
+            }
+        }
 
-//        Button confirmButton = new Button("Confirm"); confirmButton.setTranslateY(70); confirmButton.setTranslateX(270); confirmButton.setDisable(true);
-//        confirmButton.setOnAction(e->sample.Controller.setTimeLimitAwayMode(timeBox, timeLimit));
-//        shp_module.getChildren().add(confirmButton);
-//
-//        ToggleButton tb = new ToggleButton(); tb.setText("Set to AWAY mode"); tb.setTranslateX(250);
-//        tb.setOnAction(e->sample.Controller.toggleAwayButton(tb, timeBox, timeLimit, confirmButton)); shp_module.getChildren().add(tb);
+        Button confirmButton = new Button("Confirm"); confirmButton.setTranslateY(70); confirmButton.setTranslateX(270); confirmButton.setDisable(true);
+        //confirmButton.setOnAction(e->sample.Controller.setTimeLimitAwayMode(timeBox, timeLimit));
+        if ((currentActiveProfile==null)) {
+            confirmButton.setDisable(true);
+        }
+        else {
+            if (simulationIsOn) {
+                confirmButton.setDisable(true);
+            }
+            else {
+                confirmButton.setDisable(false);
+            }
+        }
 
-        return shp_module;
+        ToggleButton tb = new ToggleButton(); tb.setText("Set to AWAY mode"); tb.setTranslateX(250);
+        //tb.setOnAction(e->sample.Controller.toggleAwayButton(tb, timeBox, timeLimit, confirmButton));
+        if ((currentActiveProfile==null)) {
+            tb.setDisable(true);
+        }
+        else {
+            if (simulationIsOn) {
+                tb.setDisable(true);
+            }
+            else {
+                tb.setDisable(false);
+            }
+        }
+
+        SHP_MODULE.getChildren().addAll(tb, confirmButton, suspBox, suspiciousLabel, line, timeLimit, timeBox, warningText);
+
+        numberOfTimesSHPModuleCreated++;
+
+        return SHP_MODULE;
     }
 }

@@ -19,12 +19,16 @@ public class House {
 
     private int numOfRooms;
     private Room[] rooms;
-    private AnchorPane layout; // a layout of rooms only
+    private AnchorPane layout;
     private String location;
 
+    /**
+     * Constructor for the House class
+     * @param houseLayoutFileName
+     * @throws FileNotFoundException
+     */
     public House(String houseLayoutFileName) throws FileNotFoundException {
 
-        //using File IO, read a plain text (.txt) file called "houseLayoutFileName"
         File house = new File(houseLayoutFileName);
         Scanner scan = new Scanner(house);
         numOfRooms = scan.nextInt();
@@ -61,35 +65,58 @@ public class House {
             }
         }
 
-        // after all Room initializations, the house layout will be set up
         setupHouseLayout(this.rooms);
     }
 
+    /**
+     * Mutator for a house's location
+     * @param loc
+     */
     public void setLocation(String loc) {
         this.location = loc;
     }
 
+    /**
+     * Accessor for a house's location
+     * @return
+     */
     public String getLocation() {
         return this.location;
     }
 
+    /**
+     * Accessor for a house's number of rooms
+     * @return
+     */
     public int getNumOfRooms() {
         return numOfRooms;
     }
+
+    /**
+     * Accessor for a house's array of Room objects
+     * @return
+     */
     public Room[] getRooms() {
         return rooms;
     }
+
+    /**
+     * Accessor for a house's display layout
+     * @return
+     */
     public AnchorPane getLayout() {
         return layout;
     }
 
-    // called only once, in the constructor
+    /**
+     * Generate a house's display layout containing each Room
+     * @param roomArray
+     */
     public void setupHouseLayout(Room[] roomArray) {
         this.layout = new AnchorPane();
         this.layout.setPrefHeight(675); this.layout.setPrefHeight(675);
 
         // construct each room
-        // the length should not exceed 9 Rooms
         int transX = 0, transY = 0;
         for (int r = 0; r < roomArray.length; r++) {
             switch (r%3) {
@@ -97,7 +124,8 @@ public class House {
                 case 1: transX = 225; break;
                 case 2: transX = 450; break;
             }
-            // construct an individual room layout
+
+            // construct the room layout
             AnchorPane tempRoom = constructRoomLayout(roomArray[r]);
             tempRoom.setTranslateX(transX); tempRoom.setTranslateY(transY);
             this.layout.getChildren().add(tempRoom);
@@ -107,6 +135,15 @@ public class House {
             }
         }
     }
+
+    /**
+     * Generate the interactive user interface to configure utilities of a specific room
+     * @param room
+     * @param room_layout
+     * @param population
+     * @param stage
+     * @return
+     */
     public AnchorPane constructRoomLayoutSHCversion(Room room, AnchorPane room_layout, int population, Stage stage) {
         AnchorPane roomLayout = new AnchorPane();
         roomLayout.setId("roomLayoutID"+room.getRoomID());
@@ -116,7 +153,7 @@ public class House {
         int ID = room.getRoomID();
         String name = room.getName();
 
-        // labels (no need IDs)
+        // labels
         Label roomIDNameLabel = new Label("#"+ID+" "+name);
         roomIDNameLabel.setTranslateX(10);
         roomLayout.getChildren().add(roomIDNameLabel);
@@ -136,7 +173,7 @@ public class House {
         doorsLabel.setTranslateY(20);
         roomLayout.getChildren().add(doorsLabel);
 
-        // borderlines (no need IDs)
+        // borderlines
         Line line1 = new Line(); line1.setStartX(0); line1.setEndX(225); line1.setTranslateY(20); roomLayout.getChildren().add(line1);
         Line line4 = new Line(); line4.setStartY(20); line4.setEndY(180); line4.setTranslateX(75); roomLayout.getChildren().add(line4);
         Line line5 = new Line(); line5.setStartY(20); line5.setEndY(180); line5.setTranslateX(150); roomLayout.getChildren().add(line5);
@@ -417,6 +454,12 @@ public class House {
 
         return roomLayout;
     }
+
+    /**
+     * Generate the display layout of a Room within a house, where icons will be displayed if utilities are activated.
+     * @param room
+     * @return
+     */
     public AnchorPane constructRoomLayout(Room room) {
         AnchorPane roomLayout = new AnchorPane();
         roomLayout.setId("roomLayoutID"+room.getRoomID());
@@ -434,6 +477,12 @@ public class House {
 
         return roomLayout;
     }
+
+    /**
+     * Check if there are any lights on in a specific Room.
+     * @param room
+     * @return
+     */
     public boolean anyLightsOn(Room room) {
         boolean yes = false;
         for (int light = 0; light < room.getLightCollection().length; light++) {
@@ -444,6 +493,12 @@ public class House {
         }
         return yes;
     }
+
+    /**
+     * Check if there are any doors open for a specific Room.
+     * @param room
+     * @return
+     */
     public boolean anyDoorsOpen(Room room) {
         boolean yes = false;
         for (int door = 0; door < room.getDoorCollection().length; door++) {
@@ -454,6 +509,12 @@ public class House {
         }
         return yes;
     }
+
+    /**
+     * Check if there are any windows open for a specific Room.
+     * @param room
+     * @return
+     */
     public boolean anyWindowsOpen(Room room) {
         boolean yes = false;
         for (int window = 0; window < room.getWindowCollection().length; window++) {
@@ -464,6 +525,11 @@ public class House {
         }
         return yes;
     }
+
+    /**
+     * Append a report of a general household action to the main dashboard's output console, with the date and time of incident.
+     * @param message
+     */
     public void appendMessageToConsole(String message) {
         for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
             if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
