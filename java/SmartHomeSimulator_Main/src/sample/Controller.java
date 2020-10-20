@@ -36,13 +36,13 @@ import sample.Main.*;
 
 public class Controller {
 
-    private static int pixelY = 70;
-    private static int numberOfTimesProfileHyperlinkClicked = 0;
-    private static int numberOfTimesEditContextLinkStage1Accessed = 0;
-    private static int numberOfTimesEditContextLinkStage2Accessed = 0;
-    private static int numberOfAddedProfiles = 0;
-    private static CheckBox[] profileCheckboxes;
-    private static CheckBox[] roomCheckboxes;
+    protected static int pixelY = 70;
+    protected static int numberOfTimesProfileHyperlinkClicked = 0;
+    protected static int numberOfTimesEditContextLinkStage1Accessed = 0;
+    protected static int numberOfTimesEditContextLinkStage2Accessed = 0;
+    protected static int numberOfAddedProfiles = 0;
+    protected static CheckBox[] profileCheckboxes;
+    protected static CheckBox[] roomCheckboxes;
 
     //for LOCAL TIME
     /**
