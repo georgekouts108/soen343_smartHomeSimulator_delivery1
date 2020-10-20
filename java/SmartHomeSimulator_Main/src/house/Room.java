@@ -137,19 +137,6 @@ public class Room {
     public int getNumberOfPeopleInside() {
         return numberOfPeopleInside;
     }
-    public void incrementNumOfPeopleInside() {
-        this.numberOfPeopleInside++;
-    }
-    public void decrementNumOfPeopleInside() {
-        this.numberOfPeopleInside--;
-        try {
-            if (numberOfPeopleInside < 0) {
-                throw new Exception();
-            }
-        }catch(Exception e){
-            this.numberOfPeopleInside = 0;
-        }
-    }
 
     public boolean isVacant() {
         return isVacant;

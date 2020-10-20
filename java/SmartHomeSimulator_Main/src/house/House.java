@@ -17,8 +17,6 @@ import java.util.Scanner;
 
 public class House {
 
-    private static AnchorPane superHousePane = new AnchorPane();
-
     private int numOfRooms;
     private Room[] rooms;
     private AnchorPane layout; // a layout of rooms only
@@ -69,20 +67,11 @@ public class House {
     public int getNumOfRooms() {
         return numOfRooms;
     }
-    public void setNumOfRooms(int numOfRooms) {
-        this.numOfRooms = numOfRooms;
-    }
     public Room[] getRooms() {
         return rooms;
     }
-    public void setRooms(Room[] rooms) {
-        this.rooms = rooms;
-    }
     public AnchorPane getLayout() {
         return layout;
-    }
-    public void setLayout(AnchorPane layout) {
-        this.layout = layout;
     }
 
     // called only once, in the constructor
@@ -109,7 +98,6 @@ public class House {
             }
         }
     }
-
     public AnchorPane constructRoomLayoutSHCversion(Room room, AnchorPane room_layout, int population, Stage stage) {
         AnchorPane roomLayout = new AnchorPane();
         roomLayout.setId("roomLayoutID"+room.getRoomID());
@@ -420,7 +408,6 @@ public class House {
 
         return roomLayout;
     }
-
     public AnchorPane constructRoomLayout(Room room) {
         AnchorPane roomLayout = new AnchorPane();
         roomLayout.setId("roomLayoutID"+room.getRoomID());
@@ -438,7 +425,6 @@ public class House {
 
         return roomLayout;
     }
-
     public boolean anyLightsOn(Room room) {
         boolean yes = false;
         for (int light = 0; light < room.getLightCollection().length; light++) {
@@ -448,15 +434,6 @@ public class House {
             }
         }
         return yes;
-    }
-    public int howManyLightsOn(Room room) {
-        int count = 0;
-        for (int i = 0; i < room.getLightCollection().length; i++) {
-            if (room.getLightCollection()[i].getState()) {
-                count++;
-            }
-        }
-        return count;
     }
     public boolean anyDoorsOpen(Room room) {
         boolean yes = false;
@@ -468,15 +445,6 @@ public class House {
         }
         return yes;
     }
-    public int howManyDoorsOpen(Room room) {
-        int count = 0;
-        for (int i = 0; i < room.getDoorCollection().length; i++) {
-            if (room.getDoorCollection()[i].getState()) {
-                count++;
-            }
-        }
-        return count;
-    }
     public boolean anyWindowsOpen(Room room) {
         boolean yes = false;
         for (int window = 0; window < room.getWindowCollection().length; window++) {
@@ -487,16 +455,6 @@ public class House {
         }
         return yes;
     }
-    public int howManyWindowsOpen(Room room) {
-        int count = 0;
-        for (int i = 0; i < room.getWindowCollection().length; i++) {
-            if (room.getWindowCollection()[i].getState()) {
-                count++;
-            }
-        }
-        return count;
-    }
-
     public void appendMessageToConsole(String message) {
         for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
             if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
