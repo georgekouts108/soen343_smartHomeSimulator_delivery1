@@ -1,6 +1,7 @@
 package junit_tests;
 
 import house.*;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -8,6 +9,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utilities.*;
 import sample.*;
@@ -66,40 +68,83 @@ public class TestUseCase1 extends ApplicationTest {
 
     /**USE CASE #1 -- START AND STOP SIMULATOR*/
 
+    House house = null;
+    FileChooser fileChooser = null;
+
+
     /**TODO: FIX THIS TEST CASE*/
     @org.junit.Test
     public void testUseCase1_turnOnSim() {
         Controller.createNewProfile(new TextField("P"), new RadioButton());
 
-        for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
-            if (Main.getProfileSelection().getChildren().get(a).getId()
-                    .equals("hyperlinkForProfile"+Main.getProfiles()[0].getProfileID())) {
-                Hyperlink loginLink = (Hyperlink) Main.getProfileSelection().getChildren().get(a);
-                Controller.goToMainDashboardScene(Main.getProfiles()[0], loginLink);
-                break;
-            }
-        }
+        Platform.runLater(() -> {
+            fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
 
-        ToggleButton tb = new ToggleButton();
-        Button b = new Button();
-        TextArea oc = new TextArea();
-        TabPane modules = new TabPane();
-        for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
+            Main.setHouseLayoutFile(fileChooser.showOpenDialog(Main.getMain_stage()));
+            if (Main.getHouseLayoutFile() != null) {
+                Main.setHouseLayoutFileName(Main.getHouseLayoutFile().getName());
+                Main.setHouseLayoutFilePathName( Main.getHouseLayoutFile().getPath());
+                Main.getHouseLayoutFile().setReadOnly();
+                try {
+                    house = new House(Main.getHouseLayoutFilePathName());
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                }
+                Main.setHouseholdLocations( house.getRooms());
+                Main.setHouseLayout( house.getLayout());
+                Main.getHouseLayout().setPrefHeight(675);
+                Main.getHouseLayout().setPrefWidth(675);
+                Main.getHouseLayout().setId("houseLayout");
+                Main.getHouseLayout().setTranslateX(615);
+                Main.getHouseLayout().setTranslateY(10);
+                Main.getHouseLayout().setDisable(true);
+                Main.getMain_dashboard().getChildren().add(Main.getHouseLayout());
+                Main.createMainDashboardNecessities();
 
-            if (Main.getMain_dashboard().getChildren().get(a).getId().equals("simulationOnOffButton")) {
-                tb = (ToggleButton) Main.getMain_dashboard().getChildren().get(a);
-                tb.setDisable(false);
-                tb.setSelected(true);
-            } else if (Main.getMain_dashboard().getChildren().get(a).getId().equals("editContextButton")) {
-                b = (Button) Main.getMain_dashboard().getChildren().get(a);
-            } else if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
-                oc = (TextArea) Main.getMain_dashboard().getChildren().get(a);
-            } else if (Main.getMain_dashboard().getChildren().get(a).getId().equals("modulesInterface")) {
-                modules = (TabPane) Main.getMain_dashboard().getChildren().get(a);
+                for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
+                    if (Main.getProfileSelection().getChildren().get(a).getId()
+                            .equals("hyperlinkForProfile"+Main.getProfiles()[0].getProfileID())) {
+                        Hyperlink loginLink = (Hyperlink) Main.getProfileSelection().getChildren().get(a);
+                        Controller.goToMainDashboardScene(Main.getProfiles()[0], loginLink);
+                        break;
+                    }
+                }
+
+                ToggleButton t = new ToggleButton();
+                Button b = new Button();
+                TextArea ta = new TextArea();
+                TabPane tab = new TabPane();
+                for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
+
+                    if (Main.getMain_dashboard().getChildren().get(a).getId().equals("simulationOnOffButton")) {
+                        t = (ToggleButton) Main.getMain_dashboard().getChildren().get(a);
+                        t.setSelected(true);
+                    } else if (Main.getMain_dashboard().getChildren().get(a).getId().equals("editContextButton")) {
+                        b = (Button) Main.getMain_dashboard().getChildren().get(a);
+                    } else if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
+                        ta = (TextArea) Main.getMain_dashboard().getChildren().get(a);
+                    } else if (Main.getMain_dashboard().getChildren().get(a).getId().equals("modulesInterface")) {
+                        tab = (TabPane) Main.getMain_dashboard().getChildren().get(a);
+                    }
+                }
+                ToggleButton finalT = t;
+                TextArea finalTa = ta;
+                Button finalB = b;
+                TabPane finalTab = tab;
+
+                Main.createMainDashboardNecessities();
+                finalT.setText("Stop\nSimulation");
+                finalT.setPrefWidth(finalT.getPrefWidth()); finalT.setPrefHeight(finalT.getPrefHeight());
+                finalB.setDisable(false);
+                Main.getHouseLayout().setDisable(false);
+                finalTa.setDisable(false);
+                finalTab.setDisable(false);
+                Main.setSimulationIsOn(true);
+                Main.createMainDashboardNecessities();
+                assertEquals(true, Main.isSimulationIsOn());
             }
-        }
-        Controller.startSimulation(tb, b, oc, modules);
-        assertEquals(true, Main.isSimulationIsOn());
+        });
     }
 
     @org.junit.Test
