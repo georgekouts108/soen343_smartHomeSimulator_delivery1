@@ -66,8 +66,8 @@ public class TestUseCase9 extends ApplicationTest{
 
     @org.junit.Test
     public void testCase9() {
-    TextField input = new TextField("32");
-    Label expectedLabel = new Label("Outside Temp.\n32°C");
+        TextField input = new TextField("32");
+        Label expectedLabel = new Label("Outside Temp.\n32°C");
 
         Platform.runLater(() -> {
             try{
@@ -87,23 +87,5 @@ public class TestUseCase9 extends ApplicationTest{
                 System.out.print("There was an error while modifying the outdoor temperature.");
             }
         });
-
-        /*
-        for(int i=0; i < Main.getEditContextLayout().getChildren().size(); i++){
-            if (Main.getEditContextLayout().getChildren().get(i).getId().equals("temperatureText")){
-                    TextField tmp = (TextField) Main.getEditContextLayout().getChildren().get(i);
-                    tmp.setText("32.0");
-                    Main.getEditContextLayout().getChildren().set(i, tmp);
-                    break;
-            }
-        }
-
-        for(int i=0; i < Main.getEditContextLayout().getChildren().size(); i++){
-            if (Main.getEditContextLayout().getChildren().get(i).getId().equals("confirmTemperatureButton")){
-                javafx.scene.control.Button button = (javafx.scene.control.Button) Main.getEditContextLayout().getChildren().get(i);
-                button.fire();
-            }
-        }
-        */
     }
 }
