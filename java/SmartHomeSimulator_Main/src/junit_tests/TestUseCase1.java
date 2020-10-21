@@ -2,11 +2,12 @@ package junit_tests;
 
 import house.*;
 import javafx.scene.Scene;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import utilities.*;
 import sample.*;
@@ -63,47 +64,65 @@ public class TestUseCase1 extends ApplicationTest {
         Main.getMain_stage().show();
     }
 
-
     /**USE CASE #1 -- START AND STOP SIMULATOR*/
-    @Before
-    public void setup() throws Exception {
-        try {
-            Controller.createNewProfile(new TextField("P"), new RadioButton());
 
-            for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
-                if (Main.getProfileSelection().getChildren().get(a).getId()
-                        .equals("hyperlinkForProfile"+Main.getProfiles()[0].getProfileID())) {
-                    Hyperlink loginLink = (Hyperlink) Main.getProfileSelection().getChildren().get(a);
-                    Controller.goToMainDashboardScene(Main.getProfiles()[0], loginLink);
-                    break;
-                }
+    /**TODO: FIX THIS TEST CASE*/
+    @org.junit.Test
+    public void testUseCase1_turnOnSim() {
+        Controller.createNewProfile(new TextField("P"), new RadioButton());
+
+        for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
+            if (Main.getProfileSelection().getChildren().get(a).getId()
+                    .equals("hyperlinkForProfile"+Main.getProfiles()[0].getProfileID())) {
+                Hyperlink loginLink = (Hyperlink) Main.getProfileSelection().getChildren().get(a);
+                Controller.goToMainDashboardScene(Main.getProfiles()[0], loginLink);
+                break;
             }
+        }
 
-        }catch (Exception e){}
+        ToggleButton tb = new ToggleButton();
+        Button b = new Button();
+        TextArea oc = new TextArea();
+        TabPane modules = new TabPane();
+        for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
+
+            if (Main.getMain_dashboard().getChildren().get(a).getId().equals("simulationOnOffButton")) {
+                tb = (ToggleButton) Main.getMain_dashboard().getChildren().get(a);
+                tb.setDisable(false);
+                tb.setSelected(true);
+            } else if (Main.getMain_dashboard().getChildren().get(a).getId().equals("editContextButton")) {
+                b = (Button) Main.getMain_dashboard().getChildren().get(a);
+            } else if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
+                oc = (TextArea) Main.getMain_dashboard().getChildren().get(a);
+            } else if (Main.getMain_dashboard().getChildren().get(a).getId().equals("modulesInterface")) {
+                modules = (TabPane) Main.getMain_dashboard().getChildren().get(a);
+            }
+        }
+        Controller.startSimulation(tb, b, oc, modules);
+        assertEquals(true, Main.isSimulationIsOn());
     }
-
-//    @org.junit.Test
-//    public void testUseCase1_turnOnSim() {
-//        for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
-//            if (Main.getMain_dashboard().getChildren().get(a).getId().equals("simulationOnOffButton")) {
-//                ToggleButton tb = (ToggleButton) Main.getMain_dashboard().getChildren().get(a);
-//                tb.setSelected(true);
-//                break;
-//            }
-//        }
-//        assertEquals(true, Main.isSimulationIsOn());
-//    }
 
     @org.junit.Test
     public void testUseCase1_turnOffSim() {
+        Controller.createNewProfile(new TextField("P"), new RadioButton());
+
+        for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
+            if (Main.getProfileSelection().getChildren().get(a).getId()
+                    .equals("hyperlinkForProfile"+Main.getProfiles()[0].getProfileID())) {
+                Hyperlink loginLink = (Hyperlink) Main.getProfileSelection().getChildren().get(a);
+                Controller.goToMainDashboardScene(Main.getProfiles()[0], loginLink);
+                break;
+            }
+        }
+
         for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
             if (Main.getMain_dashboard().getChildren().get(a).getId().equals("simulationOnOffButton")) {
                 ToggleButton tb = (ToggleButton) Main.getMain_dashboard().getChildren().get(a);
                 tb.setSelected(false);
+                assertEquals(false, Main.isSimulationIsOn());
                 break;
             }
         }
-        assertEquals(false, Main.isSimulationIsOn());
     }
 
 

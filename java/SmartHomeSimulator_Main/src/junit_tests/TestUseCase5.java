@@ -1,30 +1,26 @@
 package junit_tests;
 
 import house.*;
+import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import utilities.*;
 import sample.*;
 
-import org.junit.*;
 import static org.junit.Assert.*;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-import org.testfx.api.FxToolkit;
 
-import java.awt.*;
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.testfx.framework.junit.*;
 
 public class TestUseCase5 extends ApplicationTest {
+
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -61,9 +57,38 @@ public class TestUseCase5 extends ApplicationTest {
         Main.getMain_stage().show();
     }
 
+    FileChooser fileChooser = null;
+    House house = null;
 
     @org.junit.Test
     public void testCase5() {
+        Platform.runLater(() -> {
+            fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
 
+            Main.setHouseLayoutFile(fileChooser.showOpenDialog(Main.getMain_stage()));
+            if (Main.getHouseLayoutFile() != null) {
+                Main.setHouseLayoutFileName(Main.getHouseLayoutFile().getName());
+                Main.setHouseLayoutFilePathName( Main.getHouseLayoutFile().getPath());
+                Main.getHouseLayoutFile().setReadOnly();
+                try {
+                    house = new House(Main.getHouseLayoutFilePathName());
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                }
+                Main.setHouseholdLocations( house.getRooms());
+                Main.setHouseLayout( house.getLayout());
+                Main.getHouseLayout().setPrefHeight(675);
+                Main.getHouseLayout().setPrefWidth(675);
+                Main.getHouseLayout().setId("houseLayout");
+                Main.getHouseLayout().setTranslateX(615);
+                Main.getHouseLayout().setTranslateY(10);
+                Main.getHouseLayout().setDisable(true);
+                //Main.getMain_dashboard().getChildren().remove(chooseFileButton);
+                Main.getMain_dashboard().getChildren().add(Main.getHouseLayout());
+                Main.createMainDashboardNecessities();
+            }
+            assertEquals(true, Main.getHouseLayout() != null);
+        });
     }
 }

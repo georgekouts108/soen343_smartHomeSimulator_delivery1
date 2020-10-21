@@ -623,6 +623,7 @@ public class Main extends Application {
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
         fileChooser.setTitle("Load House Layout File");
         Button chooseFileButton = new Button("Select a .txt file\nfor house layout...");
+        chooseFileButton.setId("chooseFileButton");
         chooseFileButton.setTranslateY(300); chooseFileButton.setTranslateX(900);
         chooseFileButton.setOnAction(e -> {
             houseLayoutFile = fileChooser.showOpenDialog(main_stage);
