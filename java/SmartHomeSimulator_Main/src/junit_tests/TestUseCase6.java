@@ -74,11 +74,6 @@ public class TestUseCase6 extends ApplicationTest {
     @org.junit.Test
     public void testCase6() {
 
-<<<<<<< HEAD
-    }
-
-
-=======
         Platform.runLater(() -> {
             try {
                 DatePicker datePicker = new DatePicker();
@@ -173,5 +168,4 @@ public class TestUseCase6 extends ApplicationTest {
         });
 
     }
->>>>>>> 6ef0d200079d9d09a58311782a1645f916627f13
 }
