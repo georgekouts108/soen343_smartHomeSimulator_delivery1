@@ -284,6 +284,8 @@ public class Main extends Application {
         return house;
     }
 
+    public static Room[] gethouseholdLocations(){ return householdLocations; }
+
     /**
      * Access the default house's array of Rooms
      * @return
