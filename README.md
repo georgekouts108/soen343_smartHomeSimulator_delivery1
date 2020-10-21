@@ -25,7 +25,7 @@ Learn how to work with a client in an Agile development team to accomplish chang
 ## Technologies
 
 - Java
-- JavaFX
+- JavaFX (https://gluonhq.com/products/javafx/)
 - Scene Builder
 - CSS
 
