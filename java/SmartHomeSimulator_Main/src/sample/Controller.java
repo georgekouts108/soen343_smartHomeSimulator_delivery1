@@ -1,6 +1,8 @@
 package sample;
 import house.*;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -307,6 +309,15 @@ public class Controller {
 
             TextField tempText = new TextField();
             tempText.setId("temperatureText");
+            tempText.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                    String newValue) {
+                    if (!newValue.matches("\\d*")) {
+                        tempText.setText(newValue.replaceAll("[^\\d*(\\.)?\\d*$]", ""));
+                    }
+                }
+            });
             tempText.setPrefHeight(30);
             tempText.setPrefWidth(60);
             tempText.setTranslateX(450);

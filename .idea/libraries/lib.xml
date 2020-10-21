@@ -11,8 +11,10 @@
       <root url="jar://$PROJECT_DIR$/java/javaFX/javafx-sdk-15/lib/javafx.fxml.jar!/" />
       <root url="jar://$PROJECT_DIR$/java/javaFX/javafx-sdk-15/lib/javafx.swing.jar!/" />
       <root url="file://$PROJECT_DIR$/java/javaFX" />
+      <root url="file://$PROJECT_DIR$/java/JUnit4/jar_files" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/java/JUnit4/jar_files" recursive="false" />
   </library>
 </component>
