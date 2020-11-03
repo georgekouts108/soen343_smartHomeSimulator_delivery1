@@ -25,7 +25,7 @@ public class UserProfile {
         this.profileID = (PROFILE_ID++);
         this.isAdmin = isAdmin;
         this.numberOfTimesHyperlinkClicked = 0;
-        this.isAway = true;
+        this.isAway = false;
     }
 
     public boolean isAway() {

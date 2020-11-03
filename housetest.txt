@@ -3,19 +3,19 @@
 Name= masterbedroom
 Doors= 1
 Windows= 3
-Lights= 2
+Lights= 1
 Ac= true
 -end-
 Name= bedroom
 Doors= 1
 Windows= 2
-Lights= 2
+Lights= 1
 Ac= true
 -end-
 Name= living room
 Doors= 1
 Windows= 4
-Lights= 6
+Lights= 1
 Ac= true
 -end-
 Name= bathroom
@@ -27,6 +27,6 @@ Ac= false
 Name= kitchen
 Doors= 0
 Windows= 3
-Lights= 6
+Lights= 1
 Ac= true
 -end-

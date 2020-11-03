@@ -10,6 +10,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
+import javafx.scene.text.TextAlignment;
 import utilities.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,6 +43,7 @@ public class Controller {
     protected static int numberOfTimesProfileHyperlinkClicked = 0;
     protected static int numberOfTimesEditContextLinkStage1Accessed = 0;
     protected static int numberOfTimesEditContextLinkStage2Accessed = 0;
+    protected static int numberOfTimesAwayLightsPanelAccessed = 0;
     protected static int numberOfAddedProfiles = 0;
     protected static CheckBox[] profileCheckboxes;
     protected static CheckBox[] roomCheckboxes;
@@ -1356,16 +1358,56 @@ public class Controller {
                         Main.profiles[prof].setCurrentLocation(newRoom);
 
                         if ((newRoom != null) && Main.currentActiveProfile.isAway()) {
-                            for (int s = 0; s < Main.SHP_MODULE.getChildren().size(); s++) {
-                                if (Main.SHP_MODULE.getChildren().get(s).getId().equals("setAwayModeButton")) {
-                                    ToggleButton toggleButton = (ToggleButton) Main.SHP_MODULE.getChildren().get(s);
-                                    /**todo: fix frontend bug*/
-                                    toggleAwayButton(toggleButton);
-                                    Main.SHP_MODULE.getChildren().set(s, toggleButton);
-                                    break;
+                            Platform.runLater(()->{
+                                appendMessageToConsole("AWAY mode set to OFF");
+
+                                for (int s = 0; s < Main.SHP_MODULE.getChildren().size(); s++) {
+                                    try {
+                                        if (Main.SHP_MODULE.getChildren().get(s).getId().equals("setAwayModeButton")) {
+                                            ToggleButton toggleButton = (ToggleButton) Main.SHP_MODULE.getChildren().get(s);
+                                            /**todo: fix frontend bug*/
+                                            toggleButton.setSelected(false);
+                                            toggleButton.setText("Turn on AWAY mode");
+                                            Main.SHP_MODULE.getChildren().set(s, toggleButton);
+                                            break;
+                                        }
+                                    } catch (Exception e){}
                                 }
-                            }
+
+                                Main.currentActiveProfile.setAway(false);
+
+                                // unlock all doors
+                                for (int room = 0; room < Main.householdLocations.length; room++) {
+                                    for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
+                                        Main.householdLocations[room].getDoorCollection()[door].setLocked(false);
+                                        appendMessageToConsole("Door #" +
+                                                Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
+                                                Main.householdLocations[room].getName() + " unlocked by SHP module");
+                                    }
+                                }
+
+                                // unlock all "locked" lights, so they may be turned off whenever as usual
+                                for (int room = 0; room < Main.householdLocations.length; room++) {
+                                    for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
+                                        for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
+                                            try {
+                                                if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
+                                                        Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
+                                                    CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
+                                                    if (checkBox.isSelected()) {
+                                                        Main.householdLocations[room].getLightCollection()[light].setLocked(false);
+                                                        appendMessageToConsole("Light #" +
+                                                                Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
+                                                                Main.householdLocations[room].getName() + " unlocked by SHP module");
+                                                    }
+                                                }
+                                            }catch (Exception e){}
+                                        }
+                                    }
+                                }
+                            });
                         }
+
                         Main.currentLocation = newRoom;
                         break;
                     }
@@ -1388,7 +1430,6 @@ public class Controller {
                 Main.currentActiveProfile.setAway(true);
 
                 // close all windows;
-                /**todo: make sure the window icons do not show in the layout */
                 for (int room = 0; room < Main.householdLocations.length; room++) {
                     for (int win = 0; win < Main.householdLocations[room].getWindowCollection().length; win++) {
                         Main.householdLocations[room].getWindowCollection()[win].setState(false);
@@ -1414,6 +1455,28 @@ public class Controller {
                     }
                     Main.house.setIconVisibility(Main.householdLocations[room], "Door", false);
                 }
+
+                // turn on a custom selection of lights and keep them "locked" until AWAY mode is off
+                for (int room = 0; room < Main.householdLocations.length; room++) {
+                    for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
+                        for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
+                            try {
+                                if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
+                                        Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
+                                    CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
+                                    if (checkBox.isSelected()) {
+                                        Main.householdLocations[room].getLightCollection()[light].setState(true);
+                                        Main.householdLocations[room].getLightCollection()[light].setLocked(true);
+                                        appendMessageToConsole("Light #" +
+                                                Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
+                                                Main.householdLocations[room].getName() + " locked by SHP module");
+                                        Main.house.setIconVisibility(Main.householdLocations[room], "Light", true);
+                                    }
+                                }
+                            }catch (Exception e){}
+                        }
+                    }
+                }
             }
             else {
                 appendMessageToConsole("AWAY mode set to OFF");
@@ -1429,6 +1492,26 @@ public class Controller {
                                 Main.householdLocations[room].getName() + " unlocked by SHP module");
                     }
                 }
+
+                // unlock all "locked" lights, so they may be turned off whenever as usual
+                for (int room = 0; room < Main.householdLocations.length; room++) {
+                    for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
+                        for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
+                            try {
+                                if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
+                                        Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
+                                    CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
+                                    if (checkBox.isSelected()) {
+                                        Main.householdLocations[room].getLightCollection()[light].setLocked(false);
+                                        appendMessageToConsole("Light #" +
+                                                Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
+                                                Main.householdLocations[room].getName() + " unlocked by SHP module");
+                                    }
+                                }
+                            }catch (Exception e){}
+                        }
+                    }
+                }
             }
         } catch(Exception e) {
             tb.setSelected(false);
@@ -1436,6 +1519,61 @@ public class Controller {
         }
     }
 
+    public static void createAwayLightsPanel() {
+        if (numberOfTimesAwayLightsPanelAccessed==0) {
+            Label promptLabel = new Label("Select below which lights\nshould remain on during\nAWAY mode");
+            promptLabel.setTranslateX(20); promptLabel.setTranslateY(20);
+            promptLabel.setTextAlignment(TextAlignment.CENTER);
+
+            int pixel_Y = 80, pixel_X = 20;
+            for (int r = 0; r < Main.householdLocations.length; r++) {
+                for (int l = 0; l < Main.householdLocations[r].getLightCollection().length; l++) {
+                    CheckBox lightBox = new CheckBox("Light #"
+                            +Main.householdLocations[r].getLightCollection()[l].getUtilityID()+" in "+
+                            Main.householdLocations[r].getName());
+                    lightBox.setTranslateX(pixel_X);
+                    lightBox.setTranslateY(pixel_Y+=20);
+                    lightBox.setId("awayModeLight#"+Main.householdLocations[r].getLightCollection()[l].getUtilityID());
+
+                    int finalR = r;
+                    int finalL = l;
+                    lightBox.setOnAction(e->{
+
+                        // if you click the checkbox during AWAY mode
+                        if (Main.currentActiveProfile.isAway()) {
+                            if (lightBox.isSelected()) {
+                                lightBox.setSelected(false);
+                            }
+                            else {
+                                lightBox.setSelected(true);
+                            }
+                        }
+                    });
+
+                    Main.SHP_LightsConfigAWAYmode.getChildren().add(lightBox);
+                }
+            }
+            Button closeButton = new Button("Close");
+            closeButton.setTranslateX(100); closeButton.setTranslateY(330);
+            closeButton.setOnAction(event->Main.awayLightsStage.close());
+
+            Main.SHP_LightsConfigAWAYmode.getChildren().add(promptLabel);
+            Main.SHP_LightsConfigAWAYmode.getChildren().add(closeButton);
+        }
+        numberOfTimesAwayLightsPanelAccessed++;
+    }
+
+    public static void configureAwayLights() {
+        Main.awayLightsStage = new Stage();
+        Main.awayLightsStage.setResizable(false);
+        Main.awayLightsStage.setHeight(380);
+        Main.awayLightsStage.setWidth(250);
+        Main.awayLightsStage.setTitle("AWAY mode - Lights Configuration");
+        createAwayLightsPanel();
+        Main.awayLightsStage.setScene(Main.SHP_LightsConfigAWAYscene);
+        Main.awayLightsStage.showAndWait();
+    }
+    
     public static void appendMessageToConsole(String message) {
         for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
             if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {

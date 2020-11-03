@@ -214,8 +214,16 @@ public class House {
                     // turn the light off
                     for (int light = 0; light < room.getLightCollection().length; light++) {
                         if (room.getLightCollection()[light].getUtilityID() == Integer.parseInt(checkBox.getId().substring(16))) {
-                            room.getLightCollection()[light].setState(false);
-                            Controller.appendMessageToConsole("Light #"+room.getLightCollection()[light].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
+                            if (!room.getLightCollection()[light].isLocked()) {
+                                room.getLightCollection()[light].setState(false);
+                                Controller.appendMessageToConsole("Light #"+room.getLightCollection()[light].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
+                            }
+                            else {
+                                checkBox.setSelected(true);
+                                Controller.appendMessageToConsole("Locked Light #"+room.getLightCollection()[light].getUtilityID()+" " +
+                                        "attempted to close in Room #"+room.getRoomID()+" "+room.getName());
+                            }
+
                             break;
                         }
                     }

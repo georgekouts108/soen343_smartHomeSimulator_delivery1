@@ -53,6 +53,7 @@ public class Main extends Application {
     protected static Stage main_stage;
     protected static Stage profileBox;
     protected static Stage editContextStage;
+    protected static Stage awayLightsStage;
 
     /**SCENE ELEMENTS*/
     protected static Scene dashboardScene;
@@ -88,6 +89,8 @@ public class Main extends Application {
     protected static boolean is_away;
     protected static int timeLimitBeforeAlert;
     protected static TextArea suspBox;
+    protected static AnchorPane SHP_LightsConfigAWAYmode;
+    protected static Scene SHP_LightsConfigAWAYscene;
 
     /**VARIABLES FOR COUNTING ACCESSES TO CERTAIN SCENES */
     protected static int numberOfProfiles = 0;
@@ -333,6 +336,10 @@ public class Main extends Application {
         editContextScene = new Scene(editContextLayout, 650, 650);
         editContextLayout2 = new AnchorPane();
         editContextScene2 = new Scene(editContextLayout2, 650, 650);
+
+        /**SHP MODULE ANCHORPANES*/
+        SHP_LightsConfigAWAYmode = new AnchorPane();
+        SHP_LightsConfigAWAYscene = new Scene(SHP_LightsConfigAWAYmode, 350,225);
 
         /**SET THE MAIN STAGE*/
         main_stage.setTitle("Smart Home Simulator - No user");
@@ -1051,7 +1058,7 @@ public class Main extends Application {
         Text warningText = new Text(); warningText.setTranslateY(40);
         warningText.setText("Enter the amount of time (minutes) " +
                 "before alerting the authorities after any motion detectors are triggered (AWAY mode only):");
-        warningText.setTextAlignment(TextAlignment.CENTER); warningText.setWrappingWidth(480);
+        warningText.setWrappingWidth(480);
 
         TextField timeBox = new TextField(); timeBox.setPrefHeight(Region.USE_COMPUTED_SIZE); timeBox.setPrefWidth(60);
         timeBox.setTranslateX(200); timeBox.setTranslateY(70);
@@ -1119,7 +1126,15 @@ public class Main extends Application {
         tb.setTranslateX(250);
         tb.setOnAction(e->sample.Controller.toggleAwayButton(tb));
 
-        SHP_MODULE.getChildren().addAll(tb, confirmButton, suspBox, suspiciousLabel, line, timeLimit, timeBox, warningText);
+        Button awayLightsButton = new Button("Lights\nSettings for\nAWAY mode");
+        awayLightsButton.setTranslateX(380); awayLightsButton.setTranslateY(50);
+        awayLightsButton.setOnAction(e->Controller.configureAwayLights());
+
+        if (numberOfTimesSHPModuleCreated==0) {
+            SHP_MODULE.getChildren().addAll(tb, confirmButton, suspBox,
+                    suspiciousLabel, line, timeLimit, timeBox, warningText, awayLightsButton);
+        }
+
 
         numberOfTimesSHPModuleCreated++;
 
