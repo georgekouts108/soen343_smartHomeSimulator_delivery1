@@ -1354,13 +1354,98 @@ public class Controller {
                 try {
                     if (Main.profiles[prof].getProfileID() == Main.currentActiveProfile.getProfileID()) {
                         Main.profiles[prof].setCurrentLocation(newRoom);
+
+                        if ((newRoom != null) && Main.currentActiveProfile.isAway()) {
+                            for (int s = 0; s < Main.SHP_MODULE.getChildren().size(); s++) {
+                                if (Main.SHP_MODULE.getChildren().get(s).getId().equals("setAwayModeButton")) {
+                                    ToggleButton toggleButton = (ToggleButton) Main.SHP_MODULE.getChildren().get(s);
+                                    /**todo: fix frontend bug*/
+                                    toggleAwayButton(toggleButton);
+                                    Main.SHP_MODULE.getChildren().set(s, toggleButton);
+                                    break;
+                                }
+                            }
+                        }
                         Main.currentLocation = newRoom;
                         break;
                     }
-                } catch (Exception e) {
-                }
+                } catch (Exception e) {}
             }
         }catch(Exception exc){}
+    }
+
+    /**TODO: SHP MODULE METHODS*/
+
+    public static void toggleAwayButton(ToggleButton tb) {
+        try {
+            if (Main.currentLocation != null) {
+                throw new Exception();
+            }
+
+            if (tb.isSelected()) {
+                appendMessageToConsole("AWAY mode set to ON");
+                tb.setText("Turn off AWAY mode");
+                Main.currentActiveProfile.setAway(true);
+
+                // close all windows;
+                /**todo: make sure the window icons do not show in the layout */
+                for (int room = 0; room < Main.householdLocations.length; room++) {
+                    for (int win = 0; win < Main.householdLocations[room].getWindowCollection().length; win++) {
+                        Main.householdLocations[room].getWindowCollection()[win].setState(false);
+                        appendMessageToConsole("Window #" +
+                                Main.householdLocations[room].getWindowCollection()[win].getUtilityID() + " in " +
+                                Main.householdLocations[room].getName() + " closed by SHP module");
+                    }
+
+                    Main.house.setIconVisibility(Main.householdLocations[room], "Window", false);
+                }
+
+                // close and lock all doors
+                for (int room = 0; room < Main.householdLocations.length; room++) {
+                    for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
+                        Main.householdLocations[room].getDoorCollection()[door].setState(false);
+                        appendMessageToConsole("Door #" +
+                                Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
+                                Main.householdLocations[room].getName() + " closed by SHP module");
+                        Main.householdLocations[room].getDoorCollection()[door].setLocked(true);
+                        appendMessageToConsole("Door #" +
+                                Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
+                                Main.householdLocations[room].getName() + " locked by SHP module");
+                    }
+                    Main.house.setIconVisibility(Main.householdLocations[room], "Door", false);
+                }
+            }
+            else {
+                appendMessageToConsole("AWAY mode set to OFF");
+                tb.setText("Turn on AWAY mode");
+                Main.currentActiveProfile.setAway(false);
+
+                // unlock all doors
+                for (int room = 0; room < Main.householdLocations.length; room++) {
+                    for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
+                        Main.householdLocations[room].getDoorCollection()[door].setLocked(false);
+                        appendMessageToConsole("Door #" +
+                                Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
+                                Main.householdLocations[room].getName() + " unlocked by SHP module");
+                    }
+                }
+            }
+        } catch(Exception e) {
+            tb.setSelected(false);
+            appendMessageToConsole("Failed attempt to set AWAY mode while inside the house.");
+        }
+    }
+
+    public static void appendMessageToConsole(String message) {
+        for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
+            if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
+                TextArea textArea = (TextArea) Main.getMain_dashboard().getChildren().get(a);
+                textArea.appendText(LocalDateTime.now().toString().substring(0,10)+ " "+
+                        LocalDateTime.now().toString().substring(11,19)+" -- "+message+"\n");
+                Main.getMain_dashboard().getChildren().set(a, textArea);
+                break;
+            }
+        }
     }
 
 }

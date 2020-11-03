@@ -12,6 +12,7 @@ public class UserProfile {
     private Room currentLocation;
     private boolean isAdmin;
     private int numberOfTimesHyperlinkClicked;
+    private boolean isAway;
 
     /**
      * UserProfile constructor
@@ -24,6 +25,15 @@ public class UserProfile {
         this.profileID = (PROFILE_ID++);
         this.isAdmin = isAdmin;
         this.numberOfTimesHyperlinkClicked = 0;
+        this.isAway = true;
+    }
+
+    public boolean isAway() {
+        return isAway;
+    }
+
+    public void setAway(boolean away) {
+        isAway = away;
     }
 
     /**

@@ -1,6 +1,7 @@
 package house;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import utilities.*;
 import sample.*;
 
@@ -79,23 +80,34 @@ public class Room {
         this.iconLight_view.setImage(iconLight); this.iconLight_view.setId("iconLightViewRoom#"+this.roomID);
         this.iconLight_view.setFitWidth(42); this.iconLight_view.setFitHeight(20);
         this.iconLight_view.setTranslateX(2); this.iconLight_view.setTranslateY(180);
+        this.iconLight_view.setVisible(false);
 
         this.iconWindow_view.setImage(iconWindow); this.iconWindow_view.setId("iconWindowViewRoom#"+this.roomID);
         this.iconWindow_view.setFitWidth(45); this.iconWindow_view.setFitHeight(25);
         this.iconWindow_view.setTranslateX(45); this.iconWindow_view.setTranslateY(180);
+        this.iconWindow_view.setVisible(false);
 
         this.iconDoor_view.setImage(iconDoor); this.iconDoor_view.setId("iconDoorViewRoom#"+this.roomID);
         this.iconDoor_view.setFitWidth(45); this.iconDoor_view.setFitHeight(25);
         this.iconDoor_view.setTranslateX(90); this.iconDoor_view.setTranslateY(180);
+        this.iconDoor_view.setVisible(false);
 
         this.iconMD_view.setImage(iconMotionDet); this.iconMD_view.setId("iconMDViewRoom#"+this.roomID);
         this.iconMD_view.setFitWidth(45); this.iconMD_view.setFitHeight(25);
         this.iconMD_view.setTranslateX(135); this.iconMD_view.setTranslateY(180);
+        this.iconMD_view.setVisible(false);
 
         this.iconAC_view.setImage(iconAC); this.iconAC_view.setId("iconACViewRoom#"+this.roomID);
         this.iconAC_view.setFitWidth(45); this.iconAC_view.setFitHeight(25);
         this.iconAC_view.setTranslateX(180); this.iconAC_view.setTranslateY(180);
+        this.iconAC_view.setVisible(false);
     }
+
+    public void setIconLightVisibility(boolean v) { this.iconLight_view.setVisible(v); }
+    public void setIconWindowVisibility(boolean v) { this.iconWindow_view.setVisible(v); }
+    public void setIconDoorVisibility(boolean v) { this.iconDoor_view.setVisible(v); }
+    public void setIconMDVisibility(boolean v) { this.iconMD_view.setVisible(v); }
+    public void setIconACVisibility(boolean v) { this.iconAC_view.setVisible(v); }
 
     /**
      * Access the Light-bulb icon
@@ -104,7 +116,6 @@ public class Room {
     public ImageView getIconLight_view() {
         return iconLight_view;
     }
-
     /**
      * Access the Door icon
      * @return
@@ -112,7 +123,6 @@ public class Room {
     public ImageView getIconDoor_view() {
         return iconDoor_view;
     }
-
     /**
      * Access the Air Conditioner icon
      * @return
@@ -120,7 +130,6 @@ public class Room {
     public ImageView getIconAC_view() {
         return iconAC_view;
     }
-
     /**
      * Access the Window icon
      * @return
@@ -128,7 +137,6 @@ public class Room {
     public ImageView getIconWindow_view() {
         return iconWindow_view;
     }
-
     /**
      * Access the Motion Detector icon
      * @return

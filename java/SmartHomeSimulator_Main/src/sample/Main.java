@@ -29,6 +29,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import sample.Controller.*;
+import sample.Main.*;
 import javax.sound.sampled.Control;
 import javax.swing.*;
 import java.awt.*;
@@ -851,8 +852,10 @@ public class Main extends Application {
             }
         }
 
-        Button confirmLocationButton = new Button("Set Location"); confirmLocationButton.setId("confirmLocationButton");
-        confirmLocationButton.setTranslateX(200); confirmLocationButton.setTranslateY(260);
+        Button confirmLocationButton = new Button("Set Location");
+        confirmLocationButton.setId("confirmLocationButton");
+        confirmLocationButton.setTranslateX(200);
+        confirmLocationButton.setTranslateY(260);
         confirmLocationButton.setOnAction(e->{
             for (int a = 0; a < main_dashboard.getChildren().size(); a++) {
                 try {
@@ -1064,14 +1067,23 @@ public class Main extends Application {
             }
         }
 
-        Label timeLimit = new Label(); timeLimit.setText("Time before Alert: 0 min."); timeLimit.setTranslateY(70); timeLimit.setTranslateX(10);
+        Label timeLimit = new Label();
+        timeLimit.setText("Time before Alert: 0 min.");
+        timeLimit.setTranslateY(70);
+        timeLimit.setTranslateX(10);
 
         Line line = new Line(); line.setStartX(0);line.setEndX(500); line.setTranslateY(120);
 
-        Label suspiciousLabel = new Label("Suspicious Activity Log"); suspiciousLabel.setTranslateY(120); suspiciousLabel.setTranslateX(50);
+        Label suspiciousLabel = new Label("Suspicious Activity Log");
+        suspiciousLabel.setTranslateY(120); suspiciousLabel.setTranslateX(50);
 
-        suspBox = new TextArea(); suspBox.setPrefHeight(253); suspBox.setPrefWidth(357);
-        suspBox.setTranslateX(50); suspBox.setTranslateY(140); suspBox.setWrapText(true);
+        suspBox = new TextArea();
+        suspBox.setPrefHeight(253);
+        suspBox.setPrefWidth(357);
+        suspBox.setTranslateX(50);
+        suspBox.setTranslateY(140);
+        suspBox.setWrapText(true);
+
         if ((currentActiveProfile==null)) {
             suspBox.setDisable(true);
         }
@@ -1084,7 +1096,10 @@ public class Main extends Application {
             }
         }
 
-        Button confirmButton = new Button("Confirm"); confirmButton.setTranslateY(70); confirmButton.setTranslateX(270); confirmButton.setDisable(true);
+        Button confirmButton = new Button("Confirm");
+        confirmButton.setTranslateY(70);
+        confirmButton.setTranslateX(270);
+        confirmButton.setDisable(true);
         //confirmButton.setOnAction(e->sample.Controller.setTimeLimitAwayMode(timeBox, timeLimit));
         if ((currentActiveProfile==null)) {
             confirmButton.setDisable(true);
@@ -1098,19 +1113,11 @@ public class Main extends Application {
             }
         }
 
-        ToggleButton tb = new ToggleButton(); tb.setText("Set to AWAY mode"); tb.setTranslateX(250);
-        //tb.setOnAction(e->sample.Controller.toggleAwayButton(tb, timeBox, timeLimit, confirmButton));
-        if ((currentActiveProfile==null)) {
-            tb.setDisable(true);
-        }
-        else {
-            if (simulationIsOn) {
-                tb.setDisable(true);
-            }
-            else {
-                tb.setDisable(false);
-            }
-        }
+        ToggleButton tb = new ToggleButton();
+        tb.setId("setAwayModeButton");
+        tb.setText("Turn on AWAY mode");
+        tb.setTranslateX(250);
+        tb.setOnAction(e->sample.Controller.toggleAwayButton(tb));
 
         SHP_MODULE.getChildren().addAll(tb, confirmButton, suspBox, suspiciousLabel, line, timeLimit, timeBox, warningText);
 

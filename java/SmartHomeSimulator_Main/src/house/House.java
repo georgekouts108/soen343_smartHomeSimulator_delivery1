@@ -4,11 +4,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import sample.*;
 import utilities.*;
+import sample.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -145,6 +148,7 @@ public class House {
      * @return
      */
     public AnchorPane constructRoomLayoutSHCversion(Room room, AnchorPane room_layout, int population, Stage stage) {
+
         AnchorPane roomLayout = new AnchorPane();
         roomLayout.setId("roomLayoutID"+room.getRoomID());
         roomLayout.setPrefWidth(225); roomLayout.setPrefHeight(350);
@@ -201,7 +205,7 @@ public class House {
                     for (int light = 0; light < room.getLightCollection().length; light++) {
                         if (room.getLightCollection()[light].getUtilityID() == Integer.parseInt(checkBox.getId().substring(16))) {
                             room.getLightCollection()[light].setState(true);
-                            appendMessageToConsole("Light #"+room.getLightCollection()[light].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
+                            Controller.appendMessageToConsole("Light #"+room.getLightCollection()[light].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
                             break;
                         }
                     }
@@ -211,27 +215,16 @@ public class House {
                     for (int light = 0; light < room.getLightCollection().length; light++) {
                         if (room.getLightCollection()[light].getUtilityID() == Integer.parseInt(checkBox.getId().substring(16))) {
                             room.getLightCollection()[light].setState(false);
-                            appendMessageToConsole("Light #"+room.getLightCollection()[light].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
+                            Controller.appendMessageToConsole("Light #"+room.getLightCollection()[light].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
                             break;
                         }
                     }
                 }
                 if (anyLightsOn(room)) {
-                    boolean isLightIconThere = false;
-                    for (int a = 0; a < room_layout.getChildren().size(); a++) {
-                        if (room_layout.getChildren().contains(room.getIconLight_view())) {
-                            isLightIconThere = true;
-                            break;
-                        }
-                    }
-                    if (!isLightIconThere){
-                        room_layout.getChildren().add(room.getIconLight_view());
-                    }
+                    setIconVisibility(room, "Light", true);
                 }
                 else {
-                    try {
-                        room_layout.getChildren().remove(room.getIconLight_view());
-                    }catch (Exception ex){}
+                    setIconVisibility(room, "Light", false);
                 }
             });
             roomLayout.getChildren().add(checkBox);
@@ -259,10 +252,10 @@ public class House {
                         if (room.getWindowCollection()[win].getUtilityID() == Integer.parseInt(checkBox.getId().substring(17))) {
                             if (!room.getWindowCollection()[win].isBlocked()) {
                                 room.getWindowCollection()[win].setState(true);
-                                appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
+                                Controller.appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
                             }
                             else {
-                                appendMessageToConsole("User attempted to open blocked Window #"+room.getWindowCollection()[win].getUtilityID()+" in Room #"+room.getRoomID()+" "+room.getName());
+                                Controller.appendMessageToConsole("User attempted to open blocked Window #"+room.getWindowCollection()[win].getUtilityID()+" in Room #"+room.getRoomID()+" "+room.getName());
                                 checkBox.setSelected(false);
                             }
                             break;
@@ -275,10 +268,10 @@ public class House {
                         if (room.getWindowCollection()[win].getUtilityID() == Integer.parseInt(checkBox.getId().substring(17))) {
                             if (!room.getWindowCollection()[win].isBlocked()) {
                                 room.getWindowCollection()[win].setState(false);
-                                appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
+                                Controller.appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
                             }
                             else {
-                                appendMessageToConsole("User attempted to close blocked Window #"+room.getWindowCollection()[win].getUtilityID()+" in Room #"+room.getRoomID()+" "+room.getName());
+                                Controller.appendMessageToConsole("User attempted to close blocked Window #"+room.getWindowCollection()[win].getUtilityID()+" in Room #"+room.getRoomID()+" "+room.getName());
                                 checkBox.setSelected(true);
 
                             }
@@ -287,21 +280,10 @@ public class House {
                     }
                 }
                 if (anyWindowsOpen(room)) {
-                    boolean isWindowIconThere = false;
-                    for (int a = 0; a < room_layout.getChildren().size(); a++) {
-                        if (room_layout.getChildren().contains(room.getIconWindow_view())) {
-                            isWindowIconThere = true;
-                            break;
-                        }
-                    }
-                    if (!isWindowIconThere){
-                        room_layout.getChildren().add(room.getIconWindow_view());
-                    }
+                    setIconVisibility(room, "Window", true);
                 }
                 else {
-                    try {
-                        room_layout.getChildren().remove(room.getIconWindow_view());
-                    }catch (Exception ex){}
+                    setIconVisibility(room, "Window", false);
                 }
             });
             roomLayout.getChildren().add(checkBox);
@@ -324,11 +306,18 @@ public class House {
 
             checkBox.setOnAction(e->{
                 if (checkBox.isSelected()) {
-                    // open the door
+
+                    // open the door (if unlocked)
                     for (int door = 0; door < room.getDoorCollection().length; door++) {
                         if (room.getDoorCollection()[door].getUtilityID() == Integer.parseInt(checkBox.getId().substring(15))) {
-                            room.getDoorCollection()[door].setState(true);
-                            appendMessageToConsole("Door #"+room.getDoorCollection()[door].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
+                            if (!room.getDoorCollection()[door].isLocked()) {
+                                room.getDoorCollection()[door].setState(true);
+                                Controller.appendMessageToConsole("Door #"+room.getDoorCollection()[door].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
+                            }
+                            else {
+                                checkBox.setSelected(false);
+                                Controller.appendMessageToConsole("Failed to open locked Door #"+room.getDoorCollection()[door].getUtilityID()+" to Room #"+room.getRoomID()+" "+room.getName());
+                            }
                             break;
                         }
                     }
@@ -337,28 +326,23 @@ public class House {
                     // close the door
                     for (int door = 0; door < room.getDoorCollection().length; door++) {
                         if (room.getDoorCollection()[door].getUtilityID() == Integer.parseInt(checkBox.getId().substring(15))) {
-                            room.getDoorCollection()[door].setState(false);
-                            appendMessageToConsole("Door #"+room.getDoorCollection()[door].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
+                            if (!room.getDoorCollection()[door].isLocked()) {
+                                room.getDoorCollection()[door].setState(false);
+                                Controller.appendMessageToConsole("Door #"+room.getDoorCollection()[door].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
+                            }
+                            else {
+                                checkBox.setSelected(false);
+                                Controller.appendMessageToConsole("Failed to close locked Door #"+room.getDoorCollection()[door].getUtilityID()+" to Room #"+room.getRoomID()+" "+room.getName());
+                            }
                             break;
                         }
                     }
                 }
                 if (anyDoorsOpen(room)) {
-                    boolean isDoorIconThere = false;
-                    for (int a = 0; a < room_layout.getChildren().size(); a++) {
-                        if (room_layout.getChildren().contains(room.getIconDoor_view())) {
-                            isDoorIconThere = true;
-                            break;
-                        }
-                    }
-                    if (!isDoorIconThere){
-                        room_layout.getChildren().add(room.getIconDoor_view());
-                    }
+                    setIconVisibility(room, "Door", true);
                 }
                 else {
-                    try {
-                        room_layout.getChildren().remove(room.getIconDoor_view());
-                    }catch (Exception ex){}
+                    setIconVisibility(room, "Door", false);
                 }
             });
             roomLayout.getChildren().add(checkBox);
@@ -387,21 +371,16 @@ public class House {
                         break;
                     }
                 }
-                if (!isMdIconThere){
-                    room_layout.getChildren().add(room.getIconMD_view());
-                }
-                appendMessageToConsole("Motion detector triggered in Room #"+room.getRoomID()+" "+room.getName());
+                setIconVisibility(room, "MD", true);
+                Controller.appendMessageToConsole("Motion detector triggered in Room #"+room.getRoomID()+" "+room.getName());
             }
             else {
                 room.getMd().setState(false);
-                try {
-                    room_layout.getChildren().remove(room.getIconMD_view());
-                }catch(Exception ex){}
-                appendMessageToConsole("Motion detector disabled in Room #"+room.getRoomID()+" "+room.getName());
+                setIconVisibility(room, "MD", false);
+                Controller.appendMessageToConsole("Motion detector disabled in Room #"+room.getRoomID()+" "+room.getName());
             }
         });
         roomLayout.getChildren().add(mdCheckbox);
-
 
         if (room.getAc() != null) {
             CheckBox acCheckbox = new CheckBox("AC on");
@@ -425,17 +404,13 @@ public class House {
                             break;
                         }
                     }
-                    if (!isAcIconThere){
-                        room_layout.getChildren().add(room.getIconAC_view());
-                    }
-                    appendMessageToConsole("AC turned on in Room #"+room.getRoomID()+" "+room.getName());
+                    setIconVisibility(room, "AC", true);
+                    Controller.appendMessageToConsole("AC turned on in Room #"+room.getRoomID()+" "+room.getName());
                 }
                 else {
                     room.getAc().setState(false);
-                    try {
-                        room_layout.getChildren().remove(room.getIconAC_view());
-                    }catch(Exception ex){}
-                    appendMessageToConsole("AC turned off in Room #"+room.getRoomID()+" "+room.getName());
+                    setIconVisibility(room, "AC", false);
+                    Controller.appendMessageToConsole("AC turned off in Room #"+room.getRoomID()+" "+room.getName());
                 }
             });
             roomLayout.getChildren().add(acCheckbox);
@@ -474,6 +449,9 @@ public class House {
         Line line7 = new Line(); line7.setStartY(180); line7.setEndY(205); line7.setTranslateX(90); roomLayout.getChildren().add(line7);
         Line line8 = new Line(); line8.setStartY(180); line8.setEndY(205); line8.setTranslateX(135); roomLayout.getChildren().add(line8);
         Line line9 = new Line(); line9.setStartY(180); line9.setEndY(205); line9.setTranslateX(180); roomLayout.getChildren().add(line9);
+
+        roomLayout.getChildren().addAll(room.getIconAC_view(), room.getIconDoor_view(), room.getIconLight_view(),
+                room.getIconMD_view(), room.getIconWindow_view());
 
         return roomLayout;
     }
@@ -526,19 +504,38 @@ public class House {
         return yes;
     }
 
-    /**
-     * Append a report of a general household action to the main dashboard's output console, with the date and time of incident.
-     * @param message
-     */
-    public void appendMessageToConsole(String message) {
-        for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
-            if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
-                TextArea textArea = (TextArea) Main.getMain_dashboard().getChildren().get(a);
-                textArea.appendText(LocalDateTime.now().toString().substring(0,10)+ " "+
-                        LocalDateTime.now().toString().substring(11,19)+" -- "+message+"\n");
-                Main.getMain_dashboard().getChildren().set(a, textArea);
-                break;
+    public void setIconVisibility(Room room, String utilityType, boolean isVisible) {
+        try {
+            for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {
+                if (this.layout.getChildren().get(lay).getId().equals("roomLayoutID"+room.getRoomID())) {
+                    /////////////
+                    AnchorPane room_layout = (AnchorPane) this.layout.getChildren().get(lay);
+
+                    if (utilityType.equals("Light")) { room.setIconLightVisibility(isVisible); }
+                    else if (utilityType.equals("Window")) { room.setIconWindowVisibility(isVisible); }
+                    else if (utilityType.equals("Door")) { room.setIconDoorVisibility(isVisible); }
+                    else if (utilityType.equals("MD")) { room.setIconMDVisibility(isVisible); }
+                    else if (utilityType.equals("AC")) { room.setIconACVisibility(isVisible); }
+
+                    for (int l = 0; l < room_layout.getChildren().size(); l++) {
+                        if ((room_layout.getChildren().get(l).getId().equals("icon"+utilityType+"ViewRoom#"+room.getRoomID()))) {
+                            if (utilityType.equals("Light")) { room_layout.getChildren().set(l, room.getIconLight_view()); }
+                            else if (utilityType.equals("Window")) { room_layout.getChildren().set(l, room.getIconWindow_view()); }
+                            else if (utilityType.equals("Door")) { room_layout.getChildren().set(l, room.getIconDoor_view()); }
+                            else if (utilityType.equals("MD")) { room_layout.getChildren().set(l, room.getIconMD_view()); }
+                            else if (utilityType.equals("AC")) { room_layout.getChildren().set(l, room.getIconAC_view()); }
+                            break;
+                        }
+                    }
+
+                    this.layout.getChildren().set(lay, room_layout);
+                    /////////////
+                    break;
+                }
             }
-        }
+
+
+
+        }catch (Exception ex){}
     }
 }
