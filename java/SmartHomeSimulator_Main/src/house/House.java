@@ -201,6 +201,11 @@ public class House {
                     // turn the light on
                     for (int light = 0; light < room.getLightCollection().length; light++) {
                         if (room.getLightCollection()[light].getUtilityID() == Integer.parseInt(checkBox.getId().substring(16))) {
+
+                            /**TODO: Add a condition that looks at the "currentActiveProfile"'s
+                             *  type (and perhaps location) and only turn the light on if the profile
+                             *  has permission, or else keep the light off */
+
                             room.getLightCollection()[light].setState(true);
                             Controller.appendMessageToConsole("Light #"+room.getLightCollection()[light].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
                             break;
@@ -212,6 +217,11 @@ public class House {
                     for (int light = 0; light < room.getLightCollection().length; light++) {
                         if (room.getLightCollection()[light].getUtilityID() == Integer.parseInt(checkBox.getId().substring(16))) {
                             if (!room.getLightCollection()[light].isLocked()) {
+
+                                /**TODO: Add a condition that looks at the "currentActiveProfile"'s
+                                 *  type (and perhaps location) and only turn the light off if the profile
+                                 *  has permission, or else keep the light on */
+
                                 room.getLightCollection()[light].setState(false);
                                 Controller.appendMessageToConsole("Light #"+room.getLightCollection()[light].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
                             }
@@ -256,6 +266,11 @@ public class House {
                     for (int win = 0; win < room.getWindowCollection().length; win++) {
                         if (room.getWindowCollection()[win].getUtilityID() == Integer.parseInt(checkBox.getId().substring(17))) {
                             if (!room.getWindowCollection()[win].isBlocked()) {
+
+                                /**TODO: Add a condition that looks at the "currentActiveProfile"'s
+                                 *  type (and perhaps location) and only open the window if the profile
+                                 *  has permission, or else keep the window in its current state */
+
                                 room.getWindowCollection()[win].setState(true);
                                 Controller.appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
                             }
@@ -272,6 +287,11 @@ public class House {
                     for (int win = 0; win < room.getWindowCollection().length; win++) {
                         if (room.getWindowCollection()[win].getUtilityID() == Integer.parseInt(checkBox.getId().substring(17))) {
                             if (!room.getWindowCollection()[win].isBlocked()) {
+
+                                /**TODO: Add a condition that looks at the "currentActiveProfile"'s
+                                 *  type (and perhaps location) and only close the window if the profile
+                                 *  has permission, or else keep the window in its current state */
+
                                 room.getWindowCollection()[win].setState(false);
                                 Controller.appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
                             }
@@ -316,6 +336,11 @@ public class House {
                     for (int door = 0; door < room.getDoorCollection().length; door++) {
                         if (room.getDoorCollection()[door].getUtilityID() == Integer.parseInt(checkBox.getId().substring(15))) {
                             if (!room.getDoorCollection()[door].isLocked()) {
+
+                                /**TODO: Add a condition that looks at the "currentActiveProfile"'s
+                                 *  type (and perhaps location) and only open the door if the profile
+                                 *  has permission, or else keep the door in its current state */
+
                                 room.getDoorCollection()[door].setState(true);
                                 Controller.appendMessageToConsole("Door #"+room.getDoorCollection()[door].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
                             }
@@ -332,6 +357,11 @@ public class House {
                     for (int door = 0; door < room.getDoorCollection().length; door++) {
                         if (room.getDoorCollection()[door].getUtilityID() == Integer.parseInt(checkBox.getId().substring(15))) {
                             if (!room.getDoorCollection()[door].isLocked()) {
+
+                                /**TODO: Add a condition that looks at the "currentActiveProfile"'s
+                                 *  type (and perhaps location) and only close the door if the profile
+                                 *  has permission, or else keep the door in its current state */
+
                                 room.getDoorCollection()[door].setState(false);
                                 Controller.appendMessageToConsole("Door #"+room.getDoorCollection()[door].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
                             }
