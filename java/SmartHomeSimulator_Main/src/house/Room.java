@@ -33,6 +33,7 @@ public class Room {
     private Door[] doorCollection;
     private Light[] lightCollection;
     private Window[] windowCollection;
+    private boolean autoMode;
 
     /**
      * Room constructor
@@ -51,6 +52,7 @@ public class Room {
         this.numberOfPeopleInside = 0;
         this.isVacant = true;
         this.temperature = 0;
+        this.autoMode = false;
         this.md = new MotionDetector();
         if (AC) {
             this.ac = new AirConditioner();
@@ -219,6 +221,14 @@ public class Room {
         else {
             this.isVacant = true;
         }
+    }
+
+    public boolean getIsAutoModeOn() {
+        return autoMode;
+    }
+
+    public void setAutoMode(boolean autoMode) {
+        this.autoMode = autoMode;
     }
 
     /**

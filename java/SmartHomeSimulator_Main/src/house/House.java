@@ -1,9 +1,6 @@
 package house;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -435,6 +432,33 @@ public class House {
         closeButton.setId("closeButtonFor"+roomLayout.getId());
         roomLayout.getChildren().add(closeButton);
 
+        ToggleButton autoModeButton = new ToggleButton("Auto ON");
+        autoModeButton.setId("autoModeButtonRoom#"+room.getRoomID());
+        autoModeButton.setTranslateX(100); autoModeButton.setTranslateY(270);
+        autoModeButton.setOnAction(e->{
+            if (autoModeButton.isSelected()) {
+                autoModeButton.setText("Auto OFF");
+                Controller.appendMessageToConsole("Auto mode turned ON in "+room.getName());
+                room.setAutoMode(true);
+            }
+            else {
+                autoModeButton.setText("Auto ON");
+                Controller.appendMessageToConsole("Auto mode turned OFF in "+room.getName());
+                room.setAutoMode(false);
+            }
+        });
+
+        if (room.getIsAutoModeOn()) {
+            autoModeButton.setText("Auto OFF");
+            autoModeButton.setSelected(true);
+        }
+        else {
+            autoModeButton.setText("Auto ON");
+            autoModeButton.setSelected(false);
+        }
+
+        roomLayout.getChildren().add(autoModeButton);
+
         return roomLayout;
     }
 
@@ -541,9 +565,40 @@ public class House {
                     break;
                 }
             }
+        }catch (Exception ex){}
+    }
 
+    public void autoTurnOnLight(Room room) {
+        try {
+            for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {
+                if (this.layout.getChildren().get(lay).getId().equals("roomLayoutID"+room.getRoomID())) {
 
+                    AnchorPane room_layout = (AnchorPane) this.layout.getChildren().get(lay);
 
+                    for (int l = 0; l < room.getLightCollection().length; l++) {
+                        try {
+                            room.getLightCollection()[l].setState(true);
+                            setIconVisibility(room, "Light", true);
+                            for (int cb = 0; cb < room_layout.getChildren().size(); cb++) {
+                                try {
+                                    if (room_layout.getChildren().get(cb).getId().equals
+                                            ("lightCheckboxID#"+room.getLightCollection()[l].getUtilityID())) {
+                                        CheckBox tempCB = (CheckBox) room_layout.getChildren().get(cb);
+                                        tempCB.setSelected(true);
+                                        room_layout.getChildren().set(cb, tempCB);
+                                        break;
+                                    }
+                                }
+                                catch(Exception e){}
+                            }
+                            Controller.appendMessageToConsole("Light in "+room.getName()+" automatically turned on.");
+                        }
+                        catch(Exception e){}
+                    }
+                    this.layout.getChildren().set(lay, room_layout);
+                    break;
+                }
+            }
         }catch (Exception ex){}
     }
 }
