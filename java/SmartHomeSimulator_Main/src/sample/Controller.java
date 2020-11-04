@@ -928,7 +928,7 @@ public class Controller {
                                                                             if (Main.householdLocations[r].getNumberOfPeopleInside()>0 && Main.householdLocations[r].getIsAutoModeOn()) {
                                                                                 Main.house.autoTurnOnLight(Main.householdLocations[r]);
                                                                             }
-                                                                            
+
                                                                             // update the label in SCENE 1 of the number of people who are in the destination room
                                                                             for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
                                                                                 try {
