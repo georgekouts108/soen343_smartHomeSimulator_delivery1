@@ -429,6 +429,14 @@ public class Controller {
                             } catch (Exception ex) {}
                         }
                         changeLocation(Main.householdLocations[fr]);
+
+                        // now that the new room's population is at least 1, if
+                        // the room is in auto mode, automatically turn on any lights(s) within.
+                        // the lights will remain on even when the room is empty again
+                        if (Main.householdLocations[fr].getNumberOfPeopleInside()>0 && Main.householdLocations[fr].getIsAutoModeOn()) {
+                            Main.house.autoTurnOnLight(Main.householdLocations[fr]);
+                        }
+
                         for (int a = 0; a < Main.editContextLayout2.getChildren().size(); a++) {
                             try {
                                 if (Main.editContextLayout2.getChildren().get(a).getId().equals("currentRoomOfProfile" + Main.currentActiveProfile.getProfileID())){
@@ -869,6 +877,11 @@ public class Controller {
                                                                             Main.profiles[up].setCurrentLocation(Main.householdLocations[r]); // THE CHANGE OF ROOM***
                                                                             Main.householdLocations[r].setNumberOfPeopleInside(Main.householdLocations[r].getNumberOfPeopleInside() + 1);
 
+                                                                            // if the destination room has Auto mode turned on, automatically turn on the lights inside that room
+                                                                            if (Main.householdLocations[r].getNumberOfPeopleInside()>0 && Main.householdLocations[r].getIsAutoModeOn()) {
+                                                                                Main.house.autoTurnOnLight(Main.householdLocations[r]);
+                                                                            }
+
                                                                             //update the label in SCENE 2 for the room location of the profile that was just moved.
                                                                             for (int i = 0; i < Main.editContextLayout2.getChildren().size(); i++) {
                                                                                 try {
@@ -911,6 +924,11 @@ public class Controller {
                                                                             Main.profiles[up].setCurrentLocation(Main.householdLocations[r]); // THE CHANGE OF ROOM***
                                                                             Main.householdLocations[r].setNumberOfPeopleInside(Main.householdLocations[r].getNumberOfPeopleInside() + 1);
 
+                                                                            // if the destination room has Auto mode turned on, automatically turn on the lights inside that room
+                                                                            if (Main.householdLocations[r].getNumberOfPeopleInside()>0 && Main.householdLocations[r].getIsAutoModeOn()) {
+                                                                                Main.house.autoTurnOnLight(Main.householdLocations[r]);
+                                                                            }
+                                                                            
                                                                             // update the label in SCENE 1 of the number of people who are in the destination room
                                                                             for (int a = 0; a < Main.editContextLayout.getChildren().size(); a++) {
                                                                                 try {
@@ -1416,7 +1434,7 @@ public class Controller {
         }catch(Exception exc){}
     }
 
-    /**TODO: SHP MODULE METHODS*/
+    /**todo: SHP MODULE METHODS*/
 
     public static void toggleAwayButton(ToggleButton tb) {
         try {
