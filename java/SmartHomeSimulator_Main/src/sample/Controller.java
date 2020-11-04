@@ -1420,7 +1420,19 @@ public class Controller {
 
     public static void toggleAwayButton(ToggleButton tb) {
         try {
-            if (Main.currentLocation != null) {
+            // make sure all existing users, logged in or not, are outside the house
+            int numOfPeopleOutside = 0;
+            for (int u = 0; u < Main.profiles.length; u++) {
+                try {
+                    if (Main.profiles[u].getCurrentLocation()==null) {
+                        numOfPeopleOutside++;
+                    }
+                }catch (Exception e){}
+            }
+            System.out.println(Main.profiles.length+ " profiles exist");
+            System.out.println(numOfPeopleOutside+ " people outside home");
+
+            if ((numOfPeopleOutside != Main.profiles.length)) {
                 throw new Exception();
             }
 
@@ -1515,7 +1527,7 @@ public class Controller {
             }
         } catch(Exception e) {
             tb.setSelected(false);
-            appendMessageToConsole("Failed attempt to set AWAY mode while inside the house.");
+            appendMessageToConsole("ERROR: All profiles must be outside house\nbefore turning AWAY mode on.");
         }
     }
 
