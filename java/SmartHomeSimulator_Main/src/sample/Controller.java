@@ -1420,6 +1420,7 @@ public class Controller {
 
     public static void toggleAwayButton(ToggleButton tb) {
         try {
+
             // make sure all existing users, logged in or not, are outside the house
             int numOfPeopleOutside = 0;
             for (int u = 0; u < Main.profiles.length; u++) {
@@ -1429,9 +1430,11 @@ public class Controller {
                     }
                 }catch (Exception e){}
             }
-            System.out.println(Main.profiles.length+ " profiles exist");
-            System.out.println(numOfPeopleOutside+ " people outside home");
 
+            /**TODO: in this "if" statement, add an extra condition
+             *  that will look at the currentActiveProfile's type; if
+             *  the profile type is GUEST or STRANGER, throw an exception
+             *  and do NOT turn on away mode. Only Parents and Children can do that.*/
             if ((numOfPeopleOutside != Main.profiles.length)) {
                 throw new Exception();
             }
