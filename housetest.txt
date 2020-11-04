@@ -1,4 +1,4 @@
-8
+5
 -
 Name= masterbedroom
 Doors= 1
@@ -25,26 +25,8 @@ Lights= 1
 Ac= false
 -end-
 Name= kitchen
-Doors= 1
+Doors= 0
 Windows= 3
 Lights= 1
 Ac= true
--end-
-Name= garage
-Doors= 1
-Windows= 2
-Lights= 1
-Ac= false
--end-
-Name= backyard
-Doors= 1
-Windows= 0
-Lights= 1
-Ac= false
--end-
-Name= entrance
-Doors= 1
-Windows= 1
-Lights= 1
-Ac= false
 -end-

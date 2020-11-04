@@ -927,12 +927,14 @@ public class Main extends Application {
 
                     for (int panes = 0; panes < houseLayout.getChildren().size(); panes++) {
                         try {
-                            if (houseLayout.getChildren().get(panes).getId().equals("roomLayoutID" + householdLocations[finalRoom].getRoomID())) {
-                                tempStage.setScene(new Scene(house.constructRoomLayoutSHCversion(householdLocations[panes],
-                                        (AnchorPane) houseLayout.getChildren().get(panes),
-                                        householdLocations[panes].getNumberOfPeopleInside(), tempStage)));
-                                tempStage.showAndWait();
-                                break;
+                            if (simulationIsOn) {
+                                if (houseLayout.getChildren().get(panes).getId().equals("roomLayoutID" + householdLocations[finalRoom].getRoomID())) {
+                                    tempStage.setScene(new Scene(house.constructRoomLayoutSHCversion(householdLocations[panes],
+                                            (AnchorPane) houseLayout.getChildren().get(panes),
+                                            householdLocations[panes].getNumberOfPeopleInside(), tempStage)));
+                                    tempStage.showAndWait();
+                                    break;
+                                }
                             }
                         }
                         catch (Exception ex) {}

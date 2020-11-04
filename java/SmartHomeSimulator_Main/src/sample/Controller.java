@@ -1438,22 +1438,7 @@ public class Controller {
 
     public static void toggleAwayButton(ToggleButton tb) {
         try {
-
-            // make sure all existing users, logged in or not, are outside the house
-            int numOfPeopleOutside = 0;
-            for (int u = 0; u < Main.profiles.length; u++) {
-                try {
-                    if (Main.profiles[u].getCurrentLocation()==null) {
-                        numOfPeopleOutside++;
-                    }
-                }catch (Exception e){}
-            }
-
-            /**TODO: in this "if" statement, add an extra condition
-             *  that will look at the currentActiveProfile's type; if
-             *  the profile type is GUEST or STRANGER, throw an exception
-             *  and do NOT turn on away mode. Only Parents and Children can do that.*/
-            if ((numOfPeopleOutside != Main.profiles.length)) {
+            if (Main.currentLocation != null) {
                 throw new Exception();
             }
 
@@ -1548,7 +1533,7 @@ public class Controller {
             }
         } catch(Exception e) {
             tb.setSelected(false);
-            appendMessageToConsole("ERROR: All profiles must be outside house\nbefore turning AWAY mode on.");
+            appendMessageToConsole("Failed attempt to set AWAY mode while inside the house.");
         }
     }
 
