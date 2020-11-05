@@ -661,6 +661,17 @@ public class House {
         return yes;
     }
 
+    public boolean areDoorsLocked(Room room){
+        boolean yes = true;
+        for (int door = 0; door < room.getDoorCollection().length; door++) {
+            if (!room.getDoorCollection()[door].isLocked()) {
+                yes = false;
+                break;
+            }
+        }
+        return yes;
+    }
+
     /**
      * Check if there are any windows open for a specific Room.
      * @param room

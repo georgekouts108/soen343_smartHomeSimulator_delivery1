@@ -250,6 +250,7 @@ public class Controller {
      * Create or update the default scene for editing the context of the simulation.
      */
     public static void generateEditContextScene() {
+        //try {
         if (numberOfTimesEditContextLinkStage1Accessed == 0) {
 
             DatePicker datePicker = new DatePicker();
@@ -290,7 +291,7 @@ public class Controller {
             confirmDTbutton.setTranslateY(30);
 
             //for sim time speed
-            Label timeSpeed  = new Label("Time speed multiplier: ");
+            Label timeSpeed = new Label("Time speed multiplier: ");
             timeSpeed.setId("timeSpeed");
             timeSpeed.setTranslateX(350);
             timeSpeed.setTranslateY(100);
@@ -352,10 +353,10 @@ public class Controller {
             Button tempButton = new Button("Confirm");
             tempButton.setId("confirmTemperatureButton");
             tempButton.setOnAction(e -> {
-                try{
-                    for(int i=0; i < Main.main_dashboard.getChildren().size(); i++){
-                        if (Main.main_dashboard.getChildren().get(i).getId().equals("temp")){
-                            if(!tempText.getCharacters().toString().isEmpty()) {
+                try {
+                    for (int i = 0; i < Main.main_dashboard.getChildren().size(); i++) {
+                        if (Main.main_dashboard.getChildren().get(i).getId().equals("temp")) {
+                            if (!tempText.getCharacters().toString().isEmpty()) {
                                 Label label = (Label) Main.main_dashboard.getChildren().get(i);
                                 label.setText("Outside Temp.\n" + tempText.getCharacters().toString() + "°C");
                                 Main.main_dashboard.getChildren().set(i, label);
@@ -363,7 +364,7 @@ public class Controller {
                             }
                         }
                     }
-                }catch (Exception err){
+                } catch (Exception err) {
                     System.out.print("There was an error while modifying the outdoor temperature.");
                 }
             });
@@ -379,7 +380,8 @@ public class Controller {
 
             Label currentRoom = new Label("Your location: ");
             currentRoom.setId("currentRoomOfLoggedInUser");
-            currentRoom.setTranslateY(200); currentRoom.setTranslateX(450);
+            currentRoom.setTranslateY(200);
+            currentRoom.setTranslateX(450);
             Main.editContextLayout.getChildren().add(currentRoom);
 
             int transY = 120;
@@ -387,20 +389,28 @@ public class Controller {
 
                 if (r != Main.householdLocations.length) {
                     Label l1 = new Label("# of people: " + Main.householdLocations[r].getNumberOfPeopleInside());
-                    l1.setId("numOfPeopleInRoom"+Main.householdLocations[r].getRoomID());
+                    l1.setId("numOfPeopleInRoom" + Main.householdLocations[r].getRoomID());
                     l1.setTranslateX(120);
                     l1.setTranslateY(transY + 5);
                     int fr = r;
                     Hyperlink hyp = new Hyperlink(Main.householdLocations[r].getName());
-                    hyp.setId("hyperlinkForRoom-"+Main.householdLocations[r].getName());
+                    hyp.setId("hyperlinkForRoom-" + Main.householdLocations[r].getName());
                     hyp.setTranslateX(20);
                     hyp.setTranslateY(transY);
                     int finalR = r;
                     hyp.setOnAction(e -> {
 
                         // change the label of the number of people in the origin and destination rooms
-                        if ( (Main.currentActiveProfile != null)) {
+                        if ((Main.currentActiveProfile != null)) {
                             if (Main.currentLocation == null) {
+
+                                /**TODO*/
+                                if (Main.house.areDoorsLocked(Main.householdLocations[fr])) {
+                                    appendMessageToConsole("ERROR: Profile #" + Main.currentActiveProfile.getProfileID() +
+                                            " tried entering " + Main.householdLocations[fr].getName() + " when locked.");
+                                    return;
+                                }
+
                                 Main.householdLocations[fr].setNumberOfPeopleInside(Main.householdLocations[fr].getNumberOfPeopleInside() + 1);
 
                                 // put that for loop here
@@ -419,11 +429,19 @@ public class Controller {
                                             Main.editContextLayout.getChildren().set(i, label);
                                             break;
                                         }
-                                    } catch (Exception ex) {}
+                                    } catch (Exception ex) {
+                                    }
                                 }
-                            }
-                            else {
+                            } else {
                                 if (!(Main.currentLocation == Main.householdLocations[fr])) {
+
+                                    // if the destination room is locked, do not enter
+                                    if (Main.house.areDoorsLocked(Main.householdLocations[fr])) {
+                                        appendMessageToConsole("ERROR: Profile #"+Main.currentActiveProfile.getProfileID()+
+                                                " tried entering "+Main.householdLocations[fr].getName()+" when locked.");
+                                        return;
+                                    }
+
                                     Main.householdLocations[fr].setNumberOfPeopleInside(Main.householdLocations[fr].getNumberOfPeopleInside() + 1);
                                     Main.currentLocation.setNumberOfPeopleInside(Main.currentLocation.getNumberOfPeopleInside() - 1);
                                 }
@@ -445,7 +463,7 @@ public class Controller {
                         // update the label for the number of people in the old room
                         for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
                             try {
-                                if (Main.editContextLayout.getChildren().get(i).getId().equals("numOfPeopleInRoom"+Main.currentLocation.getRoomID())) {
+                                if (Main.editContextLayout.getChildren().get(i).getId().equals("numOfPeopleInRoom" + Main.currentLocation.getRoomID())) {
                                     Label label = (Label) Main.editContextLayout.getChildren().get(i);
                                     label.setText("# of people: " + Main.currentLocation.getNumberOfPeopleInside());
                                     Main.editContextLayout.getChildren().set(i, label);
@@ -456,11 +474,12 @@ public class Controller {
 
                         // if there are 0 people inside the old room, automatically turn off the old room's motion detector
                         // otherwise keep it on
-                        if ((Main.currentLocation!=null) && (Main.currentLocation.getNumberOfPeopleInside() == 0)) {
+                        if ((Main.currentLocation != null) && (Main.currentLocation.getNumberOfPeopleInside() == 0)) {
                             Main.householdLocations[fr].getMd().setState(false);
                             Main.house.autoTurnOnOffMD(Main.currentLocation, false);
                         }
 
+                        // change the location of the room
                         changeLocation(Main.householdLocations[fr]);
 
                         // now that the new room's population is at least 1, if
@@ -477,18 +496,6 @@ public class Controller {
                             Main.house.autoTurnOnOffMD(Main.householdLocations[fr], true);
                         }
 
-                        // update the label in edit context Scene 2 of the current profile's location
-//                        for (int a = 0; a < Main.editContextLayout2.getChildren().size(); a++) {
-//                            try {
-//                                if (Main.editContextLayout2.getChildren().get(a).getId().equals("currentRoomOfProfile" + Main.currentActiveProfile.getProfileID())){
-//                                    Label label = (Label) Main.editContextLayout2.getChildren().get(a);
-//                                    label.setText(Main.currentLocation.getName());
-//                                    Main.editContextLayout2.getChildren().set(a, label);
-//                                    break;
-//                                }
-//                            }catch (Exception ex){}
-//                        }
-
                         // update the label in edit context Scene 1 of the current profile's location
                         for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
                             try {
@@ -498,7 +505,8 @@ public class Controller {
                                     Main.editContextLayout.getChildren().set(i, label);
                                     break;
                                 }
-                            } catch (Exception ex) {}
+                            } catch (Exception ex) {
+                            }
                         }
                     });
                     Main.editContextLayout.getChildren().addAll(hyp, l1);
@@ -513,7 +521,7 @@ public class Controller {
                     numOfPeopleOutside = Main.profiles.length - numOfPeopleInHouse;
 
 
-                    Label l1 = new Label("# of people: "+numOfPeopleOutside);
+                    Label l1 = new Label("# of people: " + numOfPeopleOutside);
                     l1.setId("numOfPeopleOutside");
                     l1.setTranslateX(120);
                     l1.setTranslateY(transY + 5);
@@ -528,13 +536,12 @@ public class Controller {
                     hyp.setOnAction(e -> {
 
                         // change the label of the number of people in the origin and destination rooms
-                        if ( (Main.currentActiveProfile != null)) {
+                        if ((Main.currentActiveProfile != null)) {
 
                             // if the logged in user is outside...
                             if (Main.currentLocation == null) {
                                 //Main.householdLocations[fr].setNumberOfPeopleInside(Main.householdLocations[fr].getNumberOfPeopleInside() + 1);
-                            }
-                            else {
+                            } else {
                                 Main.currentLocation.setNumberOfPeopleInside(Main.currentLocation.getNumberOfPeopleInside() - 1);
                             }
                         }
@@ -547,7 +554,8 @@ public class Controller {
                                     Main.editContextLayout.getChildren().set(j, label);
                                     break;
                                 }
-                            } catch (Exception ex) {}
+                            } catch (Exception ex) {
+                            }
                         }
 
                         for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
@@ -565,12 +573,13 @@ public class Controller {
                                     Main.editContextLayout.getChildren().set(i, label);
                                     break;
                                 }
-                            } catch (Exception ex) {}
+                            } catch (Exception ex) {
+                            }
                         }
 
                         // if there are 0 people inside the old room, automatically turn off the old room's motion detector
                         // or keep it on if the room is not empty
-                        if ((Main.currentLocation!=null) && (Main.currentLocation.getNumberOfPeopleInside() == 0)) {
+                        if ((Main.currentLocation != null) && (Main.currentLocation.getNumberOfPeopleInside() == 0)) {
                             Main.currentLocation.getMd().setState(false);
                             Main.house.autoTurnOnOffMD(Main.currentLocation, false);
                         }
@@ -579,7 +588,7 @@ public class Controller {
 
                         for (int a = 0; a < Main.editContextLayout2.getChildren().size(); a++) {
                             try {
-                                if (Main.editContextLayout2.getChildren().get(a).getId().equals("currentRoomOfProfile" + Main.currentActiveProfile.getProfileID())){
+                                if (Main.editContextLayout2.getChildren().get(a).getId().equals("currentRoomOfProfile" + Main.currentActiveProfile.getProfileID())) {
                                     Label label = (Label) Main.editContextLayout2.getChildren().get(a);
                                     if (Main.currentLocation == null) {
                                         label.setText("Outside");
@@ -587,7 +596,7 @@ public class Controller {
                                     Main.editContextLayout2.getChildren().set(a, label);
                                     break;
                                 }
-                            }catch (Exception ex){}
+                            } catch (Exception ex) {}
                         }
                         for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
                             try {
@@ -604,7 +613,11 @@ public class Controller {
                     transY += 20;
                 }
             }
-            Line line3 = new Line(); line3.setId("line3"); line3.setStartX(0); line3.setEndX(650); line3.setTranslateY(350);
+            Line line3 = new Line();
+            line3.setId("line3");
+            line3.setStartX(0);
+            line3.setEndX(650);
+            line3.setTranslateY(350);
             Main.editContextLayout.getChildren().add(line3);
 
             Label windowsLabel = new Label("Window-Blocking: Check a box " +
@@ -623,17 +636,16 @@ public class Controller {
                 /**for window-blocking purposes */
                 for (int w = 0; w < Main.householdLocations[r].getWindowCollection().length; w++) {
                     windowCount++;
-                    CheckBox checkBox = new CheckBox("W#"+Main.householdLocations[r].getWindowCollection()[w].getUtilityID()+
-                            " in "+Main.householdLocations[r].getName());
+                    CheckBox checkBox = new CheckBox("W#" + Main.householdLocations[r].getWindowCollection()[w].getUtilityID() +
+                            " in " + Main.householdLocations[r].getName());
                     checkBox.setTranslateX(transX);
                     checkBox.setTranslateY(transY);
                     int finalR = r;
                     int finalW = w;
-                    checkBox.setOnAction(e->{
+                    checkBox.setOnAction(e -> {
                         if (checkBox.isSelected()) {
                             Main.householdLocations[finalR].getWindowCollection()[finalW].setBlocked(true);
-                        }
-                        else {
+                        } else {
                             Main.householdLocations[finalR].getWindowCollection()[finalW].setBlocked(false);
                         }
                     });
@@ -641,8 +653,7 @@ public class Controller {
                     Main.editContextLayout.getChildren().add(checkBox);
                     if (windowCount % 8 != 0) {
                         transY += 20;
-                    }
-                    else {
+                    } else {
                         transY = 400;
                         transX += 180;
                     }
@@ -923,6 +934,13 @@ public class Controller {
 
                                                             else {
                                                                 if (Main.householdLocations[r].getRoomID() == selectedRoomID) {
+
+                                                                    // if the destination room is locked, do not enter
+                                                                    if (Main.house.areDoorsLocked(Main.householdLocations[r])) {
+                                                                        appendMessageToConsole("ERROR: Profile #"+Main.profiles[up].getProfileID()+
+                                                                                " tried entering "+Main.householdLocations[r].getName()+" when locked.");
+                                                                        return;
+                                                                    }
 
                                                                     dummyRoom = Main.profiles[up].getCurrentLocation();
 
