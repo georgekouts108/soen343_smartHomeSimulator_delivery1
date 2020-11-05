@@ -65,6 +65,11 @@ public class Room {
 
         for (int d = 0; d < this.doorCollection.length; d++) {
             this.doorCollection[d] = new Door();
+
+            // automatically lock doors by default for the garage, backyard, and entrance
+            if (this.name.equals("garage") || this.name.equals("backyard") || this.name.equals("entrance")) {
+                this.doorCollection[d].setLocked(true);
+            }
         }
 
         this.lightCollection = new Light[numberOfLights];

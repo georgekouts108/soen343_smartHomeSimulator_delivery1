@@ -363,7 +363,29 @@ public class House {
                                  *  has permission, or else keep the door in its current state */
 
                                 room.getDoorCollection()[door].setState(false);
-                                Controller.appendMessageToConsole("Door #"+room.getDoorCollection()[door].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
+
+                                // if the room is the garage, entrance, or backyard, automatically lock the door when closing it
+                                if (room.getName().equals("backyard") || room.getName().equals("entrance") || room.getName().equals("garage")) {
+                                    room.getDoorCollection()[door].setLocked(true);
+                                    for (int a = 0; a < roomLayout.getChildren().size(); a++) {
+                                        try {
+                                            if (roomLayout.getChildren().get(a).getId().equals("doorLockRoom#" + room.getRoomID())) {
+                                                ToggleButton tempTB = (ToggleButton) roomLayout.getChildren().get(a);
+                                                tempTB.setText("Unlock");
+                                                tempTB.setSelected(true);
+                                                roomLayout.getChildren().set(a, tempTB);
+                                                break;
+                                            }
+                                        }
+                                        catch(Exception ex){}
+                                    }
+                                }
+                                if (room.getName().equals("backyard") || room.getName().equals("entrance") || room.getName().equals("garage")) {
+                                    Controller.appendMessageToConsole("Door #"+room.getDoorCollection()[door].getUtilityID()+" closed & locked in Room #"+room.getRoomID()+" "+room.getName());
+                                }
+                                else {
+                                    Controller.appendMessageToConsole("Door #"+room.getDoorCollection()[door].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
+                                }
                             }
                             else {
                                 checkBox.setSelected(false);
@@ -383,6 +405,68 @@ public class House {
             roomLayout.getChildren().add(checkBox);
             translate_y += 20;
         }
+
+        // a toggle button for locking all doors of a room
+        ToggleButton doorLock = new ToggleButton();
+        doorLock.setId("doorLockRoom#"+room.getRoomID());
+        doorLock.setTranslateX(160); doorLock.setTranslateY(100);
+
+        doorLock.setOnAction(e->{
+            if (doorLock.isSelected()) {
+                doorLock.setText("Unlock");
+
+                for (int l = 0; l < room.getDoorCollection().length; l++) {
+                    try {
+                        room.getDoorCollection()[l].setState(false);
+                        setIconVisibility(room, "Door", false);
+                        for (int cb = 0; cb < roomLayout.getChildren().size(); cb++) {
+                            try {
+                                if (roomLayout.getChildren().get(cb).getId().equals
+                                        ("doorCheckboxID#"+room.getDoorCollection()[l].getUtilityID())) {
+                                    CheckBox tempCB = (CheckBox) roomLayout.getChildren().get(cb);
+                                    tempCB.setSelected(false);
+                                    roomLayout.getChildren().set(cb, tempCB);
+                                    break;
+                                }
+                            }
+                            catch(Exception ex){}
+                        }
+                        Controller.appendMessageToConsole("Door to "+room.getName()+" automatically closed.");
+                    }
+                    catch(Exception ex){}
+                }
+
+                for (int d = 0; d < room.getDoorCollection().length; d++) {
+                    room.getDoorCollection()[d].setLocked(true);
+                }
+
+            }
+            else {
+                doorLock.setText("Lock");
+                for (int d = 0; d < room.getDoorCollection().length; d++) {
+                    room.getDoorCollection()[d].setLocked(false);
+                }
+            }
+        });
+
+        boolean allDoorsLocked = true;
+        for (int d = 0; d < room.getDoorCollection().length; d++) {
+            if (!room.getDoorCollection()[d].isLocked()) {
+                allDoorsLocked = false;
+                break;
+            }
+        }
+
+        if (allDoorsLocked) {
+            doorLock.setText("Unlock");
+            doorLock.setSelected(true);
+        }
+        else {
+            doorLock.setText("Lock");
+            doorLock.setSelected(false);
+        }
+
+        roomLayout.getChildren().add(doorLock);
 
         CheckBox mdCheckbox = new CheckBox("MD triggered");
         mdCheckbox.setId("motionDetectorCheckboxID#"+room.getMd().getUtilityID());
@@ -622,6 +706,40 @@ public class House {
                                 catch(Exception e){}
                             }
                             Controller.appendMessageToConsole("Light in "+room.getName()+" automatically turned on.");
+                        }
+                        catch(Exception e){}
+                    }
+                    this.layout.getChildren().set(lay, room_layout);
+                    break;
+                }
+            }
+        }catch (Exception ex){}
+    }
+
+    public void autoCloseDoors(Room room) {
+        try {
+            for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {
+                if (this.layout.getChildren().get(lay).getId().equals("roomLayoutID"+room.getRoomID())) {
+
+                    AnchorPane room_layout = (AnchorPane) this.layout.getChildren().get(lay);
+
+                    for (int l = 0; l < room.getDoorCollection().length; l++) {
+                        try {
+                            room.getDoorCollection()[l].setState(false);
+                            setIconVisibility(room, "Door", false);
+                            for (int cb = 0; cb < room_layout.getChildren().size(); cb++) {
+                                try {
+                                    if (room_layout.getChildren().get(cb).getId().equals
+                                            ("doorCheckboxID#"+room.getDoorCollection()[l].getUtilityID())) {
+                                        CheckBox tempCB = (CheckBox) room_layout.getChildren().get(cb);
+                                        tempCB.setSelected(false);
+                                        room_layout.getChildren().set(cb, tempCB);
+                                        break;
+                                    }
+                                }
+                                catch(Exception e){}
+                            }
+                            Controller.appendMessageToConsole("Door to "+room.getName()+" automatically closed.");
                         }
                         catch(Exception e){}
                     }
