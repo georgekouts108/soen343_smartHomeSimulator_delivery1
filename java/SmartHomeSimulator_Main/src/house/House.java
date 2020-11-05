@@ -498,10 +498,12 @@ public class House {
                         }
 
                         if (anyMDsOn()) {
+                            Controller.appendMessageToConsole("CRITICAL: M.D in "+room.getName()+ " triggered during AWAY mode");
                             /**TODO: implement a method in Controller for setting off the time before alerting authorities*/
                             // if there are any MD's on in the house,
                             // call the controller's method to signal the alarm countdown to start
                         } else {
+                            Controller.appendMessageToConsole("No more M.D's triggered during AWAY mode");
                             /**TODO: implement a method in Controller for stopping the time before alerting authorities*/
                             // if there are no MD's on in the house,
                             // call the controller's method to signal the alarm countdown to stop
@@ -523,7 +525,6 @@ public class House {
                     setIconVisibility(room, "MD", true);
                     mdCheckbox.setSelected(true);
                 }
-                Controller.appendMessageToConsole(ex.getMessage());
             }
         });
         roomLayout.getChildren().add(mdCheckbox);
