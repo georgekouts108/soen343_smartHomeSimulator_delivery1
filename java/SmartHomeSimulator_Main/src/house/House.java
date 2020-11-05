@@ -481,22 +481,49 @@ public class House {
         }
 
         mdCheckbox.setOnAction(e->{
-            if (mdCheckbox.isSelected()) {
-                room.getMd().setState(true);
-                boolean isMdIconThere = false;
-                for (int a = 0; a < room_layout.getChildren().size(); a++) {
-                    if (room_layout.getChildren().contains(room.getIconMD_view())) {
-                        isMdIconThere = true;
-                        break;
+            try {
+                if (Main.isIs_away()) {
+                    try {
+                        /**during away mode, you may manually trigger motion detectors to
+                         * simulate the presence of intruders */
+                        if (mdCheckbox.isSelected()) {
+                            room.getMd().setState(true);
+                            setIconVisibility(room, "MD", true);
+                            // append this to the suspicious activity log in SHP module instead
+                            Controller.appendMessageToConsole("Motion detector triggered in Room #" + room.getRoomID() + " " + room.getName());
+                        } else {
+                            room.getMd().setState(false);
+                            setIconVisibility(room, "MD", false);
+                            Controller.appendMessageToConsole("Motion detector disabled in Room #" + room.getRoomID() + " " + room.getName());
+                        }
+
+                        if (anyMDsOn()) {
+                            /**TODO: implement a method in Controller for setting off the time before alerting authorities*/
+                            // if there are any MD's on in the house,
+                            // call the controller's method to signal the alarm countdown to start
+                        } else {
+                            /**TODO: implement a method in Controller for stopping the time before alerting authorities*/
+                            // if there are no MD's on in the house,
+                            // call the controller's method to signal the alarm countdown to stop
+                        }
                     }
+                    catch (Exception ex){}
                 }
-                setIconVisibility(room, "MD", true);
-                Controller.appendMessageToConsole("Motion detector triggered in Room #"+room.getRoomID()+" "+room.getName());
+                else {
+                    throw new Exception();
+                }
             }
-            else {
-                room.getMd().setState(false);
-                setIconVisibility(room, "MD", false);
-                Controller.appendMessageToConsole("Motion detector disabled in Room #"+room.getRoomID()+" "+room.getName());
+            catch(Exception ex) {
+                Controller.appendMessageToConsole("You can only manually control M.D's in AWAY mode.");
+                if (mdCheckbox.isSelected()) {
+                    setIconVisibility(room, "MD", false);
+                    mdCheckbox.setSelected(false);
+                }
+                else {
+                    setIconVisibility(room, "MD", true);
+                    mdCheckbox.setSelected(true);
+                }
+                Controller.appendMessageToConsole(ex.getMessage());
             }
         });
         roomLayout.getChildren().add(mdCheckbox);
@@ -650,6 +677,17 @@ public class House {
         return yes;
     }
 
+    public boolean anyMDsOn() {
+        boolean yes = false;
+        for (int r = 0; r < Main.getHouseholdLocations().length; r++) {
+            if (Main.getHouseholdLocations()[r].getMd().getState()) {
+                yes = true;
+                break;
+            }
+        }
+        return yes;
+    }
+
     public void setIconVisibility(Room room, String utilityType, boolean isVisible) {
         try {
             for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {
@@ -716,37 +754,40 @@ public class House {
         }catch (Exception ex){}
     }
 
-    public void autoCloseDoors(Room room) {
+    public void autoTurnOnOffMD(Room room, boolean state) {
         try {
             for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {
                 if (this.layout.getChildren().get(lay).getId().equals("roomLayoutID"+room.getRoomID())) {
-
                     AnchorPane room_layout = (AnchorPane) this.layout.getChildren().get(lay);
-
-                    for (int l = 0; l < room.getDoorCollection().length; l++) {
-                        try {
-                            room.getDoorCollection()[l].setState(false);
-                            setIconVisibility(room, "Door", false);
-                            for (int cb = 0; cb < room_layout.getChildren().size(); cb++) {
-                                try {
-                                    if (room_layout.getChildren().get(cb).getId().equals
-                                            ("doorCheckboxID#"+room.getDoorCollection()[l].getUtilityID())) {
-                                        CheckBox tempCB = (CheckBox) room_layout.getChildren().get(cb);
-                                        tempCB.setSelected(false);
-                                        room_layout.getChildren().set(cb, tempCB);
-                                        break;
-                                    }
+                    room.getMd().setState(state);
+                    try {
+                        setIconVisibility(room, "MD", state);
+                        for (int cb = 0; cb < room_layout.getChildren().size(); cb++) {
+                            try {
+                                if (room_layout.getChildren().get(cb).getId().equals
+                                        ("motionDetectorCheckboxID#"+room.getMd().getUtilityID())) {
+                                    CheckBox tempCB = (CheckBox) room_layout.getChildren().get(cb);
+                                    tempCB.setSelected(state);
+                                    room_layout.getChildren().set(cb, tempCB);
+                                    break;
                                 }
-                                catch(Exception e){}
                             }
-                            Controller.appendMessageToConsole("Door to "+room.getName()+" automatically closed.");
+                            catch(Exception e){}
                         }
-                        catch(Exception e){}
+                        if (room.getMd().getState()) {
+                            Controller.appendMessageToConsole("M.D automatically triggered in "+room.getName()+".");
+                        }
+                        else {
+                            Controller.appendMessageToConsole("M.D automatically deactivated in "+room.getName()+".");
+                        }
                     }
+                    catch(Exception e){}
                     this.layout.getChildren().set(lay, room_layout);
                     break;
                 }
             }
-        }catch (Exception ex){}
+        }
+        catch(Exception e){}
     }
+
 }

@@ -407,6 +407,8 @@ public class Controller {
                                 }
                             }
                         }
+
+                        // update the label for the number of people in the new room
                         for (int j = 0; j < Main.editContextLayout.getChildren().size(); j++) {
                             try {
                                 if (Main.editContextLayout.getChildren().get(j).getId().equals("numOfPeopleInRoom" + Main.householdLocations[finalR].getRoomID())) {
@@ -418,6 +420,7 @@ public class Controller {
                             } catch (Exception ex) {}
                         }
 
+                        // update the label for the number of people in the old room
                         for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
                             try {
                                 if (Main.editContextLayout.getChildren().get(i).getId().equals("numOfPeopleInRoom"+Main.currentLocation.getRoomID())) {
@@ -428,25 +431,43 @@ public class Controller {
                                 }
                             } catch (Exception ex) {}
                         }
+
+                        // if there are 0 people inside the old room, automatically turn off the old room's motion detector
+                        // otherwise keep it on
+                        if ((Main.currentLocation!=null) && (Main.currentLocation.getNumberOfPeopleInside() == 0)) {
+                            Main.householdLocations[fr].getMd().setState(false);
+                            Main.house.autoTurnOnOffMD(Main.currentLocation, false);
+                        }
+
                         changeLocation(Main.householdLocations[fr]);
 
                         // now that the new room's population is at least 1, if
                         // the room is in auto mode, automatically turn on any lights(s) within.
                         // the lights will remain on even when the room is empty again
-                        if (Main.householdLocations[fr].getNumberOfPeopleInside()>0 && Main.householdLocations[fr].getIsAutoModeOn()) {
+                        if (Main.householdLocations[fr].getNumberOfPeopleInside() > 0 && Main.householdLocations[fr].getIsAutoModeOn()) {
                             Main.house.autoTurnOnLight(Main.householdLocations[fr]);
                         }
 
-                        for (int a = 0; a < Main.editContextLayout2.getChildren().size(); a++) {
-                            try {
-                                if (Main.editContextLayout2.getChildren().get(a).getId().equals("currentRoomOfProfile" + Main.currentActiveProfile.getProfileID())){
-                                    Label label = (Label) Main.editContextLayout2.getChildren().get(a);
-                                    label.setText(Main.currentLocation.getName());
-                                    Main.editContextLayout2.getChildren().set(a, label);
-                                    break;
-                                }
-                            }catch (Exception ex){}
+                        // if there are >0 people inside the new room, automatically turn on the new room's motion detector
+                        // or keep it off if the room is empty
+                        if (Main.householdLocations[fr].getNumberOfPeopleInside() > 0) {
+                            Main.householdLocations[fr].getMd().setState(true);
+                            Main.house.autoTurnOnOffMD(Main.householdLocations[fr], true);
                         }
+
+                        // update the label in edit context Scene 2 of the current profile's location
+//                        for (int a = 0; a < Main.editContextLayout2.getChildren().size(); a++) {
+//                            try {
+//                                if (Main.editContextLayout2.getChildren().get(a).getId().equals("currentRoomOfProfile" + Main.currentActiveProfile.getProfileID())){
+//                                    Label label = (Label) Main.editContextLayout2.getChildren().get(a);
+//                                    label.setText(Main.currentLocation.getName());
+//                                    Main.editContextLayout2.getChildren().set(a, label);
+//                                    break;
+//                                }
+//                            }catch (Exception ex){}
+//                        }
+
+                        // update the label in edit context Scene 1 of the current profile's location
                         for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
                             try {
                                 if (Main.editContextLayout.getChildren().get(i).getId().equals("currentRoomOfLoggedInUser")) {
@@ -480,6 +501,8 @@ public class Controller {
                     hyp.setTranslateX(20);
                     hyp.setTranslateY(transY);
                     int finalR = r;
+
+                    // clicking this hyperlink means you want to go outside
                     hyp.setOnAction(e -> {
 
                         // change the label of the number of people in the origin and destination rooms
@@ -493,6 +516,7 @@ public class Controller {
                                 Main.currentLocation.setNumberOfPeopleInside(Main.currentLocation.getNumberOfPeopleInside() - 1);
                             }
                         }
+
                         for (int j = 0; j < Main.editContextLayout.getChildren().size(); j++) {
                             try {
                                 if (Main.editContextLayout.getChildren().get(j).getId().equals("numOfPeopleInRoom" + Main.currentLocation.getRoomID())) {
@@ -521,7 +545,16 @@ public class Controller {
                                 }
                             } catch (Exception ex) {}
                         }
+
+                        // if there are 0 people inside the old room, automatically turn off the old room's motion detector
+                        // or keep it on if the room is not empty
+                        if ((Main.currentLocation!=null) && (Main.currentLocation.getNumberOfPeopleInside() == 0)) {
+                            Main.currentLocation.getMd().setState(false);
+                            Main.house.autoTurnOnOffMD(Main.currentLocation, false);
+                        }
+
                         changeLocation(null);
+
                         for (int a = 0; a < Main.editContextLayout2.getChildren().size(); a++) {
                             try {
                                 if (Main.editContextLayout2.getChildren().get(a).getId().equals("currentRoomOfProfile" + Main.currentActiveProfile.getProfileID())){
@@ -804,12 +837,19 @@ public class Controller {
 
                                                         for (int r = 0; r < Main.householdLocations.length; r++) {
 
-                                                            // if you wanted move a user outside, from a room inside
+                                                            // if you wanted to move a user outside, from a room inside
                                                             if (selectedRoomID==0) {
 
                                                                 if (Main.profiles[up].getCurrentLocation() != null) {
                                                                     Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].setNumberOfPeopleInside(
                                                                             Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].getNumberOfPeopleInside() - 1);
+
+                                                                    // if there are 0 people inside the old room, automatically turn off the old room's motion detector
+                                                                    // otherwise keep it on
+                                                                    if ((Main.profiles[up].getCurrentLocation() != null) && (Main.profiles[up].getCurrentLocation().getNumberOfPeopleInside() == 0)) {
+                                                                        Main.profiles[up].getCurrentLocation().getMd().setState(false);
+                                                                        Main.house.autoTurnOnOffMD(Main.profiles[up].getCurrentLocation(), false);
+                                                                    }
 
                                                                     Main.profiles[up].setCurrentLocation(null);
 
@@ -874,8 +914,22 @@ public class Controller {
                                                                             Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].setNumberOfPeopleInside(
                                                                                     Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].getNumberOfPeopleInside() - 1);
 
+                                                                            // if there are 0 people inside the old room, automatically turn off the old room's motion detector
+                                                                            // or keep it on if the old room is not empty
+                                                                            if (Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].getNumberOfPeopleInside() == 0) {
+                                                                                Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1].getMd().setState(false);
+                                                                                Main.house.autoTurnOnOffMD(Main.householdLocations[Main.profiles[up].getCurrentLocation().getRoomID() - 1], false);
+                                                                            }
+
                                                                             Main.profiles[up].setCurrentLocation(Main.householdLocations[r]); // THE CHANGE OF ROOM***
                                                                             Main.householdLocations[r].setNumberOfPeopleInside(Main.householdLocations[r].getNumberOfPeopleInside() + 1);
+
+                                                                            // if there are > 0 people inside the new room, automatically turn on the new room's motion detector
+                                                                            // or keep it off if the new room is empty
+                                                                            if (Main.householdLocations[r].getNumberOfPeopleInside() > 0) {
+                                                                                Main.householdLocations[r].getMd().setState(true);
+                                                                                Main.house.autoTurnOnOffMD(Main.householdLocations[r], true);
+                                                                            }
 
                                                                             // if the destination room has Auto mode turned on, automatically turn on the lights inside that room
                                                                             if (Main.householdLocations[r].getNumberOfPeopleInside()>0 && Main.householdLocations[r].getIsAutoModeOn()) {
@@ -924,6 +978,13 @@ public class Controller {
                                                                             Main.profiles[up].setCurrentLocation(Main.householdLocations[r]); // THE CHANGE OF ROOM***
                                                                             Main.householdLocations[r].setNumberOfPeopleInside(Main.householdLocations[r].getNumberOfPeopleInside() + 1);
 
+                                                                            // if there are > 0 people inside the new room, automatically turn on the new room's motion detector
+                                                                            // or keep it off if the new room is empty
+                                                                            if (Main.householdLocations[r].getNumberOfPeopleInside() > 0) {
+                                                                                Main.householdLocations[r].getMd().setState(true);
+                                                                                Main.house.autoTurnOnOffMD(Main.householdLocations[r], true);
+                                                                            }
+
                                                                             // if the destination room has Auto mode turned on, automatically turn on the lights inside that room
                                                                             if (Main.householdLocations[r].getNumberOfPeopleInside()>0 && Main.householdLocations[r].getIsAutoModeOn()) {
                                                                                 Main.house.autoTurnOnLight(Main.householdLocations[r]);
@@ -971,16 +1032,8 @@ public class Controller {
                                                                                     }
                                                                                 } catch (Exception e) {}
                                                                             }
-
-
                                                                         }
-
-//                                                                        Main.profiles[up].setCurrentLocation(Main.householdLocations[r]); // THE CHANGE OF ROOM***
-//
-//                                                                        Main.householdLocations[r].setNumberOfPeopleInside(Main.householdLocations[r].getNumberOfPeopleInside() + 1);
                                                                     }
-
-
                                                                     break;
                                                                 }
                                                             }
@@ -1373,20 +1426,26 @@ public class Controller {
             for (int prof = 0; prof < Main.profiles.length; prof++) {
                 try {
                     if (Main.profiles[prof].getProfileID() == Main.currentActiveProfile.getProfileID()) {
-                        Main.profiles[prof].setCurrentLocation(newRoom);
 
-                        if ((newRoom != null) && Main.currentActiveProfile.isAway()) {
-                            Platform.runLater(()->{
-                                appendMessageToConsole("AWAY mode set to OFF");
-
+                        // when you relocate a user into the house from outside, AWAY mode is turned off
+                        if ((newRoom != null) && Main.isIs_away()) {
                                 for (int s = 0; s < Main.SHP_MODULE.getChildren().size(); s++) {
                                     try {
                                         if (Main.SHP_MODULE.getChildren().get(s).getId().equals("setAwayModeButton")) {
                                             ToggleButton toggleButton = (ToggleButton) Main.SHP_MODULE.getChildren().get(s);
-                                            /**todo: fix frontend bug*/
+                                            toggleButton.setSelected(true);
+                                            toggleButton.fire();
+
                                             toggleButton.setSelected(false);
                                             toggleButton.setText("Turn on AWAY mode");
+
                                             Main.SHP_MODULE.getChildren().set(s, toggleButton);
+
+                                            TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
+                                            Tab innerTab3 = tabPane3.getTabs().get(2);
+                                            innerTab3.setContent(Main.SHP_MODULE);
+                                            tabPane3.getTabs().set(2, innerTab3);
+                                            Main.main_dashboard.getChildren().set(8, tabPane3);
                                             break;
                                         }
                                     } catch (Exception e){}
@@ -1396,36 +1455,45 @@ public class Controller {
 
                                 // unlock all doors
                                 for (int room = 0; room < Main.householdLocations.length; room++) {
-                                    for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
-                                        Main.householdLocations[room].getDoorCollection()[door].setLocked(false);
-                                        appendMessageToConsole("Door #" +
-                                                Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
-                                                Main.householdLocations[room].getName() + " unlocked by SHP module");
-                                    }
+                                    try {
+                                        for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
+                                            try {
+                                                Main.householdLocations[room].getDoorCollection()[door].setLocked(false);
+                                                appendMessageToConsole("Door #" +
+                                                        Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
+                                                        Main.householdLocations[room].getName() + " unlocked by SHP module");
+                                            } catch (Exception e) {
+                                            }
+                                        }
+                                    }catch (Exception E){}
                                 }
 
                                 // unlock all "locked" lights, so they may be turned off whenever as usual
                                 for (int room = 0; room < Main.householdLocations.length; room++) {
-                                    for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
-                                        for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
+                                    try {
+                                        for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
                                             try {
-                                                if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
-                                                        Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
-                                                    CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
-                                                    if (checkBox.isSelected()) {
-                                                        Main.householdLocations[room].getLightCollection()[light].setLocked(false);
-                                                        appendMessageToConsole("Light #" +
-                                                                Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
-                                                                Main.householdLocations[room].getName() + " unlocked by SHP module");
-                                                    }
+                                                for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
+                                                    try {
+                                                        if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
+                                                                Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
+                                                            CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
+                                                            if (checkBox.isSelected()) {
+                                                                Main.householdLocations[room].getLightCollection()[light].setLocked(false);
+                                                                appendMessageToConsole("Light #" +
+                                                                        Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
+                                                                        Main.householdLocations[room].getName() + " unlocked by SHP module");
+                                                            }
+                                                        }
+                                                    } catch (Exception e) { }
                                                 }
-                                            }catch (Exception e){}
+                                            } catch (Exception e) { }
                                         }
-                                    }
+                                    }catch (Exception e){}
                                 }
-                            });
-                        }
 
+                        }
+                        Main.profiles[prof].setCurrentLocation(newRoom);
                         Main.currentLocation = newRoom;
                         break;
                     }
@@ -1438,7 +1506,6 @@ public class Controller {
 
     public static void toggleAwayButton(ToggleButton tb) {
         try {
-
             // make sure all existing users, logged in or not, are outside the house
             int numOfPeopleOutside = 0;
             for (int u = 0; u < Main.profiles.length; u++) {
@@ -1453,98 +1520,130 @@ public class Controller {
              *  that will look at the currentActiveProfile's type; if
              *  the profile type is GUEST or STRANGER, throw an exception
              *  and do NOT turn on away mode. Only Parents and Children can do that.*/
-            if ((numOfPeopleOutside != Main.profiles.length)) {
-                throw new Exception();
-            }
 
-            if (tb.isSelected()) {
-                appendMessageToConsole("AWAY mode set to ON");
-                tb.setText("Turn off AWAY mode");
-                Main.currentActiveProfile.setAway(true);
+            if ((numOfPeopleOutside == Main.profiles.length)) {
 
-                // close all windows;
-                for (int room = 0; room < Main.householdLocations.length; room++) {
-                    for (int win = 0; win < Main.householdLocations[room].getWindowCollection().length; win++) {
-                        Main.householdLocations[room].getWindowCollection()[win].setState(false);
-                        appendMessageToConsole("Window #" +
-                                Main.householdLocations[room].getWindowCollection()[win].getUtilityID() + " in " +
-                                Main.householdLocations[room].getName() + " closed by SHP module");
+                if (tb.isSelected()) {
+                    appendMessageToConsole("AWAY mode set to ON");
+                    tb.setText("Turn off AWAY mode");
+                    Main.currentActiveProfile.setAway(true);
+                    Main.setIs_away(true);
+
+                    // close all windows;
+                    for (int room = 0; room < Main.householdLocations.length; room++) {
+                        try {
+                            for (int win = 0; win < Main.householdLocations[room].getWindowCollection().length; win++) {
+                                try {
+                                    Main.householdLocations[room].getWindowCollection()[win].setState(false);
+                                    appendMessageToConsole("Window #" +
+                                            Main.householdLocations[room].getWindowCollection()[win].getUtilityID() + " in " +
+                                            Main.householdLocations[room].getName() + " closed by SHP module");
+                                }catch (Exception e){}
+                            }
+                            Main.house.setIconVisibility(Main.householdLocations[room], "Window", false);
+                        }catch(Exception e){}
                     }
 
-                    Main.house.setIconVisibility(Main.householdLocations[room], "Window", false);
-                }
-
-                // close and lock all doors
-                for (int room = 0; room < Main.householdLocations.length; room++) {
-                    for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
-                        Main.householdLocations[room].getDoorCollection()[door].setState(false);
-                        appendMessageToConsole("Door #" +
-                                Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
-                                Main.householdLocations[room].getName() + " closed by SHP module");
-                        Main.householdLocations[room].getDoorCollection()[door].setLocked(true);
-                        appendMessageToConsole("Door #" +
-                                Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
-                                Main.householdLocations[room].getName() + " locked by SHP module");
-                    }
-                    Main.house.setIconVisibility(Main.householdLocations[room], "Door", false);
-                }
-
-                // turn on a custom selection of lights and keep them "locked" until AWAY mode is off
-                for (int room = 0; room < Main.householdLocations.length; room++) {
-                    for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
-                        for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
-                            try {
-                                if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
-                                        Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
-                                    CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
-                                    if (checkBox.isSelected()) {
-                                        Main.householdLocations[room].getLightCollection()[light].setState(true);
-                                        Main.householdLocations[room].getLightCollection()[light].setLocked(true);
-                                        appendMessageToConsole("Light #" +
-                                                Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
-                                                Main.householdLocations[room].getName() + " locked by SHP module");
-                                        Main.house.setIconVisibility(Main.householdLocations[room], "Light", true);
-                                    }
+                    // close and lock all doors
+                    for (int room = 0; room < Main.householdLocations.length; room++) {
+                        try {
+                            for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
+                                try {
+                                    Main.householdLocations[room].getDoorCollection()[door].setState(false);
+                                    appendMessageToConsole("Door #" +
+                                            Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
+                                            Main.householdLocations[room].getName() + " closed by SHP module");
+                                    Main.householdLocations[room].getDoorCollection()[door].setLocked(true);
+                                    appendMessageToConsole("Door #" +
+                                            Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
+                                            Main.householdLocations[room].getName() + " locked by SHP module");
                                 }
-                            }catch (Exception e){}
+                                catch (Exception e){}
+                            }
+                            Main.house.setIconVisibility(Main.householdLocations[room], "Door", false);
                         }
+                        catch (Exception e){}
+                    }
+
+                    // turn on a custom selection of lights and keep them "locked" until AWAY mode is off
+                    for (int room = 0; room < Main.householdLocations.length; room++) {
+                        try {
+                            for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
+                                try {
+                                    for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
+                                        try {
+                                            if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
+                                                    Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
+                                                CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
+                                                if (checkBox.isSelected()) {
+                                                    Main.householdLocations[room].getLightCollection()[light].setState(true);
+                                                    Main.householdLocations[room].getLightCollection()[light].setLocked(true);
+                                                    appendMessageToConsole("Light #" +
+                                                            Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
+                                                            Main.householdLocations[room].getName() + " locked by SHP module");
+                                                    Main.house.setIconVisibility(Main.householdLocations[room], "Light", true);
+                                                }
+                                            }
+                                        } catch (Exception e) {
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                }
+                            }
+                        }
+                        catch (Exception e){}
+                    }
+                }
+                else {
+                    appendMessageToConsole("AWAY mode set to OFF");
+                    tb.setText("Turn on AWAY mode");
+                    Main.currentActiveProfile.setAway(false);
+                    Main.setIs_away(false);
+
+                    // unlock all doors
+                    for (int room = 0; room < Main.householdLocations.length; room++) {
+                        try {
+                            for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
+                                try {
+                                    Main.householdLocations[room].getDoorCollection()[door].setLocked(false);
+                                    appendMessageToConsole("Door #" +
+                                            Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
+                                            Main.householdLocations[room].getName() + " unlocked by SHP module");
+                                } catch (Exception e) {
+                                }
+                            }
+                        }
+                        catch (Exception e){}
+                    }
+
+                    // unlock all "locked" lights, so they may be turned off whenever as usual
+                    for (int room = 0; room < Main.householdLocations.length; room++) {
+                        try {
+                            for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
+                                try {
+                                    for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
+                                        try {
+                                            if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
+                                                    Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
+                                                CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
+                                                if (checkBox.isSelected()) {
+                                                    Main.householdLocations[room].getLightCollection()[light].setLocked(false);
+                                                    appendMessageToConsole("Light #" +
+                                                            Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
+                                                            Main.householdLocations[room].getName() + " unlocked by SHP module");
+                                                }
+                                            }
+                                        } catch (Exception e) {
+                                        }
+                                    }
+                                } catch (Exception e) { }
+                            }
+                        }catch (Exception e){}
                     }
                 }
             }
             else {
-                appendMessageToConsole("AWAY mode set to OFF");
-                tb.setText("Turn on AWAY mode");
-                Main.currentActiveProfile.setAway(false);
-
-                // unlock all doors
-                for (int room = 0; room < Main.householdLocations.length; room++) {
-                    for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
-                        Main.householdLocations[room].getDoorCollection()[door].setLocked(false);
-                        appendMessageToConsole("Door #" +
-                                Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
-                                Main.householdLocations[room].getName() + " unlocked by SHP module");
-                    }
-                }
-
-                // unlock all "locked" lights, so they may be turned off whenever as usual
-                for (int room = 0; room < Main.householdLocations.length; room++) {
-                    for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
-                        for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
-                            try {
-                                if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
-                                        Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
-                                    CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
-                                    if (checkBox.isSelected()) {
-                                        Main.householdLocations[room].getLightCollection()[light].setLocked(false);
-                                        appendMessageToConsole("Light #" +
-                                                Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
-                                                Main.householdLocations[room].getName() + " unlocked by SHP module");
-                                    }
-                                }
-                            }catch (Exception e){}
-                        }
-                    }
-                }
+                throw new Exception();
             }
         } catch(Exception e) {
             tb.setSelected(false);

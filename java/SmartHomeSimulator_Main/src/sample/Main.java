@@ -690,6 +690,7 @@ public class Main extends Application {
                         hl.setDisable(true);
                         main_dashboard.getChildren().set(a, hl);
                     } else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
+
                         SHS_MODULE = makeSHSmodule();
                         TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab = tabPane.getTabs().get(0);
@@ -1019,17 +1020,15 @@ public class Main extends Application {
         confirmButton.setTranslateY(70);
         confirmButton.setTranslateX(270);
         confirmButton.setDisable(true);
+
         //confirmButton.setOnAction(e->sample.Controller.setTimeLimitAwayMode(timeBox, timeLimit));
+
         if ((currentActiveProfile==null)) {
             confirmButton.setDisable(true);
         }
         else {
-            if (simulationIsOn) {
-                confirmButton.setDisable(true);
-            }
-            else {
-                confirmButton.setDisable(false);
-            }
+            if (simulationIsOn) { confirmButton.setDisable(true); }
+            else { confirmButton.setDisable(false); }
         }
 
         ToggleButton tb = new ToggleButton();
@@ -1042,14 +1041,8 @@ public class Main extends Application {
         awayLightsButton.setTranslateX(380); awayLightsButton.setTranslateY(50);
         awayLightsButton.setOnAction(e->Controller.configureAwayLights());
 
-        if (numberOfTimesSHPModuleCreated==0) {
-            SHP_MODULE.getChildren().addAll(tb, confirmButton, suspBox,
-                    suspiciousLabel, line, timeLimit, timeBox, warningText, awayLightsButton);
-        }
-
-
+        SHP_MODULE.getChildren().addAll(tb, confirmButton, suspBox, suspiciousLabel, line, timeLimit, timeBox, warningText, awayLightsButton);
         numberOfTimesSHPModuleCreated++;
-
         return SHP_MODULE;
     }
 }
