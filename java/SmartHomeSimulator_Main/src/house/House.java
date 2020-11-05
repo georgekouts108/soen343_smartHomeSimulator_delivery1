@@ -197,6 +197,10 @@ public class House {
                 checkBox.setSelected(false);
             }
 
+            if (room.getLightCollection()[L].isLocked()) {
+                checkBox.setStyle("-fx-border-color:#00ff00");
+            }
+
             checkBox.setOnAction(e->{
                 if (checkBox.isSelected()) {
                     // turn the light on
@@ -259,6 +263,10 @@ public class House {
             }
             else {
                 checkBox.setSelected(false);
+            }
+
+            if (room.getWindowCollection()[w].isBlocked()) {
+                checkBox.setStyle("-fx-border-color:#ff0000");
             }
 
             checkBox.setOnAction(e->{
@@ -329,6 +337,11 @@ public class House {
             else {
                 checkBox.setSelected(false);
             }
+
+            if (room.getDoorCollection()[d].isLocked()) {
+                checkBox.setStyle("-fx-border-color:#0000ff");
+            }
+
 
             checkBox.setOnAction(e->{
                 if (checkBox.isSelected()) {
@@ -425,6 +438,7 @@ public class House {
                                 if (roomLayout.getChildren().get(cb).getId().equals
                                         ("doorCheckboxID#"+room.getDoorCollection()[l].getUtilityID())) {
                                     CheckBox tempCB = (CheckBox) roomLayout.getChildren().get(cb);
+                                    tempCB.setStyle("-fx-border-color:#0000ff");
                                     tempCB.setSelected(false);
                                     roomLayout.getChildren().set(cb, tempCB);
                                     break;
@@ -445,8 +459,21 @@ public class House {
             else {
                 doorLock.setText("Lock");
                 for (int d = 0; d < room.getDoorCollection().length; d++) {
+                    for (int cb = 0; cb < roomLayout.getChildren().size(); cb++) {
+                        try {
+                            if (roomLayout.getChildren().get(cb).getId().equals
+                                    ("doorCheckboxID#"+room.getDoorCollection()[d].getUtilityID())) {
+                                CheckBox tempCB = (CheckBox) roomLayout.getChildren().get(cb);
+                                tempCB.setStyle("");
+                                roomLayout.getChildren().set(cb, tempCB);
+                                break;
+                            }
+                        }
+                        catch(Exception ex){}
+                    }
                     room.getDoorCollection()[d].setLocked(false);
                 }
+
             }
         });
 
@@ -743,12 +770,14 @@ public class House {
                     for (int l = 0; l < room.getLightCollection().length; l++) {
                         try {
                             room.getLightCollection()[l].setState(true);
+                            room.getLightCollection()[l].setLocked(true);
                             setIconVisibility(room, "Light", true);
                             for (int cb = 0; cb < room_layout.getChildren().size(); cb++) {
                                 try {
                                     if (room_layout.getChildren().get(cb).getId().equals
                                             ("lightCheckboxID#"+room.getLightCollection()[l].getUtilityID())) {
                                         CheckBox tempCB = (CheckBox) room_layout.getChildren().get(cb);
+                                        tempCB.setStyle("-fx-border-color:#00ff00");
                                         tempCB.setSelected(true);
                                         room_layout.getChildren().set(cb, tempCB);
                                         break;

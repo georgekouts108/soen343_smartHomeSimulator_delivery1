@@ -1630,17 +1630,21 @@ public class Controller {
                     Main.currentActiveProfile.setAway(false);
                     Main.setIs_away(false);
 
-                    // unlock all doors
+                    // unlock all doors (except the garage, backyard, and entrance)
                     for (int room = 0; room < Main.householdLocations.length; room++) {
                         try {
                             for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
                                 try {
-                                    Main.householdLocations[room].getDoorCollection()[door].setLocked(false);
-                                    appendMessageToConsole("Door #" +
-                                            Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
-                                            Main.householdLocations[room].getName() + " unlocked by SHP module");
-                                } catch (Exception e) {
-                                }
+                                    if (!Main.householdLocations[room].getName().equals("entrance") &&
+                                            !Main.householdLocations[room].getName().equals("backyard") &&
+                                            !Main.householdLocations[room].getName().equals("garage")) {
+                                        Main.householdLocations[room].getDoorCollection()[door].setLocked(false);
+                                        appendMessageToConsole("Door #" +
+                                                Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
+                                                Main.householdLocations[room].getName() + " unlocked by SHP module");
+
+                                    }
+                                } catch (Exception e) {}
                             }
                         }
                         catch (Exception e){}
