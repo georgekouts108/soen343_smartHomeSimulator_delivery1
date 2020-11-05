@@ -875,7 +875,7 @@ public class Main extends Application {
                 }catch (Exception excep){}
             }
             sample.Controller.CurrentDateSimulation(datePicker, (Label) main_dashboard.getChildren().get(indexOfSimDateLabel),
-                    (Label) main_dashboard.getChildren().get(indexOfSimTimeLabel), hourField, minuteField);}).start();
+                    (Label) main_dashboard.getChildren().get(indexOfSimTimeLabel), hourField, minuteField, (float) 1.0);}).start();
 
         });
 

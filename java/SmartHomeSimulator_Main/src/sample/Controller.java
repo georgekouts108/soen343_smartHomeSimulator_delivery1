@@ -81,7 +81,9 @@ public class Controller {
      * @param hourField
      * @param minuteField
      */
-    public static void CurrentDateSimulation(DatePicker datePicker, Label dateText, Label timeText, TextField hourField, TextField minuteField){
+
+    //to fix: undo previous thread when new one is created
+    public static void CurrentDateSimulation(DatePicker datePicker, Label dateText, Label timeText, TextField hourField, TextField minuteField, float timeSpeed){
         try{
             int second = 0;
             int minute = 0;
@@ -97,6 +99,7 @@ public class Controller {
                     int finalHour = hour;
                     int finalMinute = minute;
                     Platform.runLater(()->timeText.setText("Time "+(finalHour)%24+":"+(finalMinute)%60+":"+ finalSecond%60));
+                    //should make the sleep alternate depending on speed given.
                     Thread.sleep(1000);
                 }
                 else
@@ -286,8 +289,27 @@ public class Controller {
             confirmDTbutton.setTranslateX(300);
             confirmDTbutton.setTranslateY(30);
 
+            //for sim time speed
+            Label timeSpeed  = new Label("Time speed multiplier: ");
+            timeSpeed.setId("timeSpeed");
+            timeSpeed.setTranslateX(350);
+            timeSpeed.setTranslateY(100);
+
+            TextField timeMultiplier = new TextField("");
+            timeMultiplier.setId("timeMultiplier");
+            timeMultiplier.setTranslateX(425);
+            timeMultiplier.setTranslateY(100);
+            timeMultiplier.setPromptText("i.e. 0.1, 2, 100");
+
+            Button speedButton = new Button("Go");
+            speedButton.setId("timeSpeed");
+            speedButton.setTranslateX(600);
+            speedButton.setTranslateY(100);
+            speedButton.setOnAction(e -> editTimeSpeed(timeMultiplier.getText()));
+            //end sim time speed
+
             Main.editContextLayout.getChildren().addAll(datePicker, datePickerLabel, timePickerLabel, hourField,
-                    minuteField, confirmDTbutton);
+                    minuteField, confirmDTbutton, timeSpeed, timeMultiplier, speedButton);
 
             Line line1 = new Line();
             line1.setId("line1");
@@ -626,6 +648,7 @@ public class Controller {
                     }
                 }
             }
+
             Button moreButton = new Button("More...");
             moreButton.setId("GoToEditContextScene2FromScene1");
             moreButton.setTranslateX(200);
@@ -1716,6 +1739,12 @@ public class Controller {
                 break;
             }
         }
+    }
+
+    public static void editTimeSpeed(String multiplier){
+        System.out.println("Test " + Float.parseFloat(multiplier));
+        //grab thread or info that is already shown in sim time, and speed it up...
+        //i.e. make use of currentDateSimulation method
     }
 
 }
