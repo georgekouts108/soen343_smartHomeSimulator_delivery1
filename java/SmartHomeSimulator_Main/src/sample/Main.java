@@ -595,7 +595,7 @@ public class Main extends Application {
         modulesInterface.setTranslateX(110);
         modulesInterface.setId("modulesInterface");
         modulesInterface.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        modulesInterface.setStyle("-fx-border-width: 2; -fx-border-color: black;");
+        modulesInterface.setStyle("-fx-border-width: 0 2 2 0; -fx-border-color: #6e6e6e;");
 
         if (numberOfTimesDashboardPageLoaded == 0) {
             main_dashboard.getChildren().add(rectangle);
@@ -775,7 +775,7 @@ public class Main extends Application {
 
         ComboBox locationMenu = new ComboBox();
         locationMenu.setId("locationMenu");
-        locationMenu.setTranslateX(160); locationMenu.setTranslateY(180);
+        locationMenu.setTranslateX(150); locationMenu.setTranslateY(180);
         locationMenu.setItems(FXCollections.observableArrayList(countries));
         locationMenu.setPrefWidth(200); locationMenu.setPromptText("Select country...");
         if ((currentActiveProfile==null)) {
@@ -792,7 +792,7 @@ public class Main extends Application {
 
         Button confirmLocationButton = new Button("Set Location");
         confirmLocationButton.setId("confirmLocationButton");
-        confirmLocationButton.setTranslateX(200);
+        confirmLocationButton.setTranslateX(210);
         confirmLocationButton.setTranslateY(260);
         confirmLocationButton.setOnAction(e->{
             for (int a = 0; a < main_dashboard.getChildren().size(); a++) {
@@ -822,10 +822,10 @@ public class Main extends Application {
         Line line2 = new Line(); line2.setStartX(0); line2.setEndX(500); line2.setTranslateY(300);
 
         Label setDateTimeLabel = new Label("Set Date and Time");
-        setDateTimeLabel.setTranslateX(200); setDateTimeLabel.setTranslateY(300);
+        setDateTimeLabel.setTranslateX(200); setDateTimeLabel.setTranslateY(310);
 
         DatePicker datePicker = new DatePicker(); datePicker.setId("datePicker");
-        datePicker.setTranslateX(150); datePicker.setTranslateY(340); datePicker.setPromptText("Select date...");
+        datePicker.setTranslateX(160); datePicker.setTranslateY(340); datePicker.setPromptText("Select date...");
         if ((currentActiveProfile==null)) {
             datePicker.setDisable(true);
         }
@@ -875,7 +875,7 @@ public class Main extends Application {
         }
 
         Button confirmTimeButton = new Button("Confirm New Time"); confirmTimeButton.setId("confirmTimeButton");
-        confirmTimeButton.setTranslateX(200); confirmTimeButton.setTranslateY(435);
+        confirmTimeButton.setTranslateX(190); confirmTimeButton.setTranslateY(435);
         confirmTimeButton.setTextAlignment(TextAlignment.CENTER);
         confirmTimeButton.setOnAction(e -> {new Thread(()->{
 
