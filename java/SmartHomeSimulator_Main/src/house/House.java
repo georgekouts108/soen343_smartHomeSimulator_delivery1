@@ -157,6 +157,7 @@ public class House {
         // labels
         Label roomIDNameLabel = new Label("#"+ID+" "+name);
         roomIDNameLabel.setTranslateX(10);
+        roomIDNameLabel.setId("labelRoom#"+room.getRoomID());
         roomLayout.getChildren().add(roomIDNameLabel);
 
         Label lightsLabel = new Label("Lights");
@@ -801,5 +802,4 @@ public class House {
         }
         catch(Exception e){}
     }
-
 }

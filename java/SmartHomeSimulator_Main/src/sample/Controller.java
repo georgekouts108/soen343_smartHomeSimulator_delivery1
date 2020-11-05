@@ -147,10 +147,16 @@ public class Controller {
                 }
             }
 
-            String stageTitle = "Smart Home Simulator -- logged in as #" + userProfile.getProfileID() + " \"" + userProfile.getType().toUpperCase() + "\"";
-//            if (userProfile.isAdmin()) {
-//                stageTitle += " (ADMIN)";
-//            }
+            String stageTitle = "Smart Home Simulator -- logged in as #" +
+                    userProfile.getProfileID() + " \"" + userProfile.getType().toUpperCase() + "\"";
+
+            if (Main.isIs_away()) {
+                stageTitle+=" {AWAY MODE ON}";
+            }
+            else {
+                stageTitle+=" {AWAY MODE OFF}";
+            }
+
             Main.main_stage.setTitle(stageTitle);
 
             Hyperlink logoutLink = new Hyperlink("Logout");
@@ -1542,6 +1548,9 @@ public class Controller {
             if ((numOfPeopleOutside == Main.profiles.length)) {
 
                 if (tb.isSelected()) {
+                    Main.main_stage.setTitle("Smart Home Simulator -- logged in as #" +
+                            Main.currentActiveProfile.getProfileID() + " \"" + Main.currentActiveProfile.getType().toUpperCase() +
+                            "\" {AWAY MODE ON}");
                     appendMessageToConsole("AWAY mode set to ON");
                     tb.setText("Turn off AWAY mode");
                     Main.currentActiveProfile.setAway(true);
@@ -1613,6 +1622,9 @@ public class Controller {
                     }
                 }
                 else {
+                    Main.main_stage.setTitle("Smart Home Simulator -- logged in as #" +
+                            Main.currentActiveProfile.getProfileID() + " \"" + Main.currentActiveProfile.getType().toUpperCase() +
+                            "\" {AWAY MODE OFF}");
                     appendMessageToConsole("AWAY mode set to OFF");
                     tb.setText("Turn on AWAY mode");
                     Main.currentActiveProfile.setAway(false);
