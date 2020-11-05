@@ -32,36 +32,36 @@ public class TestUseCase9 extends ApplicationTest{
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setResizable(false);
-        Main.setMain_stage(primaryStage);
+        SHSHelpers.setMain_stage(primaryStage);
 
         /**PROFILE SELECTION PAGE INITIALIZATION*/
-        Main.setProfileSelection(new AnchorPane());
-        Main.setProfileScene(new Scene(Main.getProfileSelection()
-                , Main.getLoginpageHeight(), Main.getLoginpageWidth()));
+        SHSHelpers.setProfileSelection(new AnchorPane());
+        SHSHelpers.setProfileScene(new Scene(SHSHelpers.getProfileSelection()
+                , SHSHelpers.getLoginpageHeight(), SHSHelpers.getLoginpageWidth()));
 
         /**MODULE INITIALIZATIONS */
-        Main.setShsModule(new AnchorPane());
-        Main.setShcModule(new AnchorPane());
-        Main.setShpModule(new AnchorPane());
-        Main.setShhModule(new AnchorPane());
+        SHSHelpers.setShsModule(new AnchorPane());
+        SHSHelpers.setShcModule(new AnchorPane());
+        SHSHelpers.setShpModule(new AnchorPane());
+        SHSHelpers.setShhModule(new AnchorPane());
 
         /**MAIN DASHBOARD INITIALIZATIONS */
-        Main.setMain_dashboard(new AnchorPane());
+        SHSHelpers.setMain_dashboard(new AnchorPane());
         Main.createMainDashboardNecessities();
 
-        Main.setDashboardScene(new Scene(Main.getMain_dashboard(),
-                Main.getDashboardHeight(), Main.getDashboardWidth()));
+        SHSHelpers.setDashboardScene(new Scene(Main.getMain_dashboard(),
+                SHSHelpers.getDashboardHeight(), SHSHelpers.getDashboardWidth()));
 
         /**EDIT SIMULATION CONTEXT INITIALIZATIONS */
-        Main.setEditContextLayout(new AnchorPane());
-        Main.setEditContextScene(new Scene(Main.getEditContextLayout(), 650, 650));
-        Main.setEditContextLayout2(new AnchorPane());
-        Main.setEditContextScene2(new Scene(Main.getEditContextLayout2(), 650, 650));
+        SHSHelpers.setEditContextLayout(new AnchorPane());
+        SHSHelpers.setEditContextScene(new Scene(SHSHelpers.getEditContextLayout(), 650, 650));
+        SHSHelpers.setEditContextLayout2(new AnchorPane());
+        SHSHelpers.setEditContextScene2(new Scene(SHSHelpers.getEditContextLayout2(), 650, 650));
 
         /**SET THE MAIN STAGE*/
-        Main.getMain_stage().setTitle("Smart Home Simulator - No user");
-        Main.getMain_stage().setScene(Main.getDashboardScene());
-        Main.getMain_stage().show();
+        SHSHelpers.getMain_stage().setTitle("Smart Home Simulator - No user");
+        SHSHelpers.getMain_stage().setScene(SHSHelpers.getDashboardScene());
+        SHSHelpers.getMain_stage().show();
     }
 
     @org.junit.Test

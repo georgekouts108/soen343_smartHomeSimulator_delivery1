@@ -25,36 +25,36 @@ public class TestUseCase5 extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setResizable(false);
-        Main.setMain_stage(primaryStage);
+        SHSHelpers.setMain_stage(primaryStage);
 
         /**PROFILE SELECTION PAGE INITIALIZATION*/
-        Main.setProfileSelection(new AnchorPane());
-        Main.setProfileScene(new Scene(Main.getProfileSelection(),
-                Main.getLoginpageHeight(), Main.getLoginpageWidth()));
+        SHSHelpers.setProfileSelection(new AnchorPane());
+        SHSHelpers.setProfileScene(new Scene(SHSHelpers.getProfileSelection(),
+                SHSHelpers.getLoginpageHeight(), SHSHelpers.getLoginpageWidth()));
 
         /**MODULE INITIALIZATIONS */
-        Main.setShsModule(new AnchorPane());
-        Main.setShcModule(new AnchorPane());
-        Main.setShpModule(new AnchorPane());
-        Main.setShhModule(new AnchorPane());
+        SHSHelpers.setShsModule(new AnchorPane());
+        SHSHelpers.setShcModule(new AnchorPane());
+        SHSHelpers.setShpModule(new AnchorPane());
+        SHSHelpers.setShhModule(new AnchorPane());
 
         /**MAIN DASHBOARD INITIALIZATIONS */
-        Main.setMain_dashboard(new AnchorPane());
+        SHSHelpers.setMain_dashboard(new AnchorPane());
         Main.createMainDashboardNecessities();
 
-        Main.setDashboardScene(new Scene(Main.getMain_dashboard(),
-                Main.getDashboardHeight(), Main.getDashboardWidth()));
+        SHSHelpers.setDashboardScene(new Scene(Main.getMain_dashboard(),
+                SHSHelpers.getDashboardHeight(), SHSHelpers.getDashboardWidth()));
 
         /**EDIT SIMULATION CONTEXT INITIALIZATIONS */
-        Main.setEditContextLayout(new AnchorPane());
-        Main.setEditContextScene(new Scene(Main.getEditContextLayout(), 650, 650));
-        Main.setEditContextLayout2(new AnchorPane());
-        Main.setEditContextScene2(new Scene(Main.getEditContextLayout2(), 650, 650));
+        SHSHelpers.setEditContextLayout(new AnchorPane());
+        SHSHelpers.setEditContextScene(new Scene(SHSHelpers.getEditContextLayout(), 650, 650));
+        SHSHelpers.setEditContextLayout2(new AnchorPane());
+        SHSHelpers.setEditContextScene2(new Scene(SHSHelpers.getEditContextLayout2(), 650, 650));
 
         /**SET THE MAIN STAGE*/
-        Main.getMain_stage().setTitle("Smart Home Simulator - No user");
-        Main.getMain_stage().setScene(Main.getDashboardScene());
-        Main.getMain_stage().show();
+        SHSHelpers.getMain_stage().setTitle("Smart Home Simulator - No user");
+        SHSHelpers.getMain_stage().setScene(SHSHelpers.getDashboardScene());
+        SHSHelpers.getMain_stage().show();
     }
 
     FileChooser fileChooser = null;
@@ -66,29 +66,29 @@ public class TestUseCase5 extends ApplicationTest {
             fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
 
-            Main.setHouseLayoutFile(fileChooser.showOpenDialog(Main.getMain_stage()));
-            if (Main.getHouseLayoutFile() != null) {
-                Main.setHouseLayoutFileName(Main.getHouseLayoutFile().getName());
-                Main.setHouseLayoutFilePathName( Main.getHouseLayoutFile().getPath());
-                Main.getHouseLayoutFile().setReadOnly();
+            SHSHelpers.setHouseLayoutFile(fileChooser.showOpenDialog(SHSHelpers.getMain_stage()));
+            if (SHSHelpers.getHouseLayoutFile() != null) {
+                SHSHelpers.setHouseLayoutFileName(SHSHelpers.getHouseLayoutFile().getName());
+                SHSHelpers.setHouseLayoutFilePathName( SHSHelpers.getHouseLayoutFile().getPath());
+                SHSHelpers.getHouseLayoutFile().setReadOnly();
                 try {
-                    house = new House(Main.getHouseLayoutFilePathName());
+                    house = new House(SHSHelpers.getHouseLayoutFilePathName());
                 } catch (FileNotFoundException fileNotFoundException) {
                     fileNotFoundException.printStackTrace();
                 }
-                Main.setHouseholdLocations( house.getRooms());
-                Main.setHouseLayout( house.getLayout());
-                Main.getHouseLayout().setPrefHeight(675);
-                Main.getHouseLayout().setPrefWidth(675);
-                Main.getHouseLayout().setId("houseLayout");
-                Main.getHouseLayout().setTranslateX(615);
-                Main.getHouseLayout().setTranslateY(10);
-                Main.getHouseLayout().setDisable(true);
+                SHSHelpers.setHouseholdLocations( house.getRooms());
+                SHSHelpers.setHouseLayout( house.getLayout());
+                SHSHelpers.getHouseLayout().setPrefHeight(675);
+                SHSHelpers.getHouseLayout().setPrefWidth(675);
+                SHSHelpers.getHouseLayout().setId("houseLayout");
+                SHSHelpers.getHouseLayout().setTranslateX(615);
+                SHSHelpers.getHouseLayout().setTranslateY(10);
+                SHSHelpers.getHouseLayout().setDisable(true);
                 //Main.getMain_dashboard().getChildren().remove(chooseFileButton);
-                Main.getMain_dashboard().getChildren().add(Main.getHouseLayout());
+                Main.getMain_dashboard().getChildren().add(SHSHelpers.getHouseLayout());
                 Main.createMainDashboardNecessities();
             }
-            assertEquals(true, Main.getHouseLayout() != null);
+            assertEquals(true, SHSHelpers.getHouseLayout() != null);
         });
     }
 }

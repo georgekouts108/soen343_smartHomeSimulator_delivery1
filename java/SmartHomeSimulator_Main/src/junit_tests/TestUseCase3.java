@@ -29,36 +29,36 @@ public class TestUseCase3 extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setResizable(false);
-        Main.setMain_stage(primaryStage);
+        SHSHelpers.setMain_stage(primaryStage);
 
         /**PROFILE SELECTION PAGE INITIALIZATION*/
-        Main.setProfileSelection(new AnchorPane());
-        Main.setProfileScene(new Scene(Main.getProfileSelection()
-                , Main.getLoginpageHeight(), Main.getLoginpageWidth()));
+        SHSHelpers.setProfileSelection(new AnchorPane());
+        SHSHelpers.setProfileScene(new Scene(SHSHelpers.getProfileSelection()
+                , SHSHelpers.getLoginpageHeight(), SHSHelpers.getLoginpageWidth()));
 
         /**MODULE INITIALIZATIONS */
-        Main.setShsModule(new AnchorPane());
-        Main.setShcModule(new AnchorPane());
-        Main.setShpModule(new AnchorPane());
-        Main.setShhModule(new AnchorPane());
+        SHSHelpers.setShsModule(new AnchorPane());
+        SHSHelpers.setShcModule(new AnchorPane());
+        SHSHelpers.setShpModule(new AnchorPane());
+        SHSHelpers.setShhModule(new AnchorPane());
 
         /**MAIN DASHBOARD INITIALIZATIONS */
-        Main.setMain_dashboard(new AnchorPane());
+        SHSHelpers.setMain_dashboard(new AnchorPane());
         Main.createMainDashboardNecessities();
 
-        Main.setDashboardScene(new Scene(Main.getMain_dashboard(),
-                Main.getDashboardHeight(), Main.getDashboardWidth()));
+        SHSHelpers.setDashboardScene(new Scene(Main.getMain_dashboard(),
+                SHSHelpers.getDashboardHeight(), SHSHelpers.getDashboardWidth()));
 
         /**EDIT SIMULATION CONTEXT INITIALIZATIONS */
-        Main.setEditContextLayout(new AnchorPane());
-        Main.setEditContextScene(new Scene(Main.getEditContextLayout(), 650, 650));
-        Main.setEditContextLayout2(new AnchorPane());
-        Main.setEditContextScene2(new Scene(Main.getEditContextLayout2(), 650, 650));
+        SHSHelpers.setEditContextLayout(new AnchorPane());
+        SHSHelpers.setEditContextScene(new Scene(SHSHelpers.getEditContextLayout(), 650, 650));
+        SHSHelpers.setEditContextLayout2(new AnchorPane());
+        SHSHelpers.setEditContextScene2(new Scene(SHSHelpers.getEditContextLayout2(), 650, 650));
 
         /**SET THE MAIN STAGE*/
-        Main.getMain_stage().setTitle("Smart Home Simulator - No user");
-        Main.getMain_stage().setScene(Main.getDashboardScene());
-        Main.getMain_stage().show();
+        SHSHelpers.getMain_stage().setTitle("Smart Home Simulator - No user");
+        SHSHelpers.getMain_stage().setScene(SHSHelpers.getDashboardScene());
+        SHSHelpers.getMain_stage().show();
     }
 
     @org.junit.Test
@@ -67,29 +67,29 @@ public class TestUseCase3 extends ApplicationTest {
         Controller.createNewProfile(new TextField("P"));
         Hyperlink tempEditLink = new Hyperlink();
         Hyperlink tempHyperLink = new Hyperlink();
-        for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
-            if (Main.getProfileSelection().getChildren().get(a).getId()
-                    .equals("hyperlinkForProfile" + Main.getProfiles()[0].getProfileID())) {
-                tempHyperLink = (Hyperlink) Main.getProfileSelection().getChildren().get(a);
+        for (int a = 0; a < SHSHelpers.getProfileSelection().getChildren().size(); a++) {
+            if (SHSHelpers.getProfileSelection().getChildren().get(a).getId()
+                    .equals("hyperlinkForProfile" + SHSHelpers.getProfiles()[0].getProfileID())) {
+                tempHyperLink = (Hyperlink) SHSHelpers.getProfileSelection().getChildren().get(a);
 
-            } else if (Main.getProfileSelection().getChildren().get(a).getId()
-                    .equals("editLinkForProfile" + Main.getProfiles()[0].getProfileID())) {
-                tempEditLink = (Hyperlink) Main.getProfileSelection().getChildren().get(a);
+            } else if (SHSHelpers.getProfileSelection().getChildren().get(a).getId()
+                    .equals("editLinkForProfile" + SHSHelpers.getProfiles()[0].getProfileID())) {
+                tempEditLink = (Hyperlink) SHSHelpers.getProfileSelection().getChildren().get(a);
             }
         }
-        Controller.editProfile(Main.getProfiles()[0],
+        Controller.editProfile(SHSHelpers.getProfiles()[0],
                 tempHyperLink, tempEditLink);
 
 
-        for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
-            if (Main.getProfileSelection().getChildren().get(a).getId()
+        for (int a = 0; a < SHSHelpers.getProfileSelection().getChildren().size(); a++) {
+            if (SHSHelpers.getProfileSelection().getChildren().get(a).getId()
                     .equals("editProfileTextField")) {
-                TextField tf = (TextField) Main.getProfileSelection().getChildren().get(a);
+                TextField tf = (TextField) SHSHelpers.getProfileSelection().getChildren().get(a);
                 tf.setText("C");
-                for (int b = 0; b < Main.getProfileSelection().getChildren().size(); b++) {
-                    if (Main.getProfileSelection().getChildren().get(b).getId()
+                for (int b = 0; b < SHSHelpers.getProfileSelection().getChildren().size(); b++) {
+                    if (SHSHelpers.getProfileSelection().getChildren().get(b).getId()
                             .equals("acceptEditProfileButton")) {
-                        javafx.scene.control.Button button = (javafx.scene.control.Button) Main.getProfileSelection().getChildren().get(b);
+                        javafx.scene.control.Button button = (javafx.scene.control.Button) SHSHelpers.getProfileSelection().getChildren().get(b);
                         button.fire();
                         break;
                     }
@@ -98,7 +98,7 @@ public class TestUseCase3 extends ApplicationTest {
             }
         }
 
-        assertEquals("Child", Main.getProfiles()[0].getType());
+        assertEquals("Child", SHSHelpers.getProfiles()[0].getType());
     }
 
     @org.junit.Test
@@ -106,12 +106,12 @@ public class TestUseCase3 extends ApplicationTest {
 
         Controller.createNewProfile(new TextField("P"));
 
-        for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
-            if (Main.getProfileSelection().getChildren().get(a).getId()
-                    .equals("deleteLinkForProfile" + Main.getProfiles()[0].getProfileID())) {
-                Controller.deleteProfile(Main.getProfiles()[0],
-                        (Hyperlink)Main.getProfileSelection().getChildren().get(a));
-                assertEquals(true, Main.getProfiles().length==0);
+        for (int a = 0; a < SHSHelpers.getProfileSelection().getChildren().size(); a++) {
+            if (SHSHelpers.getProfileSelection().getChildren().get(a).getId()
+                    .equals("deleteLinkForProfile" + SHSHelpers.getProfiles()[0].getProfileID())) {
+                Controller.deleteProfile(SHSHelpers.getProfiles()[0],
+                        (Hyperlink) SHSHelpers.getProfileSelection().getChildren().get(a));
+                assertEquals(true, SHSHelpers.getProfiles().length==0);
                 break;
             }
         }

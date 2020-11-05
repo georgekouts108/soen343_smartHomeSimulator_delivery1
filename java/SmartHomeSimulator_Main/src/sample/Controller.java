@@ -150,7 +150,7 @@ public class Controller {
             String stageTitle = "Smart Home Simulator -- logged in as #" +
                     userProfile.getProfileID() + " \"" + userProfile.getType().toUpperCase() + "\"";
 
-            if (Main.isIs_away()) {
+            if (SHSHelpers.isIs_away()) {
                 stageTitle+=" {AWAY MODE ON}";
             }
             else {
@@ -1452,7 +1452,7 @@ public class Controller {
                     if (Main.profiles[prof].getProfileID() == Main.currentActiveProfile.getProfileID()) {
 
                         // when you relocate a user into the house from outside, AWAY mode is turned off
-                        if ((newRoom != null) && Main.isIs_away()) {
+                        if ((newRoom != null) && SHSHelpers.isIs_away()) {
                                 for (int s = 0; s < Main.SHP_MODULE.getChildren().size(); s++) {
                                     try {
                                         if (Main.SHP_MODULE.getChildren().get(s).getId().equals("setAwayModeButton")) {
@@ -1554,7 +1554,7 @@ public class Controller {
                     appendMessageToConsole("AWAY mode set to ON");
                     tb.setText("Turn off AWAY mode");
                     Main.currentActiveProfile.setAway(true);
-                    Main.setIs_away(true);
+                    SHSHelpers.setIs_away(true);
 
                     // close all windows;
                     for (int room = 0; room < Main.householdLocations.length; room++) {
@@ -1628,7 +1628,7 @@ public class Controller {
                     appendMessageToConsole("AWAY mode set to OFF");
                     tb.setText("Turn on AWAY mode");
                     Main.currentActiveProfile.setAway(false);
-                    Main.setIs_away(false);
+                    SHSHelpers.setIs_away(false);
 
                     // unlock all doors (except the garage, backyard, and entrance)
                     for (int room = 0; room < Main.householdLocations.length; room++) {

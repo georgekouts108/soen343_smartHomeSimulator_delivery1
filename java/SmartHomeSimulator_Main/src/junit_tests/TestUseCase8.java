@@ -39,36 +39,36 @@ public class TestUseCase8 extends ApplicationTest {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setResizable(false);
-        Main.setMain_stage(primaryStage);
+        SHSHelpers.setMain_stage(primaryStage);
 
         /**PROFILE SELECTION PAGE INITIALIZATION*/
-        Main.setProfileSelection(new AnchorPane());
-        Main.setProfileScene(new Scene(Main.getProfileSelection(),
-                Main.getLoginpageHeight(), Main.getLoginpageWidth()));
+        SHSHelpers.setProfileSelection(new AnchorPane());
+        SHSHelpers.setProfileScene(new Scene(SHSHelpers.getProfileSelection(),
+                SHSHelpers.getLoginpageHeight(), SHSHelpers.getLoginpageWidth()));
 
         /**MODULE INITIALIZATIONS */
-        Main.setShsModule(new AnchorPane());
-        Main.setShcModule(new AnchorPane());
-        Main.setShpModule(new AnchorPane());
-        Main.setShhModule(new AnchorPane());
+        SHSHelpers.setShsModule(new AnchorPane());
+        SHSHelpers.setShcModule(new AnchorPane());
+        SHSHelpers.setShpModule(new AnchorPane());
+        SHSHelpers.setShhModule(new AnchorPane());
 
         /**MAIN DASHBOARD INITIALIZATIONS */
-        Main.setMain_dashboard(new AnchorPane());
+        SHSHelpers.setMain_dashboard(new AnchorPane());
         Main.createMainDashboardNecessities();
 
-        Main.setDashboardScene(new Scene(Main.getMain_dashboard(),
-                Main.getDashboardHeight(), Main.getDashboardWidth()));
+        SHSHelpers.setDashboardScene(new Scene(Main.getMain_dashboard(),
+                SHSHelpers.getDashboardHeight(), SHSHelpers.getDashboardWidth()));
 
         /**EDIT SIMULATION CONTEXT INITIALIZATIONS */
-        Main.setEditContextLayout(new AnchorPane());
-        Main.setEditContextScene(new Scene(Main.getEditContextLayout(), 650, 650));
-        Main.setEditContextLayout2(new AnchorPane());
-        Main.setEditContextScene2(new Scene(Main.getEditContextLayout2(), 650, 650));
+        SHSHelpers.setEditContextLayout(new AnchorPane());
+        SHSHelpers.setEditContextScene(new Scene(SHSHelpers.getEditContextLayout(), 650, 650));
+        SHSHelpers.setEditContextLayout2(new AnchorPane());
+        SHSHelpers.setEditContextScene2(new Scene(SHSHelpers.getEditContextLayout2(), 650, 650));
 
         /**SET THE MAIN STAGE*/
-        Main.getMain_stage().setTitle("Smart Home Simulator - No user");
-        Main.getMain_stage().setScene(Main.getDashboardScene());
-        Main.getMain_stage().show();
+        SHSHelpers.getMain_stage().setTitle("Smart Home Simulator - No user");
+        SHSHelpers.getMain_stage().setScene(SHSHelpers.getDashboardScene());
+        SHSHelpers.getMain_stage().show();
     }
 
     @Before
@@ -77,11 +77,11 @@ public class TestUseCase8 extends ApplicationTest {
             Controller.createNewProfile(new TextField("P")); // profile 1
             Controller.createNewProfile(new TextField("C")); // profile 2
 
-            for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
-                if (Main.getProfileSelection().getChildren().get(a).getId()
-                        .equals("hyperlinkForProfile" + Main.getProfiles()[0].getProfileID())) {
-                    Hyperlink loginLink = (Hyperlink) Main.getProfileSelection().getChildren().get(a);
-                    Controller.goToMainDashboardScene(Main.getProfiles()[0], loginLink);
+            for (int a = 0; a < SHSHelpers.getProfileSelection().getChildren().size(); a++) {
+                if (SHSHelpers.getProfileSelection().getChildren().get(a).getId()
+                        .equals("hyperlinkForProfile" + SHSHelpers.getProfiles()[0].getProfileID())) {
+                    Hyperlink loginLink = (Hyperlink) SHSHelpers.getProfileSelection().getChildren().get(a);
+                    Controller.goToMainDashboardScene(SHSHelpers.getProfiles()[0], loginLink);
                     break;
                 }
             }
@@ -90,25 +90,25 @@ public class TestUseCase8 extends ApplicationTest {
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
 
-            Main.setHouseLayoutFile(fileChooser.showOpenDialog(Main.getMain_stage()));
-            if (Main.getHouseLayoutFile() != null) {
-                Main.setHouseLayoutFileName(Main.getHouseLayoutFile().getName());
-                Main.setHouseLayoutFilePathName(Main.getHouseLayoutFile().getPath());
-                Main.getHouseLayoutFile().setReadOnly();
+            SHSHelpers.setHouseLayoutFile(fileChooser.showOpenDialog(SHSHelpers.getMain_stage()));
+            if (SHSHelpers.getHouseLayoutFile() != null) {
+                SHSHelpers.setHouseLayoutFileName(SHSHelpers.getHouseLayoutFile().getName());
+                SHSHelpers.setHouseLayoutFilePathName(SHSHelpers.getHouseLayoutFile().getPath());
+                SHSHelpers.getHouseLayoutFile().setReadOnly();
                 try {
-                    house = new House(Main.getHouseLayoutFilePathName());
+                    house = new House(SHSHelpers.getHouseLayoutFilePathName());
                 } catch (FileNotFoundException fileNotFoundException) {
                     fileNotFoundException.printStackTrace();
                 }
-                Main.setHouseholdLocations(house.getRooms());
-                Main.setHouseLayout(house.getLayout());
-                Main.getHouseLayout().setPrefHeight(675);
-                Main.getHouseLayout().setPrefWidth(675);
-                Main.getHouseLayout().setId("houseLayout");
-                Main.getHouseLayout().setTranslateX(615);
-                Main.getHouseLayout().setTranslateY(10);
-                Main.getHouseLayout().setDisable(true);
-                Main.getMain_dashboard().getChildren().add(Main.getHouseLayout());
+                SHSHelpers.setHouseholdLocations(house.getRooms());
+                SHSHelpers.setHouseLayout(house.getLayout());
+                SHSHelpers.getHouseLayout().setPrefHeight(675);
+                SHSHelpers.getHouseLayout().setPrefWidth(675);
+                SHSHelpers.getHouseLayout().setId("houseLayout");
+                SHSHelpers.getHouseLayout().setTranslateX(615);
+                SHSHelpers.getHouseLayout().setTranslateY(10);
+                SHSHelpers.getHouseLayout().setDisable(true);
+                Main.getMain_dashboard().getChildren().add(SHSHelpers.getHouseLayout());
                 Main.createMainDashboardNecessities();
             }
 
@@ -116,7 +116,7 @@ public class TestUseCase8 extends ApplicationTest {
             currentRoom.setId("currentRoomOfLoggedInUser");
             currentRoom.setTranslateY(200);
             currentRoom.setTranslateX(450);
-            Main.getEditContextLayout().getChildren().add(currentRoom);
+            SHSHelpers.getEditContextLayout().getChildren().add(currentRoom);
 
             int transY = 120;
             for (int r = 0; r < Main.getHouseholdLocations().length + 1; r++) {
@@ -135,77 +135,77 @@ public class TestUseCase8 extends ApplicationTest {
                     hyp.setOnAction(e -> {
 
                         // change the label of the number of people in the origin and destination rooms
-                        if ((Main.getCurrentActiveProfile() != null)) {
-                            if (Main.getCurrentLocation() == null) {
+                        if ((SHSHelpers.getCurrentActiveProfile() != null)) {
+                            if (SHSHelpers.getCurrentLocation() == null) {
                                 Main.getHouseholdLocations()[fr].setNumberOfPeopleInside(Main.getHouseholdLocations()[fr].getNumberOfPeopleInside() + 1);
 
                                 // put that for loop here
-                                for (int i = 0; i < Main.getEditContextLayout().getChildren().size(); i++) {
+                                for (int i = 0; i < SHSHelpers.getEditContextLayout().getChildren().size(); i++) {
                                     try {
-                                        if (Main.getEditContextLayout().getChildren().get(i).getId().equals("numOfPeopleOutside")) {
-                                            Label label = (Label) Main.getEditContextLayout().getChildren().get(i);
+                                        if (SHSHelpers.getEditContextLayout().getChildren().get(i).getId().equals("numOfPeopleOutside")) {
+                                            Label label = (Label) SHSHelpers.getEditContextLayout().getChildren().get(i);
                                             int numberOfPeopleInHouse = 0;
                                             int numberOfPeopleOutside;
                                             for (int p = 0; p < Main.getHouseholdLocations().length; p++) {
                                                 numberOfPeopleInHouse += Main.getHouseholdLocations()[p].getNumberOfPeopleInside();
                                             }
-                                            numberOfPeopleOutside = Main.getProfiles().length - numberOfPeopleInHouse;
+                                            numberOfPeopleOutside = SHSHelpers.getProfiles().length - numberOfPeopleInHouse;
 
                                             label.setText("# of people: " + numberOfPeopleOutside);
-                                            Main.getEditContextLayout().getChildren().set(i, label);
+                                            SHSHelpers.getEditContextLayout().getChildren().set(i, label);
                                             break;
                                         }
                                     } catch (Exception ex) {
                                     }
                                 }
                             } else {
-                                if (!(Main.getCurrentLocation() == Main.getHouseholdLocations()[fr])) {
+                                if (!(SHSHelpers.getCurrentLocation() == Main.getHouseholdLocations()[fr])) {
                                     Main.getHouseholdLocations()[fr].setNumberOfPeopleInside(Main.getHouseholdLocations()[fr].getNumberOfPeopleInside() + 1);
-                                    Main.getCurrentLocation().setNumberOfPeopleInside(Main.getCurrentLocation().getNumberOfPeopleInside() - 1);
+                                    SHSHelpers.getCurrentLocation().setNumberOfPeopleInside(SHSHelpers.getCurrentLocation().getNumberOfPeopleInside() - 1);
                                 }
                             }
                         }
-                        for (int j = 0; j < Main.getEditContextLayout().getChildren().size(); j++) {
+                        for (int j = 0; j < SHSHelpers.getEditContextLayout().getChildren().size(); j++) {
                             try {
-                                if (Main.getEditContextLayout().getChildren().get(j).getId().equals("numOfPeopleInRoom" + Main.getHouseholdLocations()[finalR].getRoomID())) {
-                                    Label label = (Label) Main.getEditContextLayout().getChildren().get(j);
+                                if (SHSHelpers.getEditContextLayout().getChildren().get(j).getId().equals("numOfPeopleInRoom" + Main.getHouseholdLocations()[finalR].getRoomID())) {
+                                    Label label = (Label) SHSHelpers.getEditContextLayout().getChildren().get(j);
                                     label.setText("# of people: " + Main.getHouseholdLocations()[finalR].getNumberOfPeopleInside());
-                                    Main.getEditContextLayout().getChildren().set(j, label);
+                                    SHSHelpers.getEditContextLayout().getChildren().set(j, label);
                                     break;
                                 }
                             } catch (Exception ex) {
                             }
                         }
 
-                        for (int i = 0; i < Main.getEditContextLayout().getChildren().size(); i++) {
+                        for (int i = 0; i < SHSHelpers.getEditContextLayout().getChildren().size(); i++) {
                             try {
-                                if (Main.getEditContextLayout().getChildren().get(i).getId().equals("numOfPeopleInRoom" + Main.getCurrentLocation().getRoomID())) {
-                                    Label label = (Label) Main.getEditContextLayout().getChildren().get(i);
-                                    label.setText("# of people: " + Main.getCurrentLocation().getNumberOfPeopleInside());
-                                    Main.getEditContextLayout().getChildren().set(i, label);
+                                if (SHSHelpers.getEditContextLayout().getChildren().get(i).getId().equals("numOfPeopleInRoom" + SHSHelpers.getCurrentLocation().getRoomID())) {
+                                    Label label = (Label) SHSHelpers.getEditContextLayout().getChildren().get(i);
+                                    label.setText("# of people: " + SHSHelpers.getCurrentLocation().getNumberOfPeopleInside());
+                                    SHSHelpers.getEditContextLayout().getChildren().set(i, label);
                                     break;
                                 }
                             } catch (Exception ex) {
                             }
                         }
-                        Main.setCurrentLocation(Main.getHouseholdLocations()[fr]);
-                        for (int a = 0; a < Main.getEditContextLayout2().getChildren().size(); a++) {
+                        SHSHelpers.setCurrentLocation(Main.getHouseholdLocations()[fr]);
+                        for (int a = 0; a < SHSHelpers.getEditContextLayout2().getChildren().size(); a++) {
                             try {
-                                if (Main.getEditContextLayout2().getChildren().get(a).getId().equals("currentRoomOfProfile" + Main.getCurrentActiveProfile().getProfileID())) {
-                                    Label label = (Label) Main.getEditContextLayout2().getChildren().get(a);
-                                    label.setText(Main.getCurrentLocation().getName());
-                                    Main.getEditContextLayout2().getChildren().set(a, label);
+                                if (SHSHelpers.getEditContextLayout2().getChildren().get(a).getId().equals("currentRoomOfProfile" + SHSHelpers.getCurrentActiveProfile().getProfileID())) {
+                                    Label label = (Label) SHSHelpers.getEditContextLayout2().getChildren().get(a);
+                                    label.setText(SHSHelpers.getCurrentLocation().getName());
+                                    SHSHelpers.getEditContextLayout2().getChildren().set(a, label);
                                     break;
                                 }
                             } catch (Exception ex) {
                             }
                         }
-                        for (int i = 0; i < Main.getEditContextLayout().getChildren().size(); i++) {
+                        for (int i = 0; i < SHSHelpers.getEditContextLayout().getChildren().size(); i++) {
                             try {
-                                if (Main.getEditContextLayout().getChildren().get(i).getId().equals("currentRoomOfLoggedInUser")) {
-                                    Label label = (Label) Main.getEditContextLayout().getChildren().get(i);
-                                    label.setText("Your location:\n" + Main.getCurrentLocation().getName());
-                                    Main.getEditContextLayout().getChildren().set(i, label);
+                                if (SHSHelpers.getEditContextLayout().getChildren().get(i).getId().equals("currentRoomOfLoggedInUser")) {
+                                    Label label = (Label) SHSHelpers.getEditContextLayout().getChildren().get(i);
+                                    label.setText("Your location:\n" + SHSHelpers.getCurrentLocation().getName());
+                                    SHSHelpers.getEditContextLayout().getChildren().set(i, label);
                                     break;
                                 }
                             } catch (Exception ex) {
@@ -213,7 +213,7 @@ public class TestUseCase8 extends ApplicationTest {
                         }
                         //========================================================================================================================
                     });
-                    Main.getEditContextLayout().getChildren().addAll(hyp, l1);
+                    SHSHelpers.getEditContextLayout().getChildren().addAll(hyp, l1);
                     transY += 20;
                 }
             }
@@ -231,13 +231,13 @@ public class TestUseCase8 extends ApplicationTest {
             Room testRoom4 = new Room("Bathroom", 2, 2, 5,  true);
 
             Room[] test_rooms = new Room[]{testRoom, testRoom2, testRoom3, testRoom4};
-            Main.setHouseholdLocations(test_rooms);
+            SHSHelpers.setHouseholdLocations(test_rooms);
 
             // try moving the logged user to the Room at index 3
-            Main.setCurrentLocation(Main.getHouseholdLocations()[3]);
-            for (int a = 0; a < Main.getEditContextLayout().getChildren().size(); a++) {
-                if (Main.getEditContextLayout().getChildren().get(a).getId().equals("numOfPeopleInRoom"+Main.getHouseholdLocations()[3].getRoomID())) {
-                    Label label = (Label) Main.getEditContextLayout().getChildren().get(a);
+            SHSHelpers.setCurrentLocation(Main.getHouseholdLocations()[3]);
+            for (int a = 0; a < SHSHelpers.getEditContextLayout().getChildren().size(); a++) {
+                if (SHSHelpers.getEditContextLayout().getChildren().get(a).getId().equals("numOfPeopleInRoom"+Main.getHouseholdLocations()[3].getRoomID())) {
+                    Label label = (Label) SHSHelpers.getEditContextLayout().getChildren().get(a);
                     assertEquals(true, label.getText().equals("# of people: 1"));
                     break;
                 }

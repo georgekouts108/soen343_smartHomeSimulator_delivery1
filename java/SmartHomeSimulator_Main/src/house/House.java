@@ -510,7 +510,7 @@ public class House {
 
         mdCheckbox.setOnAction(e->{
             try {
-                if (Main.isIs_away()) {
+                if (SHSHelpers.isIs_away()) {
                     try {
                         /**during away mode, you may manually trigger motion detectors to
                          * simulate the presence of intruders */
