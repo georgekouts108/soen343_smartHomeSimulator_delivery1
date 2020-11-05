@@ -100,7 +100,7 @@ public class Controller {
                     int finalMinute = minute;
                     Platform.runLater(()->timeText.setText("Time "+(finalHour)%24+":"+(finalMinute)%60+":"+ finalSecond%60));
                     //should make the sleep alternate depending on speed given.
-                    Thread.sleep(1000);
+                    Thread.sleep((long) (1000*timeSpeed));
                 }
                 else
                 {
@@ -312,7 +312,10 @@ public class Controller {
             speedButton.setId("timeSpeed");
             speedButton.setTranslateX(600);
             speedButton.setTranslateY(100);
-            speedButton.setOnAction(e -> editTimeSpeed(timeMultiplier.getText()));
+            speedButton.setOnAction(e -> new Thread(()-> {
+            editTimeSpeed(timeMultiplier.getText());
+            }).start());
+
             //end sim time speed
 
             Main.editContextLayout.getChildren().addAll(datePicker, datePickerLabel, timePickerLabel, hourField,
@@ -1526,7 +1529,7 @@ public class Controller {
         }catch(Exception exc){}
     }
 
-    /**todo: SHP MODULE METHODS*/
+    /**SHP MODULE METHODS*/
 
     public static void toggleAwayButton(ToggleButton tb) {
         try {
@@ -1752,10 +1755,73 @@ public class Controller {
         }
     }
 
+    /**TODO: FIX ANY BUGS IN THIS METHOD*/
     public static void editTimeSpeed(String multiplier){
-        System.out.println("Test " + Float.parseFloat(multiplier));
+        float Multiplier = Float.parseFloat(multiplier);
+        System.out.println("Test " + Multiplier);
         //grab thread or info that is already shown in sim time, and speed it up...
         //i.e. make use of currentDateSimulation method
+
+        DatePicker datePick = null;
+        Label simDateLabel = null;
+        Label simTimeLabel = null;
+        TextField hourF = null;
+        TextField minuteF = null;
+
+
+        // find the datePicker
+        for (int dp = 0; dp < Main.SHS_MODULE.getChildren().size(); dp++) {
+            try {
+                if (Main.SHS_MODULE.getChildren().get(dp).getId().equals("datePicker")) {
+
+                    // find the simulation date label
+                    for (int d_text = 0; d_text < Main.main_dashboard.getChildren().size(); d_text++) {
+                        try {
+                            if (Main.main_dashboard.getChildren().get(d_text).getId().equals("simulationDate")) {
+
+                                // find the simulation time label
+                                for (int t_text = 0; t_text < Main.main_dashboard.getChildren().size(); t_text++) {
+                                    try {
+                                        if (Main.main_dashboard.getChildren().get(t_text).getId().equals("simulationTime")) {
+
+                                            // find the hour field
+                                            for (int hf = 0; hf < Main.SHS_MODULE.getChildren().size(); hf++) {
+                                                try {
+                                                    if (Main.SHS_MODULE.getChildren().get(hf).getId().equals("hourField")) {
+
+                                                        // find the minute field
+                                                        for (int mf = 0; mf < Main.SHS_MODULE.getChildren().size(); mf++) {
+                                                            try {
+                                                                if (Main.SHS_MODULE.getChildren().get(mf).getId().equals("minuteField")) {
+
+                                                                    datePick = (DatePicker) Main.SHS_MODULE.getChildren().get(dp);
+                                                                    simDateLabel = (Label) Main.main_dashboard.getChildren().get(d_text);
+                                                                    simTimeLabel = (Label) Main.main_dashboard.getChildren().get(t_text);
+                                                                    hourF = (TextField) Main.SHS_MODULE.getChildren().get(hf);
+                                                                    minuteF = (TextField) Main.SHS_MODULE.getChildren().get(mf);
+
+                                                                    break;
+                                                                }
+                                                            } catch (Exception ex) { }
+                                                        }
+                                                        break;
+                                                    }
+                                                } catch (Exception ex) { }
+                                            }
+                                            break;
+                                        }
+                                    } catch (Exception ex) { }
+                                }
+                                break;
+                            }
+                        } catch (Exception ex) { }
+                    }
+                    break;
+                }
+            }catch (Exception ex){}
+        }
+        CurrentDateSimulation(datePick, simDateLabel,
+                simTimeLabel, hourF, minuteF, Multiplier);
     }
 
 }
