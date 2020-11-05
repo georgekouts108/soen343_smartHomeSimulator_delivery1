@@ -457,18 +457,13 @@ public class Main extends Application {
         newProfileTextField.setPrefWidth(85); newProfileTextField.setTranslateX(40);
         newProfileTextField.setTranslateY(290);
 
-        RadioButton setAdministrator = new RadioButton("Set Administrator");
-        setAdministrator.setId("setAdminButton");
-        setAdministrator.setTranslateX(40); setAdministrator.setTranslateY(320);
-
         Button addButton = new Button("Add new\nProfile");
         addButton.setId("addNewProfileButton");
         addButton.setTranslateX(40); addButton.setTranslateY(350);
-        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField, setAdministrator));
+        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField));
 
         if (numberOfTimesProfilePageSelected == 0) {
             Main.profileSelection.getChildren().addAll(addButton);
-            Main.profileSelection.getChildren().add(setAdministrator);
             Main.profileSelection.getChildren().add(newProfileTextField);
             Main.profileSelection.getChildren().add(profileListLabel);
             Main.profileSelection.getChildren().add(closeButton);

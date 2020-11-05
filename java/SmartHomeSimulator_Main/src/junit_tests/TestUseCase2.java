@@ -63,7 +63,7 @@ public class TestUseCase2 extends ApplicationTest {
 
     @org.junit.Test
     public void testCase2() {
-        Controller.createNewProfile(new TextField("P"), new RadioButton());
+        Controller.createNewProfile(new TextField("P"));
         assertEquals(true, Main.getProfiles().length==1);
     }
 }

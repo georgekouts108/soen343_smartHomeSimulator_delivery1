@@ -74,8 +74,8 @@ public class TestUseCase8 extends ApplicationTest {
     @Before
     public void setup() {
         try {
-            Controller.createNewProfile(new TextField("P"), new RadioButton()); // profile 1
-            Controller.createNewProfile(new TextField("C"), new RadioButton()); // profile 2
+            Controller.createNewProfile(new TextField("P")); // profile 1
+            Controller.createNewProfile(new TextField("C")); // profile 2
 
             for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
                 if (Main.getProfileSelection().getChildren().get(a).getId()

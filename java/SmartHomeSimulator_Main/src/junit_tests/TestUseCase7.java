@@ -76,7 +76,7 @@ public class TestUseCase7 extends ApplicationTest {
     public void testCase7() {
 
         Platform.runLater(() -> {
-            Controller.createNewProfile(new TextField("P"), new RadioButton());
+            Controller.createNewProfile(new TextField("P"));
 
             for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
                 if (Main.getProfileSelection().getChildren().get(a).getId()

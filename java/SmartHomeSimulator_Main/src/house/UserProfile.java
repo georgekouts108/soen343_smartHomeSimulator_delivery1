@@ -10,20 +10,18 @@ public class UserProfile {
     private boolean loggedIn;
     private int profileID;
     private Room currentLocation;
-    private boolean isAdmin;
     private int numberOfTimesHyperlinkClicked;
     private boolean isAway;
 
     /**
      * UserProfile constructor
      * @param type
-     * @param isAdmin
+     *
      */
-    public UserProfile(String type, boolean isAdmin) {
+    public UserProfile(String type) {
         this.type = type;
         this.loggedIn = false;
         this.profileID = (PROFILE_ID++);
-        this.isAdmin = isAdmin;
         this.numberOfTimesHyperlinkClicked = 0;
         this.isAway = false;
     }
@@ -34,22 +32,6 @@ public class UserProfile {
 
     public void setAway(boolean away) {
         isAway = away;
-    }
-
-    /**
-     * Access a boolean indicating if a profile is an administrator
-     * @return
-     */
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    /**
-     * Enable or disable a profile's administrator mode
-     * @param admin
-     */
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
     }
 
     /**

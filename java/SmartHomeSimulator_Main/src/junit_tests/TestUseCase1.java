@@ -75,7 +75,7 @@ public class TestUseCase1 extends ApplicationTest {
     /**TODO: FIX THIS TEST CASE*/
     @org.junit.Test
     public void testUseCase1_turnOnSim() {
-        Controller.createNewProfile(new TextField("P"), new RadioButton());
+        Controller.createNewProfile(new TextField("P"));
 
         Platform.runLater(() -> {
             fileChooser = new FileChooser();
@@ -149,7 +149,7 @@ public class TestUseCase1 extends ApplicationTest {
 
     @org.junit.Test
     public void testUseCase1_turnOffSim() {
-        Controller.createNewProfile(new TextField("P"), new RadioButton());
+        Controller.createNewProfile(new TextField("P"));
 
         for (int a = 0; a < Main.getProfileSelection().getChildren().size(); a++) {
             if (Main.getProfileSelection().getChildren().get(a).getId()

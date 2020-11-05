@@ -148,9 +148,9 @@ public class Controller {
             }
 
             String stageTitle = "Smart Home Simulator -- logged in as #" + userProfile.getProfileID() + " \"" + userProfile.getType().toUpperCase() + "\"";
-            if (userProfile.isAdmin()) {
-                stageTitle += " (ADMIN)";
-            }
+//            if (userProfile.isAdmin()) {
+//                stageTitle += " (ADMIN)";
+//            }
             Main.main_stage.setTitle(stageTitle);
 
             Hyperlink logoutLink = new Hyperlink("Logout");
@@ -184,8 +184,8 @@ public class Controller {
             Main.createMainDashboardNecessities();
 
             Main.main_stage.setScene(Main.dashboardScene);
-        }catch (Exception e){}
-
+        }
+        catch (Exception e){}
     }
 
     /**
@@ -1100,9 +1100,9 @@ public class Controller {
     /**
      * Create a new user Profile
      * @param textField
-     * @param radioButton
+     *
      */
-    public static void createNewProfile(TextField textField, RadioButton radioButton) {
+    public static void createNewProfile(TextField textField) {
         UserProfile newProfile;
         try {
             if (!(textField.getText().length() == 1)) {
@@ -1112,23 +1112,19 @@ public class Controller {
                 switch (textField.getText().charAt(0)) {
                     case 'S':
                     case 's':
-                        if (radioButton.isSelected()) {newProfile = new UserProfile("Stranger", true);}
-                        else {newProfile = new UserProfile("Stranger", false);}
+                        newProfile = new UserProfile("Stranger");
                         break;
                     case 'G':
                     case 'g':
-                        if (radioButton.isSelected()) {newProfile = new UserProfile("Guest", true);}
-                        else {newProfile = new UserProfile("Guest", false);}
+                        newProfile = new UserProfile("Guest");
                         break;
                     case 'C':
                     case 'c':
-                        if (radioButton.isSelected()) {newProfile = new UserProfile("Child", true);}
-                        else {newProfile = new UserProfile("Child", false);}
+                        newProfile = new UserProfile("Child");
                         break;
                     case 'P':
                     case 'p':
-                        if (radioButton.isSelected()) {newProfile = new UserProfile("Parent", true);}
-                        else {newProfile = new UserProfile("Parent", false);}
+                        newProfile = new UserProfile("Parent");
                         break;
                     default:
                         throw new Exception("Invalid");
@@ -1164,8 +1160,6 @@ public class Controller {
                 templink[templink.length-1] = generateProfileHyperlink(newProfile);
                 Main.profileLinks = templink;
             }
-
-            //Main.transformProfileSelectionPageScene(); // will update "profileSelection"
             Main.profileBox.setScene(Main.profileScene);
         }
         catch(Exception ex){
@@ -1201,13 +1195,6 @@ public class Controller {
                 editTextField.setTranslateY(110); editTextField.setId("editProfileTextField");
                 Main.profileSelection.getChildren().add(editTextField);
 
-                RadioButton editAdmin = new RadioButton("Set Admin");
-                editAdmin.setId("editAdminButton");
-                if (profile.isAdmin()) {editAdmin.setSelected(true);}
-
-                editAdmin.setTranslateX(30); editAdmin.setTranslateY(140);
-                Main.profileSelection.getChildren().add(editAdmin);
-
                 accept = new Button("Modify");
                 accept.setId("acceptEditProfileButton");
                 accept.setTranslateX(30); accept.setTranslateY(170);
@@ -1223,29 +1210,21 @@ public class Controller {
                                 case 'S':
                                 case 's':
                                     updatedType = "Stranger";
-                                    if (editAdmin.isSelected()) {profile.setAdmin(true);updatedType+=" [A]";}
-                                    else {profile.setAdmin(false);}
                                     Main.profiles[finalProf].setType(updatedType);
                                     break;
                                 case 'G':
                                 case 'g':
                                     updatedType = "Guest";
-                                    if (editAdmin.isSelected()) {profile.setAdmin(true);updatedType+=" [A]";}
-                                    else {profile.setAdmin(false);}
                                     Main.profiles[finalProf].setType(updatedType);
                                     break;
                                 case 'C':
                                 case 'c':
                                     updatedType = "Child";
-                                    if (editAdmin.isSelected()) {profile.setAdmin(true);updatedType+=" [A]";}
-                                    else {profile.setAdmin(false);}
                                     Main.profiles[finalProf].setType(updatedType);
                                     break;
                                 case 'P':
                                 case 'p':
                                     updatedType = "Parent";
-                                    if (editAdmin.isSelected()) {profile.setAdmin(true);updatedType+=" [A]";}
-                                    else {profile.setAdmin(false);}
                                     Main.profiles[finalProf].setType(updatedType);
                                     break;
                                 default:
@@ -1261,8 +1240,7 @@ public class Controller {
                             }
                         }
                         editLink.setDisable(false);
-                        Main.profileSelection.getChildren().removeAll(cancel, accept, editPromptLabel, editTextField, editAdmin);
-                        //Main.transformProfileSelectionPageScene();
+                        Main.profileSelection.getChildren().removeAll(cancel, accept, editPromptLabel, editTextField);
                         Main.profileBox.setScene(Main.profileScene);
                     }
                     catch(Exception ex){
@@ -1271,7 +1249,7 @@ public class Controller {
                 });
                 Main.profileSelection.getChildren().add(accept);
                 cancel.setTranslateX(30); cancel.setTranslateY(200);
-                cancel.setOnAction(event -> {Main.profileSelection.getChildren().removeAll(cancel, accept, editAdmin, editPromptLabel, editTextField);
+                cancel.setOnAction(event -> {Main.profileSelection.getChildren().removeAll(cancel, accept, editPromptLabel, editTextField);
                     editLink.setDisable(false);
                 });
                 Main.profileSelection.getChildren().add(cancel);
@@ -1373,7 +1351,6 @@ public class Controller {
         hyperlink.setTranslateY(pixelY);
         pixelY += 20;
         String hyperText = "{{"+userProfile.getType()+"}}";
-        if (userProfile.isAdmin()){hyperText+=" [A]";}
 
         hyperlink.setText(hyperText);
 
