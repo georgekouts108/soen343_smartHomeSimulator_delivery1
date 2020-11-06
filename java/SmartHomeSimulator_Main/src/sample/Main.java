@@ -227,55 +227,71 @@ public class Main extends Application {
      * Create or update the window for the main dashboard.
      */
     public static void createMainDashboardNecessities() {
+        String graycss = "#e6e6e6";
 
         Rectangle rectangle = new Rectangle(); rectangle.setVisible(true); rectangle.setStrokeType(StrokeType.INSIDE);
         rectangle.setStroke(javafx.scene.paint.Paint.valueOf("BLACK")); rectangle.setArcWidth(5.0); rectangle.setArcHeight(5.0);
-        rectangle.setHeight(DASHBOARD_WIDTH); rectangle.setOpacity(0.95); rectangle.setWidth(110); rectangle.setFill(Color.AQUA);
-        rectangle.setId("rectangle");
+        rectangle.setHeight(DASHBOARD_WIDTH); rectangle.setOpacity(0.95); rectangle.setWidth(110); rectangle.setId("rectangle");
 
-        Label simLabel = new Label(); simLabel.setText("SIMULATION"); simLabel.setTranslateX(15);
+        Label simLabel = new Label(); simLabel.setText("SIMULATION"); simLabel.setTranslateX(20);
+        simLabel.setTranslateY(10);
+        simLabel.setStyle("-fx-text-fill: " + graycss);
         simLabel.setId("simulationLabel");
 
         ToggleButton triggerSim = new ToggleButton(); triggerSim.setId("simulationOnOffButton");
-        triggerSim.prefHeight(45); triggerSim.prefWidth(75); triggerSim.setText("Start\nSimulation");
-        triggerSim.setTranslateY(30); triggerSim.setTranslateX(15); triggerSim.setTextAlignment(TextAlignment.CENTER);
+        triggerSim.prefHeight(45); triggerSim.setMinWidth(75); triggerSim.setText("Start\nSimulation");
+        triggerSim.setStyle("-fx-text-inner-color: " + graycss);
+        triggerSim.setTranslateY(35); triggerSim.setTranslateX(18); triggerSim.setTextAlignment(TextAlignment.CENTER);
         triggerSim.setOnAction(e-> sample.Controller.startSimulation(triggerSim, editContextButton, outputConsole, modulesInterface));
         triggerSim.setDisable(true);
 
         editContextButton = new Button(); editContextButton.setId("editContextButton");
-        editContextButton.prefHeight(45); editContextButton.prefWidth(75); editContextButton.setText("Edit\nContext");
-        editContextButton.setTranslateY(90); editContextButton.setTranslateX(15); editContextButton.setTextAlignment(TextAlignment.CENTER);
+        editContextButton.prefHeight(45); editContextButton.setMinWidth(75); editContextButton.setText("Edit\nContext");
+        editContextButton.setTranslateY(90); editContextButton.setTranslateX(18); editContextButton.setTextAlignment(TextAlignment.CENTER);
         editContextButton.setOnAction(e->Controller.editContext());
         editContextButton.setDisable(true);
 
         Label locationLabel = new Label("House\nLocation:\n[not set]");
-        locationLabel.setId("locationLabel");
-        locationLabel.setTranslateX(30); locationLabel.setTranslateY(170);
+        locationLabel.setId("locationLabel"); locationLabel.setTextAlignment(TextAlignment.CENTER);
+        locationLabel.setTranslateX(18); locationLabel.setTranslateY(210);
+        locationLabel.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 70px;" +
+                "-fx-alignment: center");
 
         Label simDateAndTimeLabel = new Label("SIM TIME");
-        simDateAndTimeLabel.setTranslateX(20); simDateAndTimeLabel.setTranslateY(300);
+        simDateAndTimeLabel.setTranslateX(18); simDateAndTimeLabel.setTranslateY(300);
+        simDateAndTimeLabel.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 30px;" +
+                "-fx-alignment: center");
 
         Label simulationDate = new Label(); simulationDate.setId("simulationDate");
-        simulationDate.setTranslateX(20); simulationDate.setTranslateY(320);
+        simulationDate.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 30px;" +
+                "-fx-alignment: center");
+        simulationDate.setTranslateX(18); simulationDate.setTranslateY(320);
 
         Label simulationTime = new Label(); simulationTime.setId("simulationTime");
-        simulationTime.setTranslateX(20); simulationTime.setTranslateY(340);
+        simulationTime.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 30px;" +
+                "-fx-alignment: center");
+        simulationTime.setTranslateX(18); simulationTime.setTranslateY(340);
 
         Label temperatureLabel = new Label(); temperatureLabel.setId("temp");
-        temperatureLabel.setText("Outside Temp.\n15°C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
-        temperatureLabel.setTranslateY(400); temperatureLabel.setTranslateX(15);
+        temperatureLabel.setText("Outside\nTemp.\n15°C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
+        temperatureLabel.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 70px;" +
+                "-fx-alignment: center");
+        temperatureLabel.setTranslateY(390); temperatureLabel.setTranslateX(18);
 
         Label localDateTime = new Label(); localDateTime.setTextAlignment(TextAlignment.CENTER);
-        localDateTime.setTranslateX(15); localDateTime.setTranslateY(600); localDateTime.setText("LOCAL TIME");
+        localDateTime.setTranslateX(18); localDateTime.setTranslateY(620); localDateTime.setText("LOCAL TIME");
         localDateTime.setId("localDateAndTimeLabel");
+        localDateTime.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 20px; -fx-alignment: center");
 
         Label dateText = new Label(); dateText.setTextAlignment(TextAlignment.CENTER);
         dateText.setId("dateText");
-        dateText.setTranslateX(15); dateText.setTranslateY(620);
+        dateText.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 20px; -fx-alignment: center");
+        dateText.setTranslateX(18); dateText.setTranslateY(640);
 
         Label timeText = new Label(); timeText.setTextAlignment(TextAlignment.CENTER);
         timeText.setId("timeText");
-        timeText.setTranslateX(15); timeText.setTranslateY(640);
+        timeText.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 20px; -fx-alignment: center");
+        timeText.setTranslateX(18); timeText.setTranslateY(660);
         timeText.setText("TEST");
 
         //thread to start the current date/time display when application starts
@@ -326,7 +342,7 @@ public class Main extends Application {
         modulesInterface.setTranslateX(110);
         modulesInterface.setId("modulesInterface");
         modulesInterface.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        modulesInterface.setStyle("-fx-border-width: 2; -fx-border-color: black;");
+        modulesInterface.setStyle("-fx-border-width: 0 2 2 0; -fx-border-color: #6e6e6e;");
 
         if (numberOfTimesDashboardPageLoaded == 0) {
             main_dashboard.getChildren().add(rectangle);
