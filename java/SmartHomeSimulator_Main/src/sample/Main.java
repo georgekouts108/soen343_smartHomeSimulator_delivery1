@@ -87,7 +87,7 @@ public class Main extends Application {
 
     /**G.U.I ELEMENTS FOR THE SHP MODULE */
     protected static boolean is_away;
-    protected static int timeLimitBeforeAlert;
+    protected static int timeLimitBeforeAlert = 0;
     protected static TextArea suspBox;
     protected static AnchorPane SHP_LightsConfigAWAYmode;
     protected static Scene SHP_LightsConfigAWAYscene;
@@ -700,32 +700,41 @@ public class Main extends Application {
      * @return
      */
     public static AnchorPane makeSHPmodule(){
-        /**TODO: give IDs to each GUI element in here */
+
         SHP_MODULE = new AnchorPane();
 
         Text warningText = new Text(); warningText.setTranslateY(40);
         warningText.setText("Enter the amount of time (minutes) " +
-                "before alerting the authorities after any motion detectors are triggered (AWAY mode only):");
+                "before alerting authorities if motion detectors are triggered during AWAY mode:");
         warningText.setWrappingWidth(480);
 
-        TextField timeBox = new TextField(); timeBox.setPrefHeight(Region.USE_COMPUTED_SIZE); timeBox.setPrefWidth(60);
-        timeBox.setTranslateX(200); timeBox.setTranslateY(70);
-        if ((currentActiveProfile==null)) {
-            timeBox.setDisable(true);
-        }
-        else {
-            if (simulationIsOn) {
-                timeBox.setDisable(true);
-            }
-            else {
-                timeBox.setDisable(false);
-            }
-        }
-
         Label timeLimit = new Label();
-        timeLimit.setText("Time before Alert: 0 min.");
+        timeLimit.setText("Time before Alert:\n0 min.");
         timeLimit.setTranslateY(70);
         timeLimit.setTranslateX(10);
+
+        TextField timeBox = new TextField();
+        timeBox.setId("authAlertTimeBox");
+        timeBox.setPromptText("0 <= t <= 5");
+        timeBox.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        timeBox.setPrefWidth(100);
+        timeBox.setTranslateX(160);
+        timeBox.setTranslateY(70);
+
+        if (is_away) {
+            timeBox.setDisable(true);
+        }
+
+        Button confirmButton = new Button("Confirm");
+        confirmButton.setId("alertTimeConfirmButton");
+        confirmButton.setTranslateY(70);
+        confirmButton.setTranslateX(270);
+
+        confirmButton.setOnAction(e->Controller.setTimeBeforeAlert(timeBox, timeLimit));
+
+        if (is_away) {
+            confirmButton.setDisable(true);
+        }
 
         Line line = new Line(); line.setStartX(0);line.setEndX(500); line.setTranslateY(120);
 
@@ -749,21 +758,6 @@ public class Main extends Application {
             else {
                 suspBox.setDisable(false);
             }
-        }
-
-        Button confirmButton = new Button("Confirm");
-        confirmButton.setTranslateY(70);
-        confirmButton.setTranslateX(270);
-        confirmButton.setDisable(true);
-
-        //confirmButton.setOnAction(e->sample.Controller.setTimeLimitAwayMode(timeBox, timeLimit));
-
-        if ((currentActiveProfile==null)) {
-            confirmButton.setDisable(true);
-        }
-        else {
-            if (simulationIsOn) { confirmButton.setDisable(true); }
-            else { confirmButton.setDisable(false); }
         }
 
         ToggleButton tb = new ToggleButton();
