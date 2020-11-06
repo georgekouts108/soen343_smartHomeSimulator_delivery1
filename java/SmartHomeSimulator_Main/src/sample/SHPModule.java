@@ -106,6 +106,6 @@ public class SHPModule extends Module {
 
     @Override
     public void update(Observable o, Object arg) {
-        
+
     }
 }

@@ -139,11 +139,12 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        logFile = new File("/src/log.txt");
+        logFile = new File("src/log.txt");
         if (logFile.exists()) {
             logFile.createNewFile();
         }
         fileWriter = new FileOutputStream(logFile);
+
 
         main_stage = primaryStage;
         main_stage.setResizable(false);
