@@ -99,8 +99,7 @@ public class Controller {
                     int finalHour = hour;
                     int finalMinute = minute;
                     Platform.runLater(()->timeText.setText("Time "+(finalHour)%24+":"+(finalMinute)%60+":"+ finalSecond%60));
-                    //should make the sleep alternate depending on speed given.
-                    Thread.sleep((long) (1000*timeSpeed));
+                    Thread.sleep((long) (1000/timeSpeed));
                 }
                 else
                 {
@@ -123,7 +122,7 @@ public class Controller {
                         second = 0;
                     }
                     Platform.runLater(()->timeText.setText("Time "+(finalHour%24)+":"+(finalMinute%60)+":"+ finalSecond%60));
-                    Thread.sleep(1000);
+                    Thread.sleep((long) (1000/timeSpeed));
                 }
             }
         }catch (Exception e){
