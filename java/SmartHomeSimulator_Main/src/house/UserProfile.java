@@ -26,16 +26,24 @@ public class UserProfile {
         this.isAway = false;
     }
 
+    /**
+     * Check to see if a user is Away from home
+     * @return
+     */
     public boolean isAway() {
         return isAway;
     }
 
+    /**
+     * Set the Away mode for a user
+     * @param away
+     */
     public void setAway(boolean away) {
         isAway = away;
     }
 
     /**
-     * Return a room's profile ID
+     * Return the count for profile ID's
      * @return
      */
     public static int getstaticProfileId() {
@@ -43,7 +51,7 @@ public class UserProfile {
     }
 
     /**
-     * Mutate a room's profile ID
+     * Mutate the count for profile ID's
      * @param profileId
      */
     public static void setstaticProfileId(int profileId) {

@@ -135,7 +135,6 @@ public class SHSHelpers {
     public static UserProfile[] getProfiles() {
         return Main.profiles;
     }
-
     public static UserProfile getCurrentActiveProfile() {
         return Main.currentActiveProfile;
     }
@@ -145,11 +144,9 @@ public class SHSHelpers {
     public static double getOutsideTemperature() {
         return Main.outsideTemperature;
     }
-
     public static Room getCurrentLocation() {
         return Main.currentLocation;
     }
-
     public static House getHouse() {
         return Main.house;
     }
@@ -208,38 +205,30 @@ public class SHSHelpers {
     public static void setOutputConsole(TextArea outputConsole) {
         Main.outputConsole = outputConsole;
     }
-
     public static void setHouseLayout(AnchorPane houseLayout) {
         Main.houseLayout = houseLayout;
     }
-
     public static void setModulesInterface(TabPane modulesInterface) {
         Main.modulesInterface = modulesInterface;
     }
-
     public static void setSimulationIsOn(boolean simulationIsOn) {
         Main.simulationIsOn = simulationIsOn;
     }
     public static void setFileChooser(FileChooser fileChooser) {
         Main.fileChooser = fileChooser;
     }
-
     public static void setHouseLayoutFileName(String houseLayoutFileName) {
         Main.houseLayoutFileName = houseLayoutFileName;
     }
-
     public static void setHouseLayoutFile(File houseLayoutFile) {
         Main.houseLayoutFile = houseLayoutFile;
     }
-
     public static void setHouseLayoutFilePathName(String houseLayoutFilePathName) {
         Main.houseLayoutFilePathName = houseLayoutFilePathName;
     }
-
     public static void setIs_away(boolean is_away) {
         Main.is_away = is_away;
     }
-
     public static void setTimeLimitBeforeAlert(int timeLimitBeforeAlert) {
         Main.timeLimitBeforeAlert = timeLimitBeforeAlert;
     }

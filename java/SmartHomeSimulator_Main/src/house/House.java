@@ -690,6 +690,11 @@ public class House {
         return yes;
     }
 
+    /**
+     * Check if all of a Room's doors are locked
+     * @param room
+     * @return
+     */
     public boolean areDoorsLocked(Room room){
         boolean yes = true;
         for (int door = 0; door < room.getDoorCollection().length; door++) {
@@ -717,6 +722,10 @@ public class House {
         return yes;
     }
 
+    /**
+     * Check if there are any Motion Detectors on in the house
+     * @return
+     */
     public boolean anyMDsOn() {
         boolean yes = false;
         for (int r = 0; r < Main.getHouseholdLocations().length; r++) {
@@ -728,6 +737,12 @@ public class House {
         return yes;
     }
 
+    /**
+     * Set a specified icon's visibility in a given room
+     * @param room
+     * @param utilityType
+     * @param isVisible
+     */
     public void setIconVisibility(Room room, String utilityType, boolean isVisible) {
         try {
             for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {
@@ -760,6 +775,10 @@ public class House {
         }catch (Exception ex){}
     }
 
+    /**
+     * Automatically turn on all lights in a room
+     * @param room
+     */
     public void autoTurnOnLight(Room room) {
         try {
             for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {
@@ -796,6 +815,11 @@ public class House {
         }catch (Exception ex){}
     }
 
+    /**
+     * Automatically toggle the state of a room's motion detector
+     * @param room
+     * @param state
+     */
     public void autoTurnOnOffMD(Room room, boolean state) {
         try {
             for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {

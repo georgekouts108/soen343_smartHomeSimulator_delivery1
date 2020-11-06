@@ -20,14 +20,12 @@ public class Room {
     private ImageView iconDoor_view = new ImageView(iconDoor);
     private ImageView iconWindow_view = new ImageView(iconWindow);
 
-    private String name; // e.g. "Garage", etc.
+    private String name;
     private int roomID;
     private int numberOfWindows;
     private int numberOfLights;
     private int numberOfDoors;
     private int numberOfPeopleInside;
-    private boolean isVacant;
-    private double temperature;
     private AirConditioner ac;
     private MotionDetector md;
     private Door[] doorCollection;
@@ -50,8 +48,6 @@ public class Room {
         this.numberOfWindows = numberOfWindows;
         this.numberOfLights = numberOfLights;
         this.numberOfPeopleInside = 0;
-        this.isVacant = true;
-        this.temperature = 0;
         this.autoMode = false;
         this.md = new MotionDetector();
         if (AC) {
@@ -110,10 +106,34 @@ public class Room {
         this.iconAC_view.setVisible(false);
     }
 
+    /**
+     * set the visibility of a Room's Light Icon
+     * @param v
+     */
     public void setIconLightVisibility(boolean v) { this.iconLight_view.setVisible(v); }
+
+    /**
+     * set the visibility of a Room's Window Icon
+     * @param v
+     */
     public void setIconWindowVisibility(boolean v) { this.iconWindow_view.setVisible(v); }
+
+    /**
+     * set the visibility of a Room's Door Icon
+     * @param v
+     */
     public void setIconDoorVisibility(boolean v) { this.iconDoor_view.setVisible(v); }
+
+    /**
+     * set the visibility of a Room's Motion Detector Icon
+     * @param v
+     */
     public void setIconMDVisibility(boolean v) { this.iconMD_view.setVisible(v); }
+
+    /**
+     * set the visibility of a Room's AC Icon
+     * @param v
+     */
     public void setIconACVisibility(boolean v) { this.iconAC_view.setVisible(v); }
 
     /**
@@ -177,22 +197,6 @@ public class Room {
     }
 
     /**
-     * Access a room's temperature
-     * @return
-     */
-    public double getTemperature() {
-        return temperature;
-    }
-
-    /**
-     * Mutate a room's temperature
-     * @param temperature
-     */
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
-    }
-
-    /**
      * Mutate a room's population
      * @param numberOfPeopleInside
      */
@@ -209,29 +213,17 @@ public class Room {
     }
 
     /**
-     * Return a boolean indicating if a room is empty (has no people inside)
+     * Return the AUTO mode state of a Room
      * @return
      */
-    public boolean isVacant() {
-        return isVacant;
-    }
-
-    /**
-     * If a room has no people inside, set the boolean "isVacant" to true, or false otherwise
-     */
-    public void updateVacantStatus() {
-        if (this.numberOfPeopleInside > 0) {
-            this.isVacant = false;
-        }
-        else {
-            this.isVacant = true;
-        }
-    }
-
     public boolean getIsAutoModeOn() {
         return autoMode;
     }
 
+    /**
+     * Configure the AUTO mode of a Room
+     * @param autoMode
+     */
     public void setAutoMode(boolean autoMode) {
         this.autoMode = autoMode;
     }
@@ -299,14 +291,4 @@ public class Room {
     public Window[] getWindowCollection() {
         return windowCollection;
     }
-
-    /**
-     * Print a room's information
-     * @return
-     */
-    public String toString() {
-        return "Room ID: #"+this.roomID+"\nRoom Name: "+this.name+"\nNumber of Doors: "+this.numberOfDoors+
-                "\nNumber of Windows: "+this.numberOfWindows+"\nNumber of Lights: "+this.numberOfLights+"";
-    }
-
 }
