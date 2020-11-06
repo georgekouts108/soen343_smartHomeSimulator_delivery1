@@ -63,7 +63,7 @@ public class Window extends Utility {
     public Room getRoom() {
         return super.getRoom();
     }
-    
+
     /**
      * Access a Window's utility ID
      * @return

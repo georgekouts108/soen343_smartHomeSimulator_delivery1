@@ -381,7 +381,9 @@ public class Main extends Application {
                         }
                         main_dashboard.getChildren().set(a, hl);
                     } else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
-                        SHS_MODULE = makeSHSmodule();
+
+                        SHSModule shsModule = new SHSModule();
+                        SHS_MODULE = shsModule.generateModule();
                         TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab = tabPane.getTabs().get(0);
                         innerTab.setContent(SHS_MODULE);
@@ -390,21 +392,24 @@ public class Main extends Application {
                         tabPane.getTabs().set(0, innerTab);
                         main_dashboard.getChildren().set(a, tabPane);
 
-                        SHC_MODULE = makeSHCmodule();
+                        SHCModule shcModule = new SHCModule();
+                        shcModule.generateModule(SHC_MODULE);
                         TabPane tabPane2 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab2 = tabPane2.getTabs().get(1);
                         innerTab2.setDisable(false);
                         tabPane2.getTabs().set(1, innerTab2);
                         main_dashboard.getChildren().set(a, tabPane2);
 
-                        SHP_MODULE = makeSHPmodule();
+                        SHPModule shpModule = new SHPModule();
+                        SHP_MODULE = shpModule.generateModule();
                         TabPane tabPane3 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab3 = tabPane3.getTabs().get(2);
                         innerTab3.setDisable(false);
                         tabPane3.getTabs().set(2, innerTab3);
                         main_dashboard.getChildren().set(a, tabPane3);
 
-                        SHH_MODULE = makeSHHmodule();
+                        SHHModule shhModule = new SHHModule();
+                        shhModule.generateModule(SHH_MODULE);
                         TabPane tabPane4 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab4 = tabPane4.getTabs().get(3);
                         innerTab4.setDisable(false);
@@ -437,28 +442,32 @@ public class Main extends Application {
                         main_dashboard.getChildren().set(a, hl);
                     } else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
 
-                        SHS_MODULE = makeSHSmodule();
+                        SHSModule shsModule = new SHSModule();
+                        SHS_MODULE = shsModule.generateModule();
                         TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab = tabPane.getTabs().get(0);
                         innerTab.setContent(SHS_MODULE);
                         tabPane.getTabs().set(0, innerTab);
                         main_dashboard.getChildren().set(a, tabPane);
 
-                        SHC_MODULE = makeSHCmodule();
+                        SHCModule shcModule = new SHCModule();
+                        shcModule.generateModule(SHC_MODULE);
                         TabPane tabPane2 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab2 = tabPane2.getTabs().get(1);
                         innerTab2.setDisable(true);
                         tabPane2.getTabs().set(1, innerTab2);
                         main_dashboard.getChildren().set(a, tabPane2);
 
-                        SHP_MODULE = makeSHPmodule();
+                        SHPModule shpModule = new SHPModule();
+                        SHP_MODULE = shpModule.generateModule();
                         TabPane tabPane3 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab3 = tabPane3.getTabs().get(2);
                         innerTab3.setDisable(true);
                         tabPane3.getTabs().set(2, innerTab3);
                         main_dashboard.getChildren().set(a, tabPane3);
 
-                        SHH_MODULE = makeSHHmodule();
+                        SHHModule shhModule = new SHHModule();
+                        shhModule.generateModule(SHH_MODULE);
                         TabPane tabPane4 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab4 = tabPane4.getTabs().get(3);
                         innerTab4.setDisable(true);
@@ -477,316 +486,17 @@ public class Main extends Application {
      */
     public static TabPane createModuleInterface() {
         TabPane modules = new TabPane();
-        Tab shcTab = new Tab("SHC", makeSHCmodule()); shcTab.setId("shcTab");
-        Tab shpTab = new Tab("SHP", makeSHPmodule()); shpTab.setId("shpTab");
-        Tab shhTab = new Tab("SHH", makeSHHmodule()); shhTab.setId("shhTab");
-        Tab shsTab = new Tab("SHS", makeSHSmodule()); shsTab.setId("shsTab");
+
+        SHSModule shsModule = new SHSModule(); SHS_MODULE = shsModule.generateModule();
+        SHCModule shcModule = new SHCModule(); shcModule.generateModule(SHC_MODULE);
+        SHPModule shpModule = new SHPModule(); SHP_MODULE = shpModule.generateModule();
+        SHHModule shhModule = new SHHModule(); shhModule.generateModule(SHH_MODULE);
+
+        Tab shcTab = new Tab("SHC", SHC_MODULE); shcTab.setId("shcTab");
+        Tab shpTab = new Tab("SHP", SHP_MODULE); shpTab.setId("shpTab");
+        Tab shhTab = new Tab("SHH", SHH_MODULE); shhTab.setId("shhTab");
+        Tab shsTab = new Tab("SHS", SHS_MODULE); shsTab.setId("shsTab");
         modules.getTabs().addAll(shsTab, shcTab, shpTab, shhTab);
         return modules;
-    }
-
-    /**
-     * Create or update the SHS module interface.
-     * @return
-     */
-    public static AnchorPane makeSHSmodule() {
-        SHS_MODULE = new AnchorPane();
-
-        Button manageOrSwitchProfileButton = new Button("Manage or\nSwitch Profiles");
-        manageOrSwitchProfileButton.setId("manageOrSwitchProfileButton");
-        manageOrSwitchProfileButton.setTranslateX(200); manageOrSwitchProfileButton.setTranslateY(20);
-        manageOrSwitchProfileButton.setTextAlignment(TextAlignment.CENTER);
-        manageOrSwitchProfileButton.setOnAction(e -> Controller.returnToProfileSelectionPage());
-
-        Line line = new Line(); line.setStartX(0); line.setEndX(500); line.setTranslateY(100);
-
-        Label setHouseLocationLabel = new Label("Set House Location");
-        setHouseLocationLabel.setTranslateX(200); setHouseLocationLabel.setTranslateY(110);
-
-        ComboBox locationMenu = new ComboBox();
-        locationMenu.setId("locationMenu");
-        locationMenu.setTranslateX(160); locationMenu.setTranslateY(180);
-        locationMenu.setItems(FXCollections.observableArrayList(countries));
-        locationMenu.setPrefWidth(200); locationMenu.setPromptText("Select country...");
-        if ((currentActiveProfile==null)) {
-            locationMenu.setDisable(true);
-        }
-        else {
-            if (simulationIsOn) {
-                locationMenu.setDisable(true);
-            }
-            else {
-                locationMenu.setDisable(false);
-            }
-        }
-
-        Button confirmLocationButton = new Button("Set Location");
-        confirmLocationButton.setId("confirmLocationButton");
-        confirmLocationButton.setTranslateX(200);
-        confirmLocationButton.setTranslateY(260);
-        confirmLocationButton.setOnAction(e->{
-            for (int a = 0; a < main_dashboard.getChildren().size(); a++) {
-                try {
-                    if (main_dashboard.getChildren().get(a).getId().equals("locationLabel")) {
-                        Label updatedLabel = (Label) main_dashboard.getChildren().get(a);
-                        if (locationMenu.getValue()!=null) {
-                            updatedLabel.setText("House\nLocation:\n" + locationMenu.getValue().toString());
-                            house.setLocation(locationMenu.getValue().toString());
-                            main_dashboard.getChildren().set(a, updatedLabel);
-                        }
-
-                        break;
-                    }
-                } catch(Exception ex){}
-            }
-
-        });
-        if ((currentActiveProfile==null)) {
-            confirmLocationButton.setDisable(true);
-        }
-        else {
-            if (simulationIsOn) {
-                confirmLocationButton.setDisable(true);
-            }
-            else {
-                confirmLocationButton.setDisable(false);
-            }
-        }
-
-        Line line2 = new Line(); line2.setStartX(0); line2.setEndX(500); line2.setTranslateY(300);
-
-        Label setDateTimeLabel = new Label("Set Date and Time");
-        setDateTimeLabel.setTranslateX(200); setDateTimeLabel.setTranslateY(300);
-
-        DatePicker datePicker = new DatePicker(); datePicker.setId("datePicker");
-        datePicker.setTranslateX(150); datePicker.setTranslateY(340); datePicker.setPromptText("Select date...");
-        if ((currentActiveProfile==null)) {
-            datePicker.setDisable(true);
-        }
-        else {
-            if (simulationIsOn) {
-                datePicker.setDisable(true);
-            }
-            else {
-                datePicker.setDisable(false);
-            }
-        }
-
-        Label setTimeLabel = new Label("Hour     Minute");
-        setTimeLabel.setTranslateX(200); setTimeLabel.setTranslateY(380);
-
-        TextField hourField = new TextField(); hourField.setPrefHeight(30); hourField.setPrefWidth(40);
-        hourField.setTranslateX(200); hourField.setTranslateY(400); hourField.setPromptText("hh");
-        hourField.setId("hourField");
-        if ((currentActiveProfile==null)) {
-            hourField.setDisable(true);
-        }
-        else {
-            if (simulationIsOn) {
-                hourField.setDisable(true);
-            }
-            else {
-                hourField.setDisable(false);
-            }
-        }
-
-        Label colon = new Label(":");
-        colon.setTranslateX(245); colon.setTranslateY(400);
-
-        TextField minuteField = new TextField(); minuteField.setPrefHeight(30); minuteField.setPrefWidth(40);
-        minuteField.setId("minuteField");
-        minuteField.setTranslateX(250); minuteField.setTranslateY(400); minuteField.setPromptText("mm");
-        if ((currentActiveProfile==null)) {
-            minuteField.setDisable(true);
-        }
-        else {
-            if (simulationIsOn) {
-                minuteField.setDisable(true);
-            }
-            else {
-                minuteField.setDisable(false);
-            }
-        }
-
-        Button confirmTimeButton = new Button("Confirm New Time"); confirmTimeButton.setId("confirmTimeButton");
-        confirmTimeButton.setTranslateX(200); confirmTimeButton.setTranslateY(435);
-        confirmTimeButton.setTextAlignment(TextAlignment.CENTER);
-        confirmTimeButton.setOnAction(e -> {new Thread(()->{
-
-            int indexOfSimDateLabel = 0, indexOfSimTimeLabel = 0;
-
-            for (int a = 0; a < main_dashboard.getChildren().size(); a++) {
-                try {
-                    if (main_dashboard.getChildren().get(a).getId().equals("simulationDate")) {
-                        indexOfSimDateLabel = a;
-                    } else if (main_dashboard.getChildren().get(a).getId().equals("simulationTime")) {
-                        indexOfSimTimeLabel = a;
-                    }
-                }catch (Exception excep){}
-            }
-            sample.Controller.CurrentDateSimulation(datePicker, (Label) main_dashboard.getChildren().get(indexOfSimDateLabel),
-                    (Label) main_dashboard.getChildren().get(indexOfSimTimeLabel), hourField, minuteField, (float) 1.0);}).start();
-
-        });
-
-        if ((currentActiveProfile==null)) {
-            confirmTimeButton.setDisable(true);
-        }
-        else {
-            if (simulationIsOn) {
-                confirmTimeButton.setDisable(true);
-            }
-            else {
-                confirmTimeButton.setDisable(false);
-            }
-        }
-
-        try {
-            SHS_MODULE.getChildren().addAll(manageOrSwitchProfileButton, line, setDateTimeLabel, datePicker,
-                    setTimeLabel, hourField, colon, minuteField, confirmTimeButton, line2, setHouseLocationLabel,
-                    confirmLocationButton, locationMenu);
-        }catch (Exception e){}
-        numberOfTimesSHSModuleCreated++;
-        return SHS_MODULE;
-    }
-
-    /**
-     * Create or update the SHC module interface.
-     * @return
-     */
-    public static AnchorPane makeSHCmodule() {
-
-        Label label = new Label("Select a room that you would like to configure");
-        label.setTranslateX(20);
-        label.setTranslateY(20);
-
-        if (houseLayout != null) {
-            int trans_X = 150; int trans_Y = 40;
-            for (int room = 0; room < householdLocations.length; room++) {
-                Button roomButton = new Button(householdLocations[room].getName());
-
-                roomButton.setTranslateX(trans_X);
-                roomButton.setTranslateY(trans_Y += 30);
-                int finalRoom = room;
-                roomButton.setOnAction(e -> {
-
-                    Stage tempStage = new Stage();
-                    tempStage.setResizable(false);
-                    tempStage.setHeight(350);
-                    tempStage.setWidth(225);
-                    tempStage.setTitle("SHC - " + householdLocations[finalRoom].getName());
-
-                    for (int panes = 0; panes < houseLayout.getChildren().size(); panes++) {
-                        try {
-                            if (houseLayout.getChildren().get(panes).getId().equals("roomLayoutID" + householdLocations[finalRoom].getRoomID())) {
-                                tempStage.setScene(new Scene(house.constructRoomLayoutSHCversion(householdLocations[panes],
-                                        (AnchorPane) houseLayout.getChildren().get(panes),
-                                        householdLocations[panes].getNumberOfPeopleInside(), tempStage)));
-                                tempStage.showAndWait();
-                                break;
-                            }
-                        }
-                        catch (Exception ex) {}
-                    }
-                });
-                SHC_MODULE.getChildren().add(roomButton);
-            }
-        }
-        if (numberOfTimesSHCModuleCreated==0) {
-            SHC_MODULE.getChildren().add(label);
-        }
-
-        numberOfTimesSHCModuleCreated++;
-        return SHC_MODULE;
-    }
-
-    /**
-     * Create or update the SHH module interface.
-     * @return
-     */
-    public static AnchorPane makeSHHmodule() {
-        /**TODO: give IDs to each GUI element in here */
-        numberOfTimesSHHModuleCreated++;
-        return SHH_MODULE;
-    }
-
-    /**
-     * Create or update the SHH module interface.
-     * @return
-     */
-    public static AnchorPane makeSHPmodule(){
-
-        SHP_MODULE = new AnchorPane();
-
-        Text warningText = new Text(); warningText.setTranslateY(40);
-        warningText.setText("Enter the amount of time (minutes) " +
-                "before alerting authorities if motion detectors are triggered during AWAY mode:");
-        warningText.setWrappingWidth(480);
-
-        Label timeLimit = new Label();
-        timeLimit.setText("Time before Alert:\n0 min.");
-        timeLimit.setTranslateY(70);
-        timeLimit.setTranslateX(10);
-
-        TextField timeBox = new TextField();
-        timeBox.setId("authAlertTimeBox");
-        timeBox.setPromptText("0 <= t <= 5");
-        timeBox.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        timeBox.setPrefWidth(100);
-        timeBox.setTranslateX(160);
-        timeBox.setTranslateY(70);
-
-        if (is_away) {
-            timeBox.setDisable(true);
-        }
-
-        Button confirmButton = new Button("Confirm");
-        confirmButton.setId("alertTimeConfirmButton");
-        confirmButton.setTranslateY(70);
-        confirmButton.setTranslateX(270);
-
-        confirmButton.setOnAction(e->Controller.setTimeBeforeAlert(timeBox, timeLimit));
-
-        if (is_away) {
-            confirmButton.setDisable(true);
-        }
-
-        Line line = new Line(); line.setStartX(0);line.setEndX(500); line.setTranslateY(120);
-
-        Label suspiciousLabel = new Label("Suspicious Activity Log");
-        suspiciousLabel.setTranslateY(120); suspiciousLabel.setTranslateX(50);
-
-        suspBox = new TextArea();
-        suspBox.setPrefHeight(253);
-        suspBox.setPrefWidth(357);
-        suspBox.setTranslateX(50);
-        suspBox.setTranslateY(140);
-        suspBox.setWrapText(true);
-
-        if ((currentActiveProfile==null)) {
-            suspBox.setDisable(true);
-        }
-        else {
-            if (simulationIsOn) {
-                suspBox.setDisable(true);
-            }
-            else {
-                suspBox.setDisable(false);
-            }
-        }
-
-        ToggleButton tb = new ToggleButton();
-        tb.setId("setAwayModeButton");
-        tb.setText("Turn on AWAY mode");
-        tb.setTranslateX(250);
-        tb.setOnAction(e->sample.Controller.toggleAwayButton(tb));
-
-        Button awayLightsButton = new Button("Lights\nSettings for\nAWAY mode");
-        awayLightsButton.setTranslateX(380); awayLightsButton.setTranslateY(50);
-        awayLightsButton.setOnAction(e->Controller.configureAwayLights());
-
-        SHP_MODULE.getChildren().addAll(tb, confirmButton, suspBox, suspiciousLabel, line, timeLimit, timeBox, warningText, awayLightsButton);
-        numberOfTimesSHPModuleCreated++;
-        return SHP_MODULE;
     }
 }
