@@ -1942,6 +1942,10 @@ public class Controller {
                 LocalDateTime.now().toString().substring(11,19)+" -- "+message+"\n");
     }
 
+    /**
+     * Append a notification message to the system's log text file
+     * @param message
+     */
     public static void appendMessageToLogFile(String message) {
         try {
             byte[] bytes = message.getBytes();

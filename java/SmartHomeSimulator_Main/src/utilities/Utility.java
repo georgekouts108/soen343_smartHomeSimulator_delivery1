@@ -1,7 +1,7 @@
 package utilities;
 import house.*;
 
-public class Utility {
+public class Utility implements Utilities {
 
     private static int ID_count = 1;
 
@@ -16,18 +16,6 @@ public class Utility {
         this.isOpen = false; // by default, windows, doors, lights, A.C. are all closed.
         this.room = null; // by default, a utility should have no valid room (a 'null' room)
         this.utility_ID = (ID_count++); // each instantiated utility has a unique ID (can never be changed).
-    }
-
-    /**
-     * Switch a utility's state to the opposite of its current state.
-     */
-    public void toggleState() {
-        if (!this.isOpen) {
-            this.isOpen = true;
-        }
-        else {
-            this.isOpen = false;
-        }
     }
 
     /**

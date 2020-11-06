@@ -32,13 +32,6 @@ public class AirConditioner extends Utility {
     }
 
     /**
-     * Switch an AC's state to the opposite of its current state.
-     */
-    public void toggleState() {
-        super.toggleState();
-    }
-
-    /**
      * Set an AC's state to open (true) or closed (false)
      * @param new_state
      */

@@ -15,13 +15,6 @@ public class MotionDetector extends Utility {
     }
 
     /**
-     * Switch a motion detector's state to the opposite of its current state (ex. if triggered, turn it off).
-     */
-    public void toggleState() {
-        super.toggleState();
-    }
-
-    /**
      * Set a motion detector's state to triggered (true) or off (false)
      * @param new_state
      */

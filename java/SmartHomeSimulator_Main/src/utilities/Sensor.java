@@ -10,13 +10,6 @@ public class Sensor extends Utility {
     }
 
     /**
-     * Switch a sensor's state to the opposite of its current state (ex. if triggered, turn it off).
-     */
-    public void toggleState() {
-        super.toggleState();
-    }
-
-    /**
      * Set a sensor's state to open (true) or closed (false)
      * @param new_state
      */
