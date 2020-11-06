@@ -518,13 +518,17 @@ public class Main extends Application {
                 try {
                     if (main_dashboard.getChildren().get(a).getId().equals("locationLabel")) {
                         Label updatedLabel = (Label) main_dashboard.getChildren().get(a);
-                        updatedLabel.setText("House\nLocation:\n" + locationMenu.getValue().toString());
-                        main_dashboard.getChildren().set(a, updatedLabel);
+                        if (locationMenu.getValue()!=null) {
+                            updatedLabel.setText("House\nLocation:\n" + locationMenu.getValue().toString());
+                            house.setLocation(locationMenu.getValue().toString());
+                            main_dashboard.getChildren().set(a, updatedLabel);
+                        }
+                        
                         break;
                     }
                 } catch(Exception ex){}
             }
-            house.setLocation(locationMenu.getValue().toString());
+
         });
         if ((currentActiveProfile==null)) {
             confirmLocationButton.setDisable(true);
