@@ -753,7 +753,17 @@ public class House {
                     if (utilityType.equals("Light")) { room.setIconLightVisibility(isVisible); }
                     else if (utilityType.equals("Window")) { room.setIconWindowVisibility(isVisible); }
                     else if (utilityType.equals("Door")) { room.setIconDoorVisibility(isVisible); }
-                    else if (utilityType.equals("MD")) { room.setIconMDVisibility(isVisible); }
+                    else if (utilityType.equals("MD")) {
+                        room.setIconMDVisibility(isVisible);
+                        if (SHSHelpers.isIs_away()) {
+                            if (isVisible) {
+                                room_layout.setStyle("-fx-background-color:red;-fx-border-color:black;");
+                            }
+                            else {
+                                room_layout.setStyle("-fx-border-color:black;");
+                            }
+                        }
+                    }
                     else if (utilityType.equals("AC")) { room.setIconACVisibility(isVisible); }
 
                     for (int l = 0; l < room_layout.getChildren().size(); l++) {
