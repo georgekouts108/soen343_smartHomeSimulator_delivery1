@@ -1,45 +1,39 @@
-2020-11-06 02:12:13 -- SHP -- AWAY mode set to ON
-2020-11-06 02:12:13 -- SHP -- Window #6 in masterbedroom closed.
-2020-11-06 02:12:13 -- SHP -- Window #8 in masterbedroom closed.
-2020-11-06 02:12:13 -- SHP -- Window #10 in masterbedroom closed.
-2020-11-06 02:12:13 -- SHP -- Window #17 in bedroom closed.
-2020-11-06 02:12:13 -- SHP -- Window #19 in bedroom closed.
-2020-11-06 02:12:13 -- SHP -- Window #26 in living room closed.
-2020-11-06 02:12:13 -- SHP -- Window #28 in living room closed.
-2020-11-06 02:12:13 -- SHP -- Window #30 in living room closed.
-2020-11-06 02:12:13 -- SHP -- Window #32 in living room closed.
-2020-11-06 02:12:13 -- SHP -- Window #38 in bathroom closed.
-2020-11-06 02:12:13 -- SHP -- Window #45 in kitchen closed.
-2020-11-06 02:12:13 -- SHP -- Window #47 in kitchen closed.
-2020-11-06 02:12:13 -- SHP -- Window #49 in kitchen closed.
-2020-11-06 02:12:13 -- SHP -- Window #55 in garage closed.
-2020-11-06 02:12:13 -- SHP -- Window #57 in garage closed.
-2020-11-06 02:12:13 -- SHP -- Window #67 in entrance closed.
-2020-11-06 02:12:13 -- SHP -- Door #6 to masterbedroom closed.
-2020-11-06 02:12:13 -- SHP -- Door #6 to masterbedroom locked.
-2020-11-06 02:12:13 -- SHP -- Door #17 to bedroom closed.
-2020-11-06 02:12:13 -- SHP -- Door #17 to bedroom locked.
-2020-11-06 02:12:13 -- SHP -- Door #26 to living room closed.
-2020-11-06 02:12:13 -- SHP -- Door #26 to living room locked.
-2020-11-06 02:12:13 -- SHP -- Door #38 to bathroom closed.
-2020-11-06 02:12:13 -- SHP -- Door #38 to bathroom locked.
-2020-11-06 02:12:13 -- SHP -- Door #45 to kitchen closed.
-2020-11-06 02:12:13 -- SHP -- Door #45 to kitchen locked.
-2020-11-06 02:12:13 -- SHP -- Door #55 to garage closed.
-2020-11-06 02:12:13 -- SHP -- Door #55 to garage locked.
-2020-11-06 02:12:13 -- SHP -- Door #67 to entrance closed.
-2020-11-06 02:12:13 -- SHP -- Door #67 to entrance locked.
-2020-11-06 02:12:20 -- Motion detector triggered in Room #2 bedroom
-2020-11-06 02:12:20 -- CRITICAL: M.D in bedroom triggered during AWAY mode
-2020-11-06 02:12:21 -- Motion detector disabled in Room #2 bedroom
-2020-11-06 02:12:21 -- No more M.D's triggered during AWAY mode
-2020-11-06 02:12:50 -- Motion detector triggered in Room #2 bedroom
-2020-11-06 02:12:50 -- CRITICAL: M.D in bedroom triggered during AWAY mode
-2020-11-06 02:12:52 -- Motion detector disabled in Room #2 bedroom
-2020-11-06 02:12:52 -- No more M.D's triggered during AWAY mode
-2020-11-06 02:12:54 -- Motion detector triggered in Room #2 bedroom
-2020-11-06 02:12:54 -- CRITICAL: M.D in bedroom triggered during AWAY mode
-2020-11-06 02:13:01 -- Motion detector triggered in Room #5 kitchen
-2020-11-06 02:13:01 -- CRITICAL: M.D in kitchen triggered during AWAY mode
-2020-11-06 02:13:06 -- Motion detector disabled in Room #5 kitchen
-2020-11-06 02:13:06 -- CRITICAL: M.D in kitchen triggered during AWAY mode
+2020-11-06 02:34:59 -- SHP -- AWAY mode set to ON
+2020-11-06 02:34:59 -- SHP -- Window #6 in masterbedroom closed.
+2020-11-06 02:34:59 -- SHP -- Window #8 in masterbedroom closed.
+2020-11-06 02:34:59 -- SHP -- Window #10 in masterbedroom closed.
+2020-11-06 02:34:59 -- SHP -- Window #17 in bedroom closed.
+2020-11-06 02:34:59 -- SHP -- Window #19 in bedroom closed.
+2020-11-06 02:34:59 -- SHP -- Window #26 in living room closed.
+2020-11-06 02:34:59 -- SHP -- Window #28 in living room closed.
+2020-11-06 02:34:59 -- SHP -- Window #30 in living room closed.
+2020-11-06 02:34:59 -- SHP -- Window #32 in living room closed.
+2020-11-06 02:34:59 -- SHP -- Window #38 in bathroom closed.
+2020-11-06 02:34:59 -- SHP -- Window #45 in kitchen closed.
+2020-11-06 02:34:59 -- SHP -- Window #47 in kitchen closed.
+2020-11-06 02:34:59 -- SHP -- Window #49 in kitchen closed.
+2020-11-06 02:34:59 -- SHP -- Window #55 in garage closed.
+2020-11-06 02:34:59 -- SHP -- Window #57 in garage closed.
+2020-11-06 02:34:59 -- SHP -- Window #67 in entrance closed.
+2020-11-06 02:34:59 -- SHP -- Door #6 to masterbedroom closed.
+2020-11-06 02:34:59 -- SHP -- Door #6 to masterbedroom locked.
+2020-11-06 02:34:59 -- SHP -- Door #17 to bedroom closed.
+2020-11-06 02:34:59 -- SHP -- Door #17 to bedroom locked.
+2020-11-06 02:34:59 -- SHP -- Door #26 to living room closed.
+2020-11-06 02:34:59 -- SHP -- Door #26 to living room locked.
+2020-11-06 02:34:59 -- SHP -- Door #38 to bathroom closed.
+2020-11-06 02:34:59 -- SHP -- Door #38 to bathroom locked.
+2020-11-06 02:34:59 -- SHP -- Door #45 to kitchen closed.
+2020-11-06 02:34:59 -- SHP -- Door #45 to kitchen locked.
+2020-11-06 02:34:59 -- SHP -- Door #55 to garage closed.
+2020-11-06 02:34:59 -- SHP -- Door #55 to garage locked.
+2020-11-06 02:34:59 -- SHP -- Door #67 to entrance closed.
+2020-11-06 02:34:59 -- SHP -- Door #67 to entrance locked.
+2020-11-06 02:35:25 -- CRITICAL [SHC]: Motion detector illegitimately triggered in Room #1 masterbedroom
+2020-11-06 02:35:25 -- CRITICAL: M.D in masterbedroom triggered during AWAY mode!!
+2020-11-06 02:35:44 -- CRITICAL [SHC]: Motion detector illegitimately triggered in Room #4 bathroom
+2020-11-06 02:35:44 -- CRITICAL: M.D in bathroom triggered during AWAY mode!!
+2020-11-06 02:36:00 -- SHC -- Motion detector disabled in Room #4 bathroom
+2020-11-06 02:36:00 -- CRITICAL: M.D in bathroom triggered during AWAY mode!!
+2020-11-06 02:36:23 -- SHC -- Motion detector disabled in Room #1 masterbedroom
+2020-11-06 02:36:23 -- No more M.D's triggered during AWAY mode

@@ -212,7 +212,7 @@ public class House {
                              *  has permission, or else keep the light off */
 
                             room.getLightCollection()[light].setState(true);
-                            Controller.appendMessageToConsole("Light #"+room.getLightCollection()[light].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
+                            Controller.appendMessageToConsole("SHC -- Light #"+room.getLightCollection()[light].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName()+" by user");
                             break;
                         }
                     }
@@ -228,12 +228,12 @@ public class House {
                                  *  has permission, or else keep the light on */
 
                                 room.getLightCollection()[light].setState(false);
-                                Controller.appendMessageToConsole("Light #"+room.getLightCollection()[light].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
+                                Controller.appendMessageToConsole("SHC -- Light #"+room.getLightCollection()[light].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName() + " by user");
                             }
                             else {
                                 checkBox.setSelected(true);
-                                Controller.appendMessageToConsole("Locked Light #"+room.getLightCollection()[light].getUtilityID()+" " +
-                                        "attempted to close in Room #"+room.getRoomID()+" "+room.getName());
+                                Controller.appendMessageToConsole("SHC -- Attempt to toggle locked Light #"+room.getLightCollection()[light].getUtilityID()+" " +
+                                        " in Room #"+room.getRoomID()+" "+room.getName() + " by user");
                             }
 
                             break;
@@ -281,10 +281,10 @@ public class House {
                                  *  has permission, or else keep the window in its current state */
 
                                 room.getWindowCollection()[win].setState(true);
-                                Controller.appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
+                                Controller.appendMessageToConsole("SHC -- Window #"+room.getWindowCollection()[win].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName() + " by user");
                             }
                             else {
-                                Controller.appendMessageToConsole("User attempted to open blocked Window #"+room.getWindowCollection()[win].getUtilityID()+" in Room #"+room.getRoomID()+" "+room.getName());
+                                Controller.appendMessageToConsole("SHC -- Attempt to open blocked Window #"+room.getWindowCollection()[win].getUtilityID()+" in Room #"+room.getRoomID()+" "+room.getName() +" by user");
                                 checkBox.setSelected(false);
                             }
                             break;
@@ -356,11 +356,11 @@ public class House {
                                  *  has permission, or else keep the door in its current state */
 
                                 room.getDoorCollection()[door].setState(true);
-                                Controller.appendMessageToConsole("Door #"+room.getDoorCollection()[door].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName());
+                                Controller.appendMessageToConsole("SHC -- Door #"+room.getDoorCollection()[door].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName() + " by user");
                             }
                             else {
                                 checkBox.setSelected(false);
-                                Controller.appendMessageToConsole("Failed to open locked Door #"+room.getDoorCollection()[door].getUtilityID()+" to Room #"+room.getRoomID()+" "+room.getName());
+                                Controller.appendMessageToConsole("SHC -- Failed to open locked Door #"+room.getDoorCollection()[door].getUtilityID()+" to Room #"+room.getRoomID()+" "+room.getName()+ " by user");
                             }
                             break;
                         }
@@ -446,7 +446,7 @@ public class House {
                             }
                             catch(Exception ex){}
                         }
-                        Controller.appendMessageToConsole("Door to "+room.getName()+" automatically closed.");
+                        Controller.appendMessageToConsole("SHC -- Door to "+room.getName()+" automatically closed & locked by user.");
                     }
                     catch(Exception ex){}
                 }
@@ -518,20 +518,20 @@ public class House {
                             room.getMd().setState(true);
                             setIconVisibility(room, "MD", true);
                             // append this to the suspicious activity log in SHP module instead
-                            Controller.appendMessageToConsole("Motion detector triggered in Room #" + room.getRoomID() + " " + room.getName());
+                            Controller.appendMessageToConsole("CRITICAL [SHC]: Motion detector illegitimately triggered in Room #" + room.getRoomID() + " " + room.getName());
                         } else {
                             room.getMd().setState(false);
                             setIconVisibility(room, "MD", false);
-                            Controller.appendMessageToConsole("Motion detector disabled in Room #" + room.getRoomID() + " " + room.getName());
+                            Controller.appendMessageToConsole("SHC -- Motion detector disabled in Room #" + room.getRoomID() + " " + room.getName());
                         }
 
                         if (anyMDsOn()) {
-                            Controller.appendMessageToConsole("CRITICAL: M.D in "+room.getName()+ " triggered during AWAY mode");
+                            Controller.appendMessageToConsole("CRITICAL: One or more motion detectors are illegitimately triggered!!");
                             /**TODO: implement a method in Controller for setting off the time before alerting authorities*/
                             // if there are any MD's on in the house,
                             // call the controller's method to signal the alarm countdown to start
                         } else {
-                            Controller.appendMessageToConsole("No more M.D's triggered during AWAY mode");
+                            Controller.appendMessageToConsole("SHC -- No more M.D's are illegitimately triggered");
                             /**TODO: implement a method in Controller for stopping the time before alerting authorities*/
                             // if there are no MD's on in the house,
                             // call the controller's method to signal the alarm countdown to stop
@@ -544,7 +544,7 @@ public class House {
                 }
             }
             catch(Exception ex) {
-                Controller.appendMessageToConsole("You can only manually control M.D's in AWAY mode.");
+                Controller.appendMessageToConsole("ERROR: You can only manually control M.D's in AWAY mode.");
                 if (mdCheckbox.isSelected()) {
                     setIconVisibility(room, "MD", false);
                     mdCheckbox.setSelected(false);
@@ -580,12 +580,12 @@ public class House {
                         }
                     }
                     setIconVisibility(room, "AC", true);
-                    Controller.appendMessageToConsole("AC turned on in Room #"+room.getRoomID()+" "+room.getName());
+                    Controller.appendMessageToConsole("SHC -- AC turned on in Room #"+room.getRoomID()+" "+room.getName());
                 }
                 else {
                     room.getAc().setState(false);
                     setIconVisibility(room, "AC", false);
-                    Controller.appendMessageToConsole("AC turned off in Room #"+room.getRoomID()+" "+room.getName());
+                    Controller.appendMessageToConsole("SHC -- AC turned off in Room #"+room.getRoomID()+" "+room.getName());
                 }
             });
             roomLayout.getChildren().add(acCheckbox);
@@ -814,7 +814,7 @@ public class House {
                                 }
                                 catch(Exception e){}
                             }
-                            Controller.appendMessageToConsole("Light in "+room.getName()+" automatically turned on.");
+                            Controller.appendMessageToConsole("SHP -- Light in "+room.getName()+" automatically turned on.");
                         }
                         catch(Exception e){}
                     }
@@ -851,10 +851,10 @@ public class House {
                             catch(Exception e){}
                         }
                         if (room.getMd().getState()) {
-                            Controller.appendMessageToConsole("M.D automatically triggered in "+room.getName()+".");
+                            Controller.appendMessageToConsole("[Edit Context] -- M.D automatically triggered in "+room.getName()+".");
                         }
                         else {
-                            Controller.appendMessageToConsole("M.D automatically deactivated in "+room.getName()+".");
+                            Controller.appendMessageToConsole("[Edit Context] -- M.D automatically deactivated in "+room.getName()+".");
                         }
                     }
                     catch(Exception e){}

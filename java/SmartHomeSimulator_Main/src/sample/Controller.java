@@ -413,7 +413,6 @@ public class Controller {
                         if ((Main.currentActiveProfile != null)) {
                             if (Main.currentLocation == null) {
 
-                                /**TODO*/
                                 if (Main.house.areDoorsLocked(Main.householdLocations[fr])) {
                                     appendMessageToConsole("ERROR: Profile #" + Main.currentActiveProfile.getProfileID() +
                                             " tried entering " + Main.householdLocations[fr].getName() + " when locked.");
@@ -1490,7 +1489,7 @@ public class Controller {
                                         toggleButton.setText("Turn on AWAY mode");
                                         Main.SHP_MODULE.getChildren().set(s, toggleButton);
 
-                                        appendMessageToConsole("SHP -- AWAY mode turned Off by Edit Sim. Context.");
+                                        appendMessageToConsole("SHP -- AWAY mode automatically turned Off by Edit Sim. Context.");
 
                                         TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
                                         Tab innerTab3 = tabPane3.getTabs().get(2);
@@ -1821,7 +1820,7 @@ public class Controller {
             }
         } catch(Exception e) {
             tb.setSelected(false);
-            appendMessageToConsole("SHP ERROR: All profiles must be outside house\nbefore turning AWAY mode on.");
+            appendMessageToConsole("ERROR [SHP]: All profiles must be outside house\nbefore turning AWAY mode on.");
         }
     }
 
