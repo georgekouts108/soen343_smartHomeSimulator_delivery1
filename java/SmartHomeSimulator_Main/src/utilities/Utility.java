@@ -63,28 +63,6 @@ public class Utility {
     }
 
     /**
-     * Set the Room of the utility
-     * (for MotionDetector, AirConditioner, Light, and Window objects only)
-     * @param new_room
-     */
-    public void setRoom(Room new_room) {
-
-        try {
-            if ( (this instanceof MotionDetector) || (this instanceof AirConditioner) ||
-                    (this instanceof Light) || (this instanceof Window) ) {
-                this.room = new_room;
-            }
-            else {
-                throw new Exception("Doors and Sensors do not have valid Rooms.");
-            }
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-    }
-
-    /**
      * Access a Utility's ID
      * @return
      */

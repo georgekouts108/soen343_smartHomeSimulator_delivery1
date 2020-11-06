@@ -63,14 +63,6 @@ public class AirConditioner extends Utility {
     }
 
     /**
-     * Change or set an AC's room
-     * @param new_room
-     */
-    public void setRoom(Room new_room) {
-        super.setRoom(new_room);
-    }
-
-    /**
      * Access an AC's utility ID
      * @return
      */

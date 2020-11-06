@@ -50,14 +50,6 @@ public class Light extends Utility {
     }
 
     /**
-     * Change or set a light's room
-     * @param new_room
-     */
-    public void setRoom(Room new_room) {
-        super.setRoom(new_room);
-    }
-
-    /**
      * Access a Light's utility ID
      * @return
      */

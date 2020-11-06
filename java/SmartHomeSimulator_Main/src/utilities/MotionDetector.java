@@ -5,7 +5,6 @@ import house.*;
 
 public class MotionDetector extends Utility {
 
-    private int timeBeforeCopsAlert;
     private Room room;
 
     /**
@@ -13,7 +12,6 @@ public class MotionDetector extends Utility {
      */
     public MotionDetector() {
         super();
-        this.timeBeforeCopsAlert = 0;
     }
 
     /**
@@ -40,35 +38,11 @@ public class MotionDetector extends Utility {
     }
 
     /**
-     * Access how much time should pass before alerting authorities
-     * @return
-     */
-    public int getTimeBeforeCopsAlert() {
-        return timeBeforeCopsAlert;
-    }
-
-    /**
-     * Set the amount of time that should pass before alerting authorities
-     * @param timeBeforeCopsAlert
-     */
-    public void setTimeBeforeCopsAlert(int timeBeforeCopsAlert) {
-        this.timeBeforeCopsAlert = timeBeforeCopsAlert;
-    }
-
-    /**
      * Access a motion detector's Room
      * @return
      */
     public Room getRoom() {
         return super.getRoom();
-    }
-
-    /**
-     * Change or set a motion detector's room
-     * @param new_room
-     */
-    public void setRoom(Room new_room) {
-        super.setRoom(new_room);
     }
 
     /**

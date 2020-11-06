@@ -50,18 +50,6 @@ public class Door extends Utility {
     }
 
     /**
-     * Toggle a door's locked state
-     */
-    public void toggleLockedState() {
-        if (this.isLocked) {
-            this.isLocked = false; // unlock the door
-        }
-        else {
-            this.isLocked = true; // lock the door
-        }
-    }
-
-    /**
      * Get a door's Sensor object instance.
      * @return
      */
@@ -75,14 +63,6 @@ public class Door extends Utility {
      */
     public Room getRoom() {
         return super.getRoom();
-    }
-
-    /**
-     * Change or set a door's room
-     * @param new_room
-     */
-    public void setRoom(Room new_room) {
-        super.setRoom(new_room);
     }
 
     /**
