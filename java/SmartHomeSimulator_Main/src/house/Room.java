@@ -143,6 +143,7 @@ public class Room {
     public ImageView getIconLight_view() {
         return iconLight_view;
     }
+
     /**
      * Access the Door icon
      * @return
@@ -150,6 +151,7 @@ public class Room {
     public ImageView getIconDoor_view() {
         return iconDoor_view;
     }
+
     /**
      * Access the Air Conditioner icon
      * @return
@@ -157,6 +159,7 @@ public class Room {
     public ImageView getIconAC_view() {
         return iconAC_view;
     }
+
     /**
      * Access the Window icon
      * @return
@@ -164,6 +167,7 @@ public class Room {
     public ImageView getIconWindow_view() {
         return iconWindow_view;
     }
+
     /**
      * Access the Motion Detector icon
      * @return
