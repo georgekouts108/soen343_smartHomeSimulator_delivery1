@@ -1531,12 +1531,16 @@ public class Controller {
                                 try {
                                     for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
                                         try {
-                                            Main.householdLocations[room].getDoorCollection()[door].setLocked(false);
-                                            appendMessageToConsole("Door #" +
-                                                    Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
-                                                    Main.householdLocations[room].getName() + " unlocked by SHP module");
-                                        } catch (Exception e) {
-                                        }
+                                            if (!Main.householdLocations[room].getName().equals("entrance") &&
+                                                    !Main.householdLocations[room].getName().equals("backyard") &&
+                                                    !Main.householdLocations[room].getName().equals("garage")) {
+                                                Main.householdLocations[room].getDoorCollection()[door].setLocked(false);
+                                                appendMessageToConsole("SHP -- Door #" +
+                                                        Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
+                                                        Main.householdLocations[room].getName() + " unlocked.");
+
+                                            }
+                                        } catch (Exception e) { }
                                     }
                                 }catch (Exception E){}
                             }
@@ -1925,6 +1929,7 @@ public class Controller {
      * @param message
      */
     public static void appendMessageToConsole(String message) {
+
         for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
             if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
                 TextArea textArea = (TextArea) Main.getMain_dashboard().getChildren().get(a);
@@ -1934,6 +1939,16 @@ public class Controller {
                 break;
             }
         }
+        appendMessageToLogFile(LocalDateTime.now().toString().substring(0,10)+ " "+
+                LocalDateTime.now().toString().substring(11,19)+" -- "+message+"\n");
+    }
+
+    public static void appendMessageToLogFile(String message) {
+        try {
+            byte[] bytes = message.getBytes();
+            Main.fileWriter.write(bytes);
+        }
+        catch (Exception e){}
     }
 
     /**TODO: FIX ANY BUGS IN THIS METHOD*/

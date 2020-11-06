@@ -37,8 +37,13 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.concurrent.*;
+import java.io.*;
 
 public class Main extends Application {
+
+    /**FILE I/O */
+    protected static FileOutputStream fileWriter;
+    protected static File logFile;
 
     /**STRING ARRAY FOR COUNTRIES (USER FOR SETTING HOUSE LOCATION) */
     protected static String[] countries = Locale.getISOCountries();
@@ -133,6 +138,12 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        logFile = new File("src/log.txt");
+        if (logFile.exists()) {
+            logFile.createNewFile();
+        }
+        fileWriter = new FileOutputStream(logFile);
 
         main_stage = primaryStage;
         main_stage.setResizable(false);
@@ -523,7 +534,7 @@ public class Main extends Application {
                             house.setLocation(locationMenu.getValue().toString());
                             main_dashboard.getChildren().set(a, updatedLabel);
                         }
-                        
+
                         break;
                     }
                 } catch(Exception ex){}
