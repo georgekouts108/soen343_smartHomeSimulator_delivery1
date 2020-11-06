@@ -6,6 +6,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
+import java.util.Observable;
+
 public class SHPModule extends Module {
 
     public SHPModule(){
@@ -100,5 +102,10 @@ public class SHPModule extends Module {
     @Override
     public AnchorPane generateModule(AnchorPane pane) {
         return null;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        
     }
 }

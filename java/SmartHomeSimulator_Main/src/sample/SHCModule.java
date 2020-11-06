@@ -6,6 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.util.Observable;
+
 public class SHCModule extends Module {
 
     public SHCModule() {
@@ -71,5 +73,10 @@ public class SHCModule extends Module {
 
         Main.numberOfTimesSHCModuleCreated++;
         return pane;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }

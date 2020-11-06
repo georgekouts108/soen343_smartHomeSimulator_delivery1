@@ -2,6 +2,8 @@ package sample;
 
 import javafx.scene.layout.AnchorPane;
 
+import java.util.Observable;
+
 public class SHHModule extends Module {
 
     public SHHModule() {
@@ -29,5 +31,10 @@ public class SHHModule extends Module {
 
         Main.numberOfTimesSHHModuleCreated++;
         return null;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }

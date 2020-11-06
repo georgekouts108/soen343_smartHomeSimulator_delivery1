@@ -6,6 +6,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.TextAlignment;
 
+import java.util.Observable;
+
 public class SHSModule extends Module {
 
     public SHSModule() {
@@ -188,6 +190,11 @@ public class SHSModule extends Module {
     @Override
     public AnchorPane generateModule(AnchorPane pane) {
         return null;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }
 
