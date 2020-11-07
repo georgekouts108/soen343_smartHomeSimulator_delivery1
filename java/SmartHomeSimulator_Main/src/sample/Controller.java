@@ -1957,7 +1957,8 @@ public class Controller {
                     case '3':
                     case '4':
                     case '5':
-                        Main.timeLimitBeforeAlert = Integer.parseInt(content);
+                        Main.shpModule.setTimeToAlert(Integer.parseInt(content));
+                        Main.timeLimitBeforeAlert = Main.shpModule.getTimeToAlert();
                         appendMessageToConsole("SHP -- Away mode time limit before authority alert set to "+character+" minute(s).");
                         label.setText("Time before Alert:\n"+character+" minute(s)");
                         textField.clear();
@@ -1966,7 +1967,6 @@ public class Controller {
                         throw new Exception();
                 }
             }
-            sample.SHPModule.setTimeToAlert(Integer.parseInt(content));
         }
         catch(Exception e){
             appendMessageToConsole("SHP -- Failed attempt to set the Away mode time limit before authority alert.");

@@ -78,6 +78,11 @@ public class Main extends Application {
     protected static AnchorPane SHP_MODULE;
     protected static AnchorPane SHH_MODULE;
 
+    protected static SHSModule shsModule = new SHSModule();
+    protected static SHCModule shcModule = new SHCModule();
+    protected static SHPModule shpModule = new SHPModule();
+    protected static SHHModule shhModule = new SHHModule();
+
     /**G.U.I ELEMENTS FOR THE MAIN DASHBOARD */
     protected static Button editContextButton;
     protected static TextArea outputConsole;
@@ -399,7 +404,6 @@ public class Main extends Application {
                         main_dashboard.getChildren().set(a, hl);
                     } else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
 
-                        SHSModule shsModule = new SHSModule();
                         SHS_MODULE = shsModule.generateModule();
                         TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab = tabPane.getTabs().get(0);
@@ -409,7 +413,7 @@ public class Main extends Application {
                         tabPane.getTabs().set(0, innerTab);
                         main_dashboard.getChildren().set(a, tabPane);
 
-                        SHCModule shcModule = new SHCModule();
+
                         shcModule.generateModule(SHC_MODULE);
                         TabPane tabPane2 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab2 = tabPane2.getTabs().get(1);
@@ -417,7 +421,7 @@ public class Main extends Application {
                         tabPane2.getTabs().set(1, innerTab2);
                         main_dashboard.getChildren().set(a, tabPane2);
 
-                        SHPModule shpModule = new SHPModule();
+
                         SHP_MODULE = shpModule.generateModule();
                         TabPane tabPane3 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab3 = tabPane3.getTabs().get(2);
@@ -425,7 +429,7 @@ public class Main extends Application {
                         tabPane3.getTabs().set(2, innerTab3);
                         main_dashboard.getChildren().set(a, tabPane3);
 
-                        SHHModule shhModule = new SHHModule();
+
                         shhModule.generateModule(SHH_MODULE);
                         TabPane tabPane4 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab4 = tabPane4.getTabs().get(3);
@@ -445,21 +449,24 @@ public class Main extends Application {
                         ToggleButton tb = (ToggleButton) main_dashboard.getChildren().get(a);
                         tb.setDisable(true);
                         main_dashboard.getChildren().set(a, tb);
-                    } else if (main_dashboard.getChildren().get(a).getId().equals("editContextButton")) {
+                    }
+                    else if (main_dashboard.getChildren().get(a).getId().equals("editContextButton")) {
                         Button b = (Button) main_dashboard.getChildren().get(a);
                         b.setDisable(true);
                         main_dashboard.getChildren().set(a, b);
-                    } else if (main_dashboard.getChildren().get(a).getId().equals("OutputConsole")) {
+                    }
+                    else if (main_dashboard.getChildren().get(a).getId().equals("OutputConsole")) {
                         TextArea ta = (TextArea) main_dashboard.getChildren().get(a);
                         ta.setDisable(true);
                         main_dashboard.getChildren().set(a, ta);
-                    } else if (main_dashboard.getChildren().get(a).getId().equals("houseLayout")) {
+                    }
+                    else if (main_dashboard.getChildren().get(a).getId().equals("houseLayout")) {
                         AnchorPane hl = (AnchorPane) main_dashboard.getChildren().get(a);
                         hl.setDisable(true);
                         main_dashboard.getChildren().set(a, hl);
-                    } else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
+                    }
+                    else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
 
-                        SHSModule shsModule = new SHSModule();
                         SHS_MODULE = shsModule.generateModule();
                         TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab = tabPane.getTabs().get(0);
@@ -467,7 +474,6 @@ public class Main extends Application {
                         tabPane.getTabs().set(0, innerTab);
                         main_dashboard.getChildren().set(a, tabPane);
 
-                        SHCModule shcModule = new SHCModule();
                         shcModule.generateModule(SHC_MODULE);
                         TabPane tabPane2 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab2 = tabPane2.getTabs().get(1);
@@ -475,7 +481,6 @@ public class Main extends Application {
                         tabPane2.getTabs().set(1, innerTab2);
                         main_dashboard.getChildren().set(a, tabPane2);
 
-                        SHPModule shpModule = new SHPModule();
                         SHP_MODULE = shpModule.generateModule();
                         TabPane tabPane3 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab3 = tabPane3.getTabs().get(2);
@@ -483,7 +488,6 @@ public class Main extends Application {
                         tabPane3.getTabs().set(2, innerTab3);
                         main_dashboard.getChildren().set(a, tabPane3);
 
-                        SHHModule shhModule = new SHHModule();
                         shhModule.generateModule(SHH_MODULE);
                         TabPane tabPane4 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab4 = tabPane4.getTabs().get(3);
@@ -504,10 +508,10 @@ public class Main extends Application {
     public static TabPane createModuleInterface() {
         TabPane modules = new TabPane();
 
-        SHSModule shsModule = new SHSModule(); SHS_MODULE = shsModule.generateModule();
-        SHCModule shcModule = new SHCModule(); shcModule.generateModule(SHC_MODULE);
-        SHPModule shpModule = new SHPModule(); SHP_MODULE = shpModule.generateModule();
-        SHHModule shhModule = new SHHModule(); shhModule.generateModule(SHH_MODULE);
+        SHS_MODULE = shsModule.generateModule();
+        shcModule.generateModule(SHC_MODULE);
+        SHP_MODULE = shpModule.generateModule();
+        shhModule.generateModule(SHH_MODULE);
 
         Tab shcTab = new Tab("SHC", SHC_MODULE); shcTab.setId("shcTab");
         Tab shpTab = new Tab("SHP", SHP_MODULE); shpTab.setId("shpTab");
