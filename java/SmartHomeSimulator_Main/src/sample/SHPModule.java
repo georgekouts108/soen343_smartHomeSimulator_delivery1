@@ -121,24 +121,6 @@ public class SHPModule extends Module {
         if (SHSHelpers.isIs_away()) {
             if (Main.house.anyMDsOn()) {
                 /**todo: implement a method in Controller that will start counting down the alert time*/
-                //test
-                System.out.println("test alarm");
-                System.out.println(timeToAlert);
-                //
-
-                final int[] secondsBeforeAlert = {timeToAlert * 60};
-                Thread t = new Thread(() -> {
-                    while (secondsBeforeAlert[0] > 0) {
-                        secondsBeforeAlert[0] = secondsBeforeAlert[0] - 1;
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    sample.Controller.appendMessageToConsole("The authorities have been alerted");
-                });
-                t.start();
             }
         }
 
