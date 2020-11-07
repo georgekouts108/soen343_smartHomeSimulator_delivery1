@@ -30,7 +30,7 @@ import org.testfx.framework.junit.*;
 public class TestUseCase12 extends ApplicationTest {
     // Alert authorities time test
     @org.junit.Test
-    public void testCase12(){
+    public void alertAuthorities(){
         SHPModule shp = new SHPModule();
         try{
             shp.setTimeToAlert(12);

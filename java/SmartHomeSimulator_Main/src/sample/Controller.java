@@ -1831,10 +1831,10 @@ public class Controller {
     public static void createAwayLightsPanel() {
         if (numberOfTimesAwayLightsPanelAccessed==0) {
             Label promptLabel = new Label("Select below which lights\nshould remain on during\nAWAY mode");
-            promptLabel.setTranslateX(20); promptLabel.setTranslateY(20);
+            promptLabel.setTranslateX(60); promptLabel.setTranslateY(20);
             promptLabel.setTextAlignment(TextAlignment.CENTER);
 
-            int pixel_Y = 80, pixel_X = 20;
+            int pixel_Y = 80, pixel_X = 40;
             for (int r = 0; r < Main.householdLocations.length; r++) {
                 for (int l = 0; l < Main.householdLocations[r].getLightCollection().length; l++) {
                     CheckBox lightBox = new CheckBox("Light #"
@@ -1863,52 +1863,52 @@ public class Controller {
                 }
             }
 
-           //
+            //
             Label setTimeLabel = new Label("Hour     Minute");
-            setTimeLabel.setTranslateX(0); setTimeLabel.setTranslateY(280);
+            setTimeLabel.setTranslateX(20); setTimeLabel.setTranslateY(280);
 
             TextField hourField = new TextField(); hourField.setPrefHeight(30); hourField.setPrefWidth(40);
-            hourField.setTranslateX(0); hourField.setTranslateY(300);
+            hourField.setTranslateX(20); hourField.setTranslateY(300);
             hourField.setPromptText("hh");
             hourField.setId("hourField");
 
             Label colon = new Label(":");
-            colon.setTranslateX(45); colon.setTranslateY(300);
+            colon.setTranslateX(60); colon.setTranslateY(300);
 
             TextField minuteField = new TextField(); minuteField.setPrefHeight(30); minuteField.setPrefWidth(40);
             minuteField.setId("minuteField");
-            minuteField.setTranslateX(50); minuteField.setTranslateY(300);
+            minuteField.setTranslateX(70); minuteField.setTranslateY(300);
             minuteField.setPromptText("mm");
 
             Label setTimeLabel2 = new Label("Hour     Minute");
-            setTimeLabel2.setTranslateX(120); setTimeLabel2.setTranslateY(280);
+            setTimeLabel2.setTranslateX(140); setTimeLabel2.setTranslateY(280);
 
             TextField hourField2 = new TextField(); hourField2.setPrefHeight(30); hourField2.setPrefWidth(40);
-            hourField2.setTranslateX(120); hourField2.setTranslateY(300);
+            hourField2.setTranslateX(140); hourField2.setTranslateY(300);
             hourField2.setPromptText("hh");
             hourField2.setId("hourField");
 
             Label colon2 = new Label(":");
-            colon2.setTranslateX(165); colon2.setTranslateY(300);
+            colon2.setTranslateX(185); colon2.setTranslateY(300);
 
             TextField minuteField2 = new TextField(); minuteField2.setPrefHeight(30); minuteField2.setPrefWidth(40);
             minuteField2.setId("minuteField");
-            minuteField2.setTranslateX(170); minuteField2.setTranslateY(300);
+            minuteField2.setTranslateX(190); minuteField2.setTranslateY(300);
             minuteField2.setPromptText("mm");
 
             Button setInterval = new Button("Set");
-            setInterval.setTranslateX(215); setInterval.setTranslateY(300);
+            setInterval.setTranslateX(240); setInterval.setTranslateY(300);
             setInterval.setOnAction(e->
                     System.out.println("set time"));
 
             Label from = new Label("Keep lights on from");
-            from.setTranslateX(0); from.setTranslateY(260);
+            from.setTranslateX(20); from.setTranslateY(260);
 
             Label to = new Label("to");
-            to.setTranslateX(100); to.setTranslateY(300);
+            to.setTranslateX(120); to.setTranslateY(300);
 
             Button closeButton = new Button("Close");
-            closeButton.setTranslateX(100); closeButton.setTranslateY(330);
+            closeButton.setTranslateX(110); closeButton.setTranslateY(335);
             closeButton.setOnAction(event->Main.awayLightsStage.close());
 
             //Will add: onclick event of set button --> have a method to save time and compare it to current sim time (thread).
@@ -1928,8 +1928,8 @@ public class Controller {
     public static void configureAwayLights() {
         Main.awayLightsStage = new Stage();
         Main.awayLightsStage.setResizable(false);
-        Main.awayLightsStage.setHeight(380);
-        Main.awayLightsStage.setWidth(250);
+        Main.awayLightsStage.setHeight(410);
+        Main.awayLightsStage.setWidth(300);
         Main.awayLightsStage.setTitle("AWAY mode - Lights Configuration");
         createAwayLightsPanel();
         Main.awayLightsStage.setScene(Main.SHP_LightsConfigAWAYscene);
