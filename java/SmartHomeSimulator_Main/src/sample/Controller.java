@@ -1967,22 +1967,6 @@ public class Controller {
                 }
             }
             sample.SHPModule.setTimeToAlert(Integer.parseInt(content));
-
-            //test, works, COMMENT OUT BLOCK when update() and anyMDsOn() functions are implementend in SHPModule
-            final int[] secondsBeforeAlert = {Integer.parseInt(content) * 60};
-            Thread t = new Thread(() -> {
-                while (secondsBeforeAlert[0] > 0) {
-                    secondsBeforeAlert[0] = secondsBeforeAlert[0] - 1;
-                    try {
-                        System.out.println(secondsBeforeAlert[0]);
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                appendMessageToConsole("FBI OPEN UP");
-            });
-            t.start();
         }
         catch(Exception e){
             appendMessageToConsole("SHP -- Failed attempt to set the Away mode time limit before authority alert.");
