@@ -142,6 +142,10 @@ public class SHPModule extends Module {
 
     }
 
+    /**
+     * Start or stop counting down the time before alerting authorities.
+     * @param trigger
+     */
     public void startOrStopThread(boolean trigger) {
 
         if (trigger) {
