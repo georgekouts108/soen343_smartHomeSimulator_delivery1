@@ -10,6 +10,16 @@ import java.util.Observable;
 
 public class SHPModule extends Module {
 
+    private static int timeToAlert = 0;
+
+    public static void setTimeToAlert(int time){
+        timeToAlert = time;
+    }
+
+    public static int getTimeToAlert(){
+        return timeToAlert;
+    }
+
     public SHPModule(){
         super();
     }
@@ -48,7 +58,6 @@ public class SHPModule extends Module {
         confirmButton.setId("alertTimeConfirmButton");
         confirmButton.setTranslateY(70);
         confirmButton.setTranslateX(270);
-
         confirmButton.setOnAction(e->Controller.setTimeBeforeAlert(timeBox, timeLimit));
 
         if (Main.is_away) {
@@ -111,8 +120,31 @@ public class SHPModule extends Module {
         if (SHSHelpers.isIs_away()) {
             if (Main.house.anyMDsOn()) {
                 /**todo: implement a method in Controller that will start counting down the alert time*/
+                //test
+                System.out.println("test alarm");
+                System.out.println(timeToAlert);
+                //
+
+                final int[] secondsBeforeAlert = {timeToAlert * 60};
+                Thread t = new Thread(() -> {
+                    while (secondsBeforeAlert[0] > 0) {
+                        secondsBeforeAlert[0] = secondsBeforeAlert[0] - 1;
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    sample.Controller.appendMessageToConsole("The authorities have been alerted");
+                });
+                t.start();
             }
         }
 
     }
+
+    public static void countDownToNotify(){
+
+    }
+
 }

@@ -37,6 +37,8 @@ import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 import sample.Main.*;
 
+//import static sample.SHPModule.setTimeToAlert;
+
 public class Controller {
 
     protected static int pixelY = 70;
@@ -1911,6 +1913,7 @@ public class Controller {
 
             //Will add: onclick event of set button --> have a method to save time and compare it to current sim time (thread).
             //Check if conditions are met in createAwayLightsPanel()
+            //also need to append msg to console
 
             Main.SHP_LightsConfigAWAYmode.getChildren().addAll(promptLabel, closeButton, hourField,
                     minuteField, colon, setTimeLabel, from, to, hourField2,
@@ -1963,6 +1966,23 @@ public class Controller {
                         throw new Exception();
                 }
             }
+            sample.SHPModule.setTimeToAlert(Integer.parseInt(content));
+
+            //test, works, comment this block out when update() and anyMDsOn() functions are implementend in SHPModule
+            final int[] secondsBeforeAlert = {Integer.parseInt(content) * 60};
+            Thread t = new Thread(() -> {
+                while (secondsBeforeAlert[0] > 0) {
+                    secondsBeforeAlert[0] = secondsBeforeAlert[0] - 1;
+                    try {
+                        System.out.println(secondsBeforeAlert[0]);
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                appendMessageToConsole("FBI OPEN UP");
+            });
+            t.start();
         }
         catch(Exception e){
             appendMessageToConsole("SHP -- Failed attempt to set the Away mode time limit before authority alert.");
