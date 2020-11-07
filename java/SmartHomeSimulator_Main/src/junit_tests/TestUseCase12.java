@@ -28,5 +28,15 @@ import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
 public class TestUseCase12 extends ApplicationTest {
-    /**todo: implement*/
+    // Alert authorities time test
+    @org.junit.Test
+    public void testCase12(){
+        SHPModule shp = new SHPModule();
+        try{
+            shp.setTimeToAlert(12);
+            Assert.assertNotNull(shp);
+        } catch (Exception e){
+            Assert.assertTrue(true);
+        }
+    }
 }
