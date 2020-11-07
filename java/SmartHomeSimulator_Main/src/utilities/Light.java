@@ -6,7 +6,6 @@ import house.Room;
 
 public class Light extends Utility {
 
-    private Room room; // the room that the window is located in.
     private boolean isLocked;
 
     /**

@@ -10,7 +10,7 @@ public class UserProfile {
     private boolean loggedIn;
     private int profileID;
     private Room currentLocation;
-    private int numberOfTimesHyperlinkClicked;
+    private int TimesHyperlinkClicked;
     private boolean isAway;
 
     /**
@@ -22,7 +22,7 @@ public class UserProfile {
         this.type = type;
         this.loggedIn = false;
         this.profileID = (PROFILE_ID++);
-        this.numberOfTimesHyperlinkClicked = 0;
+        this.TimesHyperlinkClicked = 0;
         this.isAway = false;
     }
 
@@ -62,16 +62,16 @@ public class UserProfile {
      * Return the number of times a profile link was clicked
      * @return
      */
-    public int getNumberOfTimesHyperlinkClicked() {
-        return numberOfTimesHyperlinkClicked;
+    public int getTimesHyperlinkClicked() {
+        return TimesHyperlinkClicked;
     }
 
     /**
      * Update the number of times a profile link was clicked
      * @param numberOfTimesHyperlinkClicked
      */
-    public void setNumberOfTimesHyperlinkClicked(int numberOfTimesHyperlinkClicked) {
-        this.numberOfTimesHyperlinkClicked = numberOfTimesHyperlinkClicked;
+    public void setTimesHyperlinkClicked(int numberOfTimesHyperlinkClicked) {
+        this.TimesHyperlinkClicked = numberOfTimesHyperlinkClicked;
     }
 
     /**

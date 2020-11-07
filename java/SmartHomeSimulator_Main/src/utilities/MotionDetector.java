@@ -5,8 +5,6 @@ import house.*;
 
 public class MotionDetector extends Utility {
 
-    private Room room;
-
     /**
      * Motion detector constructor
      */

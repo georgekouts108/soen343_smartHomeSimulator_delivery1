@@ -5,7 +5,6 @@ import house.*;
 public class AirConditioner extends Utility {
 
     private double temperatureSetting; // the temperature level of the A.C. (in Celcius)
-    private Room room;               // the room that the A.C. machine is in;
 
     /**
      * Air conditioner constructor

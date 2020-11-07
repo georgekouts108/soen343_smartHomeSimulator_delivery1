@@ -1386,7 +1386,7 @@ public class Controller {
 
         hyperlink.setOnAction(e-> {
 
-            if (userProfile.getNumberOfTimesHyperlinkClicked()==0) {
+            if (userProfile.getTimesHyperlinkClicked()==0) {
                 Hyperlink editLink = new Hyperlink(); editLink.setText("[Edit]");
                 editLink.setId("editLinkForProfile"+userProfile.getProfileID());
                 editLink.setTranslateX((Main.LOGINPAGE_HEIGHT/2)+175); editLink.setTranslateY(hyperlink.getTranslateY());
@@ -1432,7 +1432,7 @@ public class Controller {
                     {
                         Main.profileSelection.getChildren().removeAll(editLink, loginLink, deleteLink);
                         Controller.deleteProfile(userProfile,hyperlink);
-                        userProfile.setNumberOfTimesHyperlinkClicked(0);
+                        userProfile.setTimesHyperlinkClicked(0);
                     }
                 });
 
@@ -1456,7 +1456,7 @@ public class Controller {
                 }
             }
 
-            userProfile.setNumberOfTimesHyperlinkClicked(userProfile.getNumberOfTimesHyperlinkClicked()+1);
+            userProfile.setTimesHyperlinkClicked(userProfile.getTimesHyperlinkClicked()+1);
 
         });
 

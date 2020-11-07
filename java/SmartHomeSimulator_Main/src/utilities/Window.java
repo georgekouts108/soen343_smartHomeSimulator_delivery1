@@ -4,7 +4,6 @@ import house.*;
 public class Window extends Utility {
 
     private Sensor sensor; // a window's sensor
-    private Room room; // the room that the window is located in.
     private boolean isBlocked;
 
     /**
