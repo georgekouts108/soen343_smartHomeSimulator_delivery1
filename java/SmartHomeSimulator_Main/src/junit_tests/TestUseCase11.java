@@ -28,5 +28,32 @@ import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
 public class TestUseCase11 extends ApplicationTest {
+    // Users for each type
+    private UserProfile child = new UserProfile("child");
+    private UserProfile parent = new UserProfile("parent");
+    private UserProfile guest = new UserProfile("guest");
+    private UserProfile stranger = new UserProfile("stranger");
+
     /**todo: implement*/
+    // Permissions testing
+    public void WindowPermissions(){
+
+
+    }
+    public void WindowPermissionsFail(){
+
+    }
+    public void DoorPermissions(){
+
+    }
+    public void DoorPermissionsFail(){
+
+    }
+    public void LightPermissions(){
+
+    }
+    public void LightPermissionsFail(){
+
+    }
+
 }

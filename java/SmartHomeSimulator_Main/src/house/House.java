@@ -1,19 +1,14 @@
 package house;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import sample.*;
-import utilities.*;
-import sample.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.time.LocalDateTime;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class House {
 
@@ -530,6 +525,29 @@ public class House {
                             /**TODO: implement a method in Controller for setting off the time before alerting authorities*/
                             // if there are any MD's on in the house,
                             // call the controller's method to signal the alarm countdown to start
+
+                            final int[] secondsBeforeAlert = {sample.SHPModule.getTimeToAlert() * 60};
+                            sample.Controller.appendMessageToConsole("The authorities will be alerted in " + secondsBeforeAlert[0]/60 + " minute(s)");
+                            Thread t = new Thread(() -> {
+                                while (secondsBeforeAlert[0] > 0) {
+                                    secondsBeforeAlert[0] = secondsBeforeAlert[0] - 1;
+                                    try {
+                                        /*if (secondsBeforeAlert[0] > 60 && secondsBeforeAlert[0]%60 == 0){
+                                            sample.Controller.appendMessageToConsole("The authorities will be alerted in" + secondsBeforeAlert[0]/60 + " minute(s)");
+                                        }
+                                        else if (secondsBeforeAlert[0] < 60 && secondsBeforeAlert[0]%10 == 0){
+                                            sample.Controller.appendMessageToConsole("The authorities will be alerted in" + secondsBeforeAlert[0] + " seconds(s)");
+                                        }*/
+                                        System.out.println(secondsBeforeAlert[0]);
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException exception) {
+                                        exception.printStackTrace();
+                                    }
+                                }
+                                sample.Controller.appendMessageToConsole("The authorities have been alerted");
+                            });
+                            t.start();
+
                         } else {
                             Controller.appendMessageToConsole("SHC -- No more M.D's are illegitimately triggered");
                             /**TODO: implement a method in Controller for stopping the time before alerting authorities*/
