@@ -22,9 +22,6 @@ public class Room {
 
     private String name;
     private int roomID;
-    private int numberOfWindows;
-    private int numberOfLights;
-    private int numberOfDoors;
     private int numberOfPeopleInside;
     private AirConditioner ac;
     private MotionDetector md;
@@ -44,9 +41,6 @@ public class Room {
     public Room(String roomName, int numberOfDoors, int numberOfWindows, int numberOfLights, boolean AC) {
         this.roomID = (ID_count++);
         this.name = roomName;
-        this.numberOfDoors = numberOfDoors;
-        this.numberOfWindows = numberOfWindows;
-        this.numberOfLights = numberOfLights;
         this.numberOfPeopleInside = 0;
         this.autoMode = false;
         this.md = new MotionDetector();
@@ -185,14 +179,6 @@ public class Room {
     }
 
     /**
-     * Mutate the name of a room
-     * @param name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
      * Access a room's ID
      * @return
      */
@@ -230,30 +216,6 @@ public class Room {
      */
     public void setAutoMode(boolean autoMode) {
         this.autoMode = autoMode;
-    }
-
-    /**
-     * Return a room's number of windows
-     * @return
-     */
-    public int getNumberOfWindows() {
-        return numberOfWindows;
-    }
-
-    /**
-     * Return a room's number of lights
-     * @return
-     */
-    public int getNumberOfLights() {
-        return numberOfLights;
-    }
-
-    /**
-     * Return a room's number of doors
-     * @return
-     */
-    public int getNumberOfDoors() {
-        return numberOfDoors;
     }
 
     /**

@@ -39,7 +39,7 @@ public class SHCModule extends Module {
             int trans_X = 150; int trans_Y = 40;
             for (int room = 0; room < Main.householdLocations.length; room++) {
                 Button roomButton = new Button(Main.householdLocations[room].getName());
-
+                roomButton.setId("SHCRoomButtonFor_"+Main.householdLocations[room].getName());
                 roomButton.setTranslateX(trans_X);
                 roomButton.setTranslateY(trans_Y += 30);
                 int finalRoom = room;

@@ -107,5 +107,12 @@ public class SHPModule extends Module {
     @Override
     public void update(Observable o, Object arg) {
 
+        /**if MDs are triggered during AWAY mode, call the method to count down the alert timer*/
+        if (SHSHelpers.isIs_away()) {
+            if (Main.house.anyMDsOn()) {
+                /**todo: implement a method in Controller that will start counting down the alert time*/
+            }
+        }
+
     }
 }
