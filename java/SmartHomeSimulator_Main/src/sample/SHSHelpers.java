@@ -18,6 +18,18 @@ import sample.*;
 
 public class SHSHelpers {
 
+    public static SHCModule getShcModuleObject() {
+        return Main.shcModule;
+    }
+    public static SHHModule getShhModuleObject() {
+        return Main.shhModule;
+    }
+    public static SHPModule getShpModuleObject() {
+        return Main.shpModule;
+    }
+    public static SHSModule getShsModuleObject() {
+        return Main.shsModule;
+    }
     public static String[] getCountries() {
         return Main.countries;
     }

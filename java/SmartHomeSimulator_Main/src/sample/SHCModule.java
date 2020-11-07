@@ -74,9 +74,4 @@ public class SHCModule extends Module {
         Main.numberOfTimesSHCModuleCreated++;
         return pane;
     }
-
-    @Override
-    public void update(Observable o, Object arg) {
-
-    }
 }

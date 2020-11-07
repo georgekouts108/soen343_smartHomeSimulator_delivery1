@@ -10,6 +10,10 @@ import java.util.Observable;
 
 public class SHPModule extends Module {
 
+    private Thread alertTimeThread;
+    private boolean isThreadRunning;
+
+
     private static int timeToAlert = 0;
 
     public static void setTimeToAlert(int time){
@@ -22,6 +26,8 @@ public class SHPModule extends Module {
 
     public SHPModule(){
         super();
+        this.isThreadRunning = false;
+        this.alertTimeThread = null;
     }
 
     /**
@@ -114,15 +120,60 @@ public class SHPModule extends Module {
         return null;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
+    /**
+     * Notify the SHP module of any motion detectors triggered during AWAY mode
+     * so the module may begin counting time time before alerting authorities
+     * (or cancel this thread is all motion detectors are off again during AWAY mode)
+     */
+    public void getNotified() {
 
         /**if MDs are triggered during AWAY mode, call the method to count down the alert timer*/
         if (SHSHelpers.isIs_away()) {
             if (Main.house.anyMDsOn()) {
-                /**todo: implement a method in Controller that will start counting down the alert time*/
+                Controller.appendMessageToConsole("CRITICAL: One or more motion detectors are illegitimately triggered!!");
+                startOrStopThread(true);
+            }
+            else {
+                startOrStopThread(false);
+                Controller.appendMessageToConsole("SHC -- No more M.D's are illegitimately triggered");
+                Controller.appendMessageToConsole("Alarm deactivated.");
             }
         }
 
+    }
+
+    public void startOrStopThread(boolean trigger) {
+
+        if (trigger) {
+            final int[] secondsBeforeAlert = {timeToAlert * 60};
+            sample.Controller.appendMessageToConsole("WARNING: The authorities will be alerted in " + secondsBeforeAlert[0]/60 + " minute(s)...");
+
+            this.alertTimeThread = new Thread(() -> {
+                while (secondsBeforeAlert[0] > 0) {
+                    secondsBeforeAlert[0] = secondsBeforeAlert[0] - 1;
+                    try {
+                        System.out.println(secondsBeforeAlert[0]);
+                        Thread.sleep(1000);
+                    } catch (InterruptedException exception) {
+                        exception.printStackTrace();
+                    }
+                }
+                try {
+                    sample.Controller.appendMessageToConsole("The authorities have been alerted");
+                }
+                catch (Exception ex){}
+            });
+
+            if (!isThreadRunning) {
+                isThreadRunning = true;
+                alertTimeThread.start();
+            }
+        }
+        else {
+            if (isThreadRunning) {
+                isThreadRunning = false;
+                alertTimeThread.stop();
+            }
+        }
     }
 }

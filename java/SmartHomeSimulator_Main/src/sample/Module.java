@@ -2,9 +2,7 @@ package sample;
 
 import javafx.scene.layout.AnchorPane;
 
-import java.util.Observer;
-
-public abstract class Module implements Observer {
+public abstract class Module {
 
     /**
      * Module abstract constructor

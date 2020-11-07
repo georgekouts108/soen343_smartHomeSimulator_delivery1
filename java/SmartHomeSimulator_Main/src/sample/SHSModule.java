@@ -192,10 +192,6 @@ public class SHSModule extends Module {
         return null;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-
-    }
 }
 
 
