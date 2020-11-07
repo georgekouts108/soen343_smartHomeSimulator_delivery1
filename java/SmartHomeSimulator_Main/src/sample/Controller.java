@@ -50,6 +50,7 @@ public class Controller {
     protected static CheckBox[] profileCheckboxes;
     protected static CheckBox[] roomCheckboxes;
 
+
     //for LOCAL TIME
     /**
      * Display the local date and time in the main dashboard
@@ -83,7 +84,6 @@ public class Controller {
      * @param hourField
      * @param minuteField
      */
-
     //to fix: undo previous thread when new one is created
     public static void CurrentDateSimulation(DatePicker datePicker, Label dateText, Label timeText, TextField hourField, TextField minuteField, float timeSpeed){
         try{
@@ -2078,6 +2078,5 @@ public class Controller {
         CurrentDateSimulation(datePick, simDateLabel,
                 simTimeLabel, hourF, minuteF, Multiplier);
     }
-
 
 }

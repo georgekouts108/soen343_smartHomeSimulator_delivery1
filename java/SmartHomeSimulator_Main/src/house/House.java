@@ -12,6 +12,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class House {
 
+    private static Thread t;
+    private static boolean isThreadRunning = false;
+
     private int numOfRooms;
     private Room[] rooms;
     private AnchorPane layout;
@@ -527,32 +530,38 @@ public class House {
                             // call the controller's method to signal the alarm countdown to start
 
                             final int[] secondsBeforeAlert = {sample.SHPModule.getTimeToAlert() * 60};
-                            sample.Controller.appendMessageToConsole("The authorities will be alerted in " + secondsBeforeAlert[0]/60 + " minute(s)");
-                            Thread t = new Thread(() -> {
+                            sample.Controller.appendMessageToConsole("WARNING: The authorities will be alerted in " + secondsBeforeAlert[0]/60 + " minute(s)...");
+
+                            t = new Thread(() -> {
                                 while (secondsBeforeAlert[0] > 0) {
                                     secondsBeforeAlert[0] = secondsBeforeAlert[0] - 1;
                                     try {
-                                        /*if (secondsBeforeAlert[0] > 60 && secondsBeforeAlert[0]%60 == 0){
-                                            sample.Controller.appendMessageToConsole("The authorities will be alerted in" + secondsBeforeAlert[0]/60 + " minute(s)");
-                                        }
-                                        else if (secondsBeforeAlert[0] < 60 && secondsBeforeAlert[0]%10 == 0){
-                                            sample.Controller.appendMessageToConsole("The authorities will be alerted in" + secondsBeforeAlert[0] + " seconds(s)");
-                                        }*/
                                         System.out.println(secondsBeforeAlert[0]);
                                         Thread.sleep(1000);
                                     } catch (InterruptedException exception) {
                                         exception.printStackTrace();
                                     }
                                 }
-                                sample.Controller.appendMessageToConsole("The authorities have been alerted");
+                                try {
+                                    sample.Controller.appendMessageToConsole("The authorities have been alerted");
+                                }
+                                catch (Exception ex){}
                             });
-                            t.start();
 
-                        } else {
+                            if (!isThreadRunning) {
+                                isThreadRunning = true;
+                                t.start();
+                            }
+                        }
+                        else {
                             Controller.appendMessageToConsole("SHC -- No more M.D's are illegitimately triggered");
                             /**TODO: implement a method in Controller for stopping the time before alerting authorities*/
-                            // if there are no MD's on in the house,
-                            // call the controller's method to signal the alarm countdown to stop
+                            // if there are no MD's on in the house, signal the alarm countdown to stop
+                            if (isThreadRunning) {
+                                Controller.appendMessageToConsole("Alarm deactivated.");
+                                isThreadRunning = false;
+                                t.stop();
+                            }
                         }
                     }
                     catch (Exception ex){}
