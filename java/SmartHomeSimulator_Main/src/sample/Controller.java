@@ -1860,12 +1860,61 @@ public class Controller {
                     Main.SHP_LightsConfigAWAYmode.getChildren().add(lightBox);
                 }
             }
+
+           //
+            Label setTimeLabel = new Label("Hour     Minute");
+            setTimeLabel.setTranslateX(0); setTimeLabel.setTranslateY(280);
+
+            TextField hourField = new TextField(); hourField.setPrefHeight(30); hourField.setPrefWidth(40);
+            hourField.setTranslateX(0); hourField.setTranslateY(300);
+            hourField.setPromptText("hh");
+            hourField.setId("hourField");
+
+            Label colon = new Label(":");
+            colon.setTranslateX(45); colon.setTranslateY(300);
+
+            TextField minuteField = new TextField(); minuteField.setPrefHeight(30); minuteField.setPrefWidth(40);
+            minuteField.setId("minuteField");
+            minuteField.setTranslateX(50); minuteField.setTranslateY(300);
+            minuteField.setPromptText("mm");
+
+            Label setTimeLabel2 = new Label("Hour     Minute");
+            setTimeLabel2.setTranslateX(120); setTimeLabel2.setTranslateY(280);
+
+            TextField hourField2 = new TextField(); hourField2.setPrefHeight(30); hourField2.setPrefWidth(40);
+            hourField2.setTranslateX(120); hourField2.setTranslateY(300);
+            hourField2.setPromptText("hh");
+            hourField2.setId("hourField");
+
+            Label colon2 = new Label(":");
+            colon2.setTranslateX(165); colon2.setTranslateY(300);
+
+            TextField minuteField2 = new TextField(); minuteField2.setPrefHeight(30); minuteField2.setPrefWidth(40);
+            minuteField2.setId("minuteField");
+            minuteField2.setTranslateX(170); minuteField2.setTranslateY(300);
+            minuteField2.setPromptText("mm");
+
+            Button setInterval = new Button("Set");
+            setInterval.setTranslateX(215); setInterval.setTranslateY(300);
+            setInterval.setOnAction(e->
+                    System.out.println("set time"));
+
+            Label from = new Label("Keep lights on from");
+            from.setTranslateX(0); from.setTranslateY(260);
+
+            Label to = new Label("to");
+            to.setTranslateX(100); to.setTranslateY(300);
+
             Button closeButton = new Button("Close");
             closeButton.setTranslateX(100); closeButton.setTranslateY(330);
             closeButton.setOnAction(event->Main.awayLightsStage.close());
 
-            Main.SHP_LightsConfigAWAYmode.getChildren().add(promptLabel);
-            Main.SHP_LightsConfigAWAYmode.getChildren().add(closeButton);
+            //Will add: onclick event of set button --> have a method to save time and compare it to current sim time (thread).
+            //Check if conditions are met in createAwayLightsPanel()
+
+            Main.SHP_LightsConfigAWAYmode.getChildren().addAll(promptLabel, closeButton, hourField,
+                    minuteField, colon, setTimeLabel, from, to, hourField2,
+                    minuteField2, colon2, setTimeLabel2, setInterval);
         }
         numberOfTimesAwayLightsPanelAccessed++;
     }
