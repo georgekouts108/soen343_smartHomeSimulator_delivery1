@@ -139,7 +139,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        logFile = new File("src/log.txt");
+        logFile = new File("/Users/kevinli/Desktop/project343_test/soen343_smartHome_delivery1/java/SmartHomeSimulator_Main/src/log.txt");
         if (logFile.exists()) {
             logFile.createNewFile();
         }

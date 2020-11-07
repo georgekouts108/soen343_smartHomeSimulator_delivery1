@@ -1968,7 +1968,7 @@ public class Controller {
             }
             sample.SHPModule.setTimeToAlert(Integer.parseInt(content));
 
-            //test, works, comment this block out when update() and anyMDsOn() functions are implementend in SHPModule
+            //test, works, COMMENT OUT BLOCK when update() and anyMDsOn() functions are implementend in SHPModule
             final int[] secondsBeforeAlert = {Integer.parseInt(content) * 60};
             Thread t = new Thread(() -> {
                 while (secondsBeforeAlert[0] > 0) {

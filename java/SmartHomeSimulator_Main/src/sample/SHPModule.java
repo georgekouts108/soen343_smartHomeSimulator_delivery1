@@ -142,9 +142,4 @@ public class SHPModule extends Module {
         }
 
     }
-
-    public static void countDownToNotify(){
-
-    }
-
 }
