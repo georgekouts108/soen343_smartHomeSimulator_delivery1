@@ -35,7 +35,7 @@ public class SHSModule extends Module {
 
         ComboBox locationMenu = new ComboBox();
         locationMenu.setId("locationMenu");
-        locationMenu.setTranslateX(160); locationMenu.setTranslateY(180);
+        locationMenu.setTranslateX(150); locationMenu.setTranslateY(180);
         locationMenu.setItems(FXCollections.observableArrayList(Main.countries));
         locationMenu.setPrefWidth(200); locationMenu.setPromptText("Select country...");
         if ((Main.currentActiveProfile==null)) {
@@ -86,10 +86,10 @@ public class SHSModule extends Module {
         Line line2 = new Line(); line2.setStartX(0); line2.setEndX(500); line2.setTranslateY(300);
 
         Label setDateTimeLabel = new Label("Set Date and Time");
-        setDateTimeLabel.setTranslateX(200); setDateTimeLabel.setTranslateY(300);
+        setDateTimeLabel.setTranslateX(200); setDateTimeLabel.setTranslateY(310);
 
         DatePicker datePicker = new DatePicker(); datePicker.setId("datePicker");
-        datePicker.setTranslateX(150); datePicker.setTranslateY(340); datePicker.setPromptText("Select date...");
+        datePicker.setTranslateX(160); datePicker.setTranslateY(340); datePicker.setPromptText("Select date...");
         if ((Main.currentActiveProfile==null)) {
             datePicker.setDisable(true);
         }
@@ -139,7 +139,7 @@ public class SHSModule extends Module {
         }
 
         Button confirmTimeButton = new Button("Confirm New Time"); confirmTimeButton.setId("confirmTimeButton");
-        confirmTimeButton.setTranslateX(200); confirmTimeButton.setTranslateY(435);
+        confirmTimeButton.setTranslateX(190); confirmTimeButton.setTranslateY(435);
         confirmTimeButton.setTextAlignment(TextAlignment.CENTER);
         confirmTimeButton.setOnAction(e -> {Thread th = new Thread(()->{
 

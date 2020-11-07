@@ -36,11 +36,12 @@ public class SHPModule extends Module {
         warningText.setText("Enter the amount of time (minutes) " +
                 "before alerting authorities if motion detectors are triggered during AWAY mode:");
         warningText.setWrappingWidth(480);
+        warningText.setTranslateX(20);
 
         Label timeLimit = new Label();
         timeLimit.setText("Time before Alert:\n0 min.");
         timeLimit.setTranslateY(70);
-        timeLimit.setTranslateX(10);
+        timeLimit.setTranslateX(20);
 
         TextField timeBox = new TextField();
         timeBox.setId("authAlertTimeBox");
