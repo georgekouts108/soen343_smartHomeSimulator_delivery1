@@ -63,7 +63,7 @@ public class TestUseCase4 extends ApplicationTest {
 
     @org.junit.Test
     public void testCase4() {
-        Controller.createNewProfile(new TextField("P"));
+        //Controller.createNewProfile(new TextField("P"));
         System.out.println("Debug 1 -- "+SHSHelpers.getProfiles().length);
 
         Hyperlink loginLink = new Hyperlink();

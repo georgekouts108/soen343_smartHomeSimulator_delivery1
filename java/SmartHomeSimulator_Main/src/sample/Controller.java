@@ -30,11 +30,14 @@ import javafx.util.converter.LocalDateTimeStringConverter;
 import javax.swing.*;
 import javax.swing.text.html.ImageView;
 import java.awt.*;
+import java.io.*;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
+import java.util.Scanner;
+
 import sample.Main.*;
 
 public class Controller {
@@ -1132,34 +1135,98 @@ public class Controller {
      * @param textField
      *
      */
-    public static void createNewProfile(TextField textField) {
+    public static void createNewProfile(TextField textField, CheckBox pL, CheckBox pLL, CheckBox pD, CheckBox pDL, CheckBox pW, CheckBox pWL, CheckBox pAC, CheckBox pACL) {
+
         UserProfile newProfile;
+
         try {
-            if (!(textField.getText().length() == 1)) {
-                throw new Exception("Invalid");
+            switch (textField.getText().toLowerCase()) {
+                case "stranger":
+                    newProfile = new UserProfile("Stranger",
+                            pL.isSelected(), pLL.isSelected(), pD.isSelected(), pDL.isSelected(), pW.isSelected(), pWL.isSelected(), pAC.isSelected(), pACL.isSelected());
+                    break;
+                case "guest":
+                    newProfile = new UserProfile("Guest",
+                            pL.isSelected(), pLL.isSelected(), pD.isSelected(), pDL.isSelected(), pW.isSelected(), pWL.isSelected(), pAC.isSelected(), pACL.isSelected());
+                    break;
+                case "child":
+                    newProfile = new UserProfile("Child",
+                            pL.isSelected(), pLL.isSelected(), pD.isSelected(), pDL.isSelected(), pW.isSelected(), pWL.isSelected(), pAC.isSelected(), pACL.isSelected());
+                    break;
+                case "parent":
+                    newProfile = new UserProfile("Parent",
+                            pL.isSelected(), pLL.isSelected(), pD.isSelected(), pDL.isSelected(), pW.isSelected(), pWL.isSelected(), pAC.isSelected(), pACL.isSelected());
+                    break;
+                default:
+                    throw new Exception("Invalid");
+            }
+
+
+
+            // UPDATE THE PROFILE OBJECT ARRAY
+            if (Main.profiles == null) {
+                Main.profiles = new UserProfile[1];
+                Main.profiles[0] = newProfile;
             }
             else {
-                switch (textField.getText().charAt(0)) {
-                    case 'S':
-                    case 's':
-                        newProfile = new UserProfile("Stranger");
+                UserProfile[] temp = new UserProfile[Main.numberOfProfiles + 1];
+                for (int i = 0; i < Main.profiles.length; i++) {
+                    temp[i] = Main.profiles[i];
+                }
+                temp[temp.length - 1] = newProfile;
+                Main.profiles = temp;
+            }
+            Main.numberOfProfiles++;
+
+            // generate a hyperlink for the newly-created profile and add it to the static array of profile hyperlinks
+            if (Main.profileLinks == null) {
+                Main.profileLinks = new Hyperlink[1];
+                Main.profileLinks[0] = generateProfileHyperlink(newProfile);
+            }
+            else {
+                int index = 0;
+                Hyperlink[] templink = new Hyperlink[Main.profileLinks.length+1];
+                for (int up = 0; up < Main.profileLinks.length; up++) {
+                    templink[index++] = Main.profileLinks[up];
+                }
+                templink[templink.length-1] = generateProfileHyperlink(newProfile);
+                Main.profileLinks = templink;
+            }
+            Main.profileBox.setScene(Main.profileScene);
+
+            saveProfileToFile(newProfile);
+        }
+        catch(Exception ex){
+            //System.out.println(ex.getMessage());
+        }
+    }
+
+    //overload method for loading profiles from file
+    public static void createNewProfile(String newType, boolean pL, boolean pLL, boolean pD, boolean pDL, boolean pW, boolean pWL, boolean pAC, boolean pACL) {
+
+        UserProfile newProfile;
+
+        try {
+                switch (newType) {
+                    case "stranger":
+                        newProfile = new UserProfile("Stranger",
+                                pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
                         break;
-                    case 'G':
-                    case 'g':
-                        newProfile = new UserProfile("Guest");
+                    case "guest":
+                        newProfile = new UserProfile("Guest",
+                                pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
                         break;
-                    case 'C':
-                    case 'c':
-                        newProfile = new UserProfile("Child");
+                    case "child":
+                        newProfile = new UserProfile("Child",
+                                pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
                         break;
-                    case 'P':
-                    case 'p':
-                        newProfile = new UserProfile("Parent");
+                    case "parent":
+                        newProfile = new UserProfile("Parent",
+                                pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
                         break;
                     default:
                         throw new Exception("Invalid");
                 }
-            }
 
             // UPDATE THE PROFILE OBJECT ARRAY
             if (Main.profiles == null) {
@@ -1193,7 +1260,32 @@ public class Controller {
             Main.profileBox.setScene(Main.profileScene);
         }
         catch(Exception ex){
-            System.out.println(ex.getMessage());
+            //System.out.println(ex.getMessage());
+        }
+    }
+
+    private static void saveProfileToFile(UserProfile newProfile) {
+        try{
+
+            File file =new File("C:\\Users\\Lucas\\IdeaProjects\\soen343_smartHome_delivery1\\profiles.txt");
+
+            if(!file.exists()){
+                file.createNewFile();
+            }
+
+            FileWriter fw = new FileWriter(file,true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+
+            pw.println(newProfile.getType().toLowerCase() + "," + newProfile.getPermLights() + "," + newProfile.getPermLightsLocation() + "," + newProfile.getPermDoors() + "," + newProfile.getPermDoorsLocation() + "," + newProfile.getPermWindows() + "," + newProfile.getPermWindowsLocation() + "," + newProfile.getPermAC() + "," + newProfile.getPermACLocation());
+
+            pw.close();
+
+            System.out.println("Data successfully appended at the end of file");
+
+        }catch(IOException ioe){
+            System.out.println("Exception occurred:");
+            ioe.printStackTrace();
         }
     }
 

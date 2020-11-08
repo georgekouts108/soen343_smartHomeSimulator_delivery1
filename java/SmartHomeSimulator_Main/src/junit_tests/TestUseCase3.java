@@ -64,7 +64,7 @@ public class TestUseCase3 extends ApplicationTest {
     @org.junit.Test
     public void testCase3_editProfile() {
 
-        Controller.createNewProfile(new TextField("P"));
+        //Controller.createNewProfile(new TextField("P"));
         Hyperlink tempEditLink = new Hyperlink();
         Hyperlink tempHyperLink = new Hyperlink();
         for (int a = 0; a < SHSHelpers.getProfileSelection().getChildren().size(); a++) {
@@ -104,7 +104,7 @@ public class TestUseCase3 extends ApplicationTest {
     @org.junit.Test
     public void testCase3_removeProfile() {
 
-        Controller.createNewProfile(new TextField("P"));
+        //Controller.createNewProfile(new TextField("P"));
 
         for (int a = 0; a < SHSHelpers.getProfileSelection().getChildren().size(); a++) {
             if (SHSHelpers.getProfileSelection().getChildren().get(a).getId()

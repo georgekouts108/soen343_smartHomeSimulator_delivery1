@@ -21,6 +21,9 @@ public class House {
     private Room[] rooms;
     private AnchorPane layout;
     private String location;
+    private String currentType;
+    private String currentLocation;
+    private UserProfile currentProfile;
 
     /**
      * Constructor for the House class
@@ -151,6 +154,9 @@ public class House {
         roomLayout.setPrefWidth(225); roomLayout.setPrefHeight(350);
         roomLayout.setStyle("-fx-border-color:#000000");
 
+        currentProfile = Main.getCurrentActiveProfile();
+        currentLocation = currentProfile.getCurrentLocation().getName().toLowerCase();
+
         int ID = room.getRoomID();
         String name = room.getName();
 
@@ -207,13 +213,17 @@ public class House {
                     for (int light = 0; light < room.getLightCollection().length; light++) {
                         if (room.getLightCollection()[light].getUtilityID() == Integer.parseInt(checkBox.getId().substring(16))) {
 
-                            /**TODO: Add a condition that looks at the "currentActiveProfile"'s
-                             *  type (and perhaps location) and only turn the light on if the profile
-                             *  has permission, or else keep the light off */
+                            //if user has light permissions or has location permissions and is currently in the room
+                            if(currentProfile.getPermLights() == true || (currentProfile.getPermLightsLocation() == true && currentLocation == room.getName())){
+                                room.getLightCollection()[light].setState(true);
+                                Controller.appendMessageToConsole("SHC -- Light #"+room.getLightCollection()[light].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName()+" by user");
+                                break;
+                            }
+                            else{
+                                checkBox.setSelected(false);
+                                Controller.appendMessageToConsole("SHC -- You are not allowed to turn on the " + room.getName() + " light.");
+                            }
 
-                            room.getLightCollection()[light].setState(true);
-                            Controller.appendMessageToConsole("SHC -- Light #"+room.getLightCollection()[light].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName()+" by user");
-                            break;
                         }
                     }
                 }
@@ -223,12 +233,16 @@ public class House {
                         if (room.getLightCollection()[light].getUtilityID() == Integer.parseInt(checkBox.getId().substring(16))) {
                             if (!room.getLightCollection()[light].isLocked()) {
 
-                                /**TODO: Add a condition that looks at the "currentActiveProfile"'s
-                                 *  type (and perhaps location) and only turn the light off if the profile
-                                 *  has permission, or else keep the light on */
+                                //if user has light permissions or has location permissions and is currently in the room
+                                if(currentProfile.getPermLights() == true || (currentProfile.getPermLightsLocation() == true && currentLocation == room.getName())){
+                                    room.getLightCollection()[light].setState(false);
+                                    Controller.appendMessageToConsole("SHC -- Light #"+room.getLightCollection()[light].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName() + " by user");
+                                }
+                                else{
+                                    checkBox.setSelected(true);
+                                    Controller.appendMessageToConsole("SHC -- You are not allowed to turn on the " + room.getName() + " light.");
+                                }
 
-                                room.getLightCollection()[light].setState(false);
-                                Controller.appendMessageToConsole("SHC -- Light #"+room.getLightCollection()[light].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName() + " by user");
                             }
                             else {
                                 checkBox.setSelected(true);
@@ -276,12 +290,15 @@ public class House {
                         if (room.getWindowCollection()[win].getUtilityID() == Integer.parseInt(checkBox.getId().substring(17))) {
                             if (!room.getWindowCollection()[win].isBlocked()) {
 
-                                /**TODO: Add a condition that looks at the "currentActiveProfile"'s
-                                 *  type (and perhaps location) and only open the window if the profile
-                                 *  has permission, or else keep the window in its current state */
-
-                                room.getWindowCollection()[win].setState(true);
-                                Controller.appendMessageToConsole("SHC -- Window #"+room.getWindowCollection()[win].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName() + " by user");
+                                //if user has window permissions or has location permissions and is currently in the room
+                                if(currentProfile.getPermWindows() == true || (currentProfile.getPermWindowsLocation() == true && currentLocation == room.getName())) {
+                                    room.getWindowCollection()[win].setState(true);
+                                    Controller.appendMessageToConsole("SHC -- Window #" + room.getWindowCollection()[win].getUtilityID() + " opened in Room #" + room.getRoomID() + " " + room.getName() + " by user");
+                                }
+                                else{
+                                    checkBox.setSelected(false);
+                                    Controller.appendMessageToConsole("SHC -- You are not allowed to open the " + room.getName() + " window.");
+                                }
                             }
                             else {
                                 Controller.appendMessageToConsole("SHC -- Attempt to open blocked Window #"+room.getWindowCollection()[win].getUtilityID()+" in Room #"+room.getRoomID()+" "+room.getName() +" by user");
@@ -297,12 +314,15 @@ public class House {
                         if (room.getWindowCollection()[win].getUtilityID() == Integer.parseInt(checkBox.getId().substring(17))) {
                             if (!room.getWindowCollection()[win].isBlocked()) {
 
-                                /**TODO: Add a condition that looks at the "currentActiveProfile"'s
-                                 *  type (and perhaps location) and only close the window if the profile
-                                 *  has permission, or else keep the window in its current state */
-
-                                room.getWindowCollection()[win].setState(false);
-                                Controller.appendMessageToConsole("Window #"+room.getWindowCollection()[win].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName());
+                                //if user has window permissions or has location permissions and is currently in the room
+                                if(currentProfile.getPermWindows() == true || (currentProfile.getPermWindowsLocation() == true && currentLocation == room.getName())) {
+                                    room.getWindowCollection()[win].setState(false);
+                                    Controller.appendMessageToConsole("Window #" + room.getWindowCollection()[win].getUtilityID() + " closed in Room #" + room.getRoomID() + " " + room.getName());
+                                }
+                                else{
+                                    checkBox.setSelected(true);
+                                    Controller.appendMessageToConsole("SHC -- You are not allowed to close the " + room.getName() + " window.");
+                                }
                             }
                             else {
                                 Controller.appendMessageToConsole("User attempted to close blocked Window #"+room.getWindowCollection()[win].getUtilityID()+" in Room #"+room.getRoomID()+" "+room.getName());
@@ -351,12 +371,15 @@ public class House {
                         if (room.getDoorCollection()[door].getUtilityID() == Integer.parseInt(checkBox.getId().substring(15))) {
                             if (!room.getDoorCollection()[door].isLocked()) {
 
-                                /**TODO: Add a condition that looks at the "currentActiveProfile"'s
-                                 *  type (and perhaps location) and only open the door if the profile
-                                 *  has permission, or else keep the door in its current state */
-
-                                room.getDoorCollection()[door].setState(true);
-                                Controller.appendMessageToConsole("SHC -- Door #"+room.getDoorCollection()[door].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName() + " by user");
+                                //if user has door permissions or has location permissions and is currently in the room
+                                if(currentProfile.getPermDoors() == true || (currentProfile.getPermDoorsLocation() == true && currentLocation == room.getName())) {
+                                    room.getDoorCollection()[door].setState(true);
+                                    Controller.appendMessageToConsole("SHC -- Door #" + room.getDoorCollection()[door].getUtilityID() + " opened in Room #" + room.getRoomID() + " " + room.getName() + " by user");
+                                }
+                                else{
+                                    checkBox.setSelected(false);
+                                    Controller.appendMessageToConsole("SHC -- You are not allowed to open the " + room.getName() + " door.");
+                                }
                             }
                             else {
                                 checkBox.setSelected(false);
@@ -372,11 +395,15 @@ public class House {
                         if (room.getDoorCollection()[door].getUtilityID() == Integer.parseInt(checkBox.getId().substring(15))) {
                             if (!room.getDoorCollection()[door].isLocked()) {
 
-                                /**TODO: Add a condition that looks at the "currentActiveProfile"'s
-                                 *  type (and perhaps location) and only close the door if the profile
-                                 *  has permission, or else keep the door in its current state */
-
-                                room.getDoorCollection()[door].setState(false);
+                                //if user has door permissions or has location permissions and is currently in the room
+                                if(currentProfile.getPermDoors() == true || (currentProfile.getPermDoorsLocation() == true && currentLocation == room.getName())) {
+                                    room.getDoorCollection()[door].setState(false);
+                                }
+                                else{
+                                    checkBox.setSelected(false);
+                                    Controller.appendMessageToConsole("SHC -- You are not allowed to close the " + room.getName() + " door.");
+                                    break;
+                                }
 
                                 // if the room is the garage, entrance, or backyard, automatically lock the door when closing it
                                 if (room.getName().equals("backyard") || room.getName().equals("entrance") || room.getName().equals("garage")) {
@@ -427,53 +454,63 @@ public class House {
 
         doorLock.setOnAction(e->{
             if (doorLock.isSelected()) {
-                doorLock.setText("Unlock");
+                if(currentProfile.getPermDoors() == true || (currentProfile.getPermDoorsLocation() == true && currentLocation == room.getName())) {
+                    doorLock.setText("Unlock");
 
-                for (int l = 0; l < room.getDoorCollection().length; l++) {
-                    try {
-                        room.getDoorCollection()[l].setState(false);
-                        setIconVisibility(room, "Door", false);
+                    for (int l = 0; l < room.getDoorCollection().length; l++) {
+                        try {
+                            room.getDoorCollection()[l].setState(false);
+                            setIconVisibility(room, "Door", false);
+                            for (int cb = 0; cb < roomLayout.getChildren().size(); cb++) {
+                                try {
+                                    if (roomLayout.getChildren().get(cb).getId().equals
+                                            ("doorCheckboxID#" + room.getDoorCollection()[l].getUtilityID())) {
+                                        CheckBox tempCB = (CheckBox) roomLayout.getChildren().get(cb);
+                                        tempCB.setStyle("-fx-border-color:#0000ff");
+                                        tempCB.setSelected(false);
+                                        roomLayout.getChildren().set(cb, tempCB);
+                                        break;
+                                    }
+                                } catch (Exception ex) {
+                                }
+                            }
+                            Controller.appendMessageToConsole("SHC -- Door to " + room.getName() + " automatically closed & locked by user.");
+                        } catch (Exception ex) {
+                        }
+                    }
+
+                    for (int d = 0; d < room.getDoorCollection().length; d++) {
+                        room.getDoorCollection()[d].setLocked(true);
+                    }
+                }
+                else{
+                    doorLock.setSelected(false);
+                    Controller.appendMessageToConsole("SHC -- You are not allowed to lock the " + room.getName() + " doors.");
+                }
+            }
+            else {
+                if(currentProfile.getPermDoors() == true || (currentProfile.getPermDoorsLocation() == true && currentLocation == room.getName())) {
+                    doorLock.setText("Lock");
+                    for (int d = 0; d < room.getDoorCollection().length; d++) {
                         for (int cb = 0; cb < roomLayout.getChildren().size(); cb++) {
                             try {
                                 if (roomLayout.getChildren().get(cb).getId().equals
-                                        ("doorCheckboxID#"+room.getDoorCollection()[l].getUtilityID())) {
+                                        ("doorCheckboxID#" + room.getDoorCollection()[d].getUtilityID())) {
                                     CheckBox tempCB = (CheckBox) roomLayout.getChildren().get(cb);
-                                    tempCB.setStyle("-fx-border-color:#0000ff");
-                                    tempCB.setSelected(false);
+                                    tempCB.setStyle("");
                                     roomLayout.getChildren().set(cb, tempCB);
                                     break;
                                 }
-                            }
-                            catch(Exception ex){}
-                        }
-                        Controller.appendMessageToConsole("SHC -- Door to "+room.getName()+" automatically closed & locked by user.");
-                    }
-                    catch(Exception ex){}
-                }
-
-                for (int d = 0; d < room.getDoorCollection().length; d++) {
-                    room.getDoorCollection()[d].setLocked(true);
-                }
-
-            }
-            else {
-                doorLock.setText("Lock");
-                for (int d = 0; d < room.getDoorCollection().length; d++) {
-                    for (int cb = 0; cb < roomLayout.getChildren().size(); cb++) {
-                        try {
-                            if (roomLayout.getChildren().get(cb).getId().equals
-                                    ("doorCheckboxID#"+room.getDoorCollection()[d].getUtilityID())) {
-                                CheckBox tempCB = (CheckBox) roomLayout.getChildren().get(cb);
-                                tempCB.setStyle("");
-                                roomLayout.getChildren().set(cb, tempCB);
-                                break;
+                            } catch (Exception ex) {
                             }
                         }
-                        catch(Exception ex){}
+                        room.getDoorCollection()[d].setLocked(false);
                     }
-                    room.getDoorCollection()[d].setLocked(false);
                 }
-
+                else{
+                    doorLock.setSelected(true);
+                    Controller.appendMessageToConsole("SHC -- You are not allowed to unlock the " + room.getName() + " doors.");
+                }
             }
         });
 
@@ -571,21 +608,35 @@ public class House {
 
             acCheckbox.setOnAction(e->{
                 if (acCheckbox.isSelected()) {
-                    room.getAc().setState(true);
-                    boolean isAcIconThere = false;
-                    for (int a = 0; a < room_layout.getChildren().size(); a++) {
-                        if (room_layout.getChildren().contains(room.getIconAC_view())) {
-                            isAcIconThere = true;
-                            break;
+
+                    if(currentProfile.getPermAC() == true || (currentProfile.getPermACLocation() == true && currentLocation == room.getName())) {
+                        room.getAc().setState(true);
+
+                        boolean isAcIconThere = false;
+                        for (int a = 0; a < room_layout.getChildren().size(); a++) {
+                            if (room_layout.getChildren().contains(room.getIconAC_view())) {
+                                isAcIconThere = true;
+                                break;
+                            }
                         }
+                        setIconVisibility(room, "AC", true);
+                        Controller.appendMessageToConsole("SHC -- AC turned on in Room #"+room.getRoomID()+" "+room.getName());
                     }
-                    setIconVisibility(room, "AC", true);
-                    Controller.appendMessageToConsole("SHC -- AC turned on in Room #"+room.getRoomID()+" "+room.getName());
+                    else{
+                        acCheckbox.setSelected(false);
+                        Controller.appendMessageToConsole("SHC -- You are not allowed to turn on the " + room.getName() + " AC.");
+                    }
                 }
                 else {
-                    room.getAc().setState(false);
-                    setIconVisibility(room, "AC", false);
-                    Controller.appendMessageToConsole("SHC -- AC turned off in Room #"+room.getRoomID()+" "+room.getName());
+                    if(currentProfile.getPermAC() == true || (currentProfile.getPermACLocation() == true && currentLocation == room.getName())) {
+                        room.getAc().setState(false);
+                        setIconVisibility(room, "AC", false);
+                        Controller.appendMessageToConsole("SHC -- AC turned off in Room #" + room.getRoomID() + " " + room.getName());
+                    }
+                    else{
+                        acCheckbox.setSelected(true);
+                        Controller.appendMessageToConsole("SHC -- You are not allowed to turn off the " + room.getName() + " AC.");
+                    }
                 }
             });
             roomLayout.getChildren().add(acCheckbox);

@@ -36,6 +36,7 @@ import java.awt.*;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.Locale;
+import java.util.Scanner;
 import java.util.concurrent.*;
 import java.io.*;
 
@@ -110,6 +111,7 @@ public class Main extends Application {
     protected static UserProfile[] profiles;
     protected static UserProfile currentActiveProfile;
     protected static Hyperlink[] profileLinks;
+    protected static String profilesFile;
 
     /**STATIC VARIABLES AND METHODS FOR THE HOUSE */
     protected static double outsideTemperature;
@@ -131,6 +133,10 @@ public class Main extends Application {
      */
     public static AnchorPane getMain_dashboard() {return main_dashboard;}
 
+    public static UserProfile getCurrentActiveProfile() {
+        return currentActiveProfile;
+    }
+
     /**
      * START method for the JavaFX Application "Smart Home Simulator"
      * @param primaryStage
@@ -139,7 +145,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        logFile = new File("/src/log.txt");
+        logFile = new File("C:\\Users\\Lucas\\IdeaProjects\\soen343_smartHome_delivery1\\java\\SmartHomeSimulator_Main\\src\\log.txt");
         if (logFile.exists()) {
             logFile.createNewFile();
         }
@@ -178,6 +184,55 @@ public class Main extends Application {
         main_stage.setTitle("Smart Home Simulator - No user");
         main_stage.setScene(dashboardScene);
         main_stage.show();
+
+        String profilesTxt = "C:\\Users\\Lucas\\IdeaProjects\\soen343_smartHome_delivery1\\profiles.txt";
+        loadProfilesFromFile(profilesTxt);
+    }
+
+    //need to rewrite based on perms
+    public static void loadProfilesFromFile(String file){
+
+        File profiles = new File(file);
+        Scanner sc;
+        try {
+            sc = new Scanner(profiles);
+
+            while(sc.hasNext()){
+
+                //each line in file wil be a profile. example: child,false,true,false,...
+                String[] profileParams = sc.nextLine().split(",");
+                String newType = profileParams[0];
+
+                boolean newPermLights = Boolean.parseBoolean(profileParams[1]);
+                boolean newPermLightsLocation = Boolean.parseBoolean(profileParams[2]);
+
+                boolean newPermDoors = Boolean.parseBoolean(profileParams[3]);
+                boolean newPermDoorsLocation = Boolean.parseBoolean(profileParams[4]);
+
+                boolean newPermWindows = Boolean.parseBoolean(profileParams[5]);
+                boolean newPermWindowsLocation = Boolean.parseBoolean(profileParams[6]);
+
+                boolean newPermAC = Boolean.parseBoolean(profileParams[7]);
+                boolean newPermACLocation = Boolean.parseBoolean(profileParams[8]);
+                Controller.createNewProfile(newType,newPermLights,newPermLightsLocation,newPermDoors,newPermDoorsLocation,newPermWindows,newPermWindowsLocation,newPermAC,newPermACLocation);
+
+                //quickly visualize permissions to test more easily
+                System.out.println("Type: " + newType);
+                System.out.println("L: " + newPermLights);
+                System.out.println("LL: " + newPermLightsLocation);
+                System.out.println("D: " + newPermDoors);
+                System.out.println("DL: " + newPermDoorsLocation);
+                System.out.println("W: " + newPermWindows);
+                System.out.println("WL: " + newPermWindowsLocation);
+                System.out.println("AC: " + newPermAC);
+                System.out.println("ACL: " + newPermACLocation);
+                System.out.println();
+            }
+            sc.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -208,16 +263,56 @@ public class Main extends Application {
         newProfileTextField.setPrefWidth(85); newProfileTextField.setTranslateX(40);
         newProfileTextField.setTranslateY(290);
 
+        CheckBox cbPermL = new CheckBox("Lights");
+        cbPermL.setId("lightsPermissionCB");
+        cbPermL.setTranslateX(5); cbPermL.setTranslateY(100);
+
+        CheckBox cbPermLL = new CheckBox("Lights (L)");
+        cbPermLL.setId("lightsLocationPermissionCB");
+        cbPermLL.setTranslateX(100); cbPermLL.setTranslateY(100);
+
+        CheckBox cbPermD = new CheckBox("Doors");
+        cbPermD.setId("DoorsPermissionCB");
+        cbPermD.setTranslateX(5); cbPermD.setTranslateY(150);
+
+        CheckBox cbPermDL = new CheckBox("Doors (L)");
+        cbPermDL.setId("DoorsLocationPermissionCB");
+        cbPermDL.setTranslateX(100); cbPermDL.setTranslateY(150);
+
+        CheckBox cbPermW = new CheckBox("Windows");
+        cbPermW.setId("WindowsPermissionCB");
+        cbPermW.setTranslateX(5); cbPermW.setTranslateY(200);
+
+        CheckBox cbPermWL = new CheckBox("Windows (L)");
+        cbPermWL.setId("WindowsLocationPermissionCB");
+        cbPermWL.setTranslateX(100); cbPermWL.setTranslateY(200);
+
+        CheckBox cbPermAC = new CheckBox("AC");
+        cbPermAC.setId("ACPermissionCB");
+        cbPermAC.setTranslateX(5); cbPermAC.setTranslateY(250);
+
+        CheckBox cbPermACL = new CheckBox("AC (L)");
+        cbPermACL.setId("ACLocationPermissionCB");
+        cbPermACL.setTranslateX(100); cbPermACL.setTranslateY(250);
+
         Button addButton = new Button("Add new\nProfile");
         addButton.setId("addNewProfileButton");
         addButton.setTranslateX(40); addButton.setTranslateY(350);
-        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField));
+        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField, cbPermL, cbPermLL, cbPermD, cbPermDL, cbPermW, cbPermWL, cbPermAC, cbPermACL));
 
         if (numberOfTimesProfilePageSelected == 0) {
-            Main.profileSelection.getChildren().addAll(addButton);
+            Main.profileSelection.getChildren().add(addButton);
             Main.profileSelection.getChildren().add(newProfileTextField);
             Main.profileSelection.getChildren().add(profileListLabel);
             Main.profileSelection.getChildren().add(closeButton);
+            Main.profileSelection.getChildren().add(cbPermL);
+            Main.profileSelection.getChildren().add(cbPermLL);
+            Main.profileSelection.getChildren().add(cbPermD);
+            Main.profileSelection.getChildren().add(cbPermDL);
+            Main.profileSelection.getChildren().add(cbPermW);
+            Main.profileSelection.getChildren().add(cbPermWL);
+            Main.profileSelection.getChildren().add(cbPermAC);
+            Main.profileSelection.getChildren().add(cbPermACL);
         }
         numberOfTimesProfilePageSelected++;
     }

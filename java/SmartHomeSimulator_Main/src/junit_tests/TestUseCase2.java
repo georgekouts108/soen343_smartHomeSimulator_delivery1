@@ -63,7 +63,7 @@ public class TestUseCase2 extends ApplicationTest {
 
     @org.junit.Test
     public void testCase2() {
-        Controller.createNewProfile(new TextField("P"));
+        //Controller.createNewProfile(new TextField("P"));
         assertEquals(true, SHSHelpers.getProfiles().length==1);
     }
 }

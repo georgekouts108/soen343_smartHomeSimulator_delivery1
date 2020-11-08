@@ -74,8 +74,8 @@ public class TestUseCase8 extends ApplicationTest {
     @Before
     public void setup() {
         try {
-            Controller.createNewProfile(new TextField("P")); // profile 1
-            Controller.createNewProfile(new TextField("C")); // profile 2
+            //Controller.createNewProfile(new TextField("P")); // profile 1
+            //Controller.createNewProfile(new TextField("C")); // profile 2
 
             for (int a = 0; a < SHSHelpers.getProfileSelection().getChildren().size(); a++) {
                 if (SHSHelpers.getProfileSelection().getChildren().get(a).getId()
