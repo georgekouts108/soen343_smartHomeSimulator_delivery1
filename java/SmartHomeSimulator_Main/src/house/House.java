@@ -512,12 +512,15 @@ public class House {
                         if (mdCheckbox.isSelected()) {
                             room.getMd().setState(true);
                             setIconVisibility(room, "MD", true);
-                            // append this to the suspicious activity log in SHP module instead
-                            Controller.appendMessageToConsole("CRITICAL [SHC]: Motion detector illegitimately triggered in Room #" + room.getRoomID() + " " + room.getName());
-                        } else {
+
+                            Controller.appendMessageToConsole("SHC -- Motion detector triggered in Room #" + room.getRoomID() + " " + room.getName());
+                            SHSHelpers.getShpModuleObject().incrementNumberOfMDsOn();
+                        }
+                        else {
                             room.getMd().setState(false);
                             setIconVisibility(room, "MD", false);
                             Controller.appendMessageToConsole("SHC -- Motion detector disabled in Room #" + room.getRoomID() + " " + room.getName());
+                            SHSHelpers.getShpModuleObject().decrementNumberOfMDsOn();
                         }
                         SHSHelpers.getShpModuleObject().getNotified();
                     }

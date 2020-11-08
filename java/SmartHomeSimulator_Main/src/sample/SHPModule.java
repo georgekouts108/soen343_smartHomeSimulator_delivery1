@@ -10,6 +10,7 @@ import java.util.Observable;
 
 public class SHPModule extends Module {
 
+    private int numberOfMDsOn;
     private Thread alertTimeThread;
     private boolean isThreadRunning;
 
@@ -24,8 +25,17 @@ public class SHPModule extends Module {
         return timeToAlert;
     }
 
+    public void incrementNumberOfMDsOn() {
+        this.numberOfMDsOn++;
+    }
+
+    public void decrementNumberOfMDsOn() {
+        this.numberOfMDsOn--;
+    }
+
     public SHPModule(){
         super();
+        this.numberOfMDsOn = 0;
         this.isThreadRunning = false;
         this.alertTimeThread = null;
     }
@@ -130,12 +140,12 @@ public class SHPModule extends Module {
         /**if MDs are triggered during AWAY mode, call the method to count down the alert timer*/
         if (SHSHelpers.isIs_away()) {
             if (Main.house.anyMDsOn()) {
-                Controller.appendMessageToConsole("CRITICAL: One or more motion detectors are illegitimately triggered!!");
+                Controller.appendMessageToConsole("CRITICAL [SHP]: One or more motion detectors are illegitimately triggered");
                 startOrStopThread(true);
             }
             else {
                 startOrStopThread(false);
-                Controller.appendMessageToConsole("SHC -- No more M.D's are illegitimately triggered");
+                Controller.appendMessageToConsole("SHP -- No more M.D's are illegitimately triggered");
                 Controller.appendMessageToConsole("Alarm deactivated.");
             }
         }
@@ -150,20 +160,24 @@ public class SHPModule extends Module {
 
         if (trigger) {
             final int[] secondsBeforeAlert = {timeToAlert * 60};
-            sample.Controller.appendMessageToConsole("WARNING: The authorities will be alerted in " + secondsBeforeAlert[0]/60 + " minute(s)...");
+            Controller.appendMessageToConsole("WARNING: The authorities will be alerted in " + secondsBeforeAlert[0]/60 + " minute(s)...");
 
             this.alertTimeThread = new Thread(() -> {
-                while (secondsBeforeAlert[0] > 0) {
+                int second = 0;
+                while (secondsBeforeAlert[0] > 0 && numberOfMDsOn!=0) {
                     secondsBeforeAlert[0] = secondsBeforeAlert[0] - 1;
                     try {
-                        System.out.println(secondsBeforeAlert[0]);
                         Thread.sleep(1000);
                     } catch (InterruptedException exception) {
                         exception.printStackTrace();
                     }
+                    second = secondsBeforeAlert[0];
                 }
                 try {
-                    sample.Controller.appendMessageToConsole("The authorities have been alerted");
+                    if (second==0 && numberOfMDsOn!=0) {
+                        Controller.appendMessageToConsole("The authorities have been alerted");
+                    }
+
                 }
                 catch (Exception ex){}
             });
@@ -174,9 +188,13 @@ public class SHPModule extends Module {
             }
         }
         else {
-            if (isThreadRunning) {
+            if (isThreadRunning && numberOfMDsOn==0) {
                 isThreadRunning = false;
-                alertTimeThread.stop();
+                try {
+                    alertTimeThread.stop();
+                }
+                catch (Exception e){}
+
             }
         }
     }
