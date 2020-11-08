@@ -846,7 +846,7 @@ public class House {
                                     }
                                     break;
                                 }
-                            } catch (Exception e){ System.out.println("EXCEPTION 3:"+e.getMessage());}
+                            } catch (Exception e){}
                         }
 
                         this.layout.getChildren().set(lay, room_layout);
@@ -854,12 +854,10 @@ public class House {
                         break;
                     }
                 }
-                catch (Exception e){System.out.println("EXCEPTION 2:"+e.getMessage());}
+                catch (Exception e){}
             }
         }
-        catch (Exception ex){
-            System.out.println("EXCEPTION 1:"+ex.getMessage());
-        }
+        catch (Exception ex){}
     }
 
     /**

@@ -51,72 +51,133 @@ public class UserProfile {
         this.permACLocation = pACL;
     }
 
-    //getters
+    /**
+     * return a user permission to open the lights
+     * @return
+     */
     public boolean getPermLights(){
         return permLights;
     }
 
+    /**
+     * return a user permission to open the lights only in its current location
+     * @return
+     */
     public boolean getPermLightsLocation(){
         return permLightsLocation;
     }
 
+    /**
+     * return a user permission to open the doors
+     * @return
+     */
     public boolean getPermDoors(){
         return permDoors;
     }
 
+    /**
+     * return a user permission to open the doors only in its current location
+     * @return
+     */
     public boolean getPermDoorsLocation(){
         return permDoorsLocation;
     }
 
+    /**
+     * return a user permission to open the windows
+     * @return
+     */
     public boolean getPermWindows(){
         return permWindows;
     }
 
+    /**
+     * return a user permission to open the windows only in its current location
+     * @return
+     */
     public boolean getPermWindowsLocation(){
         return permWindowsLocation;
     }
 
+    /**
+     * return a user permission to open the AC
+     * @return
+     */
     public boolean getPermAC(){
         return permAC;
     }
 
+    /**
+     * return a user permission to open the AC only in its current location
+     * @return
+     */
     public boolean getPermACLocation(){
         return permACLocation;
     }
 
-    //setters
+    /**
+     * Grant or deny a user permission to open lights
+     * @param p
+     */
     public void setPermLights(boolean p){
         permLights = p;
     }
 
+    /**
+     * Grant or deny a user permission to open lights only in its current location
+     * @param p
+     */
     public void setPermLightsLocation(boolean p){
         permLightsLocation = p;
     }
 
+    /**
+     * Grant or deny a user permission to open doors
+     * @param p
+     */
     public void setPermDoors(boolean p){
         permDoors = p;
     }
 
+    /**
+     * Grant or deny a user permission to open doors only in its current location
+     * @param p
+     */
     public void setPermDoorsLocation(boolean p){
         permDoorsLocation = p;
     }
 
+    /**
+     * Grant or deny a user permission to open windows
+     * @param p
+     */
     public void setPermWindows(boolean p){
         permWindows = p;
     }
 
+    /**
+     * Grant or deny a user permission to open windows only in its current location
+     * @param p
+     */
     public void setPermWindowsLocation(boolean p){
         permWindowsLocation = p;
     }
 
+    /**
+     * Grant or deny a user permission to open the AC
+     * @param p
+     */
     public void setPermAC(boolean p){
         permAC = p;
     }
 
+    /**
+     * Grant or deny a user permission to open the AC only in its current location
+     * @param p
+     */
     public void setPermACLocation(boolean p){
         permACLocation = p;
     }
-
 
     /**
      * Check to see if a user is Away from home
