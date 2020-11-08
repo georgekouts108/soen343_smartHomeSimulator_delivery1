@@ -40,6 +40,9 @@ import java.util.Scanner;
 import java.util.concurrent.*;
 import java.io.*;
 
+/**
+ * Main class for the Smart Home Simulator application
+ */
 public class Main extends Application {
 
     /**FILE I/O */
@@ -78,6 +81,11 @@ public class Main extends Application {
     protected static AnchorPane SHC_MODULE;
     protected static AnchorPane SHP_MODULE;
     protected static AnchorPane SHH_MODULE;
+
+    protected static SHSModule shsModule = new SHSModule();
+    protected static SHCModule shcModule = new SHCModule();
+    protected static SHPModule shpModule = new SHPModule();
+    protected static SHHModule shhModule = new SHHModule();
 
     /**G.U.I ELEMENTS FOR THE MAIN DASHBOARD */
     protected static Button editContextButton;
@@ -145,11 +153,14 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        logFile = new File("C:\\Users\\Lucas\\IdeaProjects\\soen343_smartHome_delivery1\\java\\SmartHomeSimulator_Main\\src\\log.txt");
+        shpModule.startTimeBoundaryThread();
+
+        logFile = new File("src/log.txt");
         if (logFile.exists()) {
             logFile.createNewFile();
         }
         fileWriter = new FileOutputStream(logFile);
+
 
         main_stage = primaryStage;
         main_stage.setResizable(false);
@@ -321,55 +332,71 @@ public class Main extends Application {
      * Create or update the window for the main dashboard.
      */
     public static void createMainDashboardNecessities() {
+        String graycss = "#e6e6e6";
 
         Rectangle rectangle = new Rectangle(); rectangle.setVisible(true); rectangle.setStrokeType(StrokeType.INSIDE);
         rectangle.setStroke(javafx.scene.paint.Paint.valueOf("BLACK")); rectangle.setArcWidth(5.0); rectangle.setArcHeight(5.0);
-        rectangle.setHeight(DASHBOARD_WIDTH); rectangle.setOpacity(0.95); rectangle.setWidth(110); rectangle.setFill(Color.AQUA);
-        rectangle.setId("rectangle");
+        rectangle.setHeight(DASHBOARD_WIDTH); rectangle.setOpacity(0.95); rectangle.setWidth(110); rectangle.setId("rectangle");
 
-        Label simLabel = new Label(); simLabel.setText("SIMULATION"); simLabel.setTranslateX(15);
+        Label simLabel = new Label(); simLabel.setText("SIMULATION"); simLabel.setTranslateX(20);
+        simLabel.setTranslateY(10);
+        simLabel.setStyle("-fx-text-fill: " + graycss);
         simLabel.setId("simulationLabel");
 
         ToggleButton triggerSim = new ToggleButton(); triggerSim.setId("simulationOnOffButton");
-        triggerSim.prefHeight(45); triggerSim.prefWidth(75); triggerSim.setText("Start\nSimulation");
-        triggerSim.setTranslateY(30); triggerSim.setTranslateX(15); triggerSim.setTextAlignment(TextAlignment.CENTER);
+        triggerSim.prefHeight(45); triggerSim.setMinWidth(75); triggerSim.setText("Start\nSimulation");
+        triggerSim.setStyle("-fx-text-inner-color: " + graycss);
+        triggerSim.setTranslateY(35); triggerSim.setTranslateX(18); triggerSim.setTextAlignment(TextAlignment.CENTER);
         triggerSim.setOnAction(e-> sample.Controller.startSimulation(triggerSim, editContextButton, outputConsole, modulesInterface));
         triggerSim.setDisable(true);
 
         editContextButton = new Button(); editContextButton.setId("editContextButton");
-        editContextButton.prefHeight(45); editContextButton.prefWidth(75); editContextButton.setText("Edit\nContext");
-        editContextButton.setTranslateY(90); editContextButton.setTranslateX(15); editContextButton.setTextAlignment(TextAlignment.CENTER);
+        editContextButton.prefHeight(45); editContextButton.setMinWidth(75); editContextButton.setText("Edit\nContext");
+        editContextButton.setTranslateY(90); editContextButton.setTranslateX(18); editContextButton.setTextAlignment(TextAlignment.CENTER);
         editContextButton.setOnAction(e->Controller.editContext());
         editContextButton.setDisable(true);
 
         Label locationLabel = new Label("House\nLocation:\n[not set]");
-        locationLabel.setId("locationLabel");
-        locationLabel.setTranslateX(30); locationLabel.setTranslateY(170);
+        locationLabel.setId("locationLabel"); locationLabel.setTextAlignment(TextAlignment.CENTER);
+        locationLabel.setTranslateX(18); locationLabel.setTranslateY(210);
+        locationLabel.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 70px;" +
+                "-fx-alignment: center");
 
         Label simDateAndTimeLabel = new Label("SIM TIME");
-        simDateAndTimeLabel.setTranslateX(20); simDateAndTimeLabel.setTranslateY(300);
+        simDateAndTimeLabel.setTranslateX(18); simDateAndTimeLabel.setTranslateY(300);
+        simDateAndTimeLabel.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 30px;" +
+                "-fx-alignment: center");
 
         Label simulationDate = new Label(); simulationDate.setId("simulationDate");
-        simulationDate.setTranslateX(20); simulationDate.setTranslateY(320);
+        simulationDate.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 30px;" +
+                "-fx-alignment: center");
+        simulationDate.setTranslateX(18); simulationDate.setTranslateY(320);
 
         Label simulationTime = new Label(); simulationTime.setId("simulationTime");
-        simulationTime.setTranslateX(20); simulationTime.setTranslateY(340);
+        simulationTime.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 30px;" +
+                "-fx-alignment: center");
+        simulationTime.setTranslateX(18); simulationTime.setTranslateY(340);
 
         Label temperatureLabel = new Label(); temperatureLabel.setId("temp");
-        temperatureLabel.setText("Outside Temp.\n15°C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
-        temperatureLabel.setTranslateY(400); temperatureLabel.setTranslateX(15);
+        temperatureLabel.setText("Outside\nTemp.\n15°C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
+        temperatureLabel.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 70px;" +
+                "-fx-alignment: center");
+        temperatureLabel.setTranslateY(390); temperatureLabel.setTranslateX(18);
 
         Label localDateTime = new Label(); localDateTime.setTextAlignment(TextAlignment.CENTER);
-        localDateTime.setTranslateX(15); localDateTime.setTranslateY(600); localDateTime.setText("LOCAL TIME");
+        localDateTime.setTranslateX(18); localDateTime.setTranslateY(620); localDateTime.setText("LOCAL TIME");
         localDateTime.setId("localDateAndTimeLabel");
+        localDateTime.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 20px; -fx-alignment: center");
 
         Label dateText = new Label(); dateText.setTextAlignment(TextAlignment.CENTER);
         dateText.setId("dateText");
-        dateText.setTranslateX(15); dateText.setTranslateY(620);
+        dateText.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 20px; -fx-alignment: center");
+        dateText.setTranslateX(18); dateText.setTranslateY(640);
 
         Label timeText = new Label(); timeText.setTextAlignment(TextAlignment.CENTER);
         timeText.setId("timeText");
-        timeText.setTranslateX(15); timeText.setTranslateY(640);
+        timeText.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 20px; -fx-alignment: center");
+        timeText.setTranslateX(18); timeText.setTranslateY(660);
         timeText.setText("TEST");
 
         //thread to start the current date/time display when application starts
@@ -420,7 +447,7 @@ public class Main extends Application {
         modulesInterface.setTranslateX(110);
         modulesInterface.setId("modulesInterface");
         modulesInterface.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        modulesInterface.setStyle("-fx-border-width: 2; -fx-border-color: black;");
+        modulesInterface.setStyle("-fx-border-width: 0 2 2 0; -fx-border-color: #6e6e6e;");
 
         if (numberOfTimesDashboardPageLoaded == 0) {
             main_dashboard.getChildren().add(rectangle);
@@ -477,7 +504,6 @@ public class Main extends Application {
                         main_dashboard.getChildren().set(a, hl);
                     } else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
 
-                        SHSModule shsModule = new SHSModule();
                         SHS_MODULE = shsModule.generateModule();
                         TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab = tabPane.getTabs().get(0);
@@ -487,7 +513,7 @@ public class Main extends Application {
                         tabPane.getTabs().set(0, innerTab);
                         main_dashboard.getChildren().set(a, tabPane);
 
-                        SHCModule shcModule = new SHCModule();
+
                         shcModule.generateModule(SHC_MODULE);
                         TabPane tabPane2 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab2 = tabPane2.getTabs().get(1);
@@ -495,7 +521,7 @@ public class Main extends Application {
                         tabPane2.getTabs().set(1, innerTab2);
                         main_dashboard.getChildren().set(a, tabPane2);
 
-                        SHPModule shpModule = new SHPModule();
+
                         SHP_MODULE = shpModule.generateModule();
                         TabPane tabPane3 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab3 = tabPane3.getTabs().get(2);
@@ -503,7 +529,7 @@ public class Main extends Application {
                         tabPane3.getTabs().set(2, innerTab3);
                         main_dashboard.getChildren().set(a, tabPane3);
 
-                        SHHModule shhModule = new SHHModule();
+
                         shhModule.generateModule(SHH_MODULE);
                         TabPane tabPane4 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab4 = tabPane4.getTabs().get(3);
@@ -523,21 +549,24 @@ public class Main extends Application {
                         ToggleButton tb = (ToggleButton) main_dashboard.getChildren().get(a);
                         tb.setDisable(true);
                         main_dashboard.getChildren().set(a, tb);
-                    } else if (main_dashboard.getChildren().get(a).getId().equals("editContextButton")) {
+                    }
+                    else if (main_dashboard.getChildren().get(a).getId().equals("editContextButton")) {
                         Button b = (Button) main_dashboard.getChildren().get(a);
                         b.setDisable(true);
                         main_dashboard.getChildren().set(a, b);
-                    } else if (main_dashboard.getChildren().get(a).getId().equals("OutputConsole")) {
+                    }
+                    else if (main_dashboard.getChildren().get(a).getId().equals("OutputConsole")) {
                         TextArea ta = (TextArea) main_dashboard.getChildren().get(a);
                         ta.setDisable(true);
                         main_dashboard.getChildren().set(a, ta);
-                    } else if (main_dashboard.getChildren().get(a).getId().equals("houseLayout")) {
+                    }
+                    else if (main_dashboard.getChildren().get(a).getId().equals("houseLayout")) {
                         AnchorPane hl = (AnchorPane) main_dashboard.getChildren().get(a);
                         hl.setDisable(true);
                         main_dashboard.getChildren().set(a, hl);
-                    } else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
+                    }
+                    else if (main_dashboard.getChildren().get(a).getId().equals("modulesInterface")) {
 
-                        SHSModule shsModule = new SHSModule();
                         SHS_MODULE = shsModule.generateModule();
                         TabPane tabPane = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab = tabPane.getTabs().get(0);
@@ -545,7 +574,6 @@ public class Main extends Application {
                         tabPane.getTabs().set(0, innerTab);
                         main_dashboard.getChildren().set(a, tabPane);
 
-                        SHCModule shcModule = new SHCModule();
                         shcModule.generateModule(SHC_MODULE);
                         TabPane tabPane2 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab2 = tabPane2.getTabs().get(1);
@@ -553,7 +581,6 @@ public class Main extends Application {
                         tabPane2.getTabs().set(1, innerTab2);
                         main_dashboard.getChildren().set(a, tabPane2);
 
-                        SHPModule shpModule = new SHPModule();
                         SHP_MODULE = shpModule.generateModule();
                         TabPane tabPane3 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab3 = tabPane3.getTabs().get(2);
@@ -561,7 +588,6 @@ public class Main extends Application {
                         tabPane3.getTabs().set(2, innerTab3);
                         main_dashboard.getChildren().set(a, tabPane3);
 
-                        SHHModule shhModule = new SHHModule();
                         shhModule.generateModule(SHH_MODULE);
                         TabPane tabPane4 = (TabPane) main_dashboard.getChildren().get(a);
                         Tab innerTab4 = tabPane4.getTabs().get(3);
@@ -582,10 +608,10 @@ public class Main extends Application {
     public static TabPane createModuleInterface() {
         TabPane modules = new TabPane();
 
-        SHSModule shsModule = new SHSModule(); SHS_MODULE = shsModule.generateModule();
-        SHCModule shcModule = new SHCModule(); shcModule.generateModule(SHC_MODULE);
-        SHPModule shpModule = new SHPModule(); SHP_MODULE = shpModule.generateModule();
-        SHHModule shhModule = new SHHModule(); shhModule.generateModule(SHH_MODULE);
+        SHS_MODULE = shsModule.generateModule();
+        shcModule.generateModule(SHC_MODULE);
+        SHP_MODULE = shpModule.generateModule();
+        shhModule.generateModule(SHH_MODULE);
 
         Tab shcTab = new Tab("SHC", SHC_MODULE); shcTab.setId("shcTab");
         Tab shpTab = new Tab("SHP", SHP_MODULE); shpTab.setId("shpTab");

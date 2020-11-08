@@ -16,8 +16,24 @@ import java.io.File;
 
 import sample.*;
 
+/**
+ * Class with accessor and mutator methods for the application's
+ * graphics or elements to help especially with any JUnit tests
+ */
 public class SHSHelpers {
 
+    public static SHCModule getShcModuleObject() {
+        return Main.shcModule;
+    }
+    public static SHHModule getShhModuleObject() {
+        return Main.shhModule;
+    }
+    public static SHPModule getShpModuleObject() {
+        return Main.shpModule;
+    }
+    public static SHSModule getShsModuleObject() {
+        return Main.shsModule;
+    }
     public static String[] getCountries() {
         return Main.countries;
     }
@@ -276,5 +292,8 @@ public class SHSHelpers {
     }
     public static void setHouse(House house) {
         Main.house = house;
+    }
+
+    public static void setShpModuleObject(SHPModule shp) {
     }
 }

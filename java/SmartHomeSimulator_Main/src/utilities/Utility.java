@@ -1,10 +1,12 @@
 package utilities;
 import house.*;
 
+/**
+ * Utility class
+ */
 public class Utility implements Utilities {
 
     private static int ID_count = 1;
-
     private boolean isOpen; // for example, is a window or door open, A.C. turned on, sensor triggered, etc.
     private Room room; // the room that the utility is located within, if any
     private int utility_ID; // the ID of the utility

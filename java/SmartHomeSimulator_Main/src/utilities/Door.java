@@ -2,11 +2,13 @@ package utilities;
 
 import house.Room;
 
+/**
+ * Door utility class
+ */
 public class Door extends Utility {
 
     private Sensor sensor; // a door's sensor
     private boolean isLocked; // is a door locked?
-    private Room room;
 
     /**
      * Door constructor

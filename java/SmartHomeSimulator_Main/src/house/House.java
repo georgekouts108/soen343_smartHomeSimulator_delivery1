@@ -1,20 +1,18 @@
 package house;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import sample.*;
-import utilities.*;
-import sample.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.time.LocalDateTime;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * House class
+ */
 public class House {
 
     private int numOfRooms;
@@ -554,25 +552,17 @@ public class House {
                         if (mdCheckbox.isSelected()) {
                             room.getMd().setState(true);
                             setIconVisibility(room, "MD", true);
-                            // append this to the suspicious activity log in SHP module instead
-                            Controller.appendMessageToConsole("CRITICAL [SHC]: Motion detector illegitimately triggered in Room #" + room.getRoomID() + " " + room.getName());
-                        } else {
+
+                            Controller.appendMessageToConsole("SHC -- Motion detector triggered in Room #" + room.getRoomID() + " " + room.getName());
+                            SHSHelpers.getShpModuleObject().incrementNumberOfMDsOn();
+                        }
+                        else {
                             room.getMd().setState(false);
                             setIconVisibility(room, "MD", false);
                             Controller.appendMessageToConsole("SHC -- Motion detector disabled in Room #" + room.getRoomID() + " " + room.getName());
+                            SHSHelpers.getShpModuleObject().decrementNumberOfMDsOn();
                         }
-
-                        if (anyMDsOn()) {
-                            Controller.appendMessageToConsole("CRITICAL: One or more motion detectors are illegitimately triggered!!");
-                            /**TODO: implement a method in Controller for setting off the time before alerting authorities*/
-                            // if there are any MD's on in the house,
-                            // call the controller's method to signal the alarm countdown to start
-                        } else {
-                            Controller.appendMessageToConsole("SHC -- No more M.D's are illegitimately triggered");
-                            /**TODO: implement a method in Controller for stopping the time before alerting authorities*/
-                            // if there are no MD's on in the house,
-                            // call the controller's method to signal the alarm countdown to stop
-                        }
+                        SHSHelpers.getShpModuleObject().getNotified();
                     }
                     catch (Exception ex){}
                 }
@@ -797,43 +787,65 @@ public class House {
     public void setIconVisibility(Room room, String utilityType, boolean isVisible) {
         try {
             for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {
-                if (this.layout.getChildren().get(lay).getId().equals("roomLayoutID"+room.getRoomID())) {
-                    /////////////
-                    AnchorPane room_layout = (AnchorPane) this.layout.getChildren().get(lay);
+                try {
+                    if (this.layout.getChildren().get(lay).getId().equals("roomLayoutID" + room.getRoomID())) {
+                        /////////////
+                        AnchorPane room_layout = (AnchorPane) this.layout.getChildren().get(lay);
 
-                    if (utilityType.equals("Light")) { room.setIconLightVisibility(isVisible); }
-                    else if (utilityType.equals("Window")) { room.setIconWindowVisibility(isVisible); }
-                    else if (utilityType.equals("Door")) { room.setIconDoorVisibility(isVisible); }
-                    else if (utilityType.equals("MD")) {
-                        room.setIconMDVisibility(isVisible);
-                        if (SHSHelpers.isIs_away()) {
-                            if (isVisible) {
-                                room_layout.setStyle("-fx-background-color:red;-fx-border-color:black;");
+                        if (utilityType.equals("Light")) {
+                            room.setIconLightVisibility(isVisible);
+                        } else if (utilityType.equals("Window")) {
+                            room.setIconWindowVisibility(isVisible);
+                        } else if (utilityType.equals("Door")) {
+                            room.setIconDoorVisibility(isVisible);
+                        } else if (utilityType.equals("MD")) {
+                            room.setIconMDVisibility(isVisible);
+                            if (SHSHelpers.isIs_away()) {
+                                if (isVisible) {
+                                    room_layout.setStyle("-fx-background-color:red;-fx-border-color:black;");
+                                } else {
+                                    room_layout.setStyle("-fx-border-color:black;");
+                                }
                             }
-                            else {
-                                room_layout.setStyle("-fx-border-color:black;");
-                            }
+                        } else if (utilityType.equals("AC")) {
+                            room.setIconACVisibility(isVisible);
                         }
-                    }
-                    else if (utilityType.equals("AC")) { room.setIconACVisibility(isVisible); }
 
-                    for (int l = 0; l < room_layout.getChildren().size(); l++) {
-                        if ((room_layout.getChildren().get(l).getId().equals("icon"+utilityType+"ViewRoom#"+room.getRoomID()))) {
-                            if (utilityType.equals("Light")) { room_layout.getChildren().set(l, room.getIconLight_view()); }
-                            else if (utilityType.equals("Window")) { room_layout.getChildren().set(l, room.getIconWindow_view()); }
-                            else if (utilityType.equals("Door")) { room_layout.getChildren().set(l, room.getIconDoor_view()); }
-                            else if (utilityType.equals("MD")) { room_layout.getChildren().set(l, room.getIconMD_view()); }
-                            else if (utilityType.equals("AC")) { room_layout.getChildren().set(l, room.getIconAC_view()); }
-                            break;
+                        for (int l = 0; l < room_layout.getChildren().size(); l++) {
+                            try {
+                                if ((room_layout.getChildren().get(l).getId().equals("icon" + utilityType + "ViewRoom#" + room.getRoomID()))) {
+
+                                    if (utilityType.equals("Light")) {
+                                        room_layout.getChildren().set(l, room.getIconLight_view());
+                                    }
+                                    else if (utilityType.equals("Window")) {
+                                        room_layout.getChildren().set(l, room.getIconWindow_view());
+                                    }
+                                    else if (utilityType.equals("Door")) {
+                                        room_layout.getChildren().set(l, room.getIconDoor_view());
+                                    }
+                                    else if (utilityType.equals("MD")) {
+                                        room_layout.getChildren().set(l, room.getIconMD_view());
+                                    }
+                                    else if (utilityType.equals("AC")) {
+                                        room_layout.getChildren().set(l, room.getIconAC_view());
+                                    }
+                                    break;
+                                }
+                            } catch (Exception e){ System.out.println("EXCEPTION 3:"+e.getMessage());}
                         }
-                    }
 
-                    this.layout.getChildren().set(lay, room_layout);
-                    /////////////
-                    break;
+                        this.layout.getChildren().set(lay, room_layout);
+                        /////////////
+                        break;
+                    }
                 }
+                catch (Exception e){System.out.println("EXCEPTION 2:"+e.getMessage());}
             }
-        }catch (Exception ex){}
+        }
+        catch (Exception ex){
+            System.out.println("EXCEPTION 1:"+ex.getMessage());
+        }
     }
 
     /**

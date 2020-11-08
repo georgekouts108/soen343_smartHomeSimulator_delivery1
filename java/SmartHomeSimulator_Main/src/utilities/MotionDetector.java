@@ -1,11 +1,10 @@
 package utilities;
-
-
 import house.*;
 
+/**
+ * MotionDetector utility class
+ */
 public class MotionDetector extends Utility {
-
-    private Room room;
 
     /**
      * Motion detector constructor

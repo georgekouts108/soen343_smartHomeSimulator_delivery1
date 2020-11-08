@@ -1,12 +1,11 @@
 package utilities;
-
-
-
 import house.Room;
 
+/**
+ * Light utility class
+ */
 public class Light extends Utility {
 
-    private Room room; // the room that the window is located in.
     private boolean isLocked;
 
     /**
@@ -17,10 +16,18 @@ public class Light extends Utility {
         this.isLocked = false;
     }
 
+    /**
+     * Return the locked state of a door
+     * @return
+     */
     public boolean isLocked() {
         return isLocked;
     }
 
+    /**
+     * Set the locked state of a door
+     * @param locked
+     */
     public void setLocked(boolean locked) {
         isLocked = locked;
     }
