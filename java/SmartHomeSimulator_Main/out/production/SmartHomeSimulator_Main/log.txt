@@ -1,4 +1,39 @@
-2020-11-08 17:29:43 -- SHC -- Light #25 opened in Room #3 living room by user
-2020-11-08 17:29:44 -- SHC -- Window #28 opened in Room #3 living room by user
-2020-11-08 17:29:44 -- Window #28 closed in Room #3 living room
-2020-11-08 17:29:45 -- SHC -- Light #25 closed in Room #3 living room by user
+2020-11-08 17:51:02 -- SHC -- Light #5 opened in Room #1 masterbedroom by user
+2020-11-08 17:51:16 -- SHC -- Window #6 opened in Room #1 masterbedroom by user
+2020-11-08 17:51:17 -- SHC -- Window #8 opened in Room #1 masterbedroom by user
+2020-11-08 17:51:18 -- SHC -- Window #10 opened in Room #1 masterbedroom by user
+2020-11-08 17:51:25 -- SHC -- Light #5 closed in Room #1 masterbedroom by user
+2020-11-08 17:51:26 -- Window #6 closed in Room #1 masterbedroom
+2020-11-08 17:51:26 -- Window #10 closed in Room #1 masterbedroom
+2020-11-08 17:51:26 -- Window #8 closed in Room #1 masterbedroom
+2020-11-08 17:51:54 -- SHP -- AWAY mode set to ON
+2020-11-08 17:51:54 -- SHP -- Window #6 in masterbedroom closed.
+2020-11-08 17:51:54 -- SHP -- Window #8 in masterbedroom closed.
+2020-11-08 17:51:54 -- SHP -- Window #10 in masterbedroom closed.
+2020-11-08 17:51:54 -- SHP -- Window #17 in bedroom closed.
+2020-11-08 17:51:54 -- SHP -- Window #19 in bedroom closed.
+2020-11-08 17:51:54 -- SHP -- Window #26 in living room closed.
+2020-11-08 17:51:54 -- SHP -- Window #28 in living room closed.
+2020-11-08 17:51:54 -- SHP -- Window #30 in living room closed.
+2020-11-08 17:51:54 -- SHP -- Window #32 in living room closed.
+2020-11-08 17:51:54 -- SHP -- Window #38 in bathroom closed.
+2020-11-08 17:51:54 -- SHP -- Window #45 in kitchen closed.
+2020-11-08 17:51:54 -- SHP -- Window #47 in kitchen closed.
+2020-11-08 17:51:54 -- SHP -- Window #49 in kitchen closed.
+2020-11-08 17:51:54 -- SHP -- Window #55 in garage closed.
+2020-11-08 17:51:54 -- SHP -- Window #57 in garage closed.
+2020-11-08 17:51:54 -- SHP -- Window #67 in entrance closed.
+2020-11-08 17:51:54 -- SHP -- Door #6 to masterbedroom closed.
+2020-11-08 17:51:54 -- SHP -- Door #6 to masterbedroom locked.
+2020-11-08 17:51:54 -- SHP -- Door #17 to bedroom closed.
+2020-11-08 17:51:54 -- SHP -- Door #17 to bedroom locked.
+2020-11-08 17:51:54 -- SHP -- Door #26 to living room closed.
+2020-11-08 17:51:54 -- SHP -- Door #26 to living room locked.
+2020-11-08 17:51:54 -- SHP -- Door #38 to bathroom closed.
+2020-11-08 17:51:54 -- SHP -- Door #38 to bathroom locked.
+2020-11-08 17:51:54 -- SHP -- Door #45 to kitchen closed.
+2020-11-08 17:51:54 -- SHP -- Door #45 to kitchen locked.
+2020-11-08 17:51:54 -- SHP -- Door #55 to garage closed.
+2020-11-08 17:51:54 -- SHP -- Door #55 to garage locked.
+2020-11-08 17:51:54 -- SHP -- Door #67 to entrance closed.
+2020-11-08 17:51:54 -- SHP -- Door #67 to entrance locked.

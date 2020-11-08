@@ -1,5 +1,7 @@
-2020-11-08 17:31:14 -- SHC -- Light #5 opened in Room #1 masterbedroom by user
-2020-11-08 17:31:16 -- SHC -- Light #5 closed in Room #1 masterbedroom by user
-2020-11-08 17:31:22 -- ERROR: You can only manually control M.D's in AWAY mode.
-2020-11-08 17:31:26 -- SHC -- Window #10 opened in Room #1 masterbedroom by user
-2020-11-08 17:31:28 -- Window #10 closed in Room #1 masterbedroom
+2020-11-08 17:55:37 -- ERROR: You can only manually control M.D's in AWAY mode.
+2020-11-08 17:55:40 -- SHC -- You are not allowed to open the bathroom window.
+2020-11-08 17:55:43 -- SHC -- You are not allowed to open the bathroom window.
+2020-11-08 17:55:49 -- Profile #1 moved to bathroom from Outside
+2020-11-08 17:55:49 -- [Edit Context] -- M.D automatically triggered in bathroom.
+2020-11-08 17:55:53 -- SHC -- Window #38 opened in Room #4 bathroom by user
+2020-11-08 17:55:55 -- Window #38 closed in Room #4 bathroom
