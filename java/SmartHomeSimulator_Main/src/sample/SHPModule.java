@@ -6,16 +6,62 @@ import javafx.scene.layout.Region;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
+import java.time.LocalTime;
 import java.util.Observable;
 
 public class SHPModule extends Module {
 
+    private int awayLightsHourLower;
+    private int awayLightsMinuteLower;
+    private int awayLightsHourUpper;
+    private int awayLightsMinuteUpper;
+
     private int numberOfMDsOn;
+
     private Thread alertTimeThread;
-    private boolean isThreadRunning;
-
-
+    private boolean isAlertTimeThreadRunning;
     private static int timeToAlert = 0;
+
+    private Thread localTimeAwayLightBoundaryCheckThread;
+    private boolean localTimeAwayLightInRange;
+
+    public SHPModule() {
+        super();
+        this.numberOfMDsOn = 0;
+        this.isAlertTimeThreadRunning = false;
+        this.alertTimeThread = null;
+        this.localTimeAwayLightBoundaryCheckThread = null;
+        this.localTimeAwayLightInRange = false;
+        awayLightsHourLower = 0;
+        awayLightsMinuteLower = 0;
+        awayLightsHourUpper = 0;
+        awayLightsMinuteUpper = 0;
+    }
+
+    public int getAwayLightsHourLower() {
+        return awayLightsHourLower;
+    }
+    public int getAwayLightsHourUpper() {
+        return awayLightsHourUpper;
+    }
+    public void setAwayLightsHourUpper(int awayLightsHourUpper) {
+        this.awayLightsHourUpper = awayLightsHourUpper;
+    }
+    public void setAwayLightsHourLower(int awayLightsHourLower) {
+        this.awayLightsHourLower = awayLightsHourLower;
+    }
+    public int getAwayLightsMinuteLower() {
+        return awayLightsMinuteLower;
+    }
+    public void setAwayLightsMinuteLower(int awayLightsMinuteLower) {
+        this.awayLightsMinuteLower = awayLightsMinuteLower;
+    }
+    public int getAwayLightsMinuteUpper() {
+        return awayLightsMinuteUpper;
+    }
+    public void setAwayLightsMinuteUpper(int awayLightsMinuteUpper) {
+        this.awayLightsMinuteUpper = awayLightsMinuteUpper;
+    }
 
     public static void setTimeToAlert(int time){
         timeToAlert = time;
@@ -33,12 +79,7 @@ public class SHPModule extends Module {
         this.numberOfMDsOn--;
     }
 
-    public SHPModule(){
-        super();
-        this.numberOfMDsOn = 0;
-        this.isThreadRunning = false;
-        this.alertTimeThread = null;
-    }
+
 
     /**
      * Generate a module by creating and returning a local AnchorPane
@@ -182,14 +223,14 @@ public class SHPModule extends Module {
                 catch (Exception ex){}
             });
 
-            if (!isThreadRunning) {
-                isThreadRunning = true;
+            if (!isAlertTimeThreadRunning) {
+                isAlertTimeThreadRunning = true;
                 alertTimeThread.start();
             }
         }
         else {
-            if (isThreadRunning && numberOfMDsOn==0) {
-                isThreadRunning = false;
+            if (isAlertTimeThreadRunning && numberOfMDsOn==0) {
+                isAlertTimeThreadRunning = false;
                 try {
                     alertTimeThread.stop();
                 }
@@ -197,5 +238,101 @@ public class SHPModule extends Module {
 
             }
         }
+    }
+
+    /**
+     * Check to see if the current local time (hour and minute) fall with the time boundaries
+     * @return
+     */
+    public boolean isCurrentTimeWithinRange() {
+
+        boolean nullTime = (awayLightsHourUpper==0 && awayLightsHourLower==0 &&
+                awayLightsMinuteLower==0 && awayLightsMinuteUpper==0);
+
+        int hour = LocalTime.now().getHour();
+        int minute = LocalTime.now().getMinute();
+
+        boolean hourInRange = (hour >= awayLightsHourLower && hour <= awayLightsHourUpper);
+        boolean minuteInRange = (minute >= awayLightsMinuteLower && minute <= awayLightsMinuteUpper);
+
+        return ((hourInRange && minuteInRange) || nullTime);
+    }
+
+    /**
+     * This method runs constantly while the application is running,
+     * validating, each second, if the local time falls within the
+     * specified time boundaries for automatically turning on and off
+     * lights during Away mode
+     * @return
+     */
+    public void startTimeBoundaryThread() {
+
+        this.localTimeAwayLightBoundaryCheckThread = new Thread(()->{
+
+            boolean lightsON_transitionOccurred = false;
+            boolean lightsOFF_transitionOccurred = false;
+            boolean lightsCHOICE_transitionOccurred = false;
+
+            while (true) {
+
+                    this.localTimeAwayLightInRange = isCurrentTimeWithinRange();
+
+                    System.out.println("DEBUG -- "+LocalTime.now()+" "+this.localTimeAwayLightInRange+ "~~~~~");
+
+                    if (SHSHelpers.isIs_away()) {
+                        lightsCHOICE_transitionOccurred = false;
+                        System.out.println("DEBUG 2: AWAY MODE ON"+ "~~~~~\n\n");
+
+                        // time is appropriate to turn on specific lights automatically
+                        if (this.localTimeAwayLightInRange) {
+
+                            // automatically turn on and lock all specified lights
+                            try {
+                                if (!lightsON_transitionOccurred) {
+                                    System.out.println("DEBUG 2.5 : Turning on any lights..."+ "~~~~~\n\n");
+                                    Controller.awayModeAutoSwitchAndLockCustomLightsON();
+                                    lightsON_transitionOccurred = true;
+                                    lightsOFF_transitionOccurred = false;
+                                }
+                            } catch (Exception e){}
+                        }
+                        else {
+
+                            // automatically turn off and unlock all specified lights
+                            try {
+
+                                if (!lightsOFF_transitionOccurred) {
+                                    System.out.println("DEBUG 2.75 : Turning off any lights..."+ "~~~~~\n\n");
+                                    Controller.awayModeAutoSwitchAndLockCustomLightsOFF();
+                                    lightsOFF_transitionOccurred = true;
+                                    lightsON_transitionOccurred = false;
+                                }
+
+                            } catch (Exception e){}
+                        }
+                    }
+                    else {
+                        System.out.println("DEBUG 3: AWAY MODE OFF"+ "~~~~~\n\n");
+
+                        // unlock the selected lights, but don't necessarily turn them off
+                        try {
+                            if (!lightsCHOICE_transitionOccurred) {
+                                Controller.awayModeAutoSwitchAndLockCustomLightsCHOICE(true);
+                                lightsCHOICE_transitionOccurred = true;
+                            }
+                            lightsON_transitionOccurred = false;
+                        }
+                        catch(Exception e){}
+                    }
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        this.localTimeAwayLightBoundaryCheckThread.start();
     }
 }

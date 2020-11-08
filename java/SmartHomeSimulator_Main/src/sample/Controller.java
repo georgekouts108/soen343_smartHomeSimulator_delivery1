@@ -1585,8 +1585,6 @@ public class Controller {
         }catch(Exception exc){}
     }
 
-    /**SHP MODULE METHODS*/
-
     /**
      * Toggle the Away mode and appropriately apply all configured settings around the house
      * @param tb
@@ -1611,6 +1609,7 @@ public class Controller {
             if ((numOfPeopleOutside == Main.profiles.length)) {
 
                 if (tb.isSelected()) {
+
                     Main.main_stage.setTitle("Smart Home Simulator -- logged in as #" +
                             Main.currentActiveProfile.getProfileID() + " \"" + Main.currentActiveProfile.getType().toUpperCase() +
                             "\" {AWAY MODE ON}");
@@ -1655,73 +1654,7 @@ public class Controller {
                         catch (Exception e){}
                     }
 
-                    // turn on a custom selection of lights and keep them "locked" until AWAY mode is off
-                    for (int room = 0; room < Main.householdLocations.length; room++) {
-                        try {
-                            for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
-                                try {
-                                    for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
-                                        try {
-                                            if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
-                                                    Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
-                                                CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
-                                                if (checkBox.isSelected()) {
-                                                    Main.householdLocations[room].getLightCollection()[light].setState(true);
-                                                    Main.householdLocations[room].getLightCollection()[light].setLocked(true);
-                                                    appendMessageToConsole("SHP -- Light #" +
-                                                            Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
-                                                            Main.householdLocations[room].getName() + " locked.");
-                                                    Main.house.setIconVisibility(Main.householdLocations[room], "Light", true);
-                                                }
-                                            }
-                                        } catch (Exception e) {
-                                        }
-                                    }
-                                } catch (Exception e) {}
-                            }
-                        }
-                        catch (Exception e){}
-                    }
-
-                    for (int s = 0; s < Main.SHP_MODULE.getChildren().size(); s++) {
-                        try {
-                            if (Main.SHP_MODULE.getChildren().get(s).getId().equals("authAlertTimeBox")) {
-                                TextField tempTF = (TextField) Main.SHP_MODULE.getChildren().get(s);
-                                tempTF.setDisable(true);
-                                Main.SHP_MODULE.getChildren().set(s, tempTF);
-
-                                TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
-                                Tab innerTab3 = tabPane3.getTabs().get(2);
-                                innerTab3.setContent(Main.SHP_MODULE);
-                                tabPane3.getTabs().set(2, innerTab3);
-                                Main.main_dashboard.getChildren().set(8, tabPane3);
-                            }
-                            else if (Main.SHP_MODULE.getChildren().get(s).getId().equals("alertTimeConfirmButton")) {
-                                Button tempButton = (Button) Main.SHP_MODULE.getChildren().get(s);
-                                tempButton.setDisable(true);
-                                Main.SHP_MODULE.getChildren().set(s, tempButton);
-
-                                TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
-                                Tab innerTab3 = tabPane3.getTabs().get(2);
-                                innerTab3.setContent(Main.SHP_MODULE);
-                                tabPane3.getTabs().set(2, innerTab3);
-                                Main.main_dashboard.getChildren().set(8, tabPane3);
-                            }
-                            else if (Main.SHP_MODULE.getChildren().get(s).getId().equals("setAwayModeButton")) {
-                                ToggleButton toggleButton = (ToggleButton) Main.SHP_MODULE.getChildren().get(s);
-                                toggleButton.setSelected(true);
-                                toggleButton.setText("Turn off AWAY mode");
-                                Main.SHP_MODULE.getChildren().set(s, toggleButton);
-
-                                TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
-                                Tab innerTab3 = tabPane3.getTabs().get(2);
-                                innerTab3.setContent(Main.SHP_MODULE);
-                                tabPane3.getTabs().set(2, innerTab3);
-                                Main.main_dashboard.getChildren().set(8, tabPane3);
-                            }
-
-                        } catch (Exception e){}
-                    }
+                    updateSHPModule(true);
                 }
                 else {
                     Main.main_stage.setTitle("Smart Home Simulator -- logged in as #" +
@@ -1752,71 +1685,7 @@ public class Controller {
                         catch (Exception e){}
                     }
 
-                    // unlock all "locked" lights, so they may be turned off whenever as usual
-                    for (int room = 0; room < Main.householdLocations.length; room++) {
-                        try {
-                            for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
-                                try {
-                                    for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
-                                        try {
-                                            if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
-                                                    Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
-                                                CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
-                                                if (checkBox.isSelected()) {
-                                                    Main.householdLocations[room].getLightCollection()[light].setLocked(false);
-                                                    appendMessageToConsole("SHP -- Light #" +
-                                                            Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in " +
-                                                            Main.householdLocations[room].getName() + " unlocked.");
-                                                }
-                                            }
-                                        } catch (Exception e) {
-                                        }
-                                    }
-                                } catch (Exception e) { }
-                            }
-                        }catch (Exception e){}
-                    }
-
-                    for (int s = 0; s < Main.SHP_MODULE.getChildren().size(); s++) {
-                        try {
-                            if (Main.SHP_MODULE.getChildren().get(s).getId().equals("authAlertTimeBox")) {
-
-                                TextField tempTF = (TextField) Main.SHP_MODULE.getChildren().get(s);
-                                tempTF.setDisable(false);
-                                Main.SHP_MODULE.getChildren().set(s, tempTF);
-
-                                TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
-                                Tab innerTab3 = tabPane3.getTabs().get(2);
-                                innerTab3.setContent(Main.SHP_MODULE);
-                                tabPane3.getTabs().set(2, innerTab3);
-                                Main.main_dashboard.getChildren().set(8, tabPane3);
-                            }
-                            else if (Main.SHP_MODULE.getChildren().get(s).getId().equals("alertTimeConfirmButton")) {
-                                Button tempButton = (Button) Main.SHP_MODULE.getChildren().get(s);
-                                tempButton.setDisable(false);
-                                Main.SHP_MODULE.getChildren().set(s, tempButton);
-
-                                TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
-                                Tab innerTab3 = tabPane3.getTabs().get(2);
-                                innerTab3.setContent(Main.SHP_MODULE);
-                                tabPane3.getTabs().set(2, innerTab3);
-                                Main.main_dashboard.getChildren().set(8, tabPane3);
-                            }
-                            else if (Main.SHP_MODULE.getChildren().get(s).getId().equals("setAwayModeButton")) {
-                                ToggleButton toggleButton = (ToggleButton) Main.SHP_MODULE.getChildren().get(s);
-                                toggleButton.setSelected(false);
-                                toggleButton.setText("Turn on AWAY mode");
-                                Main.SHP_MODULE.getChildren().set(s, toggleButton);
-
-                                TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
-                                Tab innerTab3 = tabPane3.getTabs().get(2);
-                                innerTab3.setContent(Main.SHP_MODULE);
-                                tabPane3.getTabs().set(2, innerTab3);
-                                Main.main_dashboard.getChildren().set(8, tabPane3);
-                            }
-
-                        } catch (Exception e){}
-                    }
+                    updateSHPModule(false);
                 }
             }
             else {
@@ -1825,6 +1694,52 @@ public class Controller {
         } catch(Exception e) {
             tb.setSelected(false);
             appendMessageToConsole("ERROR [SHP]: All profiles must be outside house\nbefore turning AWAY mode on.");
+        }
+    }
+
+    /**
+     * Update the frontend of the SHP module depending on whether the Away mode is on or off
+     * @param toggle
+     */
+    public static void updateSHPModule(boolean toggle) {
+        for (int s = 0; s < Main.SHP_MODULE.getChildren().size(); s++) {
+            try {
+                if (Main.SHP_MODULE.getChildren().get(s).getId().equals("authAlertTimeBox")) {
+                    TextField tempTF = (TextField) Main.SHP_MODULE.getChildren().get(s);
+                    tempTF.setDisable(toggle);
+                    Main.SHP_MODULE.getChildren().set(s, tempTF);
+
+                    TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
+                    Tab innerTab3 = tabPane3.getTabs().get(2);
+                    innerTab3.setContent(Main.SHP_MODULE);
+                    tabPane3.getTabs().set(2, innerTab3);
+                    Main.main_dashboard.getChildren().set(8, tabPane3);
+                }
+                else if (Main.SHP_MODULE.getChildren().get(s).getId().equals("alertTimeConfirmButton")) {
+                    Button tempButton = (Button) Main.SHP_MODULE.getChildren().get(s);
+                    tempButton.setDisable(toggle);
+                    Main.SHP_MODULE.getChildren().set(s, tempButton);
+
+                    TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
+                    Tab innerTab3 = tabPane3.getTabs().get(2);
+                    innerTab3.setContent(Main.SHP_MODULE);
+                    tabPane3.getTabs().set(2, innerTab3);
+                    Main.main_dashboard.getChildren().set(8, tabPane3);
+                }
+                else if (Main.SHP_MODULE.getChildren().get(s).getId().equals("setAwayModeButton")) {
+                    ToggleButton toggleButton = (ToggleButton) Main.SHP_MODULE.getChildren().get(s);
+                    toggleButton.setSelected(toggle);
+                    toggleButton.setText("Turn off AWAY mode");
+                    Main.SHP_MODULE.getChildren().set(s, toggleButton);
+
+                    TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
+                    Tab innerTab3 = tabPane3.getTabs().get(2);
+                    innerTab3.setContent(Main.SHP_MODULE);
+                    tabPane3.getTabs().set(2, innerTab3);
+                    Main.main_dashboard.getChildren().set(8, tabPane3);
+                }
+
+            } catch (Exception e){}
         }
     }
 
@@ -1873,13 +1788,13 @@ public class Controller {
             TextField hourField = new TextField(); hourField.setPrefHeight(30); hourField.setPrefWidth(40);
             hourField.setTranslateX(20); hourField.setTranslateY(300);
             hourField.setPromptText("hh");
-            hourField.setId("hourField");
+            hourField.setId("hourFieldLower");
 
             Label colon = new Label(":");
             colon.setTranslateX(60); colon.setTranslateY(300);
 
             TextField minuteField = new TextField(); minuteField.setPrefHeight(30); minuteField.setPrefWidth(40);
-            minuteField.setId("minuteField");
+            minuteField.setId("minuteFieldLower");
             minuteField.setTranslateX(70); minuteField.setTranslateY(300);
             minuteField.setPromptText("mm");
 
@@ -1889,20 +1804,54 @@ public class Controller {
             TextField hourField2 = new TextField(); hourField2.setPrefHeight(30); hourField2.setPrefWidth(40);
             hourField2.setTranslateX(140); hourField2.setTranslateY(300);
             hourField2.setPromptText("hh");
-            hourField2.setId("hourField");
+            hourField2.setId("hourFieldUpper");
 
             Label colon2 = new Label(":");
             colon2.setTranslateX(185); colon2.setTranslateY(300);
 
             TextField minuteField2 = new TextField(); minuteField2.setPrefHeight(30); minuteField2.setPrefWidth(40);
-            minuteField2.setId("minuteField");
+            minuteField2.setId("minuteFieldUpper");
             minuteField2.setTranslateX(190); minuteField2.setTranslateY(300);
             minuteField2.setPromptText("mm");
 
             Button setInterval = new Button("Set");
             setInterval.setTranslateX(240); setInterval.setTranslateY(300);
-            setInterval.setOnAction(e->
-                    System.out.println("set time"));
+            setInterval.setOnAction(e->{
+
+                System.out.println("set time");
+
+                int hlb = Integer.parseInt(hourField.getText());
+                int mlb = Integer.parseInt(minuteField.getText());
+                int hub = Integer.parseInt(hourField2.getText());
+                int mub = Integer.parseInt(minuteField2.getText());
+
+                boolean hourLowerBoundOkay = (hlb >= 0 && hlb < 24);
+                boolean minuteLowerBoundOkay = (mlb >= 0 && mlb < 60);
+                boolean hourUpperBoundOkay = (hub >= 0 && hub < 24);
+                boolean minuteUpperBoundOkay = (mub >= 0 && mub < 60);
+                boolean boundsOkay = (hourLowerBoundOkay && minuteLowerBoundOkay &&
+                        hourUpperBoundOkay && minuteUpperBoundOkay);
+
+                if (boundsOkay) {
+                    Main.shpModule.setAwayLightsHourLower(hlb);
+                    Main.shpModule.setAwayLightsMinuteLower(mlb);
+                    Main.shpModule.setAwayLightsHourUpper(hub);
+                    Main.shpModule.setAwayLightsMinuteUpper(mub);
+
+                    hourField.clear();
+                    hourField.setPromptText(hlb + "");
+                    minuteField.clear();
+                    minuteField.setPromptText(mlb + "");
+                    hourField2.clear();
+                    hourField2.setPromptText(hub + "");
+                    minuteField2.clear();
+                    minuteField2.setPromptText(mub + "");
+
+                    System.out.println(
+                            Main.shpModule.getAwayLightsHourLower() + ":" + Main.shpModule.getAwayLightsMinuteLower() + "-->" +
+                                    Main.shpModule.getAwayLightsHourUpper() + ":" + Main.shpModule.getAwayLightsMinuteUpper());
+                }
+            });
 
             Label from = new Label("Keep lights on from");
             from.setTranslateX(20); from.setTranslateY(260);
@@ -1977,7 +1926,6 @@ public class Controller {
         }
     }
 
-    /**TODO: append all messages to an output log text file*/
     /**
      * Append messages, generated by either user actions or modules, to the output console
      * @param message
@@ -2009,7 +1957,6 @@ public class Controller {
         catch (Exception e){}
     }
 
-    /**TODO: FIX ANY BUGS IN THIS METHOD*/
     /**
      * Configure the speed of the simulation time
      * @param multiplier
@@ -2089,6 +2036,103 @@ public class Controller {
             CurrentDateSimulation(finalDatePick, finalSimDateLabel,
                     finalSimTimeLabel, finalHourF, finalMinuteF, Multiplier);
         });
+    }
+
+    /**
+     * Unlock a pre-selected array of Lights while keeping them to a state of choice
+     * @param state
+     */
+    public static void awayModeAutoSwitchAndLockCustomLightsCHOICE(boolean state) {
+        for (int room = 0; room < Main.householdLocations.length; room++) {
+            try {
+                for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
+                    try {
+                        for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
+                            try {
+                                if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
+                                        Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
+                                    CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
+                                    if (checkBox.isSelected()) {
+                                        Main.householdLocations[room].getLightCollection()[light].setState(state);
+                                        Main.householdLocations[room].getLightCollection()[light].setLocked(false);
+                                        Controller.appendMessageToConsole("SHP -- Light #" +
+                                                Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
+                                                Main.householdLocations[room].getName() + " unlocked by SHP.");
+                                        Main.house.setIconVisibility(Main.householdLocations[room], "Light", state);
+                                    }
+                                }
+                            } catch (Exception e) {}
+                        }
+                    } catch (Exception e) {}
+                }
+            }
+            catch (Exception e){}
+        }
+    }
+
+    /**
+     * Automatically unlock and turn off a pre-selected array of Lights
+     */
+    public static void awayModeAutoSwitchAndLockCustomLightsOFF() {
+        for (int room = 0; room < Main.householdLocations.length; room++) {
+            try {
+                for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
+                    try {
+                        for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
+                            try {
+                                if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
+                                        Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
+                                    CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
+                                    if (checkBox.isSelected()) {
+                                        Main.householdLocations[room].getLightCollection()[light].setState(false);
+                                        Main.householdLocations[room].getLightCollection()[light].setLocked(false);
+                                        Controller.appendMessageToConsole("SHP -- Light #" +
+                                                Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
+                                                Main.householdLocations[room].getName() + " unlocked by SHP.");
+                                        Main.house.setIconVisibility(Main.householdLocations[room], "Light", false);
+                                    }
+                                }
+                            } catch (Exception e) {}
+                        }
+                    } catch (Exception e) {}
+                }
+            }
+            catch (Exception e){}
+        }
+    }
+
+    /**
+     * Automatically lock and turn on a pre-selected array of Lights
+     */
+    public static void awayModeAutoSwitchAndLockCustomLightsON() {
+        for (int room = 0; room < Main.householdLocations.length; room++) {
+            try {
+                for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
+                    try {
+                        for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
+                            try {
+                                if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
+                                        Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
+                                    CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
+                                    if (checkBox.isSelected()) {
+                                        Main.householdLocations[room].getLightCollection()[light].setState(true);
+                                        Main.householdLocations[room].getLightCollection()[light].setLocked(true);
+                                        Controller.appendMessageToConsole("SHP -- Light #" +
+                                                Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
+                                                Main.householdLocations[room].getName() + " locked by SHP.");
+
+                                        try{
+                                            Main.house.setIconVisibility(Main.householdLocations[room], "Light", true);
+                                        }catch (Exception e){}
+                                    }
+                                }
+                            } catch (Exception e) {}
+                        }
+                    } catch (Exception e) {}
+                }
+            }
+            catch (Exception e){}
+        }
     }
 
 }

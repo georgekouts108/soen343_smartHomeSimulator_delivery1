@@ -733,43 +733,65 @@ public class House {
     public void setIconVisibility(Room room, String utilityType, boolean isVisible) {
         try {
             for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {
-                if (this.layout.getChildren().get(lay).getId().equals("roomLayoutID"+room.getRoomID())) {
-                    /////////////
-                    AnchorPane room_layout = (AnchorPane) this.layout.getChildren().get(lay);
+                try {
+                    if (this.layout.getChildren().get(lay).getId().equals("roomLayoutID" + room.getRoomID())) {
+                        /////////////
+                        AnchorPane room_layout = (AnchorPane) this.layout.getChildren().get(lay);
 
-                    if (utilityType.equals("Light")) { room.setIconLightVisibility(isVisible); }
-                    else if (utilityType.equals("Window")) { room.setIconWindowVisibility(isVisible); }
-                    else if (utilityType.equals("Door")) { room.setIconDoorVisibility(isVisible); }
-                    else if (utilityType.equals("MD")) {
-                        room.setIconMDVisibility(isVisible);
-                        if (SHSHelpers.isIs_away()) {
-                            if (isVisible) {
-                                room_layout.setStyle("-fx-background-color:red;-fx-border-color:black;");
+                        if (utilityType.equals("Light")) {
+                            room.setIconLightVisibility(isVisible);
+                        } else if (utilityType.equals("Window")) {
+                            room.setIconWindowVisibility(isVisible);
+                        } else if (utilityType.equals("Door")) {
+                            room.setIconDoorVisibility(isVisible);
+                        } else if (utilityType.equals("MD")) {
+                            room.setIconMDVisibility(isVisible);
+                            if (SHSHelpers.isIs_away()) {
+                                if (isVisible) {
+                                    room_layout.setStyle("-fx-background-color:red;-fx-border-color:black;");
+                                } else {
+                                    room_layout.setStyle("-fx-border-color:black;");
+                                }
                             }
-                            else {
-                                room_layout.setStyle("-fx-border-color:black;");
-                            }
+                        } else if (utilityType.equals("AC")) {
+                            room.setIconACVisibility(isVisible);
                         }
-                    }
-                    else if (utilityType.equals("AC")) { room.setIconACVisibility(isVisible); }
 
-                    for (int l = 0; l < room_layout.getChildren().size(); l++) {
-                        if ((room_layout.getChildren().get(l).getId().equals("icon"+utilityType+"ViewRoom#"+room.getRoomID()))) {
-                            if (utilityType.equals("Light")) { room_layout.getChildren().set(l, room.getIconLight_view()); }
-                            else if (utilityType.equals("Window")) { room_layout.getChildren().set(l, room.getIconWindow_view()); }
-                            else if (utilityType.equals("Door")) { room_layout.getChildren().set(l, room.getIconDoor_view()); }
-                            else if (utilityType.equals("MD")) { room_layout.getChildren().set(l, room.getIconMD_view()); }
-                            else if (utilityType.equals("AC")) { room_layout.getChildren().set(l, room.getIconAC_view()); }
-                            break;
+                        for (int l = 0; l < room_layout.getChildren().size(); l++) {
+                            try {
+                                if ((room_layout.getChildren().get(l).getId().equals("icon" + utilityType + "ViewRoom#" + room.getRoomID()))) {
+
+                                    if (utilityType.equals("Light")) {
+                                        room_layout.getChildren().set(l, room.getIconLight_view());
+                                    }
+                                    else if (utilityType.equals("Window")) {
+                                        room_layout.getChildren().set(l, room.getIconWindow_view());
+                                    }
+                                    else if (utilityType.equals("Door")) {
+                                        room_layout.getChildren().set(l, room.getIconDoor_view());
+                                    }
+                                    else if (utilityType.equals("MD")) {
+                                        room_layout.getChildren().set(l, room.getIconMD_view());
+                                    }
+                                    else if (utilityType.equals("AC")) {
+                                        room_layout.getChildren().set(l, room.getIconAC_view());
+                                    }
+                                    break;
+                                }
+                            } catch (Exception e){ System.out.println("EXCEPTION 3:"+e.getMessage());}
                         }
-                    }
 
-                    this.layout.getChildren().set(lay, room_layout);
-                    /////////////
-                    break;
+                        this.layout.getChildren().set(lay, room_layout);
+                        /////////////
+                        break;
+                    }
                 }
+                catch (Exception e){System.out.println("EXCEPTION 2:"+e.getMessage());}
             }
-        }catch (Exception ex){}
+        }
+        catch (Exception ex){
+            System.out.println("EXCEPTION 1:"+ex.getMessage());
+        }
     }
 
     /**

@@ -146,6 +146,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        shpModule.startTimeBoundaryThread();
+
         logFile = new File("src/log.txt");
         if (logFile.exists()) {
             logFile.createNewFile();
