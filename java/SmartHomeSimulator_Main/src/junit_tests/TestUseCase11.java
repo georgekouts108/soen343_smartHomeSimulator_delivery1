@@ -32,10 +32,10 @@ import org.testfx.framework.junit.*;
  */
 public class TestUseCase11 extends ApplicationTest {
     // Users for each type
-    private UserProfile child = new UserProfile("child");
-    private UserProfile parent = new UserProfile("parent");
-    private UserProfile guest = new UserProfile("guest");
-    private UserProfile stranger = new UserProfile("stranger");
+//    private UserProfile child = new UserProfile("child");
+//    private UserProfile parent = new UserProfile("parent");
+//    private UserProfile guest = new UserProfile("guest");
+//    private UserProfile stranger = new UserProfile("stranger");
 
     /**todo: implement*/
     // Permissions testing

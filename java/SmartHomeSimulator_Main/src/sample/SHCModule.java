@@ -67,8 +67,10 @@ public class SHCModule extends Module {
                                 break;
                             }
                         }
-                        catch (Exception ex) {}
+                        catch (Exception ex) { }
                     }
+
+
                 });
                 pane.getChildren().add(roomButton);
             }

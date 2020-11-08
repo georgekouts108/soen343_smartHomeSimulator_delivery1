@@ -19,9 +19,6 @@ public class House {
     private Room[] rooms;
     private AnchorPane layout;
     private String location;
-    private String currentType;
-    private String currentLocation;
-    private UserProfile currentProfile;
 
     /**
      * Constructor for the House class
@@ -152,9 +149,6 @@ public class House {
         roomLayout.setPrefWidth(225); roomLayout.setPrefHeight(350);
         roomLayout.setStyle("-fx-border-color:#000000");
 
-        currentProfile = Main.getCurrentActiveProfile();
-        currentLocation = currentProfile.getCurrentLocation().getName().toLowerCase();
-
         int ID = room.getRoomID();
         String name = room.getName();
 
@@ -212,7 +206,8 @@ public class House {
                         if (room.getLightCollection()[light].getUtilityID() == Integer.parseInt(checkBox.getId().substring(16))) {
 
                             //if user has light permissions or has location permissions and is currently in the room
-                            if(currentProfile.getPermLights() == true || (currentProfile.getPermLightsLocation() == true && currentLocation == room.getName())){
+                            if(Main.getCurrentActiveProfile().getPermLights() == true || (Main.getCurrentActiveProfile().getPermLightsLocation() == true
+                                    && SHSHelpers.getCurrentLocation().getName().toLowerCase() == room.getName())){
                                 room.getLightCollection()[light].setState(true);
                                 Controller.appendMessageToConsole("SHC -- Light #"+room.getLightCollection()[light].getUtilityID()+" opened in Room #"+room.getRoomID()+" "+room.getName()+" by user");
                                 break;
@@ -232,7 +227,8 @@ public class House {
                             if (!room.getLightCollection()[light].isLocked()) {
 
                                 //if user has light permissions or has location permissions and is currently in the room
-                                if(currentProfile.getPermLights() == true || (currentProfile.getPermLightsLocation() == true && currentLocation == room.getName())){
+                                if(Main.getCurrentActiveProfile().getPermLights() == true || (Main.getCurrentActiveProfile().getPermLightsLocation() == true &&
+                                        SHSHelpers.getCurrentLocation().getName().toLowerCase() == room.getName())){
                                     room.getLightCollection()[light].setState(false);
                                     Controller.appendMessageToConsole("SHC -- Light #"+room.getLightCollection()[light].getUtilityID()+" closed in Room #"+room.getRoomID()+" "+room.getName() + " by user");
                                 }
@@ -289,7 +285,8 @@ public class House {
                             if (!room.getWindowCollection()[win].isBlocked()) {
 
                                 //if user has window permissions or has location permissions and is currently in the room
-                                if(currentProfile.getPermWindows() == true || (currentProfile.getPermWindowsLocation() == true && currentLocation == room.getName())) {
+                                if(Main.getCurrentActiveProfile().getPermWindows() == true || (Main.getCurrentActiveProfile().getPermWindowsLocation() == true &&
+                                        SHSHelpers.getCurrentLocation().getName().toLowerCase() == room.getName())) {
                                     room.getWindowCollection()[win].setState(true);
                                     Controller.appendMessageToConsole("SHC -- Window #" + room.getWindowCollection()[win].getUtilityID() + " opened in Room #" + room.getRoomID() + " " + room.getName() + " by user");
                                 }
@@ -313,7 +310,8 @@ public class House {
                             if (!room.getWindowCollection()[win].isBlocked()) {
 
                                 //if user has window permissions or has location permissions and is currently in the room
-                                if(currentProfile.getPermWindows() == true || (currentProfile.getPermWindowsLocation() == true && currentLocation == room.getName())) {
+                                if(Main.getCurrentActiveProfile().getPermWindows() == true || (Main.getCurrentActiveProfile().getPermWindowsLocation() == true &&
+                                        SHSHelpers.getCurrentLocation().getName().toLowerCase() == room.getName())) {
                                     room.getWindowCollection()[win].setState(false);
                                     Controller.appendMessageToConsole("Window #" + room.getWindowCollection()[win].getUtilityID() + " closed in Room #" + room.getRoomID() + " " + room.getName());
                                 }
@@ -370,7 +368,8 @@ public class House {
                             if (!room.getDoorCollection()[door].isLocked()) {
 
                                 //if user has door permissions or has location permissions and is currently in the room
-                                if(currentProfile.getPermDoors() == true || (currentProfile.getPermDoorsLocation() == true && currentLocation == room.getName())) {
+                                if(Main.getCurrentActiveProfile().getPermDoors() == true || (Main.getCurrentActiveProfile().getPermDoorsLocation() == true &&
+                                        SHSHelpers.getCurrentLocation().getName().toLowerCase() == room.getName())) {
                                     room.getDoorCollection()[door].setState(true);
                                     Controller.appendMessageToConsole("SHC -- Door #" + room.getDoorCollection()[door].getUtilityID() + " opened in Room #" + room.getRoomID() + " " + room.getName() + " by user");
                                 }
@@ -394,7 +393,8 @@ public class House {
                             if (!room.getDoorCollection()[door].isLocked()) {
 
                                 //if user has door permissions or has location permissions and is currently in the room
-                                if(currentProfile.getPermDoors() == true || (currentProfile.getPermDoorsLocation() == true && currentLocation == room.getName())) {
+                                if(Main.getCurrentActiveProfile().getPermDoors() == true || (Main.getCurrentActiveProfile().getPermDoorsLocation() == true &&
+                                        SHSHelpers.getCurrentLocation().getName().toLowerCase() == room.getName())) {
                                     room.getDoorCollection()[door].setState(false);
                                 }
                                 else{
@@ -452,7 +452,8 @@ public class House {
 
         doorLock.setOnAction(e->{
             if (doorLock.isSelected()) {
-                if(currentProfile.getPermDoors() == true || (currentProfile.getPermDoorsLocation() == true && currentLocation == room.getName())) {
+                if(Main.getCurrentActiveProfile().getPermDoors() == true || (Main.getCurrentActiveProfile().getPermDoorsLocation() == true &&
+                        SHSHelpers.getCurrentLocation().getName().toLowerCase() == room.getName())) {
                     doorLock.setText("Unlock");
 
                     for (int l = 0; l < room.getDoorCollection().length; l++) {
@@ -487,7 +488,8 @@ public class House {
                 }
             }
             else {
-                if(currentProfile.getPermDoors() == true || (currentProfile.getPermDoorsLocation() == true && currentLocation == room.getName())) {
+                if(Main.getCurrentActiveProfile().getPermDoors() == true || (Main.getCurrentActiveProfile().getPermDoorsLocation() == true &&
+                        SHSHelpers.getCurrentLocation().getName().toLowerCase() == room.getName())) {
                     doorLock.setText("Lock");
                     for (int d = 0; d < room.getDoorCollection().length; d++) {
                         for (int cb = 0; cb < roomLayout.getChildren().size(); cb++) {
@@ -599,7 +601,8 @@ public class House {
             acCheckbox.setOnAction(e->{
                 if (acCheckbox.isSelected()) {
 
-                    if(currentProfile.getPermAC() == true || (currentProfile.getPermACLocation() == true && currentLocation == room.getName())) {
+                    if(Main.getCurrentActiveProfile().getPermAC() == true || (Main.getCurrentActiveProfile().getPermACLocation() == true
+                            && SHSHelpers.getCurrentLocation().getName().toLowerCase() == room.getName())) {
                         room.getAc().setState(true);
 
                         boolean isAcIconThere = false;
@@ -618,7 +621,8 @@ public class House {
                     }
                 }
                 else {
-                    if(currentProfile.getPermAC() == true || (currentProfile.getPermACLocation() == true && currentLocation == room.getName())) {
+                    if(Main.getCurrentActiveProfile().getPermAC() == true || (Main.getCurrentActiveProfile().getPermACLocation() == true &&
+                            SHSHelpers.getCurrentLocation().getName().toLowerCase() == room.getName())) {
                         room.getAc().setState(false);
                         setIconVisibility(room, "AC", false);
                         Controller.appendMessageToConsole("SHC -- AC turned off in Room #" + room.getRoomID() + " " + room.getName());

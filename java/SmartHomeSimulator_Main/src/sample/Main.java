@@ -141,6 +141,10 @@ public class Main extends Application {
      */
     public static AnchorPane getMain_dashboard() {return main_dashboard;}
 
+    /**
+     * Access the current active profile
+     * @return
+     */
     public static UserProfile getCurrentActiveProfile() {
         return currentActiveProfile;
     }
@@ -160,7 +164,6 @@ public class Main extends Application {
             logFile.createNewFile();
         }
         fileWriter = new FileOutputStream(logFile);
-
 
         main_stage = primaryStage;
         main_stage.setResizable(false);
@@ -196,11 +199,15 @@ public class Main extends Application {
         main_stage.setScene(dashboardScene);
         main_stage.show();
 
-        String profilesTxt = "C:\\Users\\Lucas\\IdeaProjects\\soen343_smartHome_delivery1\\profiles.txt";
+        String profilesTxt = "src/profiles.txt";
         loadProfilesFromFile(profilesTxt);
     }
 
     //need to rewrite based on perms
+    /**
+     * Load profiles from a file with pre-saved permissions
+     * @param file
+     */
     public static void loadProfilesFromFile(String file){
 
         File profiles = new File(file);

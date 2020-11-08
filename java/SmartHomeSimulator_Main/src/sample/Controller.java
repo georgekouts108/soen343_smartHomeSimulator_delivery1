@@ -57,7 +57,7 @@ public class Controller {
     protected static CheckBox[] roomCheckboxes;
     protected static Thread simulationTimeThread = null;
 
-    //for LOCAL TIME
+
     /**
      * Display the local date and time in the main dashboard
      * @param dateText
@@ -90,7 +90,6 @@ public class Controller {
      * @param hourField
      * @param minuteField
      */
-    //to fix: undo previous thread when new one is created
     public static void CurrentDateSimulation(DatePicker datePicker, Label dateText, Label timeText, TextField hourField, TextField minuteField, float timeSpeed){
         try{
             int second = 0;
@@ -1208,7 +1207,18 @@ public class Controller {
         }
     }
 
-    //overload method for loading profiles from file
+    /**
+     * Create a new profile with pre-specified permissions
+     * @param newType
+     * @param pL
+     * @param pLL
+     * @param pD
+     * @param pDL
+     * @param pW
+     * @param pWL
+     * @param pAC
+     * @param pACL
+     */
     public static void createNewProfile(String newType, boolean pL, boolean pLL, boolean pD, boolean pDL, boolean pW, boolean pWL, boolean pAC, boolean pACL) {
 
         UserProfile newProfile;
@@ -1271,10 +1281,14 @@ public class Controller {
         }
     }
 
+    /**
+     * Save profile information in a file
+     * @param newProfile
+     */
     private static void saveProfileToFile(UserProfile newProfile) {
         try{
-
-            File file =new File("C:\\Users\\Lucas\\IdeaProjects\\soen343_smartHome_delivery1\\profiles.txt");
+            /**todo: put the 'profiles.txt' file is src directory*/
+            File file =new File("src/profiles.txt");
 
             if(!file.exists()){
                 file.createNewFile();

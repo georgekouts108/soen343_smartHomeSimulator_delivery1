@@ -1,0 +1,7 @@
+parent,false,false,false,false,false,false,false,false
+parent,true,false,false,false,false,false,false,false
+child,true,false,true,false,true,false,false,false
+parent,true,false,true,false,true,false,false,false
+parent,false,false,false,false,false,false,false,false
+parent,false,false,false,false,false,false,false,false
+parent,false,false,false,false,false,false,false,false

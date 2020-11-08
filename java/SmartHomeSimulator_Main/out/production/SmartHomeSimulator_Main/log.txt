@@ -1,0 +1,4 @@
+2020-11-08 17:29:43 -- SHC -- Light #25 opened in Room #3 living room by user
+2020-11-08 17:29:44 -- SHC -- Window #28 opened in Room #3 living room by user
+2020-11-08 17:29:44 -- Window #28 closed in Room #3 living room
+2020-11-08 17:29:45 -- SHC -- Light #25 closed in Room #3 living room by user

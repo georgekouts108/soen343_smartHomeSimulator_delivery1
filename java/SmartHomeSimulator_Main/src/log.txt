@@ -1,0 +1,5 @@
+2020-11-08 17:31:14 -- SHC -- Light #5 opened in Room #1 masterbedroom by user
+2020-11-08 17:31:16 -- SHC -- Light #5 closed in Room #1 masterbedroom by user
+2020-11-08 17:31:22 -- ERROR: You can only manually control M.D's in AWAY mode.
+2020-11-08 17:31:26 -- SHC -- Window #10 opened in Room #1 masterbedroom by user
+2020-11-08 17:31:28 -- Window #10 closed in Room #1 masterbedroom
