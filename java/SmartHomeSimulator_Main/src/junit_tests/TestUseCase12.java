@@ -29,6 +29,7 @@ import org.testfx.framework.junit.*;
 
 public class TestUseCase12 extends ApplicationTest {
     // Alert authorities time test
+
     @org.junit.Test
     public void alertAuthorities(){
         SHPModule shp = new SHPModule();
