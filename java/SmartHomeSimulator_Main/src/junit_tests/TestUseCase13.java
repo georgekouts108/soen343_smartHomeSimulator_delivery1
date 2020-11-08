@@ -29,10 +29,16 @@ import java.util.Scanner;
 
 import org.testfx.framework.junit.*;
 
+/**
+ * Test class for testing the opening and closing of doors, windows, and lights
+ */
 public class TestUseCase13 extends ApplicationTest {
     // SHC unit testing
     boolean awaymode = true;
 
+    /**
+     * Test case 1 for controlling lights
+     */
     @org.junit.Test
     public void LightControl(){
         try{
@@ -51,6 +57,9 @@ public class TestUseCase13 extends ApplicationTest {
         }
     }
 
+    /**
+     * Test case 2 for controlling lights
+     */
     @org.junit.Test
     public void LightControlFail(){
         try{
@@ -69,6 +78,9 @@ public class TestUseCase13 extends ApplicationTest {
         }
     }
 
+    /**
+     * Test case 1 for controlling windows
+     */
     @org.junit.Test
     public void WindowControl(){
         try{
@@ -87,6 +99,9 @@ public class TestUseCase13 extends ApplicationTest {
         }
     }
 
+    /**
+     * Test case 2 for controlling windows
+     */
     @org.junit.Test
     public void WindowControlFail(){
         try{
@@ -105,6 +120,9 @@ public class TestUseCase13 extends ApplicationTest {
         }
     }
 
+    /**
+     * Test case for controlling doors
+     */
     @org.junit.Test
     public void DoorControl(){
         try{
@@ -123,6 +141,9 @@ public class TestUseCase13 extends ApplicationTest {
         }
     }
 
+    /**
+     * Test case 2 for controlling doors
+     */
     @org.junit.Test
     public void DoorControlFail(){
         try{

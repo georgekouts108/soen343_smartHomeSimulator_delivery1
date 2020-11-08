@@ -39,6 +39,9 @@ import sample.Main.*;
 
 //import static sample.SHPModule.setTimeToAlert;
 
+/**
+ * Controller class for Smart Home Simulator
+ */
 public class Controller {
 
     protected static int pixelY = 70;
