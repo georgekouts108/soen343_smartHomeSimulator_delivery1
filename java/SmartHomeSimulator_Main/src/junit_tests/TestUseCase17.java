@@ -28,14 +28,23 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
+/**
+ * Class for testing use case #17
+ */
 public class TestUseCase17 extends ApplicationTest {
 
+    /**
+     * Test for setting the Away mode to on
+     */
     @org.junit.Test
     public void setAwayMode() {
         SHSHelpers.setIs_away(true);
         Assert.assertTrue(SHSHelpers.isIs_away());
     }
 
+    /**
+     * Test for setting the Away mode to off
+     */
     @org.junit.Test
     public void setAwayModeFail() {
         SHSHelpers.setIs_away(false);

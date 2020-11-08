@@ -8,8 +8,14 @@ import javafx.scene.text.TextAlignment;
 
 import java.util.Observable;
 
+/**
+ * SHS module class
+ */
 public class SHSModule extends Module {
 
+    /**
+     * SHS Constructor
+     */
     public SHSModule() {
         super();
     }

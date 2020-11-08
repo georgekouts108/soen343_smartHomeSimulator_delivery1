@@ -16,6 +16,10 @@ import java.io.File;
 
 import sample.*;
 
+/**
+ * Class with accessor and mutator methods for the application's
+ * graphics or elements to help especially with any JUnit tests
+ */
 public class SHSHelpers {
 
     public static SHCModule getShcModuleObject() {

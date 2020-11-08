@@ -2,6 +2,9 @@ package utilities;
 
 import house.*;
 
+/**
+ * AirConditioner utility class
+ */
 public class AirConditioner extends Utility {
 
     private double temperatureSetting; // the temperature level of the A.C. (in Celcius)

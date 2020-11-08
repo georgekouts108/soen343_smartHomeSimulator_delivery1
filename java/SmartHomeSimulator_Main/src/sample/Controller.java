@@ -52,7 +52,6 @@ public class Controller {
     protected static int numberOfAddedProfiles = 0;
     protected static CheckBox[] profileCheckboxes;
     protected static CheckBox[] roomCheckboxes;
-
     protected static Thread simulationTimeThread = null;
 
     //for LOCAL TIME

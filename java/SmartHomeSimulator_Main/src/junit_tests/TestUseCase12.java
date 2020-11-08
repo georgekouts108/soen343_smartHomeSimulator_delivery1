@@ -27,9 +27,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
+/**
+ * Class for testing use case #12
+ */
 public class TestUseCase12 extends ApplicationTest {
     // Alert authorities time test
 
+    /**
+     * Test the configuration of the time before alerting authorities during Away mode
+     */
     @org.junit.Test
     public void setTimeBeforeAlertAuthorities(){
         SHPModule shp = new SHPModule();

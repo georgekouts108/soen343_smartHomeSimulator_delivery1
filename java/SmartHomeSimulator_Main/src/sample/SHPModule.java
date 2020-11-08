@@ -9,22 +9,25 @@ import javafx.scene.text.Text;
 import java.time.LocalTime;
 import java.util.Observable;
 
+/**
+ * SHP Module class
+ */
 public class SHPModule extends Module {
 
     private int awayLightsHourLower;
     private int awayLightsMinuteLower;
     private int awayLightsHourUpper;
     private int awayLightsMinuteUpper;
-
     private int numberOfMDsOn;
-
     private Thread alertTimeThread;
     private boolean isAlertTimeThreadRunning;
     private static int timeToAlert = 0;
-
     private Thread localTimeAwayLightBoundaryCheckThread;
     private boolean localTimeAwayLightInRange;
 
+    /**
+     * SHP Module constructor
+     */
     public SHPModule() {
         super();
         this.numberOfMDsOn = 0;
@@ -38,49 +41,105 @@ public class SHPModule extends Module {
         awayLightsMinuteUpper = 0;
     }
 
+    /**
+     * Return the lower hour boundary for when lights should be automatically turned on for during Away mode
+     * @return
+     */
     public int getAwayLightsHourLower() {
         return awayLightsHourLower;
     }
+
+    /**
+     * Return the upper hour boundary for when lights should be automatically turned on for during Away mode
+     * @return
+     */
     public int getAwayLightsHourUpper() {
         return awayLightsHourUpper;
     }
+
+    /**
+     * Set the upper hour boundary for when lights should be automatically turned on for during Away mode
+     * @param awayLightsHourUpper
+     */
     public void setAwayLightsHourUpper(int awayLightsHourUpper) {
         this.awayLightsHourUpper = awayLightsHourUpper;
     }
+
+    /**
+     * Set the lower hour boundary for when lights should be automatically turned on for during Away mode
+     * @param awayLightsHourLower
+     */
     public void setAwayLightsHourLower(int awayLightsHourLower) {
         this.awayLightsHourLower = awayLightsHourLower;
     }
+
+    /**
+     * Return the lower minute boundary for when lights should be automatically turned on for during Away mode
+     * @return
+     */
     public int getAwayLightsMinuteLower() {
         return awayLightsMinuteLower;
     }
+
+    /**
+     * Set the lower minute boundary for when lights should be automatically turned on for during Away mode
+     * @param awayLightsMinuteLower
+     */
     public void setAwayLightsMinuteLower(int awayLightsMinuteLower) {
         this.awayLightsMinuteLower = awayLightsMinuteLower;
     }
+
+    /**
+     * Return the upper minute boundary for when lights should be automatically turned on for during Away mode
+     * @return
+     */
     public int getAwayLightsMinuteUpper() {
         return awayLightsMinuteUpper;
     }
+
+    /**
+     * Set the upper minute boundary for when lights should be automatically turned on for during Away mode
+     * @param awayLightsMinuteUpper
+     */
     public void setAwayLightsMinuteUpper(int awayLightsMinuteUpper) {
         this.awayLightsMinuteUpper = awayLightsMinuteUpper;
     }
 
+    /**
+     * Configure the amount of time before alerting authorities
+     * @param time
+     */
     public static void setTimeToAlert(int time){
         timeToAlert = time;
     }
 
+    /**
+     * Return the amount of time before alerting authorities
+     * @return
+     */
     public static int getTimeToAlert(){
         return timeToAlert;
     }
 
+    /**
+     * Increment the number of motion detectors currently activated
+     */
     public void incrementNumberOfMDsOn() {
         this.numberOfMDsOn++;
     }
 
+    /**
+     * Decrement the number of motion detectors currently activated
+     */
     public void decrementNumberOfMDsOn() {
         this.numberOfMDsOn--;
     }
 
+    /**
+     * Return the current number of motion detectors on in the house
+     * @return
+     */
     public int getNumberOfMDsOn(){return numberOfMDsOn;};
-
 
     /**
      * Generate a module by creating and returning a local AnchorPane

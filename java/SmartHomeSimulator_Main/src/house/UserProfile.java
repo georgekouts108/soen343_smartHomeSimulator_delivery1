@@ -2,10 +2,12 @@ package house;
 import sample.*;
 import utilities.*;
 
+/**
+ * User profile class
+ */
 public class UserProfile {
 
     private static int PROFILE_ID = 1;
-
     private String type; // 'parent', 'child', 'guest', or 'stranger'
     private boolean loggedIn;
     private int profileID;

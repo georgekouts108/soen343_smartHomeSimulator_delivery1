@@ -34,6 +34,10 @@ import org.testfx.framework.junit.*;
 public class TestUseCase18 extends ApplicationTest {
     /**todo: implement*/
 
+    /**
+     * Test for notifying users when motion detectors are triggered during Away mode
+     * @throws FileNotFoundException
+     */
     @org.junit.Test
     public void testCase18() throws FileNotFoundException {
 

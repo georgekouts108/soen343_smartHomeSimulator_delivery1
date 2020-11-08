@@ -2,6 +2,9 @@ package sample;
 
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * Abstract class for Modules
+ */
 public abstract class Module {
 
     /**

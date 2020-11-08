@@ -8,8 +8,14 @@ import javafx.stage.Stage;
 
 import java.util.Observable;
 
+/**
+ * SHC Module class
+ */
 public class SHCModule extends Module {
 
+    /**
+     * SHC Constructor
+     */
     public SHCModule() {
         super();
     }

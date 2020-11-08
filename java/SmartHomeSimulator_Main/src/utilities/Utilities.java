@@ -2,6 +2,9 @@ package utilities;
 import house.*;
 import sample.*;
 
+/**
+ * Interface for Utilities
+ */
 public interface Utilities {
 
     /**

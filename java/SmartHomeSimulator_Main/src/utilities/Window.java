@@ -1,6 +1,9 @@
 package utilities;
 import house.*;
 
+/**
+ * Window utility class
+ */
 public class Window extends Utility {
 
     private Sensor sensor; // a window's sensor

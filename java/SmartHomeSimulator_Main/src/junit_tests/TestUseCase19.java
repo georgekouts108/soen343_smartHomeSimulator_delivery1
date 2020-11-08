@@ -33,6 +33,9 @@ import org.testfx.framework.junit.*;
 public class TestUseCase19 extends ApplicationTest {
     /**todo: implement*/
 
+    /**
+     * Test for configuring the speed of the simulation time
+     */
     @org.junit.Test
     public void testCase19() {
 

@@ -27,6 +27,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
+/**
+ * Class for testing use case #20
+ */
 public class TestUseCase20 extends ApplicationTest {
 
     File testLayoutFile;

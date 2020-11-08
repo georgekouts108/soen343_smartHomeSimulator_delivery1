@@ -27,6 +27,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
+/**
+ * Class for testing use case #11
+ */
 public class TestUseCase11 extends ApplicationTest {
     // Users for each type
     private UserProfile child = new UserProfile("child");
@@ -36,22 +39,51 @@ public class TestUseCase11 extends ApplicationTest {
 
     /**todo: implement*/
     // Permissions testing
+
+    /**
+     * Test the permission for users to open windows
+     */
+    @org.junit.Test
     public void WindowPermissions(){
 
-
     }
+
+    /**
+     * Test the denial of users' permission to open windows
+     */
+    @org.junit.Test
     public void WindowPermissionsFail(){
 
     }
+
+    /**
+     * Test the permission for users to open doors
+     */
+    @org.junit.Test
     public void DoorPermissions(){
 
     }
+
+    /**
+     * Test the denial of users' permission to open doors
+     */
+    @org.junit.Test
     public void DoorPermissionsFail(){
 
     }
+
+    /**
+     * Test the permission for users to open lights
+     */
+    @org.junit.Test
     public void LightPermissions(){
 
     }
+
+    /**
+     * Test the denial of users' permission to open lights
+     */
+    @org.junit.Test
     public void LightPermissionsFail(){
 
     }

@@ -5,6 +5,9 @@ import javafx.scene.layout.AnchorPane;
 import utilities.*;
 import sample.*;
 
+/**
+ * Room class
+ */
 public class Room {
 
     private static int ID_count = 1;

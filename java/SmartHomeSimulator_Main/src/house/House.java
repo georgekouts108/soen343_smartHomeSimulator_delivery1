@@ -10,6 +10,9 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * House class
+ */
 public class House {
 
     private int numOfRooms;

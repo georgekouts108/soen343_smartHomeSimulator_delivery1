@@ -39,6 +39,9 @@ import java.util.Locale;
 import java.util.concurrent.*;
 import java.io.*;
 
+/**
+ * Main class for the Smart Home Simulator application
+ */
 public class Main extends Application {
 
     /**FILE I/O */
@@ -82,8 +85,6 @@ public class Main extends Application {
     protected static SHCModule shcModule = new SHCModule();
     protected static SHPModule shpModule = new SHPModule();
     protected static SHHModule shhModule = new SHHModule();
-
-
 
     /**G.U.I ELEMENTS FOR THE MAIN DASHBOARD */
     protected static Button editContextButton;

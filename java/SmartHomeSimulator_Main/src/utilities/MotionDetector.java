@@ -1,8 +1,9 @@
 package utilities;
-
-
 import house.*;
 
+/**
+ * MotionDetector utility class
+ */
 public class MotionDetector extends Utility {
 
     /**

@@ -4,8 +4,14 @@ import javafx.scene.layout.AnchorPane;
 
 import java.util.Observable;
 
+/**
+ * SHH Class
+ */
 public class SHHModule extends Module {
 
+    /**
+     * SHH Constructor
+     */
     public SHHModule() {
         super();
     }

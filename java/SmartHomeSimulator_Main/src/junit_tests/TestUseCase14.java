@@ -27,6 +27,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
+/**
+ * Class for testing use case #14
+ */
 public class TestUseCase14 extends ApplicationTest {
 
     // SHC unit testing
