@@ -148,7 +148,7 @@ public class SHPModule extends Module {
 
         ToggleButton tb = new ToggleButton();
         tb.setId("setAwayModeButton");
-        tb.setText("Turn on AWAY mode");
+        tb.setText("Turn ON Away Mode");
         tb.setTranslateX(250);
         tb.setOnAction(e->sample.Controller.toggleAwayButton(tb));
 

@@ -1482,51 +1482,8 @@ public class Controller {
 
                         // when you relocate a user into the house from outside, AWAY mode is turned off
                         if ((newRoom != null) && SHSHelpers.isIs_away()) {
-                            for (int s = 0; s < Main.SHP_MODULE.getChildren().size(); s++) {
-                                try {
-                                    if (Main.SHP_MODULE.getChildren().get(s).getId().equals("setAwayModeButton")) {
-                                        ToggleButton toggleButton = (ToggleButton) Main.SHP_MODULE.getChildren().get(s);
-                                        toggleButton.setSelected(true);
-                                        toggleButton.fire();
-
-                                        toggleButton.setSelected(false);
-                                        toggleButton.setText("Turn on AWAY mode");
-                                        Main.SHP_MODULE.getChildren().set(s, toggleButton);
-
-                                        appendMessageToConsole("SHP -- AWAY mode automatically turned Off by Edit Sim. Context.");
-
-                                        TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
-                                        Tab innerTab3 = tabPane3.getTabs().get(2);
-                                        innerTab3.setContent(Main.SHP_MODULE);
-                                        tabPane3.getTabs().set(2, innerTab3);
-                                        Main.main_dashboard.getChildren().set(8, tabPane3);
-                                    }
-                                    else if (Main.SHP_MODULE.getChildren().get(s).getId().equals("authAlertTimeBox")) {
-                                        TextField tempTF = (TextField) Main.SHP_MODULE.getChildren().get(s);
-                                        tempTF.setDisable(false);
-                                        Main.SHP_MODULE.getChildren().set(s, tempTF);
-
-                                        TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
-                                        Tab innerTab3 = tabPane3.getTabs().get(2);
-                                        innerTab3.setContent(Main.SHP_MODULE);
-                                        tabPane3.getTabs().set(2, innerTab3);
-                                        Main.main_dashboard.getChildren().set(8, tabPane3);
-                                    }
-                                    else if (Main.SHP_MODULE.getChildren().get(s).getId().equals("alertTimeConfirmButton")) {
-                                        Button tempButton = (Button) Main.SHP_MODULE.getChildren().get(s);
-                                        tempButton.setDisable(false);
-                                        Main.SHP_MODULE.getChildren().set(s, tempButton);
-
-                                        TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
-                                        Tab innerTab3 = tabPane3.getTabs().get(2);
-                                        innerTab3.setContent(Main.SHP_MODULE);
-                                        tabPane3.getTabs().set(2, innerTab3);
-                                        Main.main_dashboard.getChildren().set(8, tabPane3);
-                                    }
-
-                                } catch (Exception e){}
-                            }
-
+                            SHSHelpers.setIs_away(false);
+                            updateSHPModule(false);
                             Main.currentActiveProfile.setAway(false);
 
                             // unlock all doors
@@ -1546,30 +1503,6 @@ public class Controller {
                                         } catch (Exception e) { }
                                     }
                                 }catch (Exception E){}
-                            }
-
-                            // unlock all "locked" lights, so they may be turned off whenever as usual
-                            for (int room = 0; room < Main.householdLocations.length; room++) {
-                                try {
-                                    for (int light = 0; light < Main.householdLocations[room].getLightCollection().length; light++) {
-                                        try {
-                                            for (int i = 0; i < Main.SHP_LightsConfigAWAYmode.getChildren().size(); i++) {
-                                                try {
-                                                    if (Main.SHP_LightsConfigAWAYmode.getChildren().get(i).getId().equals("awayModeLight#" +
-                                                            Main.householdLocations[room].getLightCollection()[light].getUtilityID())) {
-                                                        CheckBox checkBox = (CheckBox) Main.SHP_LightsConfigAWAYmode.getChildren().get(i);
-                                                        if (checkBox.isSelected()) {
-                                                            Main.householdLocations[room].getLightCollection()[light].setLocked(false);
-                                                            appendMessageToConsole("Light #" +
-                                                                    Main.householdLocations[room].getLightCollection()[light].getUtilityID() + " in room " +
-                                                                    Main.householdLocations[room].getName() + " unlocked by SHP module");
-                                                        }
-                                                    }
-                                                } catch (Exception e) { }
-                                            }
-                                        } catch (Exception e) { }
-                                    }
-                                }catch (Exception e){}
                             }
                         }
 
@@ -1614,7 +1547,7 @@ public class Controller {
                             Main.currentActiveProfile.getProfileID() + " \"" + Main.currentActiveProfile.getType().toUpperCase() +
                             "\" {AWAY MODE ON}");
                     appendMessageToConsole("SHP -- AWAY mode set to ON");
-                    tb.setText("Turn off AWAY mode");
+
                     Main.currentActiveProfile.setAway(true);
                     SHSHelpers.setIs_away(true);
 
@@ -1661,7 +1594,7 @@ public class Controller {
                             Main.currentActiveProfile.getProfileID() + " \"" + Main.currentActiveProfile.getType().toUpperCase() +
                             "\" {AWAY MODE OFF}");
                     appendMessageToConsole("SHP -- AWAY mode set to OFF");
-                    tb.setText("Turn on AWAY mode");
+
                     Main.currentActiveProfile.setAway(false);
                     SHSHelpers.setIs_away(false);
 
@@ -1729,7 +1662,14 @@ public class Controller {
                 else if (Main.SHP_MODULE.getChildren().get(s).getId().equals("setAwayModeButton")) {
                     ToggleButton toggleButton = (ToggleButton) Main.SHP_MODULE.getChildren().get(s);
                     toggleButton.setSelected(toggle);
-                    toggleButton.setText("Turn off AWAY mode");
+
+                    if (toggle) {
+                        toggleButton.setText("Turn OFF Away mode");
+                    }
+                    else {
+                        toggleButton.setText("Turn ON Away mode");
+                    }
+
                     Main.SHP_MODULE.getChildren().set(s, toggleButton);
 
                     TabPane tabPane3 = (TabPane) Main.main_dashboard.getChildren().get(8);
