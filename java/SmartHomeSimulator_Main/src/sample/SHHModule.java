@@ -32,9 +32,4 @@ public class SHHModule extends Module {
         Main.numberOfTimesSHHModuleCreated++;
         return null;
     }
-
-    @Override
-    public void update(Observable o, Object arg) {
-
-    }
 }

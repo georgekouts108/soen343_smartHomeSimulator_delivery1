@@ -83,6 +83,8 @@ public class Main extends Application {
     protected static SHPModule shpModule = new SHPModule();
     protected static SHHModule shhModule = new SHHModule();
 
+
+
     /**G.U.I ELEMENTS FOR THE MAIN DASHBOARD */
     protected static Button editContextButton;
     protected static TextArea outputConsole;

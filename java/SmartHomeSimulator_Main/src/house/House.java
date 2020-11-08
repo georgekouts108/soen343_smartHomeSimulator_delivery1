@@ -12,9 +12,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class House {
 
-    private static Thread t;
-    private static boolean isThreadRunning = false;
-
     private int numOfRooms;
     private Room[] rooms;
     private AnchorPane layout;
@@ -515,54 +512,17 @@ public class House {
                         if (mdCheckbox.isSelected()) {
                             room.getMd().setState(true);
                             setIconVisibility(room, "MD", true);
-                            // append this to the suspicious activity log in SHP module instead
-                            Controller.appendMessageToConsole("CRITICAL [SHC]: Motion detector illegitimately triggered in Room #" + room.getRoomID() + " " + room.getName());
-                        } else {
+
+                            Controller.appendMessageToConsole("SHC -- Motion detector triggered in Room #" + room.getRoomID() + " " + room.getName());
+                            SHSHelpers.getShpModuleObject().incrementNumberOfMDsOn();
+                        }
+                        else {
                             room.getMd().setState(false);
                             setIconVisibility(room, "MD", false);
                             Controller.appendMessageToConsole("SHC -- Motion detector disabled in Room #" + room.getRoomID() + " " + room.getName());
+                            SHSHelpers.getShpModuleObject().decrementNumberOfMDsOn();
                         }
-
-                        if (anyMDsOn()) {
-                            Controller.appendMessageToConsole("CRITICAL: One or more motion detectors are illegitimately triggered!!");
-                            /**TODO: implement a method in Controller for setting off the time before alerting authorities*/
-                            // if there are any MD's on in the house,
-                            // call the controller's method to signal the alarm countdown to start
-
-                            final int[] secondsBeforeAlert = {sample.SHPModule.getTimeToAlert() * 60};
-                            sample.Controller.appendMessageToConsole("WARNING: The authorities will be alerted in " + secondsBeforeAlert[0]/60 + " minute(s)...");
-
-                            t = new Thread(() -> {
-                                while (secondsBeforeAlert[0] > 0) {
-                                    secondsBeforeAlert[0] = secondsBeforeAlert[0] - 1;
-                                    try {
-                                        System.out.println(secondsBeforeAlert[0]);
-                                        Thread.sleep(1000);
-                                    } catch (InterruptedException exception) {
-                                        exception.printStackTrace();
-                                    }
-                                }
-                                try {
-                                    sample.Controller.appendMessageToConsole("The authorities have been alerted");
-                                }
-                                catch (Exception ex){}
-                            });
-
-                            if (!isThreadRunning) {
-                                isThreadRunning = true;
-                                t.start();
-                            }
-                        }
-                        else {
-                            Controller.appendMessageToConsole("SHC -- No more M.D's are illegitimately triggered");
-                            /**TODO: implement a method in Controller for stopping the time before alerting authorities*/
-                            // if there are no MD's on in the house, signal the alarm countdown to stop
-                            if (isThreadRunning) {
-                                Controller.appendMessageToConsole("Alarm deactivated.");
-                                isThreadRunning = false;
-                                t.stop();
-                            }
-                        }
+                        SHSHelpers.getShpModuleObject().getNotified();
                     }
                     catch (Exception ex){}
                 }

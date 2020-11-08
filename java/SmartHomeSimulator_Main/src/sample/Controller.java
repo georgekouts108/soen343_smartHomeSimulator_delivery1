@@ -50,6 +50,7 @@ public class Controller {
     protected static CheckBox[] profileCheckboxes;
     protected static CheckBox[] roomCheckboxes;
 
+    protected static Thread simulationTimeThread = null;
 
     //for LOCAL TIME
     /**
@@ -88,8 +89,8 @@ public class Controller {
     public static void CurrentDateSimulation(DatePicker datePicker, Label dateText, Label timeText, TextField hourField, TextField minuteField, float timeSpeed){
         try{
             int second = 0;
-            int minute = 0;
-            int hour = 0;
+            int minute;
+            int hour;
             minute = Integer.parseInt(minuteField.getText());
             hour = Integer.parseInt(hourField.getText());
             for(int i = 0;;i++){
@@ -313,9 +314,11 @@ public class Controller {
             speedButton.setId("timeSpeed");
             speedButton.setTranslateX(600);
             speedButton.setTranslateY(100);
-            speedButton.setOnAction(e -> new Thread(()-> {
-            editTimeSpeed(timeMultiplier.getText());
-            }).start());
+            speedButton.setOnAction(e -> {
+                simulationTimeThread.stop();
+                editTimeSpeed(timeMultiplier.getText()); // reinitialize the thread
+                simulationTimeThread.start();
+            });
 
             //end sim time speed
 
@@ -2075,8 +2078,17 @@ public class Controller {
                 }
             }catch (Exception ex){}
         }
-        CurrentDateSimulation(datePick, simDateLabel,
-                simTimeLabel, hourF, minuteF, Multiplier);
+
+        DatePicker finalDatePick = datePick;
+        Label finalSimDateLabel = simDateLabel;
+        Label finalSimTimeLabel = simTimeLabel;
+        TextField finalHourF = hourF;
+        TextField finalMinuteF = minuteF;
+
+        simulationTimeThread = new Thread(()->{
+            CurrentDateSimulation(finalDatePick, finalSimDateLabel,
+                    finalSimTimeLabel, finalHourF, finalMinuteF, Multiplier);
+        });
     }
 
 }
