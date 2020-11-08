@@ -277,11 +277,8 @@ public class SHPModule extends Module {
 
                     this.localTimeAwayLightInRange = isCurrentTimeWithinRange();
 
-                    System.out.println("DEBUG -- "+LocalTime.now()+" "+this.localTimeAwayLightInRange+ "~~~~~");
-
                     if (SHSHelpers.isIs_away()) {
                         lightsCHOICE_transitionOccurred = false;
-                        System.out.println("DEBUG 2: AWAY MODE ON"+ "~~~~~\n\n");
 
                         // time is appropriate to turn on specific lights automatically
                         if (this.localTimeAwayLightInRange) {
@@ -289,7 +286,6 @@ public class SHPModule extends Module {
                             // automatically turn on and lock all specified lights
                             try {
                                 if (!lightsON_transitionOccurred) {
-                                    System.out.println("DEBUG 2.5 : Turning on any lights..."+ "~~~~~\n\n");
                                     Controller.awayModeAutoSwitchAndLockCustomLightsON();
                                     lightsON_transitionOccurred = true;
                                     lightsOFF_transitionOccurred = false;
@@ -302,7 +298,6 @@ public class SHPModule extends Module {
                             try {
 
                                 if (!lightsOFF_transitionOccurred) {
-                                    System.out.println("DEBUG 2.75 : Turning off any lights..."+ "~~~~~\n\n");
                                     Controller.awayModeAutoSwitchAndLockCustomLightsOFF();
                                     lightsOFF_transitionOccurred = true;
                                     lightsON_transitionOccurred = false;
@@ -312,8 +307,6 @@ public class SHPModule extends Module {
                         }
                     }
                     else {
-                        System.out.println("DEBUG 3: AWAY MODE OFF"+ "~~~~~\n\n");
-
                         // unlock the selected lights, but don't necessarily turn them off
                         try {
                             if (!lightsCHOICE_transitionOccurred) {
