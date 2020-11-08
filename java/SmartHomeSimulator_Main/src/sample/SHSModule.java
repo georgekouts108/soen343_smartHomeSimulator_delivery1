@@ -141,7 +141,9 @@ public class SHSModule extends Module {
         Button confirmTimeButton = new Button("Confirm New Time"); confirmTimeButton.setId("confirmTimeButton");
         confirmTimeButton.setTranslateX(190); confirmTimeButton.setTranslateY(435);
         confirmTimeButton.setTextAlignment(TextAlignment.CENTER);
-        confirmTimeButton.setOnAction(e -> {Thread th = new Thread(()->{
+        confirmTimeButton.setOnAction(e -> {
+
+            Controller.simulationTimeThread = new Thread(()-> {
 
             int indexOfSimDateLabel = 0, indexOfSimTimeLabel = 0;
 
@@ -155,8 +157,10 @@ public class SHSModule extends Module {
                 }catch (Exception excep){}
             }
             sample.Controller.CurrentDateSimulation(datePicker, (Label) Main.main_dashboard.getChildren().get(indexOfSimDateLabel),
-                    (Label) Main.main_dashboard.getChildren().get(indexOfSimTimeLabel), hourField, minuteField, (float) 1.0);});
-            th.start();
+                    (Label) Main.main_dashboard.getChildren().get(indexOfSimTimeLabel), hourField, minuteField, (float) 1.0);
+            });
+
+            Controller.simulationTimeThread.start();
             //now need to kill this thread everytime the method is called.. in order to reset...
         });
 
