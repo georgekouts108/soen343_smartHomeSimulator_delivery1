@@ -31,7 +31,7 @@ public class TestUseCase12 extends ApplicationTest {
     // Alert authorities time test
 
     @org.junit.Test
-    public void alertAuthorities(){
+    public void setTimeBeforeAlertAuthorities(){
         SHPModule shp = new SHPModule();
         try{
             shp.setTimeToAlert(12);

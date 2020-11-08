@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.assertj.core.util.TextFileWriter;
 import utilities.*;
 import sample.*;
 
@@ -28,9 +29,16 @@ import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
 public class TestUseCase17 extends ApplicationTest {
-    /**todo: implement*/
-    File testLayoutFile;
-    House house = null;
-    UserProfile dummyProfile = null;
+    
+    @org.junit.Test
+    public void setAwayMode() {
+        SHSHelpers.setIs_away(true);
+        Assert.assertTrue(SHSHelpers.isIs_away());
+    }
 
+    @org.junit.Test
+    public void setAwayModeFail() {
+        SHSHelpers.setIs_away(false);
+        Assert.assertFalse(SHSHelpers.isIs_away());
+    }
 }
