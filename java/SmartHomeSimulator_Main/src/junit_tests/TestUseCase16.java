@@ -27,10 +27,31 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
+/**
+ * Unit test class for testing the Auto mode feature
+ */
 public class TestUseCase16 extends ApplicationTest {
-    /**todo: implement*/
-    File testLayoutFile;
-    House house = null;
-    UserProfile dummyProfile = null;
+
+    /**
+     * Set the Auto mode to on
+     */
+    @org.junit.Test
+    public void testSetAutoMode() throws FileNotFoundException {
+        House house = new House("src/housetest_junit.txt");
+        Room room = house.getRooms()[0];
+        room.setAutoMode(true);
+        Assert.assertTrue(room.getIsAutoModeOn());
+    }
+
+    /**
+     * Leave the Auto mode off
+     */
+    @org.junit.Test
+    public void testSetAutoModeFail() throws FileNotFoundException {
+        House house = new House("src/housetest_junit.txt");
+        Room room = house.getRooms()[0];
+        Assert.assertFalse(room.getIsAutoModeOn());
+    }
+
 
 }

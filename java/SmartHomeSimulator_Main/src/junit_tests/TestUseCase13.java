@@ -43,7 +43,7 @@ public class TestUseCase13 extends ApplicationTest {
     @org.junit.Test
     public void LightControl(){
         try{
-            House house = new House(".\\src\\housetest_junit.txt");
+            House house = new House("src/housetest_junit.txt");
             Room room = house.getRooms()[0];
             if (awaymode){
                 for(int i = 0; i < room.getLightCollection().length; i++){
@@ -52,6 +52,7 @@ public class TestUseCase13 extends ApplicationTest {
                 Light testlight = room.getLightCollection()[0];
                 testlight.setState(true);
                 Assert.assertTrue(testlight.getState());
+                Assert.assertEquals(false, testlight.getState());
             }
         } catch (Exception e){
             e.printStackTrace();
