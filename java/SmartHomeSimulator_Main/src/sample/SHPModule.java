@@ -79,6 +79,7 @@ public class SHPModule extends Module {
         this.numberOfMDsOn--;
     }
 
+    public int getNumberOfMDsOn(){return numberOfMDsOn;};
 
 
     /**

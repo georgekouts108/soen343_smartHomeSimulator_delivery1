@@ -29,7 +29,7 @@ import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
 public class TestUseCase17 extends ApplicationTest {
-    
+
     @org.junit.Test
     public void setAwayMode() {
         SHSHelpers.setIs_away(true);

@@ -27,10 +27,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
+/**
+ * Unit test class for changing the simulation time speed
+ */
 public class TestUseCase19 extends ApplicationTest {
     /**todo: implement*/
-    File testLayoutFile;
-    House house = null;
-    UserProfile dummyProfile = null;
 
+    @org.junit.Test
+    public void testCase19() {
+
+    }
 }

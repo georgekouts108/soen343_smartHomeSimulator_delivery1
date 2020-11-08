@@ -27,10 +27,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
+/**
+ * Unit test class for users being notified about motion detectors
+ * triggered during away mode
+ */
 public class TestUseCase18 extends ApplicationTest {
     /**todo: implement*/
-    File testLayoutFile;
-    House house = null;
-    UserProfile dummyProfile = null;
 
+    @org.junit.Test
+    public void testCase18() throws FileNotFoundException {
+
+    }
 }

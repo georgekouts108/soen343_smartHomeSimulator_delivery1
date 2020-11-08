@@ -289,4 +289,7 @@ public class SHSHelpers {
     public static void setHouse(House house) {
         Main.house = house;
     }
+
+    public static void setShpModuleObject(SHPModule shp) {
+    }
 }
