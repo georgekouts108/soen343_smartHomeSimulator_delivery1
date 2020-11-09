@@ -874,7 +874,7 @@ public class House {
                     for (int l = 0; l < room.getLightCollection().length; l++) {
                         try {
                             room.getLightCollection()[l].setState(true);
-                            room.getLightCollection()[l].setLocked(true);
+                            room.getLightCollection()[l].setLocked(false);
                             setIconVisibility(room, "Light", true);
                             for (int cb = 0; cb < room_layout.getChildren().size(); cb++) {
                                 try {
