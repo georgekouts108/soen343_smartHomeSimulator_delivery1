@@ -1285,7 +1285,7 @@ public class Controller {
      * Save profile information in a file
      * @param newProfile
      */
-    private static void saveProfileToFile(UserProfile newProfile) {
+    public static void saveProfileToFile(UserProfile newProfile) {
         try{
             /**todo: put the 'profiles.txt' file is src directory*/
             File file =new File("src/profiles.txt");

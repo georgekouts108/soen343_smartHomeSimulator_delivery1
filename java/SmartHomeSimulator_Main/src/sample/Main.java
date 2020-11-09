@@ -233,18 +233,6 @@ public class Main extends Application {
                 boolean newPermAC = Boolean.parseBoolean(profileParams[7]);
                 boolean newPermACLocation = Boolean.parseBoolean(profileParams[8]);
                 Controller.createNewProfile(newType,newPermLights,newPermLightsLocation,newPermDoors,newPermDoorsLocation,newPermWindows,newPermWindowsLocation,newPermAC,newPermACLocation);
-
-                //quickly visualize permissions to test more easily
-                System.out.println("Type: " + newType);
-                System.out.println("L: " + newPermLights);
-                System.out.println("LL: " + newPermLightsLocation);
-                System.out.println("D: " + newPermDoors);
-                System.out.println("DL: " + newPermDoorsLocation);
-                System.out.println("W: " + newPermWindows);
-                System.out.println("WL: " + newPermWindowsLocation);
-                System.out.println("AC: " + newPermAC);
-                System.out.println("ACL: " + newPermACLocation);
-                System.out.println();
             }
             sc.close();
 

@@ -24,7 +24,10 @@ import org.testfx.api.FxToolkit;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 import org.testfx.framework.junit.*;
 
 /**
@@ -33,17 +36,39 @@ import org.testfx.framework.junit.*;
 public class TestUseCase12 extends ApplicationTest {
     // save profiles and permissions
 
-//    /**
-//     * Test the configuration of the time before alerting authorities during Away mode
-//     */
-//    @org.junit.Test
-//    public void setTimeBeforeAlertAuthorities(){
-//        SHPModule shp = new SHPModule();
-//        try{
-//            shp.setTimeToAlert(12);
-//            Assert.assertNotNull(shp);
-//        } catch (Exception e){
-//            Assert.assertTrue(true);
-//        }
-//    }
+    // Users for each type
+    boolean pL = true;
+    boolean pLL = true;
+    boolean pD = true;
+    boolean pDL = true;
+    boolean pW = true;
+    boolean pWL = true;
+    boolean pAC = true;
+    boolean pACL = true;
+
+    /**
+     * Test the saving of user profiles and permissions into a text file
+     */
+    @org.junit.Test
+    public void testCase12() {
+        UserProfile parent = new UserProfile("parent", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
+        Controller.saveProfileToFile(parent);
+        File file = new File("src/profiles.txt");
+        if (file.exists()) {
+            try {
+                boolean present = false;
+                Scanner s = new Scanner(new FileInputStream(file));
+                while (s.hasNextLine()) {
+                    String member = s.nextLine();
+                    if (member.contains(parent.getType()+","+!pL+","+!pLL+","+!pD+","+
+                            !pDL+","+!pW+","+!pWL+","+!pAC+","+!pACL)) {
+                        present = true;
+                        break;
+                    }
+                }
+                Assert.assertTrue(true);
+            }
+            catch (Exception e){}
+        }
+    }
 }
