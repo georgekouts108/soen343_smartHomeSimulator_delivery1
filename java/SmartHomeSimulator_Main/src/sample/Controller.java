@@ -305,19 +305,19 @@ public class Controller {
             //for sim time speed
             Label timeSpeed = new Label("Time speed multiplier: ");
             timeSpeed.setId("timeSpeed");
-            timeSpeed.setTranslateX(350);
-            timeSpeed.setTranslateY(100);
+            timeSpeed.setTranslateX(400);
+            timeSpeed.setTranslateY(110);
 
             TextField timeMultiplier = new TextField("");
             timeMultiplier.setId("timeMultiplier");
-            timeMultiplier.setTranslateX(425);
-            timeMultiplier.setTranslateY(100);
+            timeMultiplier.setTranslateX(400);
+            timeMultiplier.setTranslateY(130);
             timeMultiplier.setPromptText("i.e. 0.1, 2, 100");
 
             Button speedButton = new Button("Go");
             speedButton.setId("timeSpeed");
-            speedButton.setTranslateX(600);
-            speedButton.setTranslateY(100);
+            speedButton.setTranslateX(560);
+            speedButton.setTranslateY(130);
             speedButton.setOnAction(e -> {
                 simulationTimeThread.stop();
                 editTimeSpeed(timeMultiplier.getText()); // reinitialize the thread
