@@ -32,10 +32,15 @@ import org.testfx.framework.junit.*;
  */
 public class TestUseCase11 extends ApplicationTest {
     // Users for each type
-//    private UserProfile child = new UserProfile("child");
-//    private UserProfile parent = new UserProfile("parent");
-//    private UserProfile guest = new UserProfile("guest");
-//    private UserProfile stranger = new UserProfile("stranger");
+    boolean pL = true;
+    boolean pLL = true;
+    boolean pD = true;
+    boolean pDL = true;
+    boolean pW = true;
+    boolean pWL = true;
+    boolean pAC = true;
+    boolean pACL = true;
+
 
     /**todo: implement*/
     // Permissions testing
@@ -45,7 +50,13 @@ public class TestUseCase11 extends ApplicationTest {
      */
     @org.junit.Test
     public void WindowPermissions(){
+        UserProfile parent = new UserProfile("parent", pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
+        UserProfile child = new UserProfile("child", pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
 
+        Assert.assertTrue(parent.getPermWindows());
+        Assert.assertTrue(parent.getPermWindowsLocation());
+        Assert.assertTrue(child.getPermWindows());
+        Assert.assertTrue(child.getPermWindowsLocation());
     }
 
     /**
@@ -53,7 +64,13 @@ public class TestUseCase11 extends ApplicationTest {
      */
     @org.junit.Test
     public void WindowPermissionsFail(){
+        UserProfile parent = new UserProfile("parent", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
+        UserProfile child = new UserProfile("child", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
 
+        Assert.assertFalse(parent.getPermWindowsLocation());
+        Assert.assertFalse(parent.getPermWindows());
+        Assert.assertFalse(child.getPermWindowsLocation());
+        Assert.assertFalse(child.getPermWindows());
     }
 
     /**
@@ -61,7 +78,13 @@ public class TestUseCase11 extends ApplicationTest {
      */
     @org.junit.Test
     public void DoorPermissions(){
+        UserProfile parent = new UserProfile("parent", pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
+        UserProfile child = new UserProfile("child", pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
 
+        Assert.assertTrue(parent.getPermDoors());
+        Assert.assertTrue(parent.getPermDoorsLocation());
+        Assert.assertTrue(child.getPermWindows());
+        Assert.assertTrue(child.getPermWindowsLocation());
     }
 
     /**
@@ -69,7 +92,13 @@ public class TestUseCase11 extends ApplicationTest {
      */
     @org.junit.Test
     public void DoorPermissionsFail(){
+        UserProfile parent = new UserProfile("parent", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
+        UserProfile child = new UserProfile("child", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
 
+        Assert.assertFalse(parent.getPermDoors());
+        Assert.assertFalse(parent.getPermDoorsLocation());
+        Assert.assertFalse(child.getPermDoors());
+        Assert.assertFalse(child.getPermDoorsLocation());
     }
 
     /**
@@ -77,7 +106,13 @@ public class TestUseCase11 extends ApplicationTest {
      */
     @org.junit.Test
     public void LightPermissions(){
+        UserProfile parent = new UserProfile("parent", pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
+        UserProfile child = new UserProfile("child", pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
 
+        Assert.assertTrue(parent.getPermLights());
+        Assert.assertTrue(parent.getPermLightsLocation());
+        Assert.assertTrue(child.getPermLights());
+        Assert.assertTrue(child.getPermLightsLocation());
     }
 
     /**
@@ -85,7 +120,13 @@ public class TestUseCase11 extends ApplicationTest {
      */
     @org.junit.Test
     public void LightPermissionsFail(){
+        UserProfile parent = new UserProfile("parent", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
+        UserProfile child = new UserProfile("child", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
 
+        Assert.assertFalse(parent.getPermLights());
+        Assert.assertFalse(parent.getPermLightsLocation());
+        Assert.assertFalse(child.getPermLights());
+        Assert.assertFalse(child.getPermLightsLocation());
     }
 
 }
