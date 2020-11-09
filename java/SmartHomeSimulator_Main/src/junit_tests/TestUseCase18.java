@@ -27,19 +27,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
-/**
- * Unit test class for users being notified about motion detectors
- * triggered during away mode
- */
+
 public class TestUseCase18 extends ApplicationTest {
-    /**todo: implement*/
-
     /**
-     * Test for notifying users when motion detectors are triggered during Away mode
-     * @throws FileNotFoundException
+     * Testing time before alert
      */
-    @org.junit.Test
-    public void testCase18() throws FileNotFoundException {
 
+    @org.junit.Test
+    public void timeBeforeAlert() throws FileNotFoundException {
+        SHPModule shp = new SHPModule();
+        shp.setTimeToAlert(10);
+        Assert.assertNotNull(shp);
     }
 }
