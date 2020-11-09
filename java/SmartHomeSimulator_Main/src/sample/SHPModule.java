@@ -335,48 +335,48 @@ public class SHPModule extends Module {
 
             while (true) {
 
-                    this.localTimeAwayLightInRange = isCurrentTimeWithinRange();
+                this.localTimeAwayLightInRange = isCurrentTimeWithinRange();
 
-                    if (SHSHelpers.isIs_away()) {
-                        lightsCHOICE_transitionOccurred = false;
+                if (SHSHelpers.isIs_away()) {
+                    lightsCHOICE_transitionOccurred = false;
 
-                        // time is appropriate to turn on specific lights automatically
-                        if (this.localTimeAwayLightInRange) {
+                    // time is appropriate to turn on specific lights automatically
+                    if (this.localTimeAwayLightInRange) {
 
-                            // automatically turn on and lock all specified lights
-                            try {
-                                if (!lightsON_transitionOccurred) {
-                                    Controller.awayModeAutoSwitchAndLockCustomLightsON();
-                                    lightsON_transitionOccurred = true;
-                                    lightsOFF_transitionOccurred = false;
-                                }
-                            } catch (Exception e){}
-                        }
-                        else {
-
-                            // automatically turn off and unlock all specified lights
-                            try {
-
-                                if (!lightsOFF_transitionOccurred) {
-                                    Controller.awayModeAutoSwitchAndLockCustomLightsOFF();
-                                    lightsOFF_transitionOccurred = true;
-                                    lightsON_transitionOccurred = false;
-                                }
-
-                            } catch (Exception e){}
-                        }
+                        // automatically turn on and lock all specified lights
+                        try {
+                            if (!lightsON_transitionOccurred) {
+                                Controller.awayModeAutoSwitchAndLockCustomLightsON();
+                                lightsON_transitionOccurred = true;
+                                lightsOFF_transitionOccurred = false;
+                            }
+                        } catch (Exception e){}
                     }
                     else {
-                        // unlock the selected lights, but don't necessarily turn them off
+
+                        // automatically turn off and unlock all specified lights
                         try {
-                            if (!lightsCHOICE_transitionOccurred) {
-                                Controller.awayModeAutoSwitchAndLockCustomLightsCHOICE(true);
-                                lightsCHOICE_transitionOccurred = true;
+
+                            if (!lightsOFF_transitionOccurred) {
+                                Controller.awayModeAutoSwitchAndLockCustomLightsOFF();
+                                lightsOFF_transitionOccurred = true;
+                                lightsON_transitionOccurred = false;
                             }
-                            lightsON_transitionOccurred = false;
-                        }
-                        catch(Exception e){}
+
+                        } catch (Exception e){}
                     }
+                }
+                else {
+                    // unlock the selected lights, but don't necessarily turn them off
+                    try {
+                        if (!lightsCHOICE_transitionOccurred) {
+                            Controller.awayModeAutoSwitchAndLockCustomLightsCHOICE(true);
+                            lightsCHOICE_transitionOccurred = true;
+                        }
+                        lightsON_transitionOccurred = false;
+                    }
+                    catch(Exception e){}
+                }
 
                 try {
                     Thread.sleep(1000);

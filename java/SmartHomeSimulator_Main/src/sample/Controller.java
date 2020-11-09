@@ -1865,40 +1865,42 @@ public class Controller {
             Button setInterval = new Button("Set");
             setInterval.setTranslateX(240); setInterval.setTranslateY(300);
             setInterval.setOnAction(e->{
+                try {
+                    System.out.println("set time");
 
-                System.out.println("set time");
+                    int hlb = Integer.parseInt(hourField.getText());
+                    int mlb = Integer.parseInt(minuteField.getText());
+                    int hub = Integer.parseInt(hourField2.getText());
+                    int mub = Integer.parseInt(minuteField2.getText());
 
-                int hlb = Integer.parseInt(hourField.getText());
-                int mlb = Integer.parseInt(minuteField.getText());
-                int hub = Integer.parseInt(hourField2.getText());
-                int mub = Integer.parseInt(minuteField2.getText());
+                    boolean hourLowerBoundOkay = (hlb >= 0 && hlb < 24);
+                    boolean minuteLowerBoundOkay = (mlb >= 0 && mlb < 60);
+                    boolean hourUpperBoundOkay = (hub >= 0 && hub < 24);
+                    boolean minuteUpperBoundOkay = (mub >= 0 && mub < 60);
+                    boolean boundsOkay = (hourLowerBoundOkay && minuteLowerBoundOkay &&
+                            hourUpperBoundOkay && minuteUpperBoundOkay);
 
-                boolean hourLowerBoundOkay = (hlb >= 0 && hlb < 24);
-                boolean minuteLowerBoundOkay = (mlb >= 0 && mlb < 60);
-                boolean hourUpperBoundOkay = (hub >= 0 && hub < 24);
-                boolean minuteUpperBoundOkay = (mub >= 0 && mub < 60);
-                boolean boundsOkay = (hourLowerBoundOkay && minuteLowerBoundOkay &&
-                        hourUpperBoundOkay && minuteUpperBoundOkay);
+                    if (boundsOkay) {
+                        Main.shpModule.setAwayLightsHourLower(hlb);
+                        Main.shpModule.setAwayLightsMinuteLower(mlb);
+                        Main.shpModule.setAwayLightsHourUpper(hub);
+                        Main.shpModule.setAwayLightsMinuteUpper(mub);
 
-                if (boundsOkay) {
-                    Main.shpModule.setAwayLightsHourLower(hlb);
-                    Main.shpModule.setAwayLightsMinuteLower(mlb);
-                    Main.shpModule.setAwayLightsHourUpper(hub);
-                    Main.shpModule.setAwayLightsMinuteUpper(mub);
+                        hourField.clear();
+                        hourField.setPromptText(hlb + "");
+                        minuteField.clear();
+                        minuteField.setPromptText(mlb + "");
+                        hourField2.clear();
+                        hourField2.setPromptText(hub + "");
+                        minuteField2.clear();
+                        minuteField2.setPromptText(mub + "");
 
-                    hourField.clear();
-                    hourField.setPromptText(hlb + "");
-                    minuteField.clear();
-                    minuteField.setPromptText(mlb + "");
-                    hourField2.clear();
-                    hourField2.setPromptText(hub + "");
-                    minuteField2.clear();
-                    minuteField2.setPromptText(mub + "");
-
-                    System.out.println(
-                            Main.shpModule.getAwayLightsHourLower() + ":" + Main.shpModule.getAwayLightsMinuteLower() + "-->" +
-                                    Main.shpModule.getAwayLightsHourUpper() + ":" + Main.shpModule.getAwayLightsMinuteUpper());
+                        System.out.println(
+                                Main.shpModule.getAwayLightsHourLower() + ":" + Main.shpModule.getAwayLightsMinuteLower() + "-->" +
+                                        Main.shpModule.getAwayLightsHourUpper() + ":" + Main.shpModule.getAwayLightsMinuteUpper());
+                    }
                 }
+                catch (Exception ex){}
             });
 
             Label from = new Label("Keep lights on from");
