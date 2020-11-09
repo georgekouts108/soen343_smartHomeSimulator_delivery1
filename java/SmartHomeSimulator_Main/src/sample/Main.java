@@ -278,7 +278,7 @@ public class Main extends Application {
 
         TextField newProfileTextField = new TextField(); newProfileTextField.setPromptText("Parent, Child, Guest or Stranger");
         newProfileTextField.setId("newProfileTextField");
-        newProfileTextField.setPrefWidth(200); newProfileTextField.setTranslateX(40);
+        newProfileTextField.setPrefWidth(230); newProfileTextField.setTranslateX(40);
         newProfileTextField.setTranslateY(290);
 
         CheckBox cbPermL = new CheckBox("Lights");
