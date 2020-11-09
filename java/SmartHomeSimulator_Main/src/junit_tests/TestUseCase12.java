@@ -28,22 +28,22 @@ import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
 /**
- * Class for testing use case #12
+ * Class for testing use case #12 - saving the profiles into a text file
  */
 public class TestUseCase12 extends ApplicationTest {
-    // Alert authorities time test
+    // save profiles and permissions
 
-    /**
-     * Test the configuration of the time before alerting authorities during Away mode
-     */
-    @org.junit.Test
-    public void setTimeBeforeAlertAuthorities(){
-        SHPModule shp = new SHPModule();
-        try{
-            shp.setTimeToAlert(12);
-            Assert.assertNotNull(shp);
-        } catch (Exception e){
-            Assert.assertTrue(true);
-        }
-    }
+//    /**
+//     * Test the configuration of the time before alerting authorities during Away mode
+//     */
+//    @org.junit.Test
+//    public void setTimeBeforeAlertAuthorities(){
+//        SHPModule shp = new SHPModule();
+//        try{
+//            shp.setTimeToAlert(12);
+//            Assert.assertNotNull(shp);
+//        } catch (Exception e){
+//            Assert.assertTrue(true);
+//        }
+//    }
 }

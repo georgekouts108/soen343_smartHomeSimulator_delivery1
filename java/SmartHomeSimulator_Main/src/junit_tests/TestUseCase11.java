@@ -28,7 +28,7 @@ import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
 /**
- * Class for testing use case #11
+ * Class for testing use case #11 - granting and denying user permissions
  */
 public class TestUseCase11 extends ApplicationTest {
     // Users for each type

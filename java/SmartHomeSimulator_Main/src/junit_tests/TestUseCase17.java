@@ -34,20 +34,23 @@ import org.testfx.framework.junit.*;
 public class TestUseCase17 extends ApplicationTest {
 
     /**
-     * Test for setting the Away mode to on
+     * Set the Auto mode to on
      */
     @org.junit.Test
-    public void setAwayMode() {
-        SHSHelpers.setIs_away(true);
-        Assert.assertTrue(SHSHelpers.isIs_away());
+    public void testSetAutoMode() throws FileNotFoundException {
+        House house = new House("src/housetest_junit.txt");
+        Room room = house.getRooms()[0];
+        room.setAutoMode(true);
+        Assert.assertTrue(room.getIsAutoModeOn());
     }
 
     /**
-     * Test for setting the Away mode to off
+     * Leave the Auto mode off
      */
     @org.junit.Test
-    public void setAwayModeFail() {
-        SHSHelpers.setIs_away(false);
-        Assert.assertFalse(SHSHelpers.isIs_away());
+    public void testSetAutoModeFail() throws FileNotFoundException {
+        House house = new House("src/housetest_junit.txt");
+        Room room = house.getRooms()[0];
+        Assert.assertFalse(room.getIsAutoModeOn());
     }
 }

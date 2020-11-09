@@ -28,7 +28,7 @@ import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
 /**
- * Unit test class for changing the simulation time speed
+ * Test for notifying users of motion detectors triggered during away mode
  */
 public class TestUseCase19 extends ApplicationTest {
     /**todo: implement*/

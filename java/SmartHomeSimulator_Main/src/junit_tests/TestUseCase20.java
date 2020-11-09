@@ -32,8 +32,20 @@ import org.testfx.framework.junit.*;
  */
 public class TestUseCase20 extends ApplicationTest {
 
-    File testLayoutFile;
-    House house = null;
-    UserProfile dummyProfile = null;
+    // Alert authorities time test
+
+    /**
+     * Test the configuration of the time before alerting authorities during Away mode
+     */
+    @org.junit.Test
+    public void setTimeBeforeAlertAuthorities(){
+        SHPModule shp = new SHPModule();
+        try{
+            shp.setTimeToAlert(12);
+            Assert.assertNotNull(shp);
+        } catch (Exception e){
+            Assert.assertTrue(true);
+        }
+    }
 
 }

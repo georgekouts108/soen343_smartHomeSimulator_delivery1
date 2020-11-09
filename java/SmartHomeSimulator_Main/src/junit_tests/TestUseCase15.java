@@ -36,20 +36,20 @@ public class TestUseCase15 extends ApplicationTest {
     boolean awaymode = true;
 
     /**
-     * Test case for controlling doors
+     * Test case 1 for controlling windows
      */
     @org.junit.Test
-    public void DoorControl(){
+    public void WindowControl(){
         try{
             House house = new House(".\\src\\housetest_junit.txt");
             Room room = house.getRooms()[0];
             if (awaymode) {
-                for (int i = 0; i < room.getDoorCollection().length; i++) {
-                    room.getDoorCollection()[i].setState(false);
+                for (int i = 0; i < room.getWindowCollection().length; i++) {
+                    room.getWindowCollection()[i].setState(false);
                 }
-                utilities.Door testdoor = room.getDoorCollection()[0];
-                testdoor.setState(true);
-                Assert.assertTrue(testdoor.getState());
+                utilities.Window testwindow = room.getWindowCollection()[0];
+                testwindow.setState(true);
+                Assert.assertTrue(testwindow.getState());
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -57,20 +57,20 @@ public class TestUseCase15 extends ApplicationTest {
     }
 
     /**
-     * Test case 2 for controlling doors
+     * Test case 2 for controlling windows
      */
     @org.junit.Test
-    public void DoorControlFail(){
+    public void WindowControlFail(){
         try{
             House house = new House(".\\src\\housetest_junit.txt");
             Room room = house.getRooms()[0];
             if (awaymode) {
-                for (int i = 0; i < room.getDoorCollection().length; i++) {
-                    room.getDoorCollection()[i].setState(false);
+                for (int i = 0; i < room.getWindowCollection().length; i++) {
+                    room.getWindowCollection()[i].setState(false);
                 }
-                utilities.Door testdoor = room.getDoorCollection()[0];
-                testdoor.setState(false);
-                Assert.assertFalse(testdoor.getState());
+                utilities.Window testwindow = room.getWindowCollection()[0];
+                testwindow.setState(false);
+                Assert.assertFalse(testwindow.getState());
             }
         } catch (Exception e){
             e.printStackTrace();

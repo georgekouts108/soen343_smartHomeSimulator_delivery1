@@ -29,14 +29,24 @@ import org.testfx.framework.junit.*;
 
 
 public class TestUseCase18 extends ApplicationTest {
-    /**
-     * Testing time before alert
-     */
 
+
+
+    /**
+     * Test for setting the Away mode to on
+     */
     @org.junit.Test
-    public void timeBeforeAlert() throws FileNotFoundException {
-        SHPModule shp = new SHPModule();
-        shp.setTimeToAlert(10);
-        Assert.assertNotNull(shp);
+    public void setAwayMode() {
+        SHSHelpers.setIs_away(true);
+        Assert.assertTrue(SHSHelpers.isIs_away());
+    }
+
+    /**
+     * Test for setting the Away mode to off
+     */
+    @org.junit.Test
+    public void setAwayModeFail() {
+        SHSHelpers.setIs_away(false);
+        Assert.assertFalse(SHSHelpers.isIs_away());
     }
 }

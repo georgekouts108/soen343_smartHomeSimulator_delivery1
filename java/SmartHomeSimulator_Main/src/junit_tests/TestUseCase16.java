@@ -32,26 +32,50 @@ import org.testfx.framework.junit.*;
  */
 public class TestUseCase16 extends ApplicationTest {
 
+    // SHC unit testing
+    boolean awaymode = true;
+
     /**
-     * Set the Auto mode to on
+     * Test case 1 for controlling lights
      */
     @org.junit.Test
-    public void testSetAutoMode() throws FileNotFoundException {
-        House house = new House("src/housetest_junit.txt");
-        Room room = house.getRooms()[0];
-        room.setAutoMode(true);
-        Assert.assertTrue(room.getIsAutoModeOn());
+    public void LightControl(){
+        try{
+            House house = new House("src/housetest_junit.txt");
+            Room room = house.getRooms()[0];
+            if (awaymode){
+                for(int i = 0; i < room.getLightCollection().length; i++){
+                    room.getLightCollection()[i].setState(false);
+                }
+                Light testlight = room.getLightCollection()[0];
+                testlight.setState(true);
+                Assert.assertTrue(testlight.getState());
+                Assert.assertEquals(false, testlight.getState());
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
-     * Leave the Auto mode off
+     * Test case 2 for controlling lights
      */
     @org.junit.Test
-    public void testSetAutoModeFail() throws FileNotFoundException {
-        House house = new House("src/housetest_junit.txt");
-        Room room = house.getRooms()[0];
-        Assert.assertFalse(room.getIsAutoModeOn());
+    public void LightControlFail(){
+        try{
+            House house = new House(".\\src\\housetest_junit.txt");
+            Room room = house.getRooms()[0];
+            if (awaymode){
+                for(int i = 0; i < room.getLightCollection().length; i++){
+                    room.getLightCollection()[i].setState(false);
+                }
+                Light testlight = room.getLightCollection()[0];
+                testlight.setState(false);
+                Assert.assertFalse(testlight.getState());
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
-
 
 }
