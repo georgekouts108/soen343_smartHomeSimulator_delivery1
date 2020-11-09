@@ -31,13 +31,37 @@ import org.testfx.framework.junit.*;
  * Test for notifying users of motion detectors triggered during away mode
  */
 public class TestUseCase19 extends ApplicationTest {
-    /**todo: implement*/
 
-    /**
-     * Test for configuring the speed of the simulation time
-     */
     @org.junit.Test
-    public void testCase19() {
+    public void motionDetectorTriggered(){
+        try{
+            House house = new House(".\\src\\housetest_junit.txt");
 
+            SHSHelpers.setIs_away(true);
+            SHPModule shp = new SHPModule();
+            house.getRooms()[0].getMd().setState(true);
+
+            boolean MDON = false;
+            for (int r = 0; r < house.getRooms().length; r++) {
+                if (house.getRooms()[r].getMd().getState()) {
+                    MDON = true;
+                    break;
+                }
+            }
+
+            if (SHSHelpers.isIs_away()) {
+                if (MDON) {
+                    Controller.appendMessageToConsole("CRITICAL [SHP]: One or more motion detectors are illegitimately triggered");
+                    shp.startOrStopThread(true);
+                }
+                else {
+                    shp.startOrStopThread(false);
+                    Controller.appendMessageToConsole("SHP -- No more M.D's are illegitimately triggered");
+                    Controller.appendMessageToConsole("Alarm deactivated.");
+                }
+            }
+
+        } catch (Exception e){
+        }
     }
 }
