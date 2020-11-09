@@ -203,7 +203,6 @@ public class Main extends Application {
         loadProfilesFromFile(profilesTxt);
     }
 
-    //need to rewrite based on perms
     /**
      * Load profiles from a file with pre-saved permissions
      * @param file

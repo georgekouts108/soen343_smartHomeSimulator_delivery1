@@ -27,10 +27,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
-
+/**
+ * Class for testing use case #18 -- configuring Away mode
+ */
 public class TestUseCase18 extends ApplicationTest {
-
-
 
     /**
      * Test for setting the Away mode to on

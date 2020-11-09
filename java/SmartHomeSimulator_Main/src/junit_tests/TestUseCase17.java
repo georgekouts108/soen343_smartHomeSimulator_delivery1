@@ -29,7 +29,7 @@ import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
 /**
- * Class for testing use case #17
+ * Class for testing use case #17 -- configuring auto mode
  */
 public class TestUseCase17 extends ApplicationTest {
 

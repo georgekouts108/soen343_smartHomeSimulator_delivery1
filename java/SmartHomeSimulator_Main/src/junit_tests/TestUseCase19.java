@@ -32,6 +32,9 @@ import org.testfx.framework.junit.*;
  */
 public class TestUseCase19 extends ApplicationTest {
 
+    /**
+     * Test the notification to users when motion detectors trigger during Away mode
+     */
     @org.junit.Test
     public void motionDetectorTriggered(){
         try{
@@ -61,7 +64,6 @@ public class TestUseCase19 extends ApplicationTest {
                 }
             }
 
-        } catch (Exception e){
-        }
+        } catch (Exception e){ }
     }
 }

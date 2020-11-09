@@ -28,7 +28,7 @@ import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
 /**
- * Unit test class for testing the Auto mode feature
+ * Unit test class for use case #16 -- opening and closing lights
  */
 public class TestUseCase16 extends ApplicationTest {
 

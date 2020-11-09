@@ -38,7 +38,7 @@ import org.testfx.framework.junit.*;
  */
 public class TestUseCase13 extends ApplicationTest {
     /**
-     * took then contents of CurrentDateSimulation to test because the method did not have a stop functionality
+     * Test the change of the simulation speed
      */
     @Test
     public void speedChangeTest(){

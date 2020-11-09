@@ -28,7 +28,7 @@ import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
 /**
- * Class for testing use case #20
+ * Class for testing use case #20 -- setting the time before alerting authorities in SHP module
  */
 public class TestUseCase20 extends ApplicationTest {
 

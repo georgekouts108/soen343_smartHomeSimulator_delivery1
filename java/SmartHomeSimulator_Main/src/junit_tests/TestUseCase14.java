@@ -28,11 +28,9 @@ import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
 /**
- * Class for testing use case #14
+ * Class for testing use case #14 -- open and close doors
  */
 public class TestUseCase14 extends ApplicationTest {
-
-    /**DOORS */
 
     // SHC unit testing
     boolean awaymode = true;

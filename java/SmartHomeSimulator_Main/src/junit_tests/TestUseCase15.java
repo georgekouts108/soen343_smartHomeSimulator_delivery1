@@ -28,7 +28,7 @@ import java.io.FileNotFoundException;
 import org.testfx.framework.junit.*;
 
 /**
- * Class for testing use case #15
+ * Class for testing use case #15 -- open and close windows
  */
 public class TestUseCase15 extends ApplicationTest {
 
