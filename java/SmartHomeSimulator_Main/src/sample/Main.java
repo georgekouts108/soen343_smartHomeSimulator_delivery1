@@ -276,42 +276,42 @@ public class Main extends Application {
         profileListLabel.setTranslateX(350); profileListLabel.setTranslateY(40);
         profileListLabel.setText("LIST OF PROFILES:");
 
-        TextField newProfileTextField = new TextField(); newProfileTextField.setPromptText("P,C,G,or S...");
+        TextField newProfileTextField = new TextField(); newProfileTextField.setPromptText("Parent, Child, Guest or Stranger");
         newProfileTextField.setId("newProfileTextField");
-        newProfileTextField.setPrefWidth(85); newProfileTextField.setTranslateX(40);
+        newProfileTextField.setPrefWidth(200); newProfileTextField.setTranslateX(40);
         newProfileTextField.setTranslateY(290);
 
         CheckBox cbPermL = new CheckBox("Lights");
         cbPermL.setId("lightsPermissionCB");
-        cbPermL.setTranslateX(5); cbPermL.setTranslateY(100);
+        cbPermL.setTranslateX(5+150); cbPermL.setTranslateY(100);
 
         CheckBox cbPermLL = new CheckBox("Lights (L)");
         cbPermLL.setId("lightsLocationPermissionCB");
-        cbPermLL.setTranslateX(100); cbPermLL.setTranslateY(100);
+        cbPermLL.setTranslateX(100+150); cbPermLL.setTranslateY(100);
 
         CheckBox cbPermD = new CheckBox("Doors");
         cbPermD.setId("DoorsPermissionCB");
-        cbPermD.setTranslateX(5); cbPermD.setTranslateY(150);
+        cbPermD.setTranslateX(5+150); cbPermD.setTranslateY(150);
 
         CheckBox cbPermDL = new CheckBox("Doors (L)");
         cbPermDL.setId("DoorsLocationPermissionCB");
-        cbPermDL.setTranslateX(100); cbPermDL.setTranslateY(150);
+        cbPermDL.setTranslateX(100+150); cbPermDL.setTranslateY(150);
 
         CheckBox cbPermW = new CheckBox("Windows");
         cbPermW.setId("WindowsPermissionCB");
-        cbPermW.setTranslateX(5); cbPermW.setTranslateY(200);
+        cbPermW.setTranslateX(5+150); cbPermW.setTranslateY(200);
 
         CheckBox cbPermWL = new CheckBox("Windows (L)");
         cbPermWL.setId("WindowsLocationPermissionCB");
-        cbPermWL.setTranslateX(100); cbPermWL.setTranslateY(200);
+        cbPermWL.setTranslateX(100+150); cbPermWL.setTranslateY(200);
 
         CheckBox cbPermAC = new CheckBox("AC");
         cbPermAC.setId("ACPermissionCB");
-        cbPermAC.setTranslateX(5); cbPermAC.setTranslateY(250);
+        cbPermAC.setTranslateX(5+150); cbPermAC.setTranslateY(250);
 
         CheckBox cbPermACL = new CheckBox("AC (L)");
         cbPermACL.setId("ACLocationPermissionCB");
-        cbPermACL.setTranslateX(100); cbPermACL.setTranslateY(250);
+        cbPermACL.setTranslateX(100+150); cbPermACL.setTranslateY(250);
 
         Button addButton = new Button("Add new\nProfile");
         addButton.setId("addNewProfileButton");
