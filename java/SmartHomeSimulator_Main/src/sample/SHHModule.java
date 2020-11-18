@@ -403,6 +403,7 @@ public class SHHModule extends Module {
     }
 
     public void addZone() {
+
         try {
             if (this.currentNumberOfZones == MAX_NUMBER_OF_ZONES) {
                 for (int elem = 0; elem < SHHZoneConfigPane.getChildren().size(); elem++) {
@@ -454,9 +455,20 @@ public class SHHModule extends Module {
                 tempZoneArray[tempZoneArray.length - 1] = newZone;
                 this.zones = tempZoneArray;
             }
+
+            // all rooms in the new zone take on the outdoor temperature
             newZone.overrideZoneRoomTemperaturesInHouse(Main.outsideTemperature);
-            updateSHSModuleWithZones();
+
+            /**todo: debug -- make sure the temperatures are actually changing...*/
+            for (int houseroomIndex = 0; houseroomIndex < Main.householdLocations.length; houseroomIndex++) {
+                try {
+                    System.out.println("DEBUG: room temp for "+Main.householdLocations[houseroomIndex].getName()+
+                            " is "+Main.householdLocations[houseroomIndex].getRoomTemperature());
+                }
+                catch (Exception e){}
+            }
             incrementNumberOfZones();
+            updateSHSModuleWithZones();
         }
         catch (Exception e) {
             Controller.appendMessageToConsole(e.getMessage());
@@ -464,6 +476,19 @@ public class SHHModule extends Module {
     }
 
     public void updateSHSModuleWithZones() {
+
+        for (int elem = 0; elem < Main.SHH_MODULE.getChildren().size(); elem++) {
+            try {
+                if (Main.SHH_MODULE.getChildren().get(elem).getId().equals("currentNumOfZonesLabel")) {
+                    Label label = (Label) Main.SHH_MODULE.getChildren().get(elem);
+                    label.setText("Current number of zones: "+this.currentNumberOfZones);
+                    Main.SHH_MODULE.getChildren().set(elem, label);
+                    break;
+                }
+            }
+            catch (Exception e){}
+        }
+
         int transY = 150; int transX = 250;
         for (int z = 0; z < this.zones.length; z++) {
             try {
@@ -477,15 +502,16 @@ public class SHHModule extends Module {
                     AnchorPane zonePane = new AnchorPane();
 
                     Label roomsLabel = new Label("Rooms:");
-                    roomsLabel.setTranslateY(20); roomsLabel.setTranslateX(20);
+                    roomsLabel.setTranslateY(40); roomsLabel.setTranslateX(20);
                     zonePane.getChildren().add(roomsLabel);
 
-                    int tempTransX = 50, tempTransY = 40;
+                    int tempTransX = 50, tempTransY = 60;
                     for (int r = 0; r < this.zones[finalZ].getZoneRoomIDs().length; r++) {
 
                         for (int h = 0; h < Main.householdLocations.length; h++) {
                             if (Main.householdLocations[h].getRoomID()==this.zones[finalZ].getZoneRoomIDs()[r]) {
-                                Label tempLabel = new Label(""+Main.householdLocations[h].getName());
+                                Label tempLabel = new Label(""+Main.householdLocations[h].getName()+
+                                        " ("+Main.householdLocations[h].getRoomTemperature()+"°C)");
                                 tempLabel.setTranslateX(tempTransX); tempLabel.setTranslateY(tempTransY);
                                 zonePane.getChildren().add(tempLabel);
                                 tempTransY+=20;

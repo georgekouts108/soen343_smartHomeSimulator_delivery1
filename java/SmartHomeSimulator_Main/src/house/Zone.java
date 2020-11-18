@@ -88,14 +88,14 @@ public class Zone {
             if (this.zoneRoomIDs[roomIndex] == roomID) {
                 for (int houseroomIndex = 0; houseroomIndex < Main.getHouseholdLocations().length; houseroomIndex++) {
                     if (Main.getHouseholdLocations()[houseroomIndex].getRoomID() == roomID) {
-                        Main.getHouseholdLocations()[houseroomIndex].setRoomTemperature(newTemperature);
+                        Controller.changeSpecificRoomTemperature(roomID, newTemperature);
                         break;
                     }
                 }
                 break;
             }
         }
-        SHSHelpers.setHouseholdLocations(Main.getHouseholdLocations());
+        //SHSHelpers.setHouseholdLocations(Main.getHouseholdLocations());
         /**TODO: render the SHH module to show the change in the zone*/
     }
 
@@ -104,12 +104,12 @@ public class Zone {
             int roomID = this.zoneRoomIDs[roomIndex];
             for (int houseroomIndex = 0; houseroomIndex < Main.getHouseholdLocations().length; houseroomIndex++) {
                 if (Main.getHouseholdLocations()[houseroomIndex].getRoomID() == roomID) {
-                    Main.getHouseholdLocations()[houseroomIndex].setRoomTemperature(newTemperature);
+                    Controller.changeSpecificRoomTemperature(roomID, newTemperature);
                     break;
                 }
             }
         }
-        SHSHelpers.setHouseholdLocations(Main.getHouseholdLocations());
+        //SHSHelpers.setHouseholdLocations(Main.getHouseholdLocations());
         /**TODO: render the SHH module to show the change in the zone*/
     }
 }

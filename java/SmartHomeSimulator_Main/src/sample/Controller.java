@@ -370,6 +370,7 @@ public class Controller {
             Button tempButton = new Button("Confirm");
             tempButton.setId("confirmTemperatureButton");
             tempButton.setOnAction(e -> {
+                Main.outsideTemperature = Double.parseDouble(tempText.getCharacters().toString());
                 try {
                     for (int i = 0; i < Main.main_dashboard.getChildren().size(); i++) {
                         if (Main.main_dashboard.getChildren().get(i).getId().equals("temp")) {
@@ -2186,4 +2187,15 @@ public class Controller {
         }
     }
 
+    public static void changeSpecificRoomTemperature(int roomID, double temperature) {
+        for (int r = 0; r < Main.householdLocations.length; r++) {
+            try {
+                if (Main.householdLocations[r].getRoomID() == roomID) {
+                    Main.householdLocations[r].setRoomTemperature(temperature);
+                    break;
+                }
+            }
+            catch (Exception e){}
+        }
+    }
 }

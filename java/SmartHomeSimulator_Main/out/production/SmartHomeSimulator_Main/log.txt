@@ -1,2 +1,0 @@
-2020-11-18 06:29:20 -- ERROR [SHH]: Can only have up to 4 Zones
-2020-11-18 06:29:22 -- ERROR [SHH]: Can only have up to 4 Zones
