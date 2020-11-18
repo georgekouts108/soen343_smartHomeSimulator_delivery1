@@ -139,14 +139,15 @@ public class SHHModule extends Module {
     }
     public void setWinterTemperature(double winterTemperature) {
         this.winterTemperature = winterTemperature;
+        changeSHHTempLabel("winterTempSHHLabel", winterTemperature);
     }
 
     public double getSummerTemperature() {
         return summerTemperature;
     }
-
     public void setSummerTemperature(double summerTemperature) {
         this.summerTemperature = summerTemperature;
+        changeSHHTempLabel("summerTempSHHLabel", summerTemperature);
     }
 
     public Zone[] getZones() {
@@ -225,11 +226,11 @@ public class SHHModule extends Module {
         }
     }
 
-    public void changeSHHTempLabel(AnchorPane pane, String labelID, double newTemp) {
-        for (int e = 0; e < pane.getChildren().size(); e++) {
+    public void changeSHHTempLabel(String labelID, double newTemp) {
+        for (int e = 0; e < Main.SHH_MODULE.getChildren().size(); e++) {
             try {
-                if (pane.getChildren().get(e).getId().equals(labelID)) {
-                    Label tempLabel = (Label) pane.getChildren().get(e);
+                if (Main.SHH_MODULE.getChildren().get(e).getId().equals(labelID)) {
+                    Label tempLabel = (Label) Main.SHH_MODULE.getChildren().get(e);
                     if (tempLabel.getText().contains("Summer")) {
                         tempLabel.setText("Summer temperature: "+newTemp+"°C");
                     }
@@ -239,34 +240,34 @@ public class SHHModule extends Module {
                     else if (tempLabel.getText().contains("Outdoor")) {
                         tempLabel.setText("Outdoor temperature: "+newTemp+"°C");
                     }
-                    pane.getChildren().set(e, tempLabel);
+                    Main.SHH_MODULE.getChildren().set(e, tempLabel);
                     break;
                 }
             }
             catch (Exception ex){}
         }
     }
-    public void changeSHHZoneCountLabel(AnchorPane pane, int numOfZones) {
-        for (int e = 0; e < pane.getChildren().size(); e++) {
+    public void changeSHHZoneCountLabel(int numOfZones) {
+        for (int e = 0; e < Main.SHH_MODULE.getChildren().size(); e++) {
             try {
-                if (pane.getChildren().get(e).getId().equals("currentNumOfZonesLabel")) {
-                    Label tempLabel = (Label) pane.getChildren().get(e);
+                if (Main.SHH_MODULE.getChildren().get(e).getId().equals("currentNumOfZonesLabel")) {
+                    Label tempLabel = (Label) Main.SHH_MODULE.getChildren().get(e);
                     tempLabel.setText("Current number of zones: "+numOfZones);
-                    pane.getChildren().set(e, tempLabel);
+                    Main.SHH_MODULE.getChildren().set(e, tempLabel);
                     break;
                 }
             }
             catch (Exception ex){}
         }
     }
-    public void changeSHHAwayModeLabel(AnchorPane pane, boolean isAwayModeOn) {
-        for (int e = 0; e < pane.getChildren().size(); e++) {
+    public void changeSHHAwayModeLabel(boolean isAwayModeOn) {
+        for (int e = 0; e < Main.SHH_MODULE.getChildren().size(); e++) {
             try {
-                if (pane.getChildren().get(e).getId().equals("awayModeSHHLabel")) {
-                    Label tempLabel = (Label) pane.getChildren().get(e);
+                if (Main.SHH_MODULE.getChildren().get(e).getId().equals("awayModeSHHLabel")) {
+                    Label tempLabel = (Label) Main.SHH_MODULE.getChildren().get(e);
                     if (isAwayModeOn) { tempLabel.setText("Away mode: ON"); }
                     else { tempLabel.setText("Away mode: OFF"); }
-                    pane.getChildren().set(e, tempLabel);
+                    Main.SHH_MODULE.getChildren().set(e, tempLabel);
                     break;
                 }
             }

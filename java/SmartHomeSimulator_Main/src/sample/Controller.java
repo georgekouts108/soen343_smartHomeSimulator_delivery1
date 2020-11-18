@@ -377,7 +377,7 @@ public class Controller {
                                 Label label = (Label) Main.main_dashboard.getChildren().get(i);
                                 label.setText("Outside Temp.\n" + tempText.getCharacters().toString() + "°C");
                                 Main.main_dashboard.getChildren().set(i, label);
-                                Main.shhModule.changeSHHTempLabel(Main.SHH_MODULE, "outdoorTempSHHLabel", Double.parseDouble(tempText.getCharacters().toString()));
+                                Main.shhModule.changeSHHTempLabel("outdoorTempSHHLabel", Double.parseDouble(tempText.getCharacters().toString()));
                                 break;
                             }
                         }
@@ -1594,7 +1594,7 @@ public class Controller {
                             SHSHelpers.setIs_away(false);
                             updateSHPModule(false);
                             Main.currentActiveProfile.setAway(false);
-                            Main.shhModule.changeSHHAwayModeLabel(Main.SHH_MODULE, false);
+                            Main.shhModule.changeSHHAwayModeLabel(false);
                             // unlock all doors
                             for (int room = 0; room < Main.householdLocations.length; room++) {
                                 try {
@@ -1659,7 +1659,7 @@ public class Controller {
 
                     Main.currentActiveProfile.setAway(true);
                     SHSHelpers.setIs_away(true);
-                    Main.shhModule.changeSHHAwayModeLabel(Main.SHH_MODULE, true);
+                    Main.shhModule.changeSHHAwayModeLabel(true);
                     // close all windows;
                     for (int room = 0; room < Main.householdLocations.length; room++) {
                         try {
@@ -1706,7 +1706,7 @@ public class Controller {
 
                     Main.currentActiveProfile.setAway(false);
                     SHSHelpers.setIs_away(false);
-                    Main.shhModule.changeSHHAwayModeLabel(Main.SHH_MODULE, false);
+                    Main.shhModule.changeSHHAwayModeLabel(false);
                     // unlock all doors (except the garage, backyard, and entrance)
                     for (int room = 0; room < Main.householdLocations.length; room++) {
                         try {
