@@ -122,7 +122,7 @@ public class Main extends Application {
     protected static String profilesFile;
 
     /**STATIC VARIABLES AND METHODS FOR THE HOUSE */
-    protected static double outsideTemperature;
+    protected static double outsideTemperature = 15;
     protected static Room[] householdLocations;
     protected static Room currentLocation;
     protected static House house;
@@ -372,7 +372,7 @@ public class Main extends Application {
         simulationTime.setTranslateX(18); simulationTime.setTranslateY(340);
 
         Label temperatureLabel = new Label(); temperatureLabel.setId("temp");
-        temperatureLabel.setText("Outside\nTemp.\n15°C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
+        temperatureLabel.setText("Outside\nTemp.\n"+outsideTemperature+"°C"); temperatureLabel.setTextAlignment(TextAlignment.CENTER);
         temperatureLabel.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 70px;" +
                 "-fx-alignment: center");
         temperatureLabel.setTranslateY(390); temperatureLabel.setTranslateX(18);

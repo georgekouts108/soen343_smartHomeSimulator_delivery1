@@ -33,6 +33,8 @@ public class Room {
     private Window[] windowCollection;
     private boolean autoMode;
 
+    private double roomTemperature;
+
     /**
      * Room constructor
      * @param roomName
@@ -76,6 +78,8 @@ public class Room {
         for (int w = 0; w < this.windowCollection.length; w++) {
             this.windowCollection[w] = new Window();
         }
+
+        this.roomTemperature = SHSHelpers.getOutsideTemperature();
 
         this.iconLight_view.setImage(iconLight); this.iconLight_view.setId("iconLightViewRoom#"+this.roomID);
         this.iconLight_view.setFitWidth(42); this.iconLight_view.setFitHeight(20);
@@ -259,5 +263,21 @@ public class Room {
      */
     public Window[] getWindowCollection() {
         return windowCollection;
+    }
+
+    /**
+     * Return a room's indoor temperature
+     * @return
+     */
+    public double getRoomTemperature() {
+        return roomTemperature;
+    }
+
+    /**
+     * Set a room's indoor temperature
+     * @param roomTemperature
+     */
+    public void setRoomTemperature(double roomTemperature) {
+        this.roomTemperature = roomTemperature;
     }
 }
