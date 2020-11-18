@@ -95,7 +95,6 @@ public class Zone {
                 break;
             }
         }
-        //SHSHelpers.setHouseholdLocations(Main.getHouseholdLocations());
         /**TODO: render the SHH module to show the change in the zone*/
     }
 
@@ -109,7 +108,6 @@ public class Zone {
                 }
             }
         }
-        //SHSHelpers.setHouseholdLocations(Main.getHouseholdLocations());
         /**TODO: render the SHH module to show the change in the zone*/
     }
 }

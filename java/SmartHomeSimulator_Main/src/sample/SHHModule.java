@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.TextAlignment;
@@ -283,6 +284,7 @@ public class SHHModule extends Module {
     public void overrideZoneTemperature(int zoneID, double newTemp) {
         for (int z = 0; z < this.zones.length; z++) {
             if (this.zones[z].getZoneID() == zoneID) {
+                this.zones[z].setZoneTemperature(newTemp);
                 this.zones[z].overrideZoneRoomTemperaturesInHouse(newTemp);
                 Controller.appendMessageToConsole("SHH: Zone #"+zoneID+" temperature changed to "+newTemp+"°C");
                 break;
@@ -435,7 +437,7 @@ public class SHHModule extends Module {
                             }
                             tempCB.setSelected(false);
                             tempCB.setDisable(true);
-                            tempCB.setText(tempCB.getText()+" (Z)");
+                            tempCB.setText(tempCB.getText()+" (Z"+newZone.getZoneID()+")");
                             SHHZoneConfigPane.getChildren().set(elem, tempCB);
                         }
                     }
@@ -501,23 +503,62 @@ public class SHHModule extends Module {
                     zoneStage.setWidth(300); zoneStage.setHeight(300);
                     AnchorPane zonePane = new AnchorPane();
 
+                    Label zoneTempLabel = new Label("Zone temperature: "+this.zones[finalZ].getZoneTemperature()+"°C");
+                    zoneTempLabel.setTranslateY(10); zoneTempLabel.setTranslateX(20);
+                    zoneTempLabel.setId("zone"+this.zones[finalZ].getZoneID()+"tempLabel");
+                    zonePane.getChildren().add(zoneTempLabel);
+
+
+                    /**todo: you can modify the zone temperature, which will change the rooms' temperatures in the zone
+                     *  to that value*/
+
+                    TextField changeZoneTempTF = new TextField(); changeZoneTempTF.setPrefWidth(80);
+                    changeZoneTempTF.setPromptText("Change"); changeZoneTempTF.setId("changeZoneTempTF");
+                    changeZoneTempTF.setTranslateX(20); changeZoneTempTF.setTranslateY(30);
+                    zonePane.getChildren().add(changeZoneTempTF);
+
+                    Button changeZoneTempButton = new Button("Change");
+                    changeZoneTempButton.setId("changeZoneTempButton");
+                    changeZoneTempButton.setTranslateX(110); changeZoneTempButton.setTranslateY(30);
+                    changeZoneTempButton.setOnAction(e->{
+                        try {
+                            int newTemperature = Integer.parseInt(changeZoneTempTF.getText());
+                            overrideZoneTemperature(this.zones[finalZ].getZoneID(), newTemperature);
+                            changeZoneInfoPane(zonePane, newTemperature, this.zones[finalZ]);
+                        }
+                        catch (Exception ex){
+                            Controller.appendMessageToConsole("Invalid attempt to change temperature of Zone "+
+                                    this.zones[finalZ].getZoneID());
+                            changeZoneTempTF.clear();
+                            changeZoneTempTF.setPromptText("Change");
+                        }
+                    });
+
+                    zonePane.getChildren().add(changeZoneTempButton);
+
+
                     Label roomsLabel = new Label("Rooms:");
-                    roomsLabel.setTranslateY(40); roomsLabel.setTranslateX(20);
+                    roomsLabel.setTranslateY(90); roomsLabel.setTranslateX(20);
                     zonePane.getChildren().add(roomsLabel);
 
-                    int tempTransX = 50, tempTransY = 60;
+                    int tempTransX = 20, tempTransY = 110;
                     for (int r = 0; r < this.zones[finalZ].getZoneRoomIDs().length; r++) {
-
-                        for (int h = 0; h < Main.householdLocations.length; h++) {
-                            if (Main.householdLocations[h].getRoomID()==this.zones[finalZ].getZoneRoomIDs()[r]) {
-                                Label tempLabel = new Label(""+Main.householdLocations[h].getName()+
-                                        " ("+Main.householdLocations[h].getRoomTemperature()+"°C)");
-                                tempLabel.setTranslateX(tempTransX); tempLabel.setTranslateY(tempTransY);
-                                zonePane.getChildren().add(tempLabel);
-                                tempTransY+=20;
+                        try {
+                            for (int h = 0; h < Main.householdLocations.length; h++) {
+                                try {
+                                    if (Main.householdLocations[h].getRoomID()==this.zones[finalZ].getZoneRoomIDs()[r]) {
+                                        Label tempLabel = new Label("#"+Main.householdLocations[h].getRoomID()+" "+Main.householdLocations[h].getName()+
+                                                " ("+Main.householdLocations[h].getRoomTemperature()+"°C)");
+                                        tempLabel.setId("#"+Main.householdLocations[h].getRoomID()+"_tempLabel");
+                                        tempLabel.setTranslateX(tempTransX); tempLabel.setTranslateY(tempTransY);
+                                        zonePane.getChildren().add(tempLabel);
+                                        tempTransY+=20;
+                                    }
+                                }
+                                catch (Exception e){}
                             }
-
                         }
+                        catch (Exception e){}
                     }
 
                     Button zonePaneCloseButton = new Button("Return");
@@ -530,6 +571,47 @@ public class SHHModule extends Module {
                 });
                 Main.SHH_MODULE.getChildren().add(zoneInfoButton);
                 transY+=40;
+            }
+            catch (Exception e){}
+        }
+    }
+
+    public void changeZoneInfoPane(AnchorPane pane, double temperature, Zone zone) {
+        for (int el = 0; el < pane.getChildren().size(); el++) {
+            if (pane.getChildren().get(el).getId().equals("zone"+zone.getZoneID()+"tempLabel")) {
+                Label label = (Label) pane.getChildren().get(el);
+                label.setText("Zone temperature: "+zone.getZoneTemperature()+"°C");
+                pane.getChildren().set(el,label);
+                break;
+            }
+        }
+
+        // for each room in the zone...
+        for (int r = 0; r < zone.getZoneRoomIDs().length; r++) {
+            try {
+                // for each room in the house...
+                for (int h = 0; h < Main.householdLocations.length; h++) {
+                    try {
+                        // if the room's ID matches the one at the zone's index...
+                        if (Main.householdLocations[h].getRoomID()==zone.getZoneRoomIDs()[r]) {
+
+                            // find the label with the matching room ID...
+                            for (int el = 0; el < pane.getChildren().size(); el++) {
+                                try {
+                                    if (pane.getChildren().get(el).getId().contains("#"+Main.householdLocations[h].getRoomID()+"_tempLabel")) {
+                                        Label label = (Label) pane.getChildren().get(el);
+                                        label.setText("#"+Main.householdLocations[h].getRoomID()+" "+Main.householdLocations[h].getName()+
+                                                " ("+temperature+"°C)");
+                                        pane.getChildren().set(el,label);
+                                        break;
+                                    }
+                                }
+                                catch (Exception e){}
+                            }
+                        }
+                    }
+                    catch (Exception e){}
+                }
             }
             catch (Exception e){}
         }
