@@ -19,7 +19,7 @@ public class SHHModule extends Module {
     private static AnchorPane SHHZoneConfigPane;
     private static int numberOfTimesZoneConfigSelected = 0;
 
-    private final int MAX_NUMBER_OF_ZONES = 4;
+    //private final int MAX_NUMBER_OF_ZONES = 4;
     private int currentNumberOfZones;
     private double outdoorTemperature;
     private double winterTemperature;
@@ -82,7 +82,7 @@ public class SHHModule extends Module {
         summerTempSHHLabel.setId("summerTempSHHLabel");
         summerTempSHHLabel.setTranslateY(60);
 
-        Label maxNumOfZonesSHHLabel = new Label("Maximum number of zones allowed: "+MAX_NUMBER_OF_ZONES);
+        Label maxNumOfZonesSHHLabel = new Label("Maximum number of zones allowed: Unlimited");
         maxNumOfZonesSHHLabel.setId("maxNumOfZonesLabel");
         maxNumOfZonesSHHLabel.setTranslateY(80);
 
@@ -200,30 +200,7 @@ public class SHHModule extends Module {
     }
 
     public void incrementNumberOfZones() {
-        try {
-            if (this.currentNumberOfZones + 1 <= MAX_NUMBER_OF_ZONES) {
-                this.currentNumberOfZones++;
-            }
-            else {
-                throw new Exception("ERROR [SHH]: Can only have up to 4 Zones.");
-            }
-        }
-        catch (Exception e){
-            Controller.appendMessageToConsole(e.getMessage());
-        }
-    }
-    public void decrementNumberOfZones() {
-        try {
-            if (this.currentNumberOfZones - 1 >= MAX_NUMBER_OF_ZONES) {
-                this.currentNumberOfZones--;
-            }
-            else {
-                throw new Exception("ERROR [SHH]: Number of Zones must be >= 0");
-            }
-        }
-        catch (Exception e){
-            Controller.appendMessageToConsole(e.getMessage());
-        }
+        this.currentNumberOfZones++;
     }
 
     public double getOutdoorTemperature() {
@@ -390,22 +367,7 @@ public class SHHModule extends Module {
     }
 
     public void addZone() {
-
         try {
-            if (this.currentNumberOfZones == MAX_NUMBER_OF_ZONES) {
-                for (int elem = 0; elem < SHHZoneConfigPane.getChildren().size(); elem++) {
-                    try {
-                        if (SHHZoneConfigPane.getChildren().get(elem).getId().contains("zoneRoomCheckBoxID")){
-                            CheckBox tempCB = (CheckBox) SHHZoneConfigPane.getChildren().get(elem);
-                            tempCB.setSelected(false);
-                            SHHZoneConfigPane.getChildren().set(elem, tempCB);
-                        }
-                    }
-                    catch (Exception ex){}
-                }
-                throw new Exception("ERROR [SHH]: Can only have up to 4 Zones");
-            }
-
             Zone newZone = new Zone();
 
             for (int elem = 0; elem < SHHZoneConfigPane.getChildren().size(); elem++) {

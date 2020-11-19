@@ -53,34 +53,7 @@ public class Zone {
             }
             tempZoneRoomsArray[tempZoneRoomsArray.length-1] = room.getRoomID();
         }
-
         this.zoneRoomIDs = tempZoneRoomsArray;
-
-        /**TODO: render the SHH module to show the change in the zone*/
-    }
-
-    public void deleteRoomFromZone(Room room, int zoneID) {
-
-        int[] tempZoneRoomsArray = new int[this.zoneRoomIDs.length - 1];
-
-        for (int z = 0; z < this.zoneRoomIDs.length; z++) {
-            if (this.zoneRoomIDs[z] == room.getRoomID()) {
-                this.zoneRoomIDs[z] = -1;
-                break;
-            }
-        }
-
-        int tempIndex = 0;
-        for (int t = 0; t < this.zoneRoomIDs.length; t++) {
-            if (this.zoneRoomIDs[t] != -1) {
-                tempZoneRoomsArray[tempIndex] = this.zoneRoomIDs[t];
-                tempIndex++;
-            }
-        }
-
-        this.zoneRoomIDs = tempZoneRoomsArray;
-
-        /**TODO: render the SHH module to show the change in the zone*/
     }
 
     public void overrideSpecificRoomTemperature(int roomID, double newTemperature) {
@@ -95,7 +68,6 @@ public class Zone {
                 break;
             }
         }
-        /**TODO: render the SHH module to show the change in the zone*/
     }
 
     public void overrideZoneRoomTemperaturesInHouse(double newTemperature) {
@@ -108,6 +80,5 @@ public class Zone {
                 }
             }
         }
-        /**TODO: render the SHH module to show the change in the zone*/
     }
 }
