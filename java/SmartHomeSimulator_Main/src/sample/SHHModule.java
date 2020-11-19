@@ -14,7 +14,7 @@ import javafx.stage.Stage;
  */
 public class SHHModule extends Module {
 
-    protected static Stage SHHZoneConfigStage;
+    private static Stage SHHZoneConfigStage;
     private static Scene SHHZoneConfigScene;
     private static AnchorPane SHHZoneConfigPane;
     private static int numberOfTimesZoneConfigSelected = 0;
@@ -26,13 +26,10 @@ public class SHHModule extends Module {
     private Zone[] zones;
     private boolean isWinter;
     private boolean isSummer;
-    private boolean HAVCsystemActive;
-    private Thread adjustToRoomTemperatureThread;
-    private Thread adjustToDefaultTemperatureThread;
 
     private SHHZoneThread[] zoneThreads;
-
-
+    private boolean HAVCsystemActive;
+    private boolean HAVCsystemPaused;
     private double TEMP_THRESHOLD;
 
     /**
@@ -46,6 +43,7 @@ public class SHHModule extends Module {
         this.isWinter = false;
         this.isSummer = false;
         this.HAVCsystemActive = false;
+        this.HAVCsystemPaused = false;
         this.currentNumberOfZones = 0;
         this.zones = null;
         this.zoneThreads = null;
@@ -130,6 +128,14 @@ public class SHHModule extends Module {
 
         Main.numberOfTimesSHHModuleCreated++;
         return pane;
+    }
+
+    public boolean isHAVCsystemPaused() {
+        return HAVCsystemPaused;
+    }
+
+    public void setHAVCsystemPaused(boolean HAVCsystemPaused) {
+        this.HAVCsystemPaused = HAVCsystemPaused;
     }
 
     public void goToZoneConfigPage() {
@@ -268,13 +274,84 @@ public class SHHModule extends Module {
 
     public void overrideZoneTemperature(int zoneID, double newTemp) {
         for (int z = 0; z < this.zones.length; z++) {
-            if (this.zones[z].getZoneID() == zoneID) {
-                this.zones[z].setZoneTemperature(newTemp);
-                this.zones[z].overrideZoneRoomTemperaturesInHouse(newTemp);
-                Controller.appendMessageToConsole("SHH: Zone #"+zoneID+" temperature changed to "+newTemp+"°C");
-                break;
+            try {
+                if (this.zones[z].getZoneID() == zoneID) {
+
+                    // check if newTemp has a difference of at least 1 degree from the initial temperature...
+                    double tempDifference = (newTemp - this.zones[z].getZoneTemperature());
+                    double absoluteTempDifference = (tempDifference < 0 ? (tempDifference * -1) : (tempDifference * 1));
+
+                    if (absoluteTempDifference >= 1) {
+
+                        this.HAVCsystemActive = true;
+                        double roundedTemp;
+
+                        while (this.zones[z].getZoneTemperature() != newTemp) {
+
+                            if (newTemp < this.zones[z].getZoneTemperature()) {
+                                roundedTemp = (double) Math.round((this.zones[z].getZoneTemperature() - 0.1) * 100) / 100;
+                            } else {
+                                roundedTemp = (double) Math.round((this.zones[z].getZoneTemperature() + 0.1) * 100) / 100;
+                            }
+                            try {
+
+                                this.zones[z].setZoneTemperature(roundedTemp);
+                                this.zones[z].overrideZoneRoomTemperaturesInHouse(roundedTemp);
+                                Controller.appendMessageToConsole("SHH: Zone #" + zoneID + " temperature changed to " + roundedTemp + "°C");
+                            }
+                            catch (Exception e) {}
+                            finally {
+                                try { Thread.sleep((long) (1000 / Controller.simulationTimeSpeed)); } catch (Exception e) {}
+                            }
+                        }
+                        this.HAVCsystemPaused = true;
+                    }
+                    break;
+                }
+            }
+            catch (Exception e){}
+        }
+    }
+
+    public boolean isRoomTempInBetweenQuartDegreeBounds(int zoneID, int roomID) {
+        boolean yes = false;
+        try {
+            boolean roomIsInZone = false;
+            for (int z = 0; z < this.zones.length; z++) {
+                if (this.zones[z].getZoneID() == zoneID) {
+                    for (int r = 0; r < this.zones[z].getZoneRoomIDs().length; r++) {
+                        if (this.zones[z].getZoneRoomIDs()[r]==roomID) {
+                            roomIsInZone = true;
+                            break;
+                        }
+                    }
+
+                    if (!roomIsInZone) {
+                        throw new Exception("ERROR [SHH]: Room #"+roomID+" is not in Zone "+zoneID);
+                    }
+
+                    for (int roomIndex = 0; roomIndex < this.zones[z].getZoneRoomIDs().length; roomIndex++) {
+                        try {
+                            for (int houseroomIndex = 0; houseroomIndex < Main.getHouseholdLocations().length; houseroomIndex++) {
+                                if (Main.getHouseholdLocations()[houseroomIndex].getRoomID() == roomID) {
+                                    double temperature = Main.getHouseholdLocations()[houseroomIndex].getRoomTemperature();
+                                    double lowerBound = (double) Math.round((temperature-0.25)*100)/100;
+                                    double upperBound = (double) Math.round((temperature+0.25)*100)/100;
+                                    yes = ((temperature >= (lowerBound)) && (temperature <= upperBound));
+                                    break;
+                                }
+                            }
+                        }
+                        catch (Exception e){}
+                    }
+                    break;
+                }
             }
         }
+        catch (Exception e){
+            Controller.appendMessageToConsole(e.getMessage());
+        }
+        return yes;
     }
 
     public void overrideTempInSpecificRoomInZone(int zoneID, int roomID, double newTemp) {
@@ -425,7 +502,7 @@ public class SHHModule extends Module {
             try {
                 addNewZoneThread(newZone);
             }
-            catch (Exception e){System.out.println("THREAD ERROR:"+e.getMessage());}
+            catch (Exception e){}
         }
         catch (Exception e) {
             Controller.appendMessageToConsole(e.getMessage());

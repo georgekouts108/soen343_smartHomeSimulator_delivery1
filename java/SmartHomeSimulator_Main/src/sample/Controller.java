@@ -2185,11 +2185,40 @@ public class Controller {
         }
     }
 
-    public static void changeSpecificRoomTemperature(int roomID, double temperature) {
+    public static void changeSpecificRoomTemperature(int roomID, double newTemp) {
+        System.out.println("DEBUGGGGG HERE 3");
         for (int r = 0; r < Main.householdLocations.length; r++) {
             try {
                 if (Main.householdLocations[r].getRoomID() == roomID) {
-                    Main.householdLocations[r].setRoomTemperature(temperature);
+
+                    /////
+                    // check if newTemp has a difference of at least 1 degree from the initial temperature...
+                    double tempDifference = (newTemp - Main.householdLocations[r].getRoomTemperature());
+                    double absoluteTempDifference = (tempDifference < 0 ? (tempDifference * -1) : (tempDifference * 1));
+
+                    if (absoluteTempDifference >= 1) {
+
+                        Main.shhModule.setHAVCsystemActive(true);
+                        double roundedTemp;
+
+                        while (Main.householdLocations[r].getRoomTemperature() != newTemp) {
+                            if (newTemp < Main.householdLocations[r].getRoomTemperature()) {
+                                roundedTemp = (double) Math.round((Main.householdLocations[r].getRoomTemperature() - 0.1) * 100) / 100;
+                            } else {
+                                roundedTemp = (double) Math.round((Main.householdLocations[r].getRoomTemperature() + 0.1) * 100) / 100;
+                            }
+                            try {
+                                Main.householdLocations[r].setRoomTemperature(roundedTemp);
+                                Controller.appendMessageToConsole("SHH: Room #" + roomID + " temperature changed to " + roundedTemp + "°C");
+                            } catch (Exception e) {}
+                            finally {
+                                try {
+                                    Thread.sleep((long) (1000 / Controller.simulationTimeSpeed));
+                                } catch (Exception e) {}
+                            }
+                        }
+                        Main.shhModule.setHAVCsystemPaused(true);
+                    }
                     break;
                 }
             }

@@ -10,48 +10,68 @@ public class SHHZoneThread {
 
     public SHHZoneThread(Zone zone) {
         this.zone = zone;
-        this.isRunning = false;
         this.zoneRoomThreads = new Thread[zone.getZoneRoomIDs().length];
-        initializeMainThread();
-        this.mainThread.start();
-        //initializeAndStartZoneRoomThreads();
+        initializeAndStartMainThread();
     }
 
-    public void initializeMainThread() {
+    public void initializeAndStartMainThread() {
 
         // as soon as a new zone is created, its corresponding thread will immediately start running
         this.mainThread = new Thread(()-> {
-            System.out.println("THREAD DEBUG 1 -- main thread started");
+            boolean anyRoomsInZoneHaveTempInBounds = false;
             // this thread will run until the program is closed
             while (true) {
                 try {
-                    this.isRunning = false;
+                    if (!Main.shhModule.isHAVCsystemActive()) {
 
-                    // if HAVC is stopped, the temperature increases/decreases 0.05 deg. Celsius
-                    // per ms until it reaches the temperature outside the house.
-                    if (this.zone.getZoneTemperature() != Main.outsideTemperature) {
-                        double roundedTemp;
-                        if (this.zone.getZoneTemperature() > Main.outsideTemperature) {
-                            roundedTemp = (double) Math.round((this.zone.getZoneTemperature()-0.05) * 100)/100;
+                        // the temperature increases/decreases by 0.05 deg. Celsius
+                        // per ms until it reaches the temperature outside the house.
+                        if (this.zone.getZoneTemperature() != Main.outsideTemperature) {
+                            double roundedTemp;
+                            if (this.zone.getZoneTemperature() > Main.outsideTemperature) {
+                                roundedTemp = (double) Math.round((this.zone.getZoneTemperature()-0.05) * 100)/100;
+                            }
+                            else {
+                                roundedTemp = (double) Math.round((this.zone.getZoneTemperature()+0.05) * 100)/100;
+                            }
+                            try {
+                                Main.shhModule.overrideZoneTemperature(this.zone.getZoneID(), roundedTemp);
+                            }
+                            catch (Exception e){}
                         }
-                        else {
-                            roundedTemp = (double) Math.round((this.zone.getZoneTemperature()+0.05) * 100)/100;
+                    }
+
+                    /**todo: might need to change this block when the HAVC is working...
+                     *  also add debug statements for future testing*/
+                    else {
+                        while (Main.shhModule.isHAVCsystemPaused()) {
+                            int numOfRoomsWithTempOOB = 0;
+                            for (int r = 0; r < this.zone.getZoneRoomIDs().length; r++) {
+                                try {
+                                    if (!Main.shhModule.isRoomTempInBetweenQuartDegreeBounds(this.zone.getZoneID(),
+                                            this.zone.getZoneRoomIDs()[r])) {
+                                        numOfRoomsWithTempOOB++;
+                                    }
+                                }
+                                catch (Exception e){}
+                            }
+
+                            // when all rooms in the zone have temperatures within (temp +- 0.25)
+                            // the HAVC may unpause itself
+                            if (numOfRoomsWithTempOOB == 0) {
+                                Main.shhModule.setHAVCsystemPaused(false);
+                                break;
+                            }
                         }
-                        try {
-                            Main.shhModule.overrideZoneTemperature(this.zone.getZoneID(), roundedTemp);
-                        }
-                        catch (Exception e){}
                     }
                 }
                 catch (Exception e){}
                 finally {
-                    /**todo: the time should be controlled by the simulation time */
-                    try {
-                        Thread.sleep((long) (1000/Controller.simulationTimeSpeed)); // Appendix D says every 1 ms ???
-                    }
-                    catch (Exception e){}
+                    try { Thread.sleep((long) (1000/Controller.simulationTimeSpeed)); } catch (Exception e){}
                 }
             }
         });
+
+        this.mainThread.start();
     }
 }
