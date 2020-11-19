@@ -19,7 +19,6 @@ public class SHHModule extends Module {
     private static AnchorPane SHHZoneConfigPane;
     private static int numberOfTimesZoneConfigSelected = 0;
 
-    //private final int MAX_NUMBER_OF_ZONES = 4;
     private int currentNumberOfZones;
     private double outdoorTemperature;
     private double winterTemperature;
@@ -30,6 +29,11 @@ public class SHHModule extends Module {
     private boolean HAVCsystemActive;
     private Thread adjustToRoomTemperatureThread;
     private Thread adjustToDefaultTemperatureThread;
+
+    private SHHZoneThread[] zoneThreads;
+
+
+    private double TEMP_THRESHOLD;
 
     /**
      * SHH Constructor
@@ -44,7 +48,7 @@ public class SHHModule extends Module {
         this.HAVCsystemActive = false;
         this.currentNumberOfZones = 0;
         this.zones = null;
-
+        this.zoneThreads = null;
         SHHZoneConfigPane = new AnchorPane();
         SHHZoneConfigScene = new Scene(SHHZoneConfigPane, 600,900);
     }
@@ -224,6 +228,14 @@ public class SHHModule extends Module {
     public void setSummerTemperature(double summerTemperature) {
         this.summerTemperature = summerTemperature;
         changeSHHTempLabel("summerTempSHHLabel", summerTemperature);
+    }
+
+    public double getTEMP_THRESHOLD() {
+        return TEMP_THRESHOLD;
+    }
+
+    public void setTEMP_THRESHOLD(double TEMP_THRESHOLD) {
+        this.TEMP_THRESHOLD = TEMP_THRESHOLD;
     }
 
     public Zone[] getZones() {
@@ -407,19 +419,34 @@ public class SHHModule extends Module {
 
             // all rooms in the new zone take on the outdoor temperature
             newZone.overrideZoneRoomTemperaturesInHouse(Main.outsideTemperature);
-
-            for (int houseroomIndex = 0; houseroomIndex < Main.householdLocations.length; houseroomIndex++) {
-                try {
-                    System.out.println("DEBUG: room temp for "+Main.householdLocations[houseroomIndex].getName()+
-                            " is "+Main.householdLocations[houseroomIndex].getRoomTemperature());
-                }
-                catch (Exception e){}
-            }
             incrementNumberOfZones();
             updateSHSModuleWithZones();
+
+            try {
+                addNewZoneThread(newZone);
+            }
+            catch (Exception e){System.out.println("THREAD ERROR:"+e.getMessage());}
         }
         catch (Exception e) {
             Controller.appendMessageToConsole(e.getMessage());
+        }
+    }
+
+    public void addNewZoneThread(Zone zone) {
+        if (this.zoneThreads == null) {
+            this.zoneThreads = new SHHZoneThread[1];
+            this.zoneThreads[0] = new SHHZoneThread(zone);
+        }
+        else {
+            SHHZoneThread[] tempThreadArray = new SHHZoneThread[this.zoneThreads.length + 1];
+            for (int zt = 0; zt < this.zoneThreads.length; zt++) {
+                try {
+                    tempThreadArray[zt] = this.zoneThreads[zt];
+                }
+                catch (Exception e){}
+            }
+            tempThreadArray[tempThreadArray.length - 1] = new SHHZoneThread(zone);
+            this.zoneThreads = tempThreadArray;
         }
     }
 

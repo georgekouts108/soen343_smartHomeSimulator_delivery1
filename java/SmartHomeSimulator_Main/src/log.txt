@@ -1,2 +1,0 @@
-2020-11-18 22:11:46 -- SHH: Room #3 in Zone #2 temperature changed to 20.0°C
-2020-11-18 22:12:24 -- SHH: Room #3 in Zone #2 temperature changed to 5.0°C

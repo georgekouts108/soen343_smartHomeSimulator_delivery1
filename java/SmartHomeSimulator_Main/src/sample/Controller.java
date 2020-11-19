@@ -351,15 +351,6 @@ public class Controller {
 
             TextField tempText = new TextField();
             tempText.setId("temperatureText");
-            tempText.textProperty().addListener(new ChangeListener<String>() {
-                @Override
-                public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                    String newValue) {
-                    if (!newValue.matches("\\d*")) {
-                        tempText.setText(newValue.replaceAll("[^\\d*(\\.)?\\d*$]", ""));
-                    }
-                }
-            });
             tempText.setPrefHeight(30);
             tempText.setPrefWidth(60);
             tempText.setTranslateX(450);
@@ -370,8 +361,8 @@ public class Controller {
             Button tempButton = new Button("Confirm");
             tempButton.setId("confirmTemperatureButton");
             tempButton.setOnAction(e -> {
-                Main.outsideTemperature = Double.parseDouble(tempText.getCharacters().toString());
                 try {
+                    Main.outsideTemperature = Double.parseDouble(tempText.getCharacters().toString());
                     for (int i = 0; i < Main.main_dashboard.getChildren().size(); i++) {
                         if (Main.main_dashboard.getChildren().get(i).getId().equals("temp")) {
                             if (!tempText.getCharacters().toString().isEmpty()) {
@@ -384,7 +375,7 @@ public class Controller {
                         }
                     }
                 } catch (Exception err) {
-                    System.out.print("There was an error while modifying the outdoor temperature.");
+                    appendMessageToConsole("There was an error while modifying the outdoor temperature.");
                 }
             });
             tempButton.setTranslateX(540);
@@ -1985,13 +1976,15 @@ public class Controller {
     public static void appendMessageToConsole(String message) {
 
         for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
-            if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
-                TextArea textArea = (TextArea) Main.getMain_dashboard().getChildren().get(a);
-                textArea.appendText(LocalDateTime.now().toString().substring(0,10)+ " "+
-                        LocalDateTime.now().toString().substring(11,19)+" -- "+message+"\n");
-                Main.getMain_dashboard().getChildren().set(a, textArea);
-                break;
-            }
+            try {
+                if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
+                    TextArea textArea = (TextArea) Main.getMain_dashboard().getChildren().get(a);
+                    textArea.appendText(LocalDateTime.now().toString().substring(0, 10) + " " +
+                            LocalDateTime.now().toString().substring(11, 19) + " -- " + message + "\n");
+                    Main.getMain_dashboard().getChildren().set(a, textArea);
+                    break;
+                }
+            }catch (Exception e){}
         }
         appendMessageToLogFile(LocalDateTime.now().toString().substring(0,10)+ " "+
                 LocalDateTime.now().toString().substring(11,19)+" -- "+message+"\n");
