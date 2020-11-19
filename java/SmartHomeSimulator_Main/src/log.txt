@@ -1,3 +1,5 @@
-2020-11-18 18:52:18 -- SHH: Zone #1 temperature changed to 54.0°C
-2020-11-18 18:52:21 -- SHH: Zone #1 temperature changed to 54.0°C
-2020-11-18 18:52:25 -- SHH: Zone #1 temperature changed to 32.0°C
+2020-11-18 20:35:16 -- SHH: Room #1 in Zone #1 temperature changed to 32.0°C
+2020-11-18 20:35:30 -- SHH: Zone #1 temperature changed to 11.0°C
+2020-11-18 20:35:37 -- SHH: Room #2 in Zone #1 temperature changed to 22.0°C
+2020-11-18 20:35:42 -- SHH: Room #1 in Zone #1 temperature changed to 22.0°C
+2020-11-18 20:35:52 -- SHH: Zone #1 temperature changed to 14.0°C
