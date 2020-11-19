@@ -46,7 +46,10 @@ public class SHHZoneThread {
                 catch (Exception e){}
                 finally {
                     /**todo: the time should be controlled by the simulation time */
-                    try {Thread.sleep(1000); }catch (Exception e){}// Appendix D says every 1 ms ???
+                    try {
+                        Thread.sleep((long) (1000/Controller.simulationTimeSpeed)); // Appendix D says every 1 ms ???
+                    }
+                    catch (Exception e){}
                 }
             }
         });

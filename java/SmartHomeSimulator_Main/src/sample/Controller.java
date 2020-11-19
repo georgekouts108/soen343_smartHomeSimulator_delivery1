@@ -56,6 +56,7 @@ public class Controller {
     protected static CheckBox[] profileCheckboxes;
     protected static CheckBox[] roomCheckboxes;
     protected static Thread simulationTimeThread = null;
+    protected static float simulationTimeSpeed = 1; /** NOTE: this is a divisor */
 
 
     /**
@@ -319,9 +320,12 @@ public class Controller {
             speedButton.setTranslateX(560);
             speedButton.setTranslateY(130);
             speedButton.setOnAction(e -> {
-                simulationTimeThread.stop();
-                editTimeSpeed(timeMultiplier.getText()); // reinitialize the thread
-                simulationTimeThread.start();
+                try {
+                    simulationTimeThread.stop();
+                    editTimeSpeed(timeMultiplier.getText()); // reinitialize the thread
+                    simulationTimeThread.start();
+                }
+                catch (Exception ex){}
             });
 
             //end sim time speed
@@ -2008,6 +2012,7 @@ public class Controller {
      */
     public static void editTimeSpeed(String multiplier){
         float Multiplier = Float.parseFloat(multiplier);
+        simulationTimeSpeed = Multiplier;
         System.out.println("Test " + Multiplier);
         //grab thread or info that is already shown in sim time, and speed it up...
         //i.e. make use of currentDateSimulation method

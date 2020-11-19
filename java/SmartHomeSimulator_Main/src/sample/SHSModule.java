@@ -163,7 +163,7 @@ public class SHSModule extends Module {
                 }catch (Exception excep){}
             }
             sample.Controller.CurrentDateSimulation(datePicker, (Label) Main.main_dashboard.getChildren().get(indexOfSimDateLabel),
-                    (Label) Main.main_dashboard.getChildren().get(indexOfSimTimeLabel), hourField, minuteField, (float) 1.0);
+                    (Label) Main.main_dashboard.getChildren().get(indexOfSimTimeLabel), hourField, minuteField, Controller.simulationTimeSpeed);
             });
 
             Controller.simulationTimeThread.start();
