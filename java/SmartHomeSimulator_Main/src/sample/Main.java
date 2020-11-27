@@ -447,6 +447,10 @@ public class Main extends Application {
                 houseLayout.setDisable(true);
                 main_dashboard.getChildren().remove(chooseFileButton);
                 main_dashboard.getChildren().add(houseLayout);
+
+                // create an initial SHH zone that contains all rooms in the house
+                Main.shhModule.createNewZone(householdLocations);
+
                 createMainDashboardNecessities();
             }
         });

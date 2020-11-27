@@ -107,7 +107,7 @@ public class SHHModule extends Module {
         configZoneButton.setTranslateX(300); configZoneButton.setTranslateY(30);
         configZoneButton.setOnAction(e->{
             if (Main.householdLocations != null) {
-                goToZoneConfigPage();
+                openUpZoneConfigurationPanel_UPDATED();
             }
             else {
                 new Thread(()->{
@@ -389,71 +389,98 @@ public class SHHModule extends Module {
         this.HAVCsystemPaused = HAVCsystemPaused;
     }
 
-    public void goToZoneConfigPage() {
-        SHHZoneConfigStage = new Stage();
-        SHHZoneConfigStage.setResizable(false);
-        SHHZoneConfigStage.initModality(Modality.APPLICATION_MODAL);
-        SHHZoneConfigStage.setTitle("Configure SHH Zones");
-        SHHZoneConfigStage.setWidth(900);
-        SHHZoneConfigStage.setHeight(600);
-        generateZoneConfigInterface();
-        SHHZoneConfigStage.setScene(SHHZoneConfigScene);
-        SHHZoneConfigStage.showAndWait();
-    }
+    public void openUpZoneConfigurationPanel_UPDATED() {
+        Stage tempStage = new Stage();
+        tempStage.setResizable(false);
+        tempStage.setTitle("Relocate Rooms Around Zones");
 
-    public void generateZoneConfigInterface() {
+        AnchorPane hostPane = new AnchorPane();
 
-        Label createNewZoneLabel = new Label("CREATE A NEW ZONE");
-        createNewZoneLabel.setTranslateY(10); createNewZoneLabel.setTranslateX(20);
+        Label instructionsLabel = new Label();
+        instructionsLabel.setText("Select as many rooms from up to multiple zones, and then\n" +
+                "select ONLY ONE zone where you would like to move those rooms, and click \"Confirm Configuration\"");
+        hostPane.getChildren().add(instructionsLabel);
 
-        Label roomListLabel = new Label("Select rooms that\nyou would like\nto add to a\nnew zone:");
-        roomListLabel.setTranslateY(40); roomListLabel.setTranslateX(30);
-        roomListLabel.setTextAlignment(TextAlignment.CENTER);
+        int transX = 0, transY = 50;
+        for (int z = 0; z <= this.zones.length; z++) {
+            AnchorPane zonePane = new AnchorPane();
+            zonePane.setPrefWidth(250);
+            zonePane.setPrefHeight(250);
+            zonePane.setStyle("-fx-border-color:black;");
 
-        if (numberOfTimesZoneConfigSelected == 0) {
-            int transY = 130;
-            for (int room = 0; room < Main.householdLocations.length; room++) {
-                try {
-                    CheckBox zoneRoomCB = new CheckBox(Main.householdLocations[room].getName());
-                    zoneRoomCB.setId("zoneRoomCheckBoxID#"+Main.householdLocations[room].getRoomID());
-                    zoneRoomCB.setTranslateX(30); zoneRoomCB.setTranslateY(transY);
-                    if (isRoomInAzone(Main.householdLocations[room])) {
-                        zoneRoomCB.setDisable(true);
-                    }
-                    SHHZoneConfigPane.getChildren().add(zoneRoomCB);
-                    transY+=20;
-                }
-                catch (Exception e){}
+            switch (z+1) {
+                case 1: transY = 50; transX = 0; break;
+                case 2: transY = 50; transX = 250; break;
+                case 3: transY = 50; transX = 500; break;
+                case 4: transY = 300; transX = 0; break;
+                case 5: transY = 300; transX = 250; break;
+                case 6: transY = 300; transX = 500; break;
+                case 7: transY = 550; transX = 0; break;
+                case 8: transY = 550; transX = 250; break;
+                case 9: transY = 550; transX = 500; break;
             }
+
+            if (z != this.zones.length) {
+                CheckBox zoneSelectBox = new CheckBox("Zone #"+this.zones[z].getZoneID());
+                zoneSelectBox.setId("zoneSelectBoxID#"+this.zones[z].getZoneID());
+                zoneSelectBox.setTranslateX(20); zoneSelectBox.setTranslateY(10);
+                zonePane.getChildren().add(zoneSelectBox);
+
+                Line line = new Line();
+                line.setEndX(0); line.setEndX(250);
+                line.setTranslateY(30);
+                zonePane.getChildren().add(line);
+
+                int roomTransX = 20, roomTransY = 50;
+                for (int zoneRoom = 0; zoneRoom < this.zones[z].getZoneRoomIDs().length; zoneRoom++) {
+                    try {
+                        for (int hr = 0; hr < Main.householdLocations.length; hr++) {
+                            try {
+                                if (Main.householdLocations[hr].getRoomID()==this.zones[z].getZoneRoomIDs()[zoneRoom]) {
+                                    CheckBox zoneRoomBox = new CheckBox(""+Main.householdLocations[hr].getName());
+                                    zoneRoomBox.setId("zoneRoomBoxID#"+Main.householdLocations[hr].getRoomID());
+                                    zoneRoomBox.setTranslateX(roomTransX);
+                                    zoneRoomBox.setTranslateY(roomTransY);
+                                    zonePane.getChildren().add(zoneRoomBox);
+                                    roomTransY += 20;
+                                    break;
+                                }
+                            }
+                            catch (Exception e){}
+                        }
+                    }
+                    catch (Exception e){}
+                }
+            }
+            else {
+                CheckBox zoneSelectBox = new CheckBox("New Zone");
+                zoneSelectBox.setId("zoneSelectBoxNewZone");
+                zoneSelectBox.setTranslateX(20); zoneSelectBox.setTranslateY(10);
+                zonePane.getChildren().add(zoneSelectBox);
+
+                Line line = new Line();
+                line.setEndX(0); line.setEndX(250);
+                line.setTranslateY(30);
+                zonePane.getChildren().add(line);
+            }
+
+            zonePane.setTranslateX(transX);
+            zonePane.setTranslateY(transY);
+            hostPane.getChildren().add(zonePane);
         }
-
-        Button addZoneButton = new Button("Add New Zone");
-        addZoneButton.setId("addNewZoneButton");
-        addZoneButton.setTranslateX(30); addZoneButton.setTranslateY(330);
-        addZoneButton.setOnAction(e->addZone());
-
-        Line borderline1 = new Line();
-        borderline1.setStartY(0); borderline1.setEndY(530);
-        borderline1.setTranslateX(200);
-
-        /**todo: option for configuring an existing zone */
-
-        Line borderline2 = new Line();
-        borderline2.setStartX(0); borderline2.setEndX(900);
-        borderline2.setTranslateY(530);
 
         Button closeButton = new Button("Close");
-        closeButton.setId("zoneConfigPageCloseButton");
-        closeButton.setTranslateX(400); closeButton.setTranslateY(550);
-        closeButton.setOnAction(e->SHHZoneConfigStage.close());
+        closeButton.setTranslateY(720); closeButton.setTranslateX(270);
+        closeButton.setOnAction(e->tempStage.close());
+        hostPane.getChildren().add(closeButton);
 
-        if (numberOfTimesZoneConfigSelected == 0) {
+        Button confirmButton = new Button("Confirm Configuration");
+        confirmButton.setTranslateY(720); confirmButton.setTranslateX(200);
+        confirmButton.setOnAction(e->tempStage.close()); /**TODO: RELOCATE ROOMS */
+        hostPane.getChildren().add(confirmButton);
 
-            /**todo: add all elements */
-            SHHZoneConfigPane.getChildren().addAll(createNewZoneLabel, borderline1, borderline2,
-                    closeButton, roomListLabel, addZoneButton);
-        }
-        numberOfTimesZoneConfigSelected++;
+        tempStage.setScene(new Scene(hostPane, 750, 750));
+        tempStage.showAndWait();
     }
 
     public int getCurrentNumberOfZones() {
@@ -692,32 +719,21 @@ public class SHHModule extends Module {
         return inAzone;
     }
 
-    public void addZone() {
+    /***
+     * Create a brand new Zone that will hold the rooms in the Room[] array parameter.
+     * This method will also be used when first uploading the house layout, placing all
+     * household locations in one zone by default
+     * @param roomArray
+     */
+    public void createNewZone(Room[] roomArray) {
         try {
             Zone newZone = new Zone();
-
-            for (int elem = 0; elem < SHHZoneConfigPane.getChildren().size(); elem++) {
+            for (int r = 0; r < roomArray.length; r++) {
                 try {
-                    if (SHHZoneConfigPane.getChildren().get(elem).getId().contains("zoneRoomCheckBoxID")){
-                        CheckBox tempCB = (CheckBox) SHHZoneConfigPane.getChildren().get(elem);
-                        if (tempCB.isSelected()) {
-                            int roomID = Integer.parseInt(tempCB.getId().substring(19));
-                            for (int r = 0; r < Main.householdLocations.length; r++) {
-                                if (Main.householdLocations[r].getRoomID() == roomID) {
-                                    newZone.addRoomToZone(Main.householdLocations[r]);
-                                    break;
-                                }
-                            }
-                            tempCB.setSelected(false);
-                            tempCB.setDisable(true);
-                            tempCB.setText(tempCB.getText()+" (Z"+newZone.getZoneID()+")");
-                            SHHZoneConfigPane.getChildren().set(elem, tempCB);
-                        }
-                    }
+                    newZone.addRoomToZone(roomArray[r]);
                 }
-                catch (Exception ex){}
+                catch (Exception e){}
             }
-
             if (this.zones==null) {
                 this.zones = new Zone[1];
                 this.zones[0] = newZone;
@@ -740,8 +756,9 @@ public class SHHModule extends Module {
                 addNewZoneThread(newZone);
             }
             catch (Exception e){}
+
         }
-        catch (Exception e) {
+        catch (Exception e){
             Controller.appendMessageToConsole(e.getMessage());
         }
     }

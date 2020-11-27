@@ -54,6 +54,7 @@ public class Zone {
             tempZoneRoomsArray[tempZoneRoomsArray.length-1] = room.getRoomID();
         }
         this.zoneRoomIDs = tempZoneRoomsArray;
+        this.setZoneRoomIDs(this.zoneRoomIDs);
     }
 
     public void overrideSpecificRoomTemperature(int roomID, double newTemperature) {
