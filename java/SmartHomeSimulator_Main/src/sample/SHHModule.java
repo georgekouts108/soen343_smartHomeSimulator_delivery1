@@ -250,41 +250,7 @@ public class SHHModule extends Module {
             Month upperBoundMonth = identifyMonth(upperBound);
             Month otherLowerBoundMonth = identifyMonth(otherLowerBound);
             Month otherUpperBoundMonth = identifyMonth(otherUpperBound);
-
-//            switch (lowerBound) {
-//                case 1: lowerBoundMonth = Month.JANUARY; break;
-//                case 2: lowerBoundMonth = Month.FEBRUARY; break;
-//                case 3: lowerBoundMonth = Month.MARCH; break;
-//                case 4: lowerBoundMonth = Month.APRIL; break;
-//                case 5: lowerBoundMonth = Month.MAY; break;
-//                case 6: lowerBoundMonth = Month.JUNE; break;
-//                case 7: lowerBoundMonth = Month.JULY; break;
-//                case 8: lowerBoundMonth = Month.AUGUST; break;
-//                case 9: lowerBoundMonth = Month.SEPTEMBER; break;
-//                case 10: lowerBoundMonth = Month.OCTOBER; break;
-//                case 11: lowerBoundMonth = Month.NOVEMBER; break;
-//                case 12: lowerBoundMonth = Month.DECEMBER; break;
-//                default:
-//                    throw new Exception();
-//            }
-
-//            switch (upperBound) {
-//                case 1: upperBoundMonth = Month.JANUARY; break;
-//                case 2: upperBoundMonth = Month.FEBRUARY; break;
-//                case 3: upperBoundMonth = Month.MARCH; break;
-//                case 4: upperBoundMonth = Month.APRIL; break;
-//                case 5: upperBoundMonth = Month.MAY; break;
-//                case 6: upperBoundMonth = Month.JUNE; break;
-//                case 7: upperBoundMonth = Month.JULY; break;
-//                case 8: upperBoundMonth = Month.AUGUST; break;
-//                case 9: upperBoundMonth = Month.SEPTEMBER; break;
-//                case 10: upperBoundMonth = Month.OCTOBER; break;
-//                case 11: upperBoundMonth = Month.NOVEMBER; break;
-//                case 12: upperBoundMonth = Month.DECEMBER; break;
-//                default:
-//                    throw new Exception();
-//            }
-
+            
             if (summer) {
                 this.summerMonthLowerBound = lowerBoundMonth;
                 this.summerMonthUpperBound = upperBoundMonth;
