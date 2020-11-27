@@ -2186,7 +2186,7 @@ public class Controller {
     }
 
     public static void changeSpecificRoomTemperature(int roomID, double newTemp) {
-        System.out.println("DEBUGGGGG HERE 3");
+
         for (int r = 0; r < Main.householdLocations.length; r++) {
             try {
                 if (Main.householdLocations[r].getRoomID() == roomID) {
@@ -2213,7 +2213,7 @@ public class Controller {
                             } catch (Exception e) {}
                             finally {
                                 try {
-                                    Thread.sleep((long) (1000 / Controller.simulationTimeSpeed));
+                                    Thread.sleep((long) (1 / Controller.simulationTimeSpeed));
                                 } catch (Exception e) {}
                             }
                         }

@@ -787,7 +787,7 @@ public class SHHModule extends Module {
                             }
                             catch (Exception e) {}
                             finally {
-                                try { Thread.sleep((long) (1000 / Controller.simulationTimeSpeed)); } catch (Exception e) {}
+                                try { Thread.sleep((long) (1 / Controller.simulationTimeSpeed)); } catch (Exception e) {}
                             }
                         }
                         this.HAVCsystemPaused = true;
@@ -1083,7 +1083,7 @@ public class SHHModule extends Module {
 
                                         Hyperlink tempHypLink = new Hyperlink("Change this temperature");
                                         tempHypLink.setTranslateY(tempTransY - 5);
-                                        tempHypLink.setTranslateX(tempTransX+200);
+                                        tempHypLink.setTranslateX(tempTransX+260);
                                         tempHypLink.setId("linkToChangeTempOfRoom#"+Main.householdLocations[h].getRoomID());
 
                                         int finalH = h;
@@ -1219,7 +1219,7 @@ public class SHHModule extends Module {
                                     if (pane.getChildren().get(el).getId().contains("#"+Main.householdLocations[h].getRoomID()+"_tempLabel")) {
                                         Label label = (Label) pane.getChildren().get(el);
                                         label.setText("#"+Main.householdLocations[h].getRoomID()+" "+Main.householdLocations[h].getName()+
-                                                " ("+temperature+"°C -- overridden)");
+                                                " ("+temperature+"°C {OVR})");
                                         pane.getChildren().set(el,label);
                                         break;
                                     }
