@@ -1,2 +1,0 @@
-2020-11-27 18:09:37 -- ERROR [SHH]: Failed to change Zones of Rooms
-2020-11-27 18:10:32 -- ERROR [SHH]: Max # of zones cannot be exceeded

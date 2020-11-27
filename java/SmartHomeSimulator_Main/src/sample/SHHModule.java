@@ -555,7 +555,6 @@ public class SHHModule extends Module {
         Button confirmButton = new Button("Confirm");
         confirmButton.setTranslateY(50); confirmButton.setTranslateX(760);
         confirmButton.setOnAction(e->{
-            /**TODO: RELOCATE ROOMS, OR CREATE A NEW ZONE WITH THE SELECTED ROOMS */
             int[] roomsToBeMoved = getRoomIDsToMoveInAnotherZone(hostPane);
             Room[] roomsDeletedFromExistingZones;
             if (roomsToBeMoved!=null) {
@@ -1083,8 +1082,8 @@ public class SHHModule extends Module {
                                         zonePane.getChildren().add(tempLabel);
 
                                         Hyperlink tempHypLink = new Hyperlink("Change this temperature");
-                                        tempHypLink.setTranslateY(tempTransY+20);
-                                        tempHypLink.setTranslateX(tempTransX);
+                                        tempHypLink.setTranslateY(tempTransY - 5);
+                                        tempHypLink.setTranslateX(tempTransX+200);
                                         tempHypLink.setId("linkToChangeTempOfRoom#"+Main.householdLocations[h].getRoomID());
 
                                         int finalH = h;
@@ -1106,7 +1105,7 @@ public class SHHModule extends Module {
                                             changeSpecRoomTempButton.setId("changeTempButtonSpecRoom#"+Main.householdLocations[finalH].getRoomID());
                                             changeSpecRoomTempButton.setTranslateY(30);
                                             changeSpecRoomTempButton.setTranslateX(120);
-                                            /**todo: set on action*/
+
                                             changeSpecRoomTempButton.setOnAction(ev->{
                                                 try {
                                                     int newTemperature = Integer.parseInt(textField.getText());
@@ -1138,7 +1137,7 @@ public class SHHModule extends Module {
                                         });
 
                                         zonePane.getChildren().add(tempHypLink);
-                                        tempTransY+=60;
+                                        tempTransY+=30;
                                     }
                                 }
                                 catch (Exception e){}
