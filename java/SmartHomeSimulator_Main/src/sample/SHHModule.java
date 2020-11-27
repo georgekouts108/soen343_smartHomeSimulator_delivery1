@@ -441,6 +441,47 @@ public class SHHModule extends Module {
                                     zoneRoomBox.setId("zoneRoomBoxID#"+Main.householdLocations[hr].getRoomID());
                                     zoneRoomBox.setTranslateX(roomTransX);
                                     zoneRoomBox.setTranslateY(roomTransY);
+                                    zoneRoomBox.setOnAction(e->{
+                                        int numOfRoomBoxesChecked = 0;
+                                        for (int zboxFinder = 0; zboxFinder < zonePane.getChildren().size(); zboxFinder++) {
+                                            try {
+                                                if (zonePane.getChildren().get(zboxFinder).getId().contains("zoneRoomBoxID#")) {
+                                                    CheckBox cb = (CheckBox) zonePane.getChildren().get(zboxFinder);
+                                                    if (cb.isSelected()) {
+                                                        numOfRoomBoxesChecked++;
+                                                    }
+                                                }
+                                            }
+                                            catch (Exception foo){}
+                                        }
+
+                                        if (numOfRoomBoxesChecked == 0) {
+                                            for (int zboxFinder = 0; zboxFinder < zonePane.getChildren().size(); zboxFinder++) {
+                                                try {
+                                                    if (zonePane.getChildren().get(zboxFinder).getId().contains("zoneSelectBoxID#")) {
+                                                        CheckBox cb = (CheckBox) zonePane.getChildren().get(zboxFinder);
+                                                        cb.setDisable(false);
+                                                        zonePane.getChildren().set(zboxFinder, cb);
+                                                        break;
+                                                    }
+                                                }
+                                                catch (Exception foo){}
+                                            }
+                                        }
+                                        else {
+                                            for (int zboxFinder = 0; zboxFinder < zonePane.getChildren().size(); zboxFinder++) {
+                                                try {
+                                                    if (zonePane.getChildren().get(zboxFinder).getId().contains("zoneSelectBoxID#")) {
+                                                        CheckBox cb = (CheckBox) zonePane.getChildren().get(zboxFinder);
+                                                        cb.setDisable(true);
+                                                        zonePane.getChildren().set(zboxFinder, cb);
+                                                        break;
+                                                    }
+                                                }
+                                                catch (Exception foo){}
+                                            }
+                                        }
+                                    });
                                     zonePane.getChildren().add(zoneRoomBox);
                                     roomTransY += 20;
                                     break;
