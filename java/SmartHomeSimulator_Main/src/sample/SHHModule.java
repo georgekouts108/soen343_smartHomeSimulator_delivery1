@@ -4,11 +4,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
-import javafx.scene.text.TextAlignment;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.time.Month;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -388,7 +387,9 @@ public class SHHModule extends Module {
     public void setHAVCsystemPaused(boolean HAVCsystemPaused) {
         this.HAVCsystemPaused = HAVCsystemPaused;
     }
-    
+
+    private static int nextDestinationZoneID = -1;
+
     public void openUpZoneConfigurationPanel_UPDATED() {
         Stage tempStage = new Stage();
         tempStage.setResizable(false);
@@ -400,6 +401,7 @@ public class SHHModule extends Module {
         instructionsLabel.setText("Select as many rooms from up to multiple zones, and then\n" +
                 "select ONLY ONE zone where you would like to move those rooms, and click \"Confirm Configuration\"");
         hostPane.getChildren().add(instructionsLabel);
+
 
         int transX = 0, transY = 50;
         for (int z = 0; z <= this.zones.length; z++) {
@@ -421,9 +423,18 @@ public class SHHModule extends Module {
             }
 
             if (z != this.zones.length) {
+                zonePane.setId("zonePaneForZone#"+this.zones[z].getZoneID());
                 CheckBox zoneSelectBox = new CheckBox("Zone #"+this.zones[z].getZoneID());
                 zoneSelectBox.setId("zoneSelectBoxID#"+this.zones[z].getZoneID());
                 zoneSelectBox.setTranslateX(20); zoneSelectBox.setTranslateY(10);
+                zoneSelectBox.setOnAction(e->{
+                    if (zoneSelectBox.isSelected()) {
+                        nextDestinationZoneID = Integer.parseInt(zoneSelectBox.getId().substring(16));
+                    }
+                    else {
+                        nextDestinationZoneID = -1;
+                    }
+                });
                 zonePane.getChildren().add(zoneSelectBox);
 
                 Line line = new Line();
@@ -494,9 +505,18 @@ public class SHHModule extends Module {
                 }
             }
             else {
+                zonePane.setId("zonePaneForNewZone");
                 CheckBox zoneSelectBox = new CheckBox("New Zone");
                 zoneSelectBox.setId("zoneSelectBoxNewZone");
                 zoneSelectBox.setTranslateX(20); zoneSelectBox.setTranslateY(10);
+                zoneSelectBox.setOnAction(e->{
+                    if (zoneSelectBox.isSelected()) {
+                        nextDestinationZoneID = 0;
+                    }
+                    else {
+                        nextDestinationZoneID = -1;
+                    }
+                });
                 zonePane.getChildren().add(zoneSelectBox);
 
                 Line line = new Line();
@@ -517,12 +537,157 @@ public class SHHModule extends Module {
 
         Button confirmButton = new Button("Confirm Configuration");
         confirmButton.setTranslateY(720); confirmButton.setTranslateX(200);
-        confirmButton.setOnAction(e->tempStage.close()); /**TODO: RELOCATE ROOMS */
+        confirmButton.setOnAction(e->{
+            /**TODO: RELOCATE ROOMS, OR CREATE A NEW ZONE WITH THE SELECTED ROOMS */
+            int[] roomsToBeMoved = getRoomIDsToMoveInAnotherZone(hostPane);
+            Room[] roomsDeletedFromExistingZones;
+            if (roomsToBeMoved!=null) {
+
+                switch (nextDestinationZoneID) {
+                    case -1:
+                        Controller.appendMessageToConsole("ERROR [SHH]: Failed to change Zones of Rooms");
+                        break;
+                    case 0:
+                        roomsDeletedFromExistingZones = deleteRoomsFromZones(roomsToBeMoved);
+                        createNewZone(roomsDeletedFromExistingZones);
+                        break;
+                    default:
+                        roomsDeletedFromExistingZones = deleteRoomsFromZones(roomsToBeMoved);
+                        for (int z = 0; z < zones.length; z++) {
+                            try {
+                                if (zones[z].getZoneID()==nextDestinationZoneID) {
+                                    for (int r = 0; r < roomsDeletedFromExistingZones.length; r++) {
+                                        try {
+                                            zones[z].addRoomToZone(roomsDeletedFromExistingZones[r]);
+                                        }
+                                        catch (Exception f){}
+                                    }
+                                    break;
+                                }
+                            }
+                            catch (Exception ex1){}
+                        }
+                        break;
+                }
+            }
+            else {
+                Controller.appendMessageToConsole("ERROR [SHH]: Failed to change Zones of Rooms");
+            }
+
+            tempStage.close();
+        });
         hostPane.getChildren().add(confirmButton);
 
         tempStage.setScene(new Scene(hostPane, 750, 750));
         tempStage.showAndWait();
     }
+
+    public Room[] deleteRoomsFromZones(int[] roomsToBeMoved) {
+        Room[] roomsArray = new Room[roomsToBeMoved.length];
+
+        try {
+            for (int roomID = 0; roomID < roomsToBeMoved.length; roomID++) {
+
+                // store the corresponding Room object into the roomsArray
+                for (int locs = 0; locs < Main.householdLocations.length; locs++) {
+                    try {
+                        if (Main.householdLocations[locs].getRoomID()==roomsToBeMoved[roomID]) {
+                            roomsArray[roomID] = Main.householdLocations[locs];
+                        }
+                    }
+                    catch (Exception e){}
+                }
+
+                // remove the room from the existing zone it's in
+                removeRoomFromZone(roomsToBeMoved[roomID], getZoneOfRoom(roomsToBeMoved[roomID]));
+            }
+        }
+        catch (Exception e){}
+        return roomsArray;
+    }
+
+    public void removeRoomFromZone(int roomID, int zoneID) {
+        for (int z = 0; z < zones.length; z++) {
+            try {
+                if (zones[z].getZoneID()==zoneID) {
+                    zones[z].deleteRoomFromZone(roomID);
+                    break;
+                }
+            }
+            catch (Exception e){}
+        }
+    }
+
+    public int getZoneOfRoom(int roomID) {
+        int zoneID = 0;
+        boolean zoneFound = false;
+        for (int z = 0; z < zones.length; z++) {
+            try {
+                for (int r = 0; r < zones[z].getZoneRoomIDs().length; r++) {
+                    if (zones[z].getZoneRoomIDs()[r]==roomID) {
+                        zoneID = zones[z].getZoneID();
+                        zoneFound = true;
+                        break;
+                    }
+                }
+                if (zoneFound) {
+                    break;
+                }
+            }
+            catch (Exception e){}
+        }
+        return zoneID;
+    }
+
+    public int[] getRoomIDsToMoveInAnotherZone(AnchorPane hostPane) {
+        String roomIDsString = "";
+        try {
+            // in the host pane...
+            for (int hp_elem = 0; hp_elem < hostPane.getChildren().size(); hp_elem++) {
+                try {
+                    // for each zone pane...
+                    if (hostPane.getChildren().get(hp_elem).getId().contains("zonePaneFor")) {
+                        AnchorPane zonePane = (AnchorPane) hostPane.getChildren().get(hp_elem);
+
+                        // figure out how many room checkboxes are selected...
+                        for (int zp = 0; zp < zonePane.getChildren().size(); zp++) {
+                            try {
+                                if (zonePane.getChildren().get(zp).getId().contains("zoneRoomBoxID#")) {
+                                    CheckBox cb = (CheckBox) zonePane.getChildren().get(zp);
+                                    if (cb.isSelected()) {
+                                        roomIDsString += zonePane.getChildren().get(zp).getId().substring(14) + " ";
+                                    }
+                                }
+                            }
+                            catch (Exception e){}
+                        }
+                    }
+                }
+                catch (Exception e){}
+            }
+        }
+        catch (Exception e){}
+
+        if (!roomIDsString.equals("")) {
+            String[] stringIDsArray = (roomIDsString.strip()).split(" ");
+
+            for (int s = 0; s < stringIDsArray.length; s++) {
+                System.out.println("DEBUG -- " + stringIDsArray[s]);
+            }
+
+            int[] ids = new int[stringIDsArray.length];
+            for (int i = 0; i < ids.length; i++) {
+                ids[i] = Integer.parseInt(stringIDsArray[i]);
+            }
+            return ids;
+        }
+        else {
+            return null;
+        }
+    }
+
+
+
 
     public int getCurrentNumberOfZones() {
         return currentNumberOfZones;

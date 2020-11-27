@@ -57,6 +57,24 @@ public class Zone {
         this.setZoneRoomIDs(this.zoneRoomIDs);
     }
 
+    public void deleteRoomFromZone(int roomID) {
+        int[] tempZoneRoomsArray = new int[this.zoneRoomIDs.length - 1];
+
+        for (int z = 0; z < this.zoneRoomIDs.length; z++) {
+            if (this.zoneRoomIDs[z] == roomID) {
+                this.zoneRoomIDs[z] = -1;
+            }
+        }
+        int tempIndex = 0;
+        for (int t = 0; t < this.zoneRoomIDs.length; t++) {
+            if (!(this.zoneRoomIDs[t] == -1)) {
+                tempZoneRoomsArray[tempIndex++] = this.zoneRoomIDs[t];
+            }
+        }
+        this.zoneRoomIDs = tempZoneRoomsArray;
+    }
+
+
     public void overrideSpecificRoomTemperature(int roomID, double newTemperature) {
         for (int roomIndex = 0; roomIndex < this.zoneRoomIDs.length; roomIndex++) {
             if (this.zoneRoomIDs[roomIndex] == roomID) {
