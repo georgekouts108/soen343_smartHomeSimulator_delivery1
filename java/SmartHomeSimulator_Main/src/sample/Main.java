@@ -448,9 +448,10 @@ public class Main extends Application {
                 main_dashboard.getChildren().remove(chooseFileButton);
                 main_dashboard.getChildren().add(houseLayout);
 
+                Main.shhModule.setMaxNumOfZones(householdLocations.length);
+
                 // create an initial SHH zone that contains all rooms in the house
                 Main.shhModule.createNewZone(householdLocations);
-
                 createMainDashboardNecessities();
             }
         });

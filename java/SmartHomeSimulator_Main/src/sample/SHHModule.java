@@ -33,6 +33,8 @@ public class SHHModule extends Module {
     private boolean HAVCsystemPaused;
     private double TEMP_THRESHOLD;
 
+    protected static int MAX_NUMBER_OF_ZONES = 0;
+
     /**
      * SHH Constructor
      */
@@ -50,6 +52,21 @@ public class SHHModule extends Module {
         this.zoneThreads = null;
         SHHZoneConfigPane = new AnchorPane();
         SHHZoneConfigScene = new Scene(SHHZoneConfigPane, 600,900);
+    }
+
+    public void setMaxNumOfZones(int max) {
+        MAX_NUMBER_OF_ZONES = max;
+        for (int elem = 0; elem < Main.SHH_MODULE.getChildren().size(); elem++) {
+            try {
+                if (Main.SHH_MODULE.getChildren().get(elem).getId().equals("maxNumOfZonesLabel")) {
+                    Label maxNumOfZonesSHHLabel = (Label) Main.SHH_MODULE.getChildren().get(elem);
+                    maxNumOfZonesSHHLabel.setText("Maximum number of zones allowed: "+MAX_NUMBER_OF_ZONES);
+                    Main.SHH_MODULE.getChildren().set(elem,maxNumOfZonesSHHLabel);
+                    break;
+                }
+            }
+            catch (Exception e){}
+        }
     }
 
     /**
@@ -85,7 +102,7 @@ public class SHHModule extends Module {
         summerTempSHHLabel.setId("summerTempSHHLabel");
         summerTempSHHLabel.setTranslateY(60);
 
-        Label maxNumOfZonesSHHLabel = new Label("Maximum number of zones allowed: Unlimited");
+        Label maxNumOfZonesSHHLabel = new Label("Maximum number of zones allowed: "+MAX_NUMBER_OF_ZONES);
         maxNumOfZonesSHHLabel.setId("maxNumOfZonesLabel");
         maxNumOfZonesSHHLabel.setTranslateY(80);
 
@@ -399,7 +416,7 @@ public class SHHModule extends Module {
 
         Label instructionsLabel = new Label();
         instructionsLabel.setText("Select as many rooms from up to multiple zones, and then\n" +
-                "select ONLY ONE zone where you would like to move those rooms, and click \"Confirm Configuration\"");
+                "select ONLY ONE zone where you would like to move those rooms, and click \"Confirm\"");
         hostPane.getChildren().add(instructionsLabel);
 
 
@@ -531,25 +548,27 @@ public class SHHModule extends Module {
         }
 
         Button closeButton = new Button("Close");
-        closeButton.setTranslateY(720); closeButton.setTranslateX(270);
+        closeButton.setTranslateY(80); closeButton.setTranslateX(760);
         closeButton.setOnAction(e->tempStage.close());
         hostPane.getChildren().add(closeButton);
 
-        Button confirmButton = new Button("Confirm Configuration");
-        confirmButton.setTranslateY(720); confirmButton.setTranslateX(200);
+        Button confirmButton = new Button("Confirm");
+        confirmButton.setTranslateY(50); confirmButton.setTranslateX(760);
         confirmButton.setOnAction(e->{
             /**TODO: RELOCATE ROOMS, OR CREATE A NEW ZONE WITH THE SELECTED ROOMS */
             int[] roomsToBeMoved = getRoomIDsToMoveInAnotherZone(hostPane);
             Room[] roomsDeletedFromExistingZones;
             if (roomsToBeMoved!=null) {
-
                 switch (nextDestinationZoneID) {
                     case -1:
                         Controller.appendMessageToConsole("ERROR [SHH]: Failed to change Zones of Rooms");
                         break;
                     case 0:
-                        roomsDeletedFromExistingZones = deleteRoomsFromZones(roomsToBeMoved);
-                        createNewZone(roomsDeletedFromExistingZones);
+                        if (currentNumberOfZones != MAX_NUMBER_OF_ZONES) {
+                            roomsDeletedFromExistingZones = deleteRoomsFromZones(roomsToBeMoved);
+                            createNewZone(roomsDeletedFromExistingZones);
+                        }
+                        nextDestinationZoneID = -1;
                         break;
                     default:
                         roomsDeletedFromExistingZones = deleteRoomsFromZones(roomsToBeMoved);
@@ -567,6 +586,7 @@ public class SHHModule extends Module {
                             }
                             catch (Exception ex1){}
                         }
+                        nextDestinationZoneID = -1;
                         break;
                 }
             }
@@ -578,7 +598,7 @@ public class SHHModule extends Module {
         });
         hostPane.getChildren().add(confirmButton);
 
-        tempStage.setScene(new Scene(hostPane, 750, 750));
+        tempStage.setScene(new Scene(hostPane, 850, 1000));
         tempStage.showAndWait();
     }
 
@@ -685,9 +705,6 @@ public class SHHModule extends Module {
             return null;
         }
     }
-
-
-
 
     public int getCurrentNumberOfZones() {
         return currentNumberOfZones;
@@ -933,6 +950,11 @@ public class SHHModule extends Module {
      */
     public void createNewZone(Room[] roomArray) {
         try {
+            if (currentNumberOfZones == MAX_NUMBER_OF_ZONES) {
+                Controller.appendMessageToConsole("ERROR [SHH]: Max # of zones cannot be exceeded");
+                return;
+            }
+
             Zone newZone = new Zone();
             for (int r = 0; r < roomArray.length; r++) {
                 try {
