@@ -377,20 +377,35 @@ public class Main extends Application {
                 "-fx-alignment: center");
         temperatureLabel.setTranslateY(390); temperatureLabel.setTranslateX(18);
 
+        Button setWinterSummerMonthsButton = new Button("Set Winter\n& Summer\nMonths");
+        setWinterSummerMonthsButton.setTranslateX(15);
+        setWinterSummerMonthsButton.setTranslateY(480);
+        setWinterSummerMonthsButton.setOnAction(e->Main.shhModule.configureWinterSummerMonths());
+
+        Label winterMonthLabel = new Label("Winter:\n{not set}");
+        winterMonthLabel.setId("winterMonthLabel");
+        winterMonthLabel.setTranslateX(15); winterMonthLabel.setTranslateY(550);
+        winterMonthLabel.setStyle("-fx-text-fill:white;");
+
+        Label summerMonthLabel = new Label("Summer:\n{not set}");
+        summerMonthLabel.setId("summerMonthLabel");
+        summerMonthLabel.setTranslateX(15); summerMonthLabel.setTranslateY(585);
+        summerMonthLabel.setStyle("-fx-text-fill:white;");
+
         Label localDateTime = new Label(); localDateTime.setTextAlignment(TextAlignment.CENTER);
-        localDateTime.setTranslateX(18); localDateTime.setTranslateY(620); localDateTime.setText("LOCAL TIME");
+        localDateTime.setTranslateX(18); localDateTime.setTranslateY(630); localDateTime.setText("LOCAL TIME");
         localDateTime.setId("localDateAndTimeLabel");
         localDateTime.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 20px; -fx-alignment: center");
 
         Label dateText = new Label(); dateText.setTextAlignment(TextAlignment.CENTER);
         dateText.setId("dateText");
         dateText.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 20px; -fx-alignment: center");
-        dateText.setTranslateX(18); dateText.setTranslateY(640);
+        dateText.setTranslateX(18); dateText.setTranslateY(650);
 
         Label timeText = new Label(); timeText.setTextAlignment(TextAlignment.CENTER);
         timeText.setId("timeText");
         timeText.setStyle("-fx-background-color: " + graycss + "; -fx-min-width: 75px; -fx-min-height: 20px; -fx-alignment: center");
-        timeText.setTranslateX(18); timeText.setTranslateY(660);
+        timeText.setTranslateX(18); timeText.setTranslateY(670);
         timeText.setText("TEST");
 
         //thread to start the current date/time display when application starts
@@ -449,6 +464,9 @@ public class Main extends Application {
             main_dashboard.getChildren().add(triggerSim);
             main_dashboard.getChildren().add(editContextButton);
             main_dashboard.getChildren().add(temperatureLabel);
+            main_dashboard.getChildren().add(setWinterSummerMonthsButton);
+            main_dashboard.getChildren().add(winterMonthLabel);
+            main_dashboard.getChildren().add(summerMonthLabel);
             main_dashboard.getChildren().add(localDateTime);
             main_dashboard.getChildren().add(outputConsole);
             main_dashboard.getChildren().add(outputConsoleLabel);

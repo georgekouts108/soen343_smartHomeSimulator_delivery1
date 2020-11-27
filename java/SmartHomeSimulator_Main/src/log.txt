@@ -1,0 +1,2 @@
+2020-11-27 04:04:35 -- Failed attempt to set Winter or Summer Months.
+2020-11-27 04:04:56 -- Failed attempt to set Winter or Summer Months.

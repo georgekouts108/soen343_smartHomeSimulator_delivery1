@@ -8,6 +8,8 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.time.Month;
+
 
 /**
  * SHH Class
@@ -133,6 +135,133 @@ public class SHHModule extends Module {
 
         Main.numberOfTimesSHHModuleCreated++;
         return pane;
+    }
+
+    public void configureWinterSummerMonths() {
+        Stage tempStage = new Stage();
+        tempStage.setTitle("Winter/Summer Temp Settings");
+        tempStage.setResizable(false);
+        AnchorPane tempPane = new AnchorPane();
+
+        Label setWinterMonthRange = new Label("Winter Months: ");
+        setWinterMonthRange.setTranslateX(50); setWinterMonthRange.setTranslateY(80);
+        TextField winterMonthsTempTextField = new TextField();
+        winterMonthsTempTextField.setTranslateY(100); winterMonthsTempTextField.setTranslateX(50);
+        winterMonthsTempTextField.setPromptText("EX: \"12,3\" for DEC->MAR");
+        winterMonthsTempTextField.setPrefWidth(200);
+        Button confirmWinterMonthRange = new Button("Confirm");
+        confirmWinterMonthRange.setTranslateY(100); confirmWinterMonthRange.setTranslateX(250);
+        confirmWinterMonthRange.setOnAction(e->setMonthRange(winterMonthsTempTextField, false));
+
+        Label setSummerMonthRange = new Label("Summer Months: ");
+        setSummerMonthRange.setTranslateX(50); setSummerMonthRange.setTranslateY(140);
+        TextField summerMonthsTempTextField = new TextField();
+        summerMonthsTempTextField.setTranslateY(160); summerMonthsTempTextField.setTranslateX(50);
+        summerMonthsTempTextField.setPromptText("EX: \"6,9\" for JUN->SEP");
+        summerMonthsTempTextField.setPrefWidth(200);
+        Button confirmSummerMonthRange = new Button("Confirm");
+        confirmSummerMonthRange.setTranslateY(160); confirmSummerMonthRange.setTranslateX(250);
+        confirmSummerMonthRange.setOnAction(e->setMonthRange(summerMonthsTempTextField, true));
+
+        Button closeButton = new Button("Return");
+        closeButton.setOnAction(e->tempStage.close());
+        closeButton.setTranslateY(250); closeButton.setTranslateX(100);
+
+        tempPane.getChildren().addAll(closeButton, setWinterMonthRange, winterMonthsTempTextField,
+                setSummerMonthRange, summerMonthsTempTextField, confirmSummerMonthRange, confirmWinterMonthRange);
+        tempStage.setScene(new Scene(tempPane, 500, 300));
+        tempStage.showAndWait();
+    }
+
+    private Month winterMonthLowerBound;
+    private Month winterMonthUpperBound;
+    private Month summerMonthLowerBound;
+    private Month summerMonthUpperBound;
+
+    public void setMonthRange(TextField textField, boolean summer) {
+        try {
+            String input = textField.getText();
+            String[] months = input.split(",");
+            int lowerBound = Integer.parseInt(months[0]);
+            int upperBound = Integer.parseInt(months[1]);
+
+            Month lowerBoundMonth = null;
+            Month upperBoundMonth = null;
+
+            switch (lowerBound) {
+                case 1: lowerBoundMonth = Month.JANUARY; break;
+                case 2: lowerBoundMonth = Month.FEBRUARY; break;
+                case 3: lowerBoundMonth = Month.MARCH; break;
+                case 4: lowerBoundMonth = Month.APRIL; break;
+                case 5: lowerBoundMonth = Month.MAY; break;
+                case 6: lowerBoundMonth = Month.JUNE; break;
+                case 7: lowerBoundMonth = Month.JULY; break;
+                case 8: lowerBoundMonth = Month.AUGUST; break;
+                case 9: lowerBoundMonth = Month.SEPTEMBER; break;
+                case 10: lowerBoundMonth = Month.OCTOBER; break;
+                case 11: lowerBoundMonth = Month.NOVEMBER; break;
+                case 12: lowerBoundMonth = Month.DECEMBER; break;
+                default:
+                    throw new Exception();
+            }
+
+            switch (upperBound) {
+                case 1: upperBoundMonth = Month.JANUARY; break;
+                case 2: upperBoundMonth = Month.FEBRUARY; break;
+                case 3: upperBoundMonth = Month.MARCH; break;
+                case 4: upperBoundMonth = Month.APRIL; break;
+                case 5: upperBoundMonth = Month.MAY; break;
+                case 6: upperBoundMonth = Month.JUNE; break;
+                case 7: upperBoundMonth = Month.JULY; break;
+                case 8: upperBoundMonth = Month.AUGUST; break;
+                case 9: upperBoundMonth = Month.SEPTEMBER; break;
+                case 10: upperBoundMonth = Month.OCTOBER; break;
+                case 11: upperBoundMonth = Month.NOVEMBER; break;
+                case 12: upperBoundMonth = Month.DECEMBER; break;
+                default:
+                    throw new Exception();
+            }
+
+            if (summer) {
+                this.summerMonthLowerBound = lowerBoundMonth;
+                this.summerMonthUpperBound = upperBoundMonth;
+                String lb = (""+lowerBoundMonth).substring(0,3);
+                String ub = (""+upperBoundMonth).substring(0,3);
+
+                for (int i = 0; i < Main.main_dashboard.getChildren().size(); i++) {
+                    try {
+                        if (Main.main_dashboard.getChildren().get(i).getId().equals("summerMonthLabel")) {
+                            Label label = (Label) Main.main_dashboard.getChildren().get(i);
+                            label.setText("Summer:\n"+lb+"->"+ub);
+                            Main.main_dashboard.getChildren().set(i, label);
+                            break;
+                        }
+                    }
+                    catch (Exception e){}
+                }
+            }
+            else {
+                this.winterMonthLowerBound = lowerBoundMonth;
+                this.winterMonthUpperBound = upperBoundMonth;
+                String lb = (""+lowerBoundMonth).substring(0,3);
+                String ub = (""+upperBoundMonth).substring(0,3);
+
+                for (int i = 0; i < Main.main_dashboard.getChildren().size(); i++) {
+                    try {
+                        if (Main.main_dashboard.getChildren().get(i).getId().equals("winterMonthLabel")) {
+                            Label label = (Label) Main.main_dashboard.getChildren().get(i);
+                            label.setText("Winter:\n"+lb+"->"+ub);
+                            Main.main_dashboard.getChildren().set(i, label);
+                            break;
+                        }
+                    }
+                    catch (Exception e){}
+                }
+            }
+        }
+        catch (Exception e){
+            Controller.appendMessageToConsole("Failed attempt to set Winter or Summer Months.");
+        }
     }
 
     public void popupWinterSummerTempSettingsStage(AnchorPane pane) {
