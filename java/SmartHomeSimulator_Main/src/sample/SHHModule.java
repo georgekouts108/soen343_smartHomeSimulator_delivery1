@@ -76,11 +76,11 @@ public class SHHModule extends Module {
         outdoorTempSHHLabel.setId("outdoorTempSHHLabel");
         outdoorTempSHHLabel.setTranslateY(20);
 
-        Label winterTempSHHLabel = new Label("Winter temp (AWAY only): "+this.winterTemperature+"°C");
+        Label winterTempSHHLabel = new Label("Winter temp (AWAY mode only): "+this.winterTemperature+"°C");
         winterTempSHHLabel.setId("winterTempSHHLabel");
         winterTempSHHLabel.setTranslateY(40);
 
-        Label summerTempSHHLabel = new Label("Summer temp (AWAY only): "+this.summerTemperature+"°C");
+        Label summerTempSHHLabel = new Label("Summer temp (AWAY mode only): "+this.summerTemperature+"°C");
         summerTempSHHLabel.setId("summerTempSHHLabel");
         summerTempSHHLabel.setTranslateY(60);
 
@@ -96,8 +96,8 @@ public class SHHModule extends Module {
         borderLine1.setStartX(0); borderLine1.setEndX(500);
         borderLine1.setTranslateY(120);
 
-        Label nullHouseError = new Label("ERROR:\nHouse layout\nnull");
-        nullHouseError.setTranslateX(400); nullHouseError.setTranslateY(30);
+        Label nullHouseError = new Label("ERROR: House layout null");
+        nullHouseError.setTranslateX(300); nullHouseError.setTranslateY(10);
         nullHouseError.setVisible(false);
 
         Button configZoneButton = new Button("Add or\nConfigure\nZones");
@@ -116,6 +116,11 @@ public class SHHModule extends Module {
             }
         });
 
+        Button configWinterSummerTemp = new Button("Configure\nWinter or\nSummer Temp.\nSettings");
+        configWinterSummerTemp.setId("configSummerWeatherTempButton");
+        configWinterSummerTemp.setTranslateX(380); configWinterSummerTemp.setTranslateY(30);
+        configWinterSummerTemp.setOnAction(e-> popupWinterSummerTempSettingsStage(pane));
+        
         Label zonesLabel = new Label("Zones");
         zonesLabel.setId("zonesLabel");
         zonesLabel.setTranslateY(130);
@@ -123,11 +128,81 @@ public class SHHModule extends Module {
         if (Main.numberOfTimesSHHModuleCreated==0) {
             pane.getChildren().addAll(awayModeSHHLabel, outdoorTempSHHLabel,
                     winterTempSHHLabel, summerTempSHHLabel, maxNumOfZonesSHHLabel,
-                    currentNumOfZonesSHHLabel, borderLine1, configZoneButton, zonesLabel, nullHouseError);
+                    currentNumOfZonesSHHLabel, borderLine1, configZoneButton, zonesLabel, nullHouseError, configWinterSummerTemp);
         }
 
         Main.numberOfTimesSHHModuleCreated++;
         return pane;
+    }
+
+    public void popupWinterSummerTempSettingsStage(AnchorPane pane) {
+        //////////
+        Stage tempStage = new Stage();
+        tempStage.setTitle("Winter/Summer Temp Settings");
+        tempStage.setResizable(false);
+        AnchorPane tempPane = new AnchorPane();
+
+        Label setWinterTempLabel = new Label("Winter Temp: ");
+        setWinterTempLabel.setTranslateX(50); setWinterTempLabel.setTranslateY(80);
+        TextField winterTempTextField = new TextField();
+        winterTempTextField.setTranslateY(100); winterTempTextField.setTranslateX(50);
+        winterTempTextField.setPromptText("degrees °C");
+        winterTempTextField.setPrefWidth(90);
+        Button confirmWinterTemp = new Button("Confirm");
+        confirmWinterTemp.setTranslateY(100); confirmWinterTemp.setTranslateX(160);
+        confirmWinterTemp.setOnAction(ev1->{
+            try {
+                for (int f = 0; f < pane.getChildren().size(); f++) {
+                    try {
+                        if (pane.getChildren().get(f).getId().equals("winterTempSHHLabel")) {
+                            Label label = (Label) pane.getChildren().get(f);
+                            this.winterTemperature = Integer.parseInt(winterTempTextField.getText());
+                            label.setText("Winter temp (AWAY mode only): "+this.winterTemperature+"°C");
+                            pane.getChildren().set(f, label);
+                            break;
+                        }
+                    }
+                    catch (Exception foo){}
+                }
+            }
+            catch (Exception ex1){}
+        });
+
+        Label setSummerTempLabel = new Label("Summer Temp: ");
+        setSummerTempLabel.setTranslateX(50); setSummerTempLabel.setTranslateY(140);
+        TextField summerTempTextField = new TextField();
+        summerTempTextField.setTranslateY(160); summerTempTextField.setTranslateX(50);
+        summerTempTextField.setPromptText("degrees °C");
+        summerTempTextField.setPrefWidth(90);
+        Button confirmSummerTemp = new Button("Confirm");
+        confirmSummerTemp.setTranslateY(160); confirmSummerTemp.setTranslateX(160);
+        confirmSummerTemp.setOnAction(ev1->{
+            try {
+                for (int f = 0; f < pane.getChildren().size(); f++) {
+                    try {
+                        if (pane.getChildren().get(f).getId().equals("summerTempSHHLabel")) {
+                            Label label = (Label) pane.getChildren().get(f);
+                            this.summerTemperature = Integer.parseInt(summerTempTextField.getText());
+                            label.setText("Summer temp (AWAY mode only): "+this.summerTemperature+"°C");
+                            pane.getChildren().set(f, label);
+                            break;
+                        }
+                    }
+                    catch (Exception foo){}
+                }
+            }
+            catch (Exception ex1){}
+        });
+
+        Button closeButton = new Button("Return");
+        closeButton.setOnAction(e->tempStage.close());
+        closeButton.setTranslateY(250); closeButton.setTranslateX(100);
+
+        tempPane.getChildren().addAll(setSummerTempLabel, setWinterTempLabel,
+                summerTempTextField, winterTempTextField, confirmSummerTemp, confirmWinterTemp, closeButton);
+        tempStage.setScene(new Scene(tempPane, 300, 300));
+        tempStage.showAndWait();
+        //////////
     }
 
     public boolean isHAVCsystemPaused() {
