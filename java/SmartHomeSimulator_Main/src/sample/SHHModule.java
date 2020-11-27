@@ -388,7 +388,7 @@ public class SHHModule extends Module {
     public void setHAVCsystemPaused(boolean HAVCsystemPaused) {
         this.HAVCsystemPaused = HAVCsystemPaused;
     }
-
+    
     public void openUpZoneConfigurationPanel_UPDATED() {
         Stage tempStage = new Stage();
         tempStage.setResizable(false);
