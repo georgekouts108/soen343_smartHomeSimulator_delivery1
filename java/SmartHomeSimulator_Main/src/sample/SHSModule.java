@@ -6,6 +6,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.TextAlignment;
 
+import java.time.Month;
 import java.util.Observable;
 
 /**
@@ -13,11 +14,14 @@ import java.util.Observable;
  */
 public class SHSModule extends Module {
 
+    protected Month simulationMonth;
+
     /**
      * SHS Constructor
      */
     public SHSModule() {
         super();
+        simulationMonth = null;
     }
 
     /**
@@ -148,7 +152,7 @@ public class SHSModule extends Module {
         confirmTimeButton.setTranslateX(190); confirmTimeButton.setTranslateY(435);
         confirmTimeButton.setTextAlignment(TextAlignment.CENTER);
         confirmTimeButton.setOnAction(e -> {
-
+            simulationMonth = datePicker.getValue().getMonth();
             Controller.simulationTimeThread = new Thread(()-> {
 
             int indexOfSimDateLabel = 0, indexOfSimTimeLabel = 0;

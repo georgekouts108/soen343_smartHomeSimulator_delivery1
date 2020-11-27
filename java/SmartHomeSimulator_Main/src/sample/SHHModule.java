@@ -151,7 +151,7 @@ public class SHHModule extends Module {
         winterMonthsTempTextField.setPrefWidth(200);
         Button confirmWinterMonthRange = new Button("Confirm");
         confirmWinterMonthRange.setTranslateY(100); confirmWinterMonthRange.setTranslateX(250);
-        confirmWinterMonthRange.setOnAction(e->setMonthRange(winterMonthsTempTextField, false));
+        confirmWinterMonthRange.setOnAction(e->setWeatherMonthRange(winterMonthsTempTextField, false));
 
         Label setSummerMonthRange = new Label("Summer Months: ");
         setSummerMonthRange.setTranslateX(50); setSummerMonthRange.setTranslateY(140);
@@ -161,7 +161,7 @@ public class SHHModule extends Module {
         summerMonthsTempTextField.setPrefWidth(200);
         Button confirmSummerMonthRange = new Button("Confirm");
         confirmSummerMonthRange.setTranslateY(160); confirmSummerMonthRange.setTranslateX(250);
-        confirmSummerMonthRange.setOnAction(e->setMonthRange(summerMonthsTempTextField, true));
+        confirmSummerMonthRange.setOnAction(e->setWeatherMonthRange(summerMonthsTempTextField, true));
 
         Button closeButton = new Button("Return");
         closeButton.setOnAction(e->tempStage.close());
@@ -178,7 +178,31 @@ public class SHHModule extends Module {
     private Month summerMonthLowerBound;
     private Month summerMonthUpperBound;
 
-    public void setMonthRange(TextField textField, boolean summer) {
+    public boolean isWinter() {
+        try {
+            int winterLB_Value = this.winterMonthLowerBound.getValue();
+            int winterUB_Value = this.winterMonthUpperBound.getValue();
+            int simMonth_Value = Main.shsModule.simulationMonth.getValue();
+            return (simMonth_Value <= winterUB_Value && simMonth_Value >= winterLB_Value);
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean isSummer() {
+        try {
+            int summerLB_Value = this.summerMonthLowerBound.getValue();
+            int summerUB_Value = this.summerMonthUpperBound.getValue();
+            int simMonth_Value = Main.shsModule.simulationMonth.getValue();
+            return (simMonth_Value <= summerUB_Value && simMonth_Value >= summerLB_Value);
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+
+    public void setWeatherMonthRange(TextField textField, boolean summer) {
         try {
             String input = textField.getText();
             String[] months = input.split(",");
@@ -453,20 +477,6 @@ public class SHHModule extends Module {
     }
     public void setZones(Zone[] zones) {
         this.zones = zones;
-    }
-
-    public boolean isWinter() {
-        return isWinter;
-    }
-    public void setWinter(boolean winter) {
-        isWinter = winter;
-    }
-
-    public boolean isSummer() {
-        return isSummer;
-    }
-    public void setSummer(boolean summer) {
-        isSummer = summer;
     }
 
     public boolean isHAVCsystemActive() {
