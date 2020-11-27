@@ -202,6 +202,33 @@ public class SHHModule extends Module {
         }
     }
 
+    public Month identifyMonth(int value) {
+        try {
+            Month month;
+            switch (value) {
+                case 1: month = Month.JANUARY; break;
+                case 2: month = Month.FEBRUARY; break;
+                case 3: month = Month.MARCH; break;
+                case 4: month = Month.APRIL; break;
+                case 5: month = Month.MAY; break;
+                case 6: month = Month.JUNE; break;
+                case 7: month = Month.JULY; break;
+                case 8: month = Month.AUGUST; break;
+                case 9: month = Month.SEPTEMBER; break;
+                case 10: month = Month.OCTOBER; break;
+                case 11: month = Month.NOVEMBER; break;
+                case 12: month = Month.DECEMBER; break;
+                default:
+                    throw new Exception();
+            }
+            return month;
+        }
+        catch (Exception e){
+            return null;
+        }
+
+    }
+
     public void setWeatherMonthRange(TextField textField, boolean summer) {
         try {
             String input = textField.getText();
@@ -209,48 +236,65 @@ public class SHHModule extends Module {
             int lowerBound = Integer.parseInt(months[0]);
             int upperBound = Integer.parseInt(months[1]);
 
-            Month lowerBoundMonth = null;
-            Month upperBoundMonth = null;
+            int otherUpperBound = lowerBound - 1;
+            int otherLowerBound = (upperBound + 1) % 12;
 
-            switch (lowerBound) {
-                case 1: lowerBoundMonth = Month.JANUARY; break;
-                case 2: lowerBoundMonth = Month.FEBRUARY; break;
-                case 3: lowerBoundMonth = Month.MARCH; break;
-                case 4: lowerBoundMonth = Month.APRIL; break;
-                case 5: lowerBoundMonth = Month.MAY; break;
-                case 6: lowerBoundMonth = Month.JUNE; break;
-                case 7: lowerBoundMonth = Month.JULY; break;
-                case 8: lowerBoundMonth = Month.AUGUST; break;
-                case 9: lowerBoundMonth = Month.SEPTEMBER; break;
-                case 10: lowerBoundMonth = Month.OCTOBER; break;
-                case 11: lowerBoundMonth = Month.NOVEMBER; break;
-                case 12: lowerBoundMonth = Month.DECEMBER; break;
-                default:
-                    throw new Exception();
+            if (otherUpperBound % 12 == 0) {
+                otherUpperBound = 12;
+            }
+            if (otherLowerBound % 12 == 0) {
+                otherLowerBound = 12;
             }
 
-            switch (upperBound) {
-                case 1: upperBoundMonth = Month.JANUARY; break;
-                case 2: upperBoundMonth = Month.FEBRUARY; break;
-                case 3: upperBoundMonth = Month.MARCH; break;
-                case 4: upperBoundMonth = Month.APRIL; break;
-                case 5: upperBoundMonth = Month.MAY; break;
-                case 6: upperBoundMonth = Month.JUNE; break;
-                case 7: upperBoundMonth = Month.JULY; break;
-                case 8: upperBoundMonth = Month.AUGUST; break;
-                case 9: upperBoundMonth = Month.SEPTEMBER; break;
-                case 10: upperBoundMonth = Month.OCTOBER; break;
-                case 11: upperBoundMonth = Month.NOVEMBER; break;
-                case 12: upperBoundMonth = Month.DECEMBER; break;
-                default:
-                    throw new Exception();
-            }
+            Month lowerBoundMonth = identifyMonth(lowerBound);
+            Month upperBoundMonth = identifyMonth(upperBound);
+            Month otherLowerBoundMonth = identifyMonth(otherLowerBound);
+            Month otherUpperBoundMonth = identifyMonth(otherUpperBound);
+
+//            switch (lowerBound) {
+//                case 1: lowerBoundMonth = Month.JANUARY; break;
+//                case 2: lowerBoundMonth = Month.FEBRUARY; break;
+//                case 3: lowerBoundMonth = Month.MARCH; break;
+//                case 4: lowerBoundMonth = Month.APRIL; break;
+//                case 5: lowerBoundMonth = Month.MAY; break;
+//                case 6: lowerBoundMonth = Month.JUNE; break;
+//                case 7: lowerBoundMonth = Month.JULY; break;
+//                case 8: lowerBoundMonth = Month.AUGUST; break;
+//                case 9: lowerBoundMonth = Month.SEPTEMBER; break;
+//                case 10: lowerBoundMonth = Month.OCTOBER; break;
+//                case 11: lowerBoundMonth = Month.NOVEMBER; break;
+//                case 12: lowerBoundMonth = Month.DECEMBER; break;
+//                default:
+//                    throw new Exception();
+//            }
+
+//            switch (upperBound) {
+//                case 1: upperBoundMonth = Month.JANUARY; break;
+//                case 2: upperBoundMonth = Month.FEBRUARY; break;
+//                case 3: upperBoundMonth = Month.MARCH; break;
+//                case 4: upperBoundMonth = Month.APRIL; break;
+//                case 5: upperBoundMonth = Month.MAY; break;
+//                case 6: upperBoundMonth = Month.JUNE; break;
+//                case 7: upperBoundMonth = Month.JULY; break;
+//                case 8: upperBoundMonth = Month.AUGUST; break;
+//                case 9: upperBoundMonth = Month.SEPTEMBER; break;
+//                case 10: upperBoundMonth = Month.OCTOBER; break;
+//                case 11: upperBoundMonth = Month.NOVEMBER; break;
+//                case 12: upperBoundMonth = Month.DECEMBER; break;
+//                default:
+//                    throw new Exception();
+//            }
 
             if (summer) {
                 this.summerMonthLowerBound = lowerBoundMonth;
                 this.summerMonthUpperBound = upperBoundMonth;
+                this.winterMonthLowerBound = otherLowerBoundMonth;
+                this.winterMonthUpperBound = otherUpperBoundMonth;
+
                 String lb = (""+lowerBoundMonth).substring(0,3);
                 String ub = (""+upperBoundMonth).substring(0,3);
+                String lb2 = (""+otherLowerBoundMonth).substring(0,3);
+                String ub2 = (""+otherUpperBoundMonth).substring(0,3);
 
                 for (int i = 0; i < Main.main_dashboard.getChildren().size(); i++) {
                     try {
@@ -258,7 +302,11 @@ public class SHHModule extends Module {
                             Label label = (Label) Main.main_dashboard.getChildren().get(i);
                             label.setText("Summer:\n"+lb+"->"+ub);
                             Main.main_dashboard.getChildren().set(i, label);
-                            break;
+                        }
+                        else if (Main.main_dashboard.getChildren().get(i).getId().equals("winterMonthLabel")){
+                            Label label = (Label) Main.main_dashboard.getChildren().get(i);
+                            label.setText("Winter:\n"+lb2+"->"+ub2);
+                            Main.main_dashboard.getChildren().set(i, label);
                         }
                     }
                     catch (Exception e){}
@@ -267,8 +315,13 @@ public class SHHModule extends Module {
             else {
                 this.winterMonthLowerBound = lowerBoundMonth;
                 this.winterMonthUpperBound = upperBoundMonth;
+                this.summerMonthLowerBound = otherLowerBoundMonth;
+                this.summerMonthUpperBound = otherUpperBoundMonth;
+
                 String lb = (""+lowerBoundMonth).substring(0,3);
                 String ub = (""+upperBoundMonth).substring(0,3);
+                String lb2 = (""+otherLowerBoundMonth).substring(0,3);
+                String ub2 = (""+otherUpperBoundMonth).substring(0,3);
 
                 for (int i = 0; i < Main.main_dashboard.getChildren().size(); i++) {
                     try {
@@ -276,7 +329,11 @@ public class SHHModule extends Module {
                             Label label = (Label) Main.main_dashboard.getChildren().get(i);
                             label.setText("Winter:\n"+lb+"->"+ub);
                             Main.main_dashboard.getChildren().set(i, label);
-                            break;
+                        }
+                        else if (Main.main_dashboard.getChildren().get(i).getId().equals("summerMonthLabel")){
+                            Label label = (Label) Main.main_dashboard.getChildren().get(i);
+                            label.setText("Summer:\n"+lb2+"->"+ub2);
+                            Main.main_dashboard.getChildren().set(i, label);
                         }
                     }
                     catch (Exception e){}
