@@ -940,4 +940,47 @@ public class House {
         }
         catch(Exception e){}
     }
+
+    public void autoOpenWindows(Room room) {
+        try {
+            for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {
+                try {
+                    if (this.layout.getChildren().get(lay).getId().equals("roomLayoutID" + room.getRoomID())) {
+
+                        AnchorPane room_layout = (AnchorPane) this.layout.getChildren().get(lay);
+
+                        for (int l = 0; l < room.getWindowCollection().length; l++) {
+                            try {
+                                if (!room.getWindowCollection()[l].isBlocked()) {
+                                    room.getWindowCollection()[l].setState(true);
+                                    setIconVisibility(room, "Window", true);
+                                    for (int cb = 0; cb < room_layout.getChildren().size(); cb++) {
+                                        try {
+                                            if (room_layout.getChildren().get(cb).getId().equals
+                                                    ("windowCheckboxID#" + room.getWindowCollection()[l].getUtilityID())) {
+                                                CheckBox tempCB = (CheckBox) room_layout.getChildren().get(cb);
+                                                tempCB.setStyle("-fx-border-color:#00ff00");
+                                                tempCB.setSelected(true);
+                                                room_layout.getChildren().set(cb, tempCB);
+                                                break;
+                                            }
+                                        } catch (Exception e) {}
+                                    }
+                                    Controller.appendMessageToConsole("SHH -- Window #" +
+                                            room.getWindowCollection()[l].getUtilityID() + " in " + room.getName() + " automatically opened.");
+                                }
+                                else {
+                                    Controller.appendMessageToConsole("SHH -- Blocked Window #" +
+                                            room.getWindowCollection()[l].getUtilityID() + " in " + room.getName() + " attempted to open.");
+                                }
+                            } catch (Exception e) {}
+                        }
+                        this.layout.getChildren().set(lay, room_layout);
+                        break;
+                    }
+                }
+                catch (Exception e){}
+            }
+        }catch (Exception ex){}
+    }
 }

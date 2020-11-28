@@ -186,7 +186,7 @@ public class SHHModule extends Module {
         tempPane.getChildren().addAll(closeButton, setWinterMonthRange, winterMonthsTempTextField,
                 setSummerMonthRange, summerMonthsTempTextField, confirmSummerMonthRange, confirmWinterMonthRange);
         tempStage.setScene(new Scene(tempPane, 500, 300));
-        tempStage.showAndWait();
+        tempStage.show();
     }
 
     private Month winterMonthLowerBound;
@@ -393,7 +393,7 @@ public class SHHModule extends Module {
         tempPane.getChildren().addAll(setSummerTempLabel, setWinterTempLabel,
                 summerTempTextField, winterTempTextField, confirmSummerTemp, confirmWinterTemp, closeButton);
         tempStage.setScene(new Scene(tempPane, 300, 300));
-        tempStage.showAndWait();
+        tempStage.show();
         //////////
     }
 
@@ -598,7 +598,7 @@ public class SHHModule extends Module {
         hostPane.getChildren().add(confirmButton);
 
         tempStage.setScene(new Scene(hostPane, 850, 1000));
-        tempStage.showAndWait();
+        tempStage.show();
     }
 
     public Room[] deleteRoomsFromZones(int[] roomsToBeMoved) {
@@ -1133,7 +1133,7 @@ public class SHHModule extends Module {
                                             changeRoomTempPane.getChildren().add(closeButton);
 
                                             changeRoomTempStage.setScene(new Scene(changeRoomTempPane, 350,350));
-                                            changeRoomTempStage.showAndWait();
+                                            changeRoomTempStage.show();
                                         });
 
                                         zonePane.getChildren().add(tempHypLink);
@@ -1152,7 +1152,7 @@ public class SHHModule extends Module {
                     zonePane.getChildren().add(zonePaneCloseButton);
 
                     zoneStage.setScene(new Scene(zonePane));
-                    zoneStage.showAndWait();
+                    zoneStage.show();
                 });
                 Main.SHH_MODULE.getChildren().add(zoneInfoButton);
                 transY+=40;
