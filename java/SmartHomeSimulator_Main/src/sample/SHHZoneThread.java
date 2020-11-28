@@ -19,8 +19,9 @@ public class SHHZoneThread {
             // this thread will run until the program is closed
             while (true) {
                 try {
-                    if (!Main.shhModule.isHAVCsystemActive()) {
 
+                    if (!Main.shhModule.isHAVCsystemActive()) {
+                        System.out.println("HAVC active == "+Main.shhModule.isHAVCsystemActive());
                         // the temperature increases/decreases by 0.05 deg. Celsius
                         // per ms until it reaches the temperature outside the house.
                         if (this.zone.getZoneTemperature() != Main.outsideTemperature) {
@@ -33,6 +34,7 @@ public class SHHZoneThread {
                             }
                             try {
                                 Main.shhModule.overrideZoneTemperature(this.zone.getZoneID(), roundedTemp);
+                                System.out.println(this.zone.getZoneTemperature());
                             }
                             catch (Exception e){}
                         }
@@ -64,7 +66,7 @@ public class SHHZoneThread {
                 }
                 catch (Exception e){}
                 finally {
-                    try { Thread.sleep((long) (1000/Controller.simulationTimeSpeed)); } catch (Exception e){}
+                    try { Thread.sleep((long) (1/Controller.simulationTimeSpeed)); } catch (Exception e){}
                 }
             }
         });

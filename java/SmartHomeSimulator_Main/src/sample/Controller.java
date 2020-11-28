@@ -2198,11 +2198,14 @@ public class Controller {
                     double tempDifference = (newTemp - Main.householdLocations[r].getRoomTemperature());
                     double absoluteTempDifference = (tempDifference < 0 ? (tempDifference * -1) : (tempDifference * 1));
 
+                    // if the desired temperature in a zone/room is above or below
+                    // one or more degrees celsius...
                     if (absoluteTempDifference >= 1) {
 
+                        //...the HAVC system starts working...
                         Main.shhModule.setHAVCsystemActive(true);
-                        double roundedTemp;
 
+                        double roundedTemp;
                         while (Main.householdLocations[r].getRoomTemperature() != newTemp) {
                             if (newTemp < Main.householdLocations[r].getRoomTemperature()) {
                                 roundedTemp = (double) Math.round((Main.householdLocations[r].getRoomTemperature() - 0.1) * 100) / 100;

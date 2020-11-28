@@ -134,6 +134,14 @@ public class SHHModule extends Module {
             }
         });
 
+        Button toggleHAVCButton = new Button("HAVC Off");
+        toggleHAVCButton.setTranslateX(300); toggleHAVCButton.setTranslateY(95);
+        toggleHAVCButton.setId("toggleHAVCButton");
+        toggleHAVCButton.setOnAction(e->{
+            setHAVCsystemActive(false);
+            setHAVCsystemPaused(false);
+            System.out.println("By button click, HAVC false");});
+
         Button configWinterSummerTemp = new Button("Configure\nWinter or\nSummer Temp.\nSettings");
         configWinterSummerTemp.setId("configSummerWeatherTempButton");
         configWinterSummerTemp.setTranslateX(380); configWinterSummerTemp.setTranslateY(30);
@@ -146,7 +154,7 @@ public class SHHModule extends Module {
         if (Main.numberOfTimesSHHModuleCreated==0) {
             pane.getChildren().addAll(awayModeSHHLabel, outdoorTempSHHLabel,
                     winterTempSHHLabel, summerTempSHHLabel, maxNumOfZonesSHHLabel,
-                    currentNumOfZonesSHHLabel, borderLine1, configZoneButton, zonesLabel, nullHouseError, configWinterSummerTemp);
+                    currentNumOfZonesSHHLabel, toggleHAVCButton, borderLine1, configZoneButton, zonesLabel, nullHouseError, configWinterSummerTemp);
         }
 
         Main.numberOfTimesSHHModuleCreated++;
