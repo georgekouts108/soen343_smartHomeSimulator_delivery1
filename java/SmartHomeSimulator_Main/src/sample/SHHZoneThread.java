@@ -3,62 +3,14 @@ import house.*;
 
 public class SHHZoneThread {
 
-    private boolean isRunning;
     private Thread mainThread;
-    private Thread zoneTemperatureThread;
-    private Thread zoneAwayModeWeatherThread;
-
     private Zone zone;
 
     public SHHZoneThread(Zone zone) {
         this.zone = zone;
         initializeAndStartMainThread();
-        initializeAndStartTemperatureThread();
     }
 
-    public void initializeAndStartTemperatureThread() {
-        this.zoneTemperatureThread = new Thread(()->{
-            try {
-                while (true) {
-                    try {
-                        double outdoorTemp = Main.outsideTemperature;
-
-                        for (int room = 0; room < zone.getZoneRoomIDs().length; room++) {
-                            try {
-                                for (int h = 0; h < Main.householdLocations.length; h++) {
-                                    try {
-                                        if (Main.householdLocations[h].getRoomID() == zone.getZoneRoomIDs()[room]) {
-                                            double roomTemp = Main.householdLocations[h].getRoomTemperature();
-                                            if ((outdoorTemp < roomTemp) && Main.shhModule.isSummer() && !SHSHelpers.isIs_away()) {
-                                                try {
-                                                    /**todo: fix repetition bug (implementation okay) */
-                                                    Main.house.autoOpenWindows(Main.householdLocations[h]);
-                                                }
-                                                catch (Exception e){}
-                                            }
-                                            break;
-                                        }
-                                    } catch (Exception F) {
-                                        System.out.println("EXCEPTION F: " + F.getMessage());
-                                    }
-                                }
-                            } catch (Exception G) {
-                                System.out.println("EXCEPTION G: " + G.getMessage());
-                            }
-                        }
-                    } catch (Exception E) {
-                        System.out.println("EXCEPTION E: " + E.getMessage());
-                    } finally {
-                        try {
-                            Thread.sleep(1);
-                        } catch (Exception H) {}
-                    }
-                }
-            }catch (Exception e){}
-        });
-
-        this.zoneTemperatureThread.start();
-    }
     public void initializeAndStartMainThread() {
 
         // as soon as a new zone is created, its corresponding thread will immediately start running

@@ -1718,16 +1718,15 @@ public class Controller {
                                         appendMessageToConsole("SHP -- Door #" +
                                                 Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
                                                 Main.householdLocations[room].getName() + " unlocked.");
-
                                     }
                                 } catch (Exception e) {}
                             }
                         }
                         catch (Exception e){}
                     }
-
                     updateSHPModule(false);
                 }
+                Main.shhModule.notifyToOpenAllZoneWindows();
             }
             else {
                 throw new Exception();
@@ -2228,6 +2227,4 @@ public class Controller {
             catch (Exception e){}
         }
     }
-
-
 }

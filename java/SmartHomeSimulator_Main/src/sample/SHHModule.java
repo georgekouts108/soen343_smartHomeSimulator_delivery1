@@ -205,7 +205,6 @@ public class SHHModule extends Module {
             return false;
         }
     }
-
     public boolean isSummer() {
         try {
             int summerLB_Value = this.summerMonthLowerBound.getValue();
@@ -217,7 +216,6 @@ public class SHHModule extends Module {
             return false;
         }
     }
-
     public Month identifyMonth(int value) {
         try {
             Month month;
@@ -322,12 +320,12 @@ public class SHHModule extends Module {
                 }
             }
             notifySHSOFAwayMode();
+            notifyToOpenAllZoneWindows();
         }
         catch (Exception e){
             Controller.appendMessageToConsole("Failed attempt to set Winter or Summer Months.");
         }
     }
-
     public void popupWinterSummerTempSettingsStage(AnchorPane pane) {
         //////////
         Stage tempStage = new Stage();
@@ -403,13 +401,11 @@ public class SHHModule extends Module {
     public boolean isHAVCsystemPaused() {
         return HAVCsystemPaused;
     }
-
     public void setHAVCsystemPaused(boolean HAVCsystemPaused) {
         this.HAVCsystemPaused = HAVCsystemPaused;
     }
 
     private static int nextDestinationZoneID = -1;
-
     public void openUpZoneConfigurationPanel_UPDATED() {
         Stage tempStage = new Stage();
         tempStage.setResizable(false);
@@ -603,7 +599,6 @@ public class SHHModule extends Module {
         tempStage.setScene(new Scene(hostPane, 850, 1000));
         tempStage.show();
     }
-
     public Room[] deleteRoomsFromZones(int[] roomsToBeMoved) {
         Room[] roomsArray = new Room[roomsToBeMoved.length];
 
@@ -627,7 +622,6 @@ public class SHHModule extends Module {
         catch (Exception e){}
         return roomsArray;
     }
-
     public void removeRoomFromZone(int roomID, int zoneID) {
         for (int z = 0; z < zones.length; z++) {
             try {
@@ -639,7 +633,6 @@ public class SHHModule extends Module {
             catch (Exception e){}
         }
     }
-
     public int getZoneOfRoom(int roomID) {
         int zoneID = 0;
         boolean zoneFound = false;
@@ -660,7 +653,6 @@ public class SHHModule extends Module {
         }
         return zoneID;
     }
-
     public int[] getRoomIDsToMoveInAnotherZone(AnchorPane hostPane) {
         String roomIDsString = "";
         try {
@@ -711,7 +703,6 @@ public class SHHModule extends Module {
     public int getCurrentNumberOfZones() {
         return currentNumberOfZones;
     }
-
     public void incrementNumberOfZones() {
         this.currentNumberOfZones++;
     }
@@ -730,7 +721,6 @@ public class SHHModule extends Module {
         this.winterTemperature = winterTemperature;
         changeSHHTempLabel("winterTempSHHLabel", winterTemperature);
     }
-
     public double getSummerTemperature() {
         return summerTemperature;
     }
@@ -742,7 +732,6 @@ public class SHHModule extends Module {
     public double getTEMP_THRESHOLD() {
         return TEMP_THRESHOLD;
     }
-
     public void setTEMP_THRESHOLD(double TEMP_THRESHOLD) {
         this.TEMP_THRESHOLD = TEMP_THRESHOLD;
     }
@@ -800,8 +789,8 @@ public class SHHModule extends Module {
             }
             catch (Exception e){}
         }
+        notifyToOpenZoneWindows(zoneID);
     }
-
     public boolean isRoomTempInBetweenQuartDegreeBounds(int zoneID, int roomID) {
         boolean yes = false;
         try {
@@ -842,7 +831,6 @@ public class SHHModule extends Module {
         }
         return yes;
     }
-
     public void overrideTempInSpecificRoomInZone(int zoneID, int roomID, double newTemp) {
         try {
             boolean roomIsInZone = false;
@@ -865,12 +853,12 @@ public class SHHModule extends Module {
                     break;
                 }
             }
+            notifyToOpenZoneWindows(zoneID);
         }
         catch (Exception e){
             Controller.appendMessageToConsole(e.getMessage());
         }
     }
-
     public void setAllZoneTempsToSummerTemp() {
         for (int z = 0; z < this.zones.length; z++) {
             try {
@@ -888,7 +876,7 @@ public class SHHModule extends Module {
         }
     }
 
-    public void notifySHSOFAwayMode() {
+    public void notifySHSOFAwayMode() { /**todo: change name to 'notifySHHOFAwayMode()'*/
         if (SHSHelpers.isIs_away()) {
             if (Main.shhModule.isSummer()) {
                 try {
@@ -903,6 +891,56 @@ public class SHHModule extends Module {
                 catch (Exception e){}
             }
         }
+    }
+    public void notifyToOpenZoneWindows(int zoneID) {
+        try {
+            double outdoorTemp = Main.outsideTemperature;
+            for (int z = 0; z < this.zones.length; z++) {
+                try {
+                    if (this.zones[z].getZoneID() == zoneID) {
+                        /////
+                        for (int room = 0; room < this.zones[z].getZoneRoomIDs().length; room++) {
+                            try {
+                                for (int h = 0; h < Main.householdLocations.length; h++) {
+                                    try {
+                                        if (Main.householdLocations[h].getRoomID() == this.zones[z].getZoneRoomIDs()[room]) {
+                                            double roomTemp = Main.householdLocations[h].getRoomTemperature();
+                                            if ((outdoorTemp < roomTemp) && Main.shhModule.isSummer() && !SHSHelpers.isIs_away()) {
+                                                try {
+                                                    /**todo: fix repetition bug (implementation okay) */
+                                                    Main.house.autoOpenWindows(Main.householdLocations[h]);
+                                                }
+                                                catch (Exception e){}
+                                            }
+                                            break;
+                                        }
+                                    } catch (Exception F) {
+                                        System.out.println("EXCEPTION F: " + F.getMessage());
+                                    }
+                                }
+                            } catch (Exception G) {
+                                System.out.println("EXCEPTION G: " + G.getMessage());
+                            }
+                        }
+                        /////
+                        break;
+                    }
+                }
+                catch (Exception e){}
+            }
+        }
+        catch (Exception e){}
+    }
+    public void notifyToOpenAllZoneWindows() {
+        try {
+            for (int z = 0 ; z < this.zones.length; z++) {
+                try {
+                    notifyToOpenZoneWindows(this.zones[z].getZoneID());
+                }
+                catch (Exception e){}
+            }
+        }
+        catch (Exception e){}
     }
 
     public void changeSHHTempLabel(String labelID, double newTemp) {
@@ -926,7 +964,6 @@ public class SHHModule extends Module {
             catch (Exception ex){}
         }
     }
-
     public void changeSHHAwayModeLabel(boolean isAwayModeOn) {
         for (int e = 0; e < Main.SHH_MODULE.getChildren().size(); e++) {
             try {
@@ -1015,7 +1052,6 @@ public class SHHModule extends Module {
             Controller.appendMessageToConsole(e.getMessage());
         }
     }
-
     public void addNewZoneThread(Zone zone) {
         if (this.zoneThreads == null) {
             this.zoneThreads = new SHHZoneThread[1];
@@ -1033,7 +1069,6 @@ public class SHHModule extends Module {
             this.zoneThreads = tempThreadArray;
         }
     }
-
     public void updateSHSModuleWithZones() {
 
         for (int elem = 0; elem < Main.SHH_MODULE.getChildren().size(); elem++) {
@@ -1227,7 +1262,6 @@ public class SHHModule extends Module {
             catch (Exception e){}
         }
     }
-
     public void changeZoneInfoPaneSpecificRoom(AnchorPane pane, double temperature, Zone zone, int roomID) {
         // for each room in the zone...
         for (int r = 0; r < zone.getZoneRoomIDs().length; r++) {
