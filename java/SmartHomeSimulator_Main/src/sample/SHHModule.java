@@ -321,6 +321,7 @@ public class SHHModule extends Module {
                     catch (Exception e){}
                 }
             }
+            notifySHSOFAwayMode();
         }
         catch (Exception e){
             Controller.appendMessageToConsole("Failed attempt to set Winter or Summer Months.");
@@ -349,6 +350,7 @@ public class SHHModule extends Module {
                         if (pane.getChildren().get(f).getId().equals("winterTempSHHLabel")) {
                             Label label = (Label) pane.getChildren().get(f);
                             this.winterTemperature = Integer.parseInt(winterTempTextField.getText());
+                            notifySHSOFAwayMode();
                             label.setText("Winter temp (AWAY mode only): "+this.winterTemperature+"°C");
                             pane.getChildren().set(f, label);
                             break;
@@ -375,6 +377,7 @@ public class SHHModule extends Module {
                         if (pane.getChildren().get(f).getId().equals("summerTempSHHLabel")) {
                             Label label = (Label) pane.getChildren().get(f);
                             this.summerTemperature = Integer.parseInt(summerTempTextField.getText());
+                            notifySHSOFAwayMode();
                             label.setText("Summer temp (AWAY mode only): "+this.summerTemperature+"°C");
                             pane.getChildren().set(f, label);
                             break;
@@ -592,7 +595,7 @@ public class SHHModule extends Module {
             else {
                 Controller.appendMessageToConsole("ERROR [SHH]: Failed to change Zones of Rooms");
             }
-
+            notifySHSOFAwayMode();
             tempStage.close();
         });
         hostPane.getChildren().add(confirmButton);
@@ -870,12 +873,35 @@ public class SHHModule extends Module {
 
     public void setAllZoneTempsToSummerTemp() {
         for (int z = 0; z < this.zones.length; z++) {
-            overrideZoneTemperature(this.zones[z].getZoneID(), this.summerTemperature);
+            try {
+                overrideZoneTemperature(this.zones[z].getZoneID(), this.summerTemperature);
+            }
+            catch (Exception e){}
         }
     }
     public void setAllZoneTempsToWinterTemp() {
         for (int z = 0; z < this.zones.length; z++) {
-            overrideZoneTemperature(this.zones[z].getZoneID(), this.winterTemperature);
+            try {
+                overrideZoneTemperature(this.zones[z].getZoneID(), this.winterTemperature);
+            }
+            catch (Exception e){}
+        }
+    }
+
+    public void notifySHSOFAwayMode() {
+        if (SHSHelpers.isIs_away()) {
+            if (Main.shhModule.isSummer()) {
+                try {
+                    setAllZoneTempsToSummerTemp();
+                }
+                catch (Exception e){}
+            }
+            else if (Main.shhModule.isWinter()) {
+                try {
+                    setAllZoneTempsToWinterTemp();
+                }
+                catch (Exception e){}
+            }
         }
     }
 

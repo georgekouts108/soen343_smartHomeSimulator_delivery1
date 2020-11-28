@@ -1647,7 +1647,7 @@ public class Controller {
             if ((numOfPeopleOutside == Main.profiles.length)) {
 
                 if (tb.isSelected()) {
-
+                    tb.setText("Turn OFF Away Mode");
                     Main.main_stage.setTitle("Smart Home Simulator -- logged in as #" +
                             Main.currentActiveProfile.getProfileID() + " \"" + Main.currentActiveProfile.getType().toUpperCase() +
                             "\" {AWAY MODE ON}");
@@ -1655,6 +1655,7 @@ public class Controller {
 
                     Main.currentActiveProfile.setAway(true);
                     SHSHelpers.setIs_away(true);
+                    Main.shhModule.notifySHSOFAwayMode();
                     Main.shhModule.changeSHHAwayModeLabel(true);
                     // close all windows;
                     for (int room = 0; room < Main.householdLocations.length; room++) {
@@ -1695,6 +1696,7 @@ public class Controller {
                     updateSHPModule(true);
                 }
                 else {
+                    tb.setText("Turn ON Away Mode");
                     Main.main_stage.setTitle("Smart Home Simulator -- logged in as #" +
                             Main.currentActiveProfile.getProfileID() + " \"" + Main.currentActiveProfile.getType().toUpperCase() +
                             "\" {AWAY MODE OFF}");
@@ -1702,6 +1704,7 @@ public class Controller {
 
                     Main.currentActiveProfile.setAway(false);
                     SHSHelpers.setIs_away(false);
+                    Main.shhModule.notifySHSOFAwayMode();
                     Main.shhModule.changeSHHAwayModeLabel(false);
                     // unlock all doors (except the garage, backyard, and entrance)
                     for (int room = 0; room < Main.householdLocations.length; room++) {

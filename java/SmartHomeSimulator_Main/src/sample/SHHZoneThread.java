@@ -6,12 +6,12 @@ public class SHHZoneThread {
     private boolean isRunning;
     private Thread mainThread;
     private Thread zoneTemperatureThread;
-    private Thread[] zoneRoomThreads;
+    private Thread zoneAwayModeWeatherThread;
+
     private Zone zone;
 
     public SHHZoneThread(Zone zone) {
         this.zone = zone;
-        this.zoneRoomThreads = new Thread[zone.getZoneRoomIDs().length];
         initializeAndStartMainThread();
         initializeAndStartTemperatureThread();
     }
@@ -59,7 +59,6 @@ public class SHHZoneThread {
 
         this.zoneTemperatureThread.start();
     }
-
     public void initializeAndStartMainThread() {
 
         // as soon as a new zone is created, its corresponding thread will immediately start running
