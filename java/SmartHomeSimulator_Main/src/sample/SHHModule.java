@@ -617,6 +617,8 @@ public class SHHModule extends Module {
                                     for (int r = 0; r < roomsDeletedFromExistingZones.length; r++) {
                                         try {
                                             zones[z].addRoomToZone(roomsDeletedFromExistingZones[r]);
+                                            overrideTempInSpecificRoomInZone(zones[z].getZoneID(),
+                                                    roomsDeletedFromExistingZones[r].getRoomID(), zones[z].getZoneTemperature());
                                         }
                                         catch (Exception f){}
                                     }
