@@ -2218,7 +2218,7 @@ public class Controller {
                             } catch (Exception e) {}
                             finally {
                                 try {
-                                    Thread.sleep((long) (1 / Controller.simulationTimeSpeed));
+                                    Thread.sleep((long) (1000 / Controller.simulationTimeSpeed));
                                 } catch (Exception e) {}
                             }
                         }

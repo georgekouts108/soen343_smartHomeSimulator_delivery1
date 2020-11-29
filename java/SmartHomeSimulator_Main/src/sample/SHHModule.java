@@ -1287,7 +1287,7 @@ public class SHHModule extends Module {
                                     if (pane.getChildren().get(el).getId().contains("#"+Main.householdLocations[h].getRoomID()+"_tempLabel")) {
                                         Label label = (Label) pane.getChildren().get(el);
                                         label.setText("#"+Main.householdLocations[h].getRoomID()+" "+Main.householdLocations[h].getName()+
-                                                " ("+temperature+"°C {OVR})");
+                                                " ("+temperature+"°C {overridden})");
                                         pane.getChildren().set(el,label);
                                         break;
                                     }

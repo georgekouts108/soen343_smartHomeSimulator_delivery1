@@ -66,7 +66,7 @@ public class SHHZoneThread {
                 }
                 catch (Exception e){}
                 finally {
-                    try { Thread.sleep((long) (1/Controller.simulationTimeSpeed)); } catch (Exception e){}
+                    try { Thread.sleep((long) (1000 / Controller.simulationTimeSpeed)); } catch (Exception e){}
                 }
             }
         });
