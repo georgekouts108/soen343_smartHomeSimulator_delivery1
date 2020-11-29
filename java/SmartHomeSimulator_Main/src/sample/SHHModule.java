@@ -22,6 +22,7 @@ public class SHHModule extends Module {
 
     private int currentNumberOfZones;
     private double outdoorTemperature;
+    private double indoorTemperature;
     private double winterTemperature;
     private double summerTemperature;
     private Zone[] zones;
@@ -32,7 +33,7 @@ public class SHHModule extends Module {
     private boolean HAVCsystemActive;
     private boolean HAVCsystemPaused;
     private double TEMP_THRESHOLD;
-
+    private Thread indoorTemperatureThread;
     protected static int MAX_NUMBER_OF_ZONES = 0;
 
     /**
@@ -41,6 +42,7 @@ public class SHHModule extends Module {
     public SHHModule() {
         super();
         this.outdoorTemperature = Main.outsideTemperature;
+        this.indoorTemperature = Main.outsideTemperature;
         this.winterTemperature = 0;
         this.summerTemperature = 0;
         this.isWinter = false;
@@ -53,6 +55,37 @@ public class SHHModule extends Module {
         SHHZoneConfigPane = new AnchorPane();
         SHHZoneConfigScene = new Scene(SHHZoneConfigPane, 600,900);
     }
+
+    public void setIndoorTemperature(double newTemperature) {
+        this.indoorTemperature = newTemperature;
+    }
+
+    public void startIndoorTempThread() {
+        this.indoorTemperatureThread = new Thread(()->{
+            while (true) {
+                try {
+                    double averageTemperatureOfRooms = 0;
+                    for (int location = 0; location < Main.householdLocations.length; location++) {
+                        try {
+                            averageTemperatureOfRooms += Main.householdLocations[location].getRoomTemperature();
+                        }
+                        catch (Exception e){}
+                    }
+                    setIndoorTemperature(averageTemperatureOfRooms / Main.householdLocations.length);
+                    System.out.println("DEBUG INDOOR TEMP: indoor temp == "+this.indoorTemperature);
+                    if (this.indoorTemperature <= 0) {
+                        Controller.appendMessageToConsole("WARNING [SHH]: Indoor temperature <= 0°C -- pipes might burst...");
+                    }
+                }
+                catch (Exception e){}
+                finally {
+                    try {Thread.sleep((long) (1000 / Controller.simulationTimeSpeed));} catch (Exception e){}
+                }
+            }
+        });
+        this.indoorTemperatureThread.start();
+    }
+
 
     public void setMaxNumOfZones(int max) {
         MAX_NUMBER_OF_ZONES = max;

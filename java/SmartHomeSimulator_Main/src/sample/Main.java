@@ -452,6 +452,9 @@ public class Main extends Application {
 
                 // create an initial SHH zone that contains all rooms in the house
                 Main.shhModule.createNewZone(householdLocations);
+
+                Main.shhModule.startIndoorTempThread();
+
                 createMainDashboardNecessities();
             }
         });
