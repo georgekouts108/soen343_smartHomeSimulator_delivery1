@@ -624,7 +624,7 @@ public class House {
                         setIconVisibility(room, "AC", true);
                         Controller.appendMessageToConsole("SHC -- AC turned on in Room #"+room.getRoomID()+" "+room.getName());
                     }
-                    else{
+                    else {
                         acCheckbox.setSelected(false);
                         Controller.appendMessageToConsole("SHC -- You are not allowed to turn on the " + room.getName() + " AC.");
                     }
@@ -636,6 +636,7 @@ public class House {
                         room.getAc().setState(false);
                         setIconVisibility(room, "AC", false);
                         Controller.appendMessageToConsole("SHC -- AC turned off in Room #" + room.getRoomID() + " " + room.getName());
+                        room.startThreadToSetRoomTempToOutdoorTemp();
                     }
                     else{
                         acCheckbox.setSelected(true);
@@ -982,5 +983,48 @@ public class House {
                 catch (Exception e){}
             }
         }catch (Exception ex){}
+    }
+
+    public void autoTurnOnOffAC(Room room, boolean state) {
+        try {
+            for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {
+                try {
+                    if (this.layout.getChildren().get(lay).getId().equals("roomLayoutID"+room.getRoomID())) {
+                        AnchorPane room_layout = (AnchorPane) this.layout.getChildren().get(lay);
+
+                        try {
+                            if (room.getAc() != null) {
+                                room.getAc().setState(state);
+                                setIconVisibility(room, "AC", state);
+                                for (int cb = 0; cb < room_layout.getChildren().size(); cb++) {
+                                    try {
+                                        if (room_layout.getChildren().get(cb).getId().equals
+                                                ("airConditionerCheckboxID#"+room.getAc().getUtilityID())) {
+                                            CheckBox tempCB = (CheckBox) room_layout.getChildren().get(cb);
+                                            tempCB.setSelected(state);
+                                            room_layout.getChildren().set(cb, tempCB);
+                                            break;
+                                        }
+                                    }
+                                    catch(Exception e){}
+                                }
+                                if (room.getAc().getState()) {
+                                    Controller.appendMessageToConsole("[Edit Context] -- A.C automatically triggered in "+room.getName()+".");
+                                }
+                                else {
+                                    Controller.appendMessageToConsole("[Edit Context] -- A.C automatically deactivated in "+room.getName()+".");
+                                }
+                            }
+                        }
+                        catch(Exception e){}
+                        this.layout.getChildren().set(lay, room_layout);
+                        break;
+                    }
+                }
+                catch (Exception e){}
+
+            }
+        }
+        catch(Exception e){}
     }
 }

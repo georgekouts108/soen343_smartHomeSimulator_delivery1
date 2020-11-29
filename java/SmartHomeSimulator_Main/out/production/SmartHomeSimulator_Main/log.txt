@@ -1,0 +1,78 @@
+2020-11-29 02:34:14 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-11-29 02:34:14 -- SHH: Room #4 temperature changed to 15.1°C
+2020-11-29 02:34:14 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-11-29 02:34:14 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-11-29 02:34:14 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-11-29 02:34:14 -- SHH: Room #6 temperature changed to 15.1°C
+2020-11-29 02:34:14 -- SHH: Room #7 temperature changed to 15.1°C
+2020-11-29 02:34:14 -- SHH: Room #3 temperature changed to 15.1°C
+2020-11-29 02:34:14 -- SHH: Room #1 temperature changed to 15.1°C
+2020-11-29 02:34:14 -- SHH: Room #5 temperature changed to 15.1°C
+2020-11-29 02:34:14 -- SHH: Room #2 temperature changed to 15.1°C
+2020-11-29 02:34:15 -- SHH: Room #6 temperature changed to 15.2°C
+2020-11-29 02:34:15 -- SHH: Room #7 temperature changed to 15.2°C
+2020-11-29 02:34:15 -- SHH: Room #4 temperature changed to 15.2°C
+2020-11-29 02:34:15 -- SHH: Room #3 temperature changed to 15.2°C
+2020-11-29 02:34:15 -- SHH: Room #1 temperature changed to 15.2°C
+2020-11-29 02:34:15 -- SHH: Room #2 temperature changed to 15.2°C
+2020-11-29 02:34:15 -- SHH: Room #5 temperature changed to 15.2°C
+2020-11-29 02:34:16 -- SHH: Room #2 temperature changed to 15.3°C
+2020-11-29 02:34:16 -- SHH: Room #3 temperature changed to 15.3°C
+2020-11-29 02:34:16 -- SHH: Room #6 temperature changed to 15.3°C
+2020-11-29 02:34:16 -- SHH: Room #5 temperature changed to 15.3°C
+2020-11-29 02:34:16 -- SHH: Room #7 temperature changed to 15.3°C
+2020-11-29 02:34:16 -- SHH: Room #1 temperature changed to 15.3°C
+2020-11-29 02:34:16 -- SHH: Room #4 temperature changed to 15.3°C
+2020-11-29 02:34:17 -- SHH: Room #2 temperature changed to 15.4°C
+2020-11-29 02:34:17 -- SHH: Room #5 temperature changed to 15.4°C
+2020-11-29 02:34:17 -- SHH: Room #6 temperature changed to 15.4°C
+2020-11-29 02:34:17 -- SHH: Room #7 temperature changed to 15.4°C
+2020-11-29 02:34:17 -- SHH: Room #3 temperature changed to 15.4°C
+2020-11-29 02:34:17 -- SHH: Room #1 temperature changed to 15.4°C
+2020-11-29 02:34:17 -- SHH: Room #4 temperature changed to 15.4°C
+2020-11-29 02:34:18 -- SHH: Room #2 temperature changed to 15.5°C
+2020-11-29 02:34:18 -- SHH: Room #3 temperature changed to 15.5°C
+2020-11-29 02:34:18 -- SHH: Room #7 temperature changed to 15.5°C
+2020-11-29 02:34:18 -- SHH: Room #5 temperature changed to 15.5°C
+2020-11-29 02:34:18 -- SHH: Room #6 temperature changed to 15.5°C
+2020-11-29 02:34:18 -- SHH: Room #1 temperature changed to 15.5°C
+2020-11-29 02:34:18 -- SHH: Room #4 temperature changed to 15.5°C
+2020-11-29 02:34:19 -- SHH: Room #5 temperature changed to 15.6°C
+2020-11-29 02:34:19 -- SHH: Room #3 temperature changed to 15.6°C
+2020-11-29 02:34:19 -- SHH: Room #6 temperature changed to 15.6°C
+2020-11-29 02:34:19 -- SHH: Room #7 temperature changed to 15.6°C
+2020-11-29 02:34:19 -- SHH: Room #2 temperature changed to 15.6°C
+2020-11-29 02:34:19 -- SHH: Room #4 temperature changed to 15.6°C
+2020-11-29 02:34:19 -- SHH: Room #1 temperature changed to 15.6°C
+2020-11-29 02:34:20 -- SHH: Room #4 temperature changed to 15.7°C
+2020-11-29 02:34:20 -- SHH: Room #2 temperature changed to 15.7°C
+2020-11-29 02:34:20 -- SHH: Room #6 temperature changed to 15.7°C
+2020-11-29 02:34:20 -- SHH: Room #7 temperature changed to 15.7°C
+2020-11-29 02:34:20 -- SHH: Room #3 temperature changed to 15.7°C
+2020-11-29 02:34:20 -- SHH: Room #5 temperature changed to 15.7°C
+2020-11-29 02:34:20 -- SHH: Room #1 temperature changed to 15.7°C
+2020-11-29 02:34:21 -- SHH: Room #1 temperature changed to 15.8°C
+2020-11-29 02:34:21 -- SHH: Room #4 temperature changed to 15.8°C
+2020-11-29 02:34:21 -- SHH: Room #2 temperature changed to 15.8°C
+2020-11-29 02:34:21 -- SHH: Room #6 temperature changed to 15.8°C
+2020-11-29 02:34:21 -- SHH: Room #5 temperature changed to 15.8°C
+2020-11-29 02:34:21 -- SHH: Room #3 temperature changed to 15.8°C
+2020-11-29 02:34:21 -- SHH: Room #7 temperature changed to 15.8°C
+2020-11-29 02:34:22 -- SHH: Room #4 temperature changed to 15.9°C
+2020-11-29 02:34:22 -- SHH: Room #3 temperature changed to 15.9°C
+2020-11-29 02:34:22 -- SHH: Room #2 temperature changed to 15.9°C
+2020-11-29 02:34:22 -- SHH: Room #7 temperature changed to 15.9°C
+2020-11-29 02:34:22 -- SHH: Room #1 temperature changed to 15.9°C
+2020-11-29 02:34:22 -- SHH: Room #5 temperature changed to 15.9°C
+2020-11-29 02:34:22 -- SHH: Room #6 temperature changed to 15.9°C
+2020-11-29 02:34:23 -- SHH: Room #3 temperature changed to 16.0°C
+2020-11-29 02:34:23 -- SHH: Room #5 temperature changed to 16.0°C
+2020-11-29 02:34:23 -- SHH: Room #1 temperature changed to 16.0°C
+2020-11-29 02:34:23 -- SHH: Room #7 temperature changed to 16.0°C
+2020-11-29 02:34:23 -- SHH: Room #2 temperature changed to 16.0°C
+2020-11-29 02:34:23 -- SHH: Room #6 temperature changed to 16.0°C
+2020-11-29 02:34:23 -- SHH: Room #4 temperature changed to 16.0°C
+2020-11-29 02:34:24 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-11-29 02:34:24 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-11-29 02:34:24 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-11-29 02:34:24 -- [Edit Context] -- A.C automatically triggered in masterbedroom.

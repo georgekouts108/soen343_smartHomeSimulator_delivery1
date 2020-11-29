@@ -32,7 +32,8 @@ public class Room {
     private Light[] lightCollection;
     private Window[] windowCollection;
     private boolean autoMode;
-
+    private boolean HAVC_Working;
+    private boolean HAVC_Paused;
     private double roomTemperature;
 
     /**
@@ -80,6 +81,9 @@ public class Room {
         }
 
         this.roomTemperature = SHSHelpers.getOutsideTemperature();
+
+        this.HAVC_Working = false;
+        this.HAVC_Paused = false;
 
         this.iconLight_view.setImage(iconLight); this.iconLight_view.setId("iconLightViewRoom#"+this.roomID);
         this.iconLight_view.setFitWidth(42); this.iconLight_view.setFitHeight(20);
@@ -279,5 +283,110 @@ public class Room {
      */
     public void setRoomTemperature(double roomTemperature) {
         this.roomTemperature = roomTemperature;
+    }
+
+    public boolean isHAVC_Working() {
+        return HAVC_Working;
+    }
+    public void setHAVC_Working(boolean HAVC_Working) {
+        this.HAVC_Working = HAVC_Working;
+    }
+    public boolean isHAVC_Paused() {
+        return HAVC_Paused;
+    }
+    public void setHAVC_Paused(boolean HAVC_Paused) {
+        this.HAVC_Paused = HAVC_Paused;
+    }
+
+    // call this method whenever:
+        // (1) you want to override a specific room temperature in a zone
+        // (2) you want to change a zone temperature that overrides all its rooms' temperatures to that value
+    public void startThreadToAdjustRoomTemp(double newTemp) {
+
+        double tempDifference = (newTemp - this.getRoomTemperature());
+        double absoluteTempDifference = (tempDifference < 0 ? (tempDifference * -1) : (tempDifference * 1));
+
+        // if the desired temperature in a zone/room is above or below one or more degrees celsius...
+        if (absoluteTempDifference >= 1) {
+
+            new Thread(()->{
+                try {
+                    //...the HAVC system starts working...
+                    this.HAVC_Working = true;
+                    updateRoomHAVCstatus();
+
+                    double roundedTemp;
+                    while (this.getRoomTemperature() != newTemp) {
+                        if (newTemp < this.getRoomTemperature()) {
+                            roundedTemp = (double) Math.round((this.getRoomTemperature() - 0.1) * 100) / 100;
+                        }
+                        else {
+                            roundedTemp = (double) Math.round((this.getRoomTemperature() + 0.1) * 100) / 100;
+                        }
+                        try {
+                            this.setRoomTemperature(roundedTemp);
+                            Controller.appendMessageToConsole("SHH: Room #" + this.roomID + " temperature changed to " + roundedTemp + "°C");
+                        } catch (Exception e) {}
+                        finally {
+                            try { Thread.sleep(1000 / (long) Controller.getSimulationTimeSpeed()); } catch (Exception e) {}
+                        }
+                    }
+
+                    /**todo: figure out the right time to set this value to true*/
+                    this.HAVC_Paused = true; // the heater is now idle at the desired temperature, until temp is changed again
+                    updateRoomHAVCstatus();
+                }
+                catch (Exception e){}
+            }).start();
+        }
+    }
+
+    // call this method whenever:
+        // (1) the selected AC icon in a room is deselected
+    public void startThreadToSetRoomTempToOutdoorTemp() {
+        new Thread(()-> {
+            try {
+                this.HAVC_Working = false;
+                this.HAVC_Paused = false;
+                updateRoomHAVCstatus();
+
+                while (this.roomTemperature != SHSHelpers.getOutsideTemperature()) {
+                    double roundedTemp;
+                    if (this.roomTemperature > SHSHelpers.getOutsideTemperature()) {
+                        roundedTemp = (double) Math.round((this.roomTemperature - 0.05) * 100) / 100;
+                    } else {
+                        roundedTemp = (double) Math.round((this.roomTemperature + 0.05) * 100) / 100;
+                    }
+                    try {
+                        this.roomTemperature = roundedTemp;
+                        System.out.println(this.roomTemperature);
+                    } catch (Exception e) {
+                    } finally {
+                        try { Thread.sleep(1000 / (long) Controller.getSimulationTimeSpeed()); } catch (Exception e) {}
+                    }
+                }
+            }
+            catch (Exception e){}
+        }).start();
+    }
+
+    public boolean isRoomTempInBetweenQuartDegreeBounds() {
+        double lowerBound = (double) Math.round((roomTemperature - 0.25) * 100) / 100;
+        double upperBound = (double) Math.round((roomTemperature + 0.25) * 100) / 100;
+        return ((roomTemperature >= (lowerBound)) && (roomTemperature <= upperBound));
+    }
+
+    public void updateRoomHAVCstatus() {
+        try {
+            if (this.HAVC_Paused || this.HAVC_Working) {
+                SHSHelpers.getHouse().autoTurnOnOffAC(this, true);
+
+            }
+            else {
+                SHSHelpers.getHouse().autoTurnOnOffAC(this, false);
+            }
+            SHSHelpers.setHouse(SHSHelpers.getHouse());
+        }
+        catch (Exception e){}
     }
 }

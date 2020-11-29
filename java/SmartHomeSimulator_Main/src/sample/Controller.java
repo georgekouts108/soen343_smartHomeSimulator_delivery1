@@ -1985,8 +1985,11 @@ public class Controller {
             try {
                 if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
                     TextArea textArea = (TextArea) Main.getMain_dashboard().getChildren().get(a);
-                    textArea.appendText(LocalDateTime.now().toString().substring(0, 10) + " " +
-                            LocalDateTime.now().toString().substring(11, 19) + " -- " + message + "\n");
+                    try {
+                        textArea.appendText(LocalDateTime.now().toString().substring(0, 10) + " " +
+                                LocalDateTime.now().toString().substring(11, 19) + " -- " + message + "\n");
+                    }
+                    catch (Exception e){}
                     Main.getMain_dashboard().getChildren().set(a, textArea);
                     break;
                 }
@@ -2188,46 +2191,18 @@ public class Controller {
     }
 
     public static void changeSpecificRoomTemperature(int roomID, double newTemp) {
-
         for (int r = 0; r < Main.householdLocations.length; r++) {
             try {
                 if (Main.householdLocations[r].getRoomID() == roomID) {
-
-                    /////
-                    // check if newTemp has a difference of at least 1 degree from the initial temperature...
-                    double tempDifference = (newTemp - Main.householdLocations[r].getRoomTemperature());
-                    double absoluteTempDifference = (tempDifference < 0 ? (tempDifference * -1) : (tempDifference * 1));
-
-                    // if the desired temperature in a zone/room is above or below
-                    // one or more degrees celsius...
-                    if (absoluteTempDifference >= 1) {
-
-                        //...the HAVC system starts working...
-                        Main.shhModule.setHAVCsystemActive(true);
-
-                        double roundedTemp;
-                        while (Main.householdLocations[r].getRoomTemperature() != newTemp) {
-                            if (newTemp < Main.householdLocations[r].getRoomTemperature()) {
-                                roundedTemp = (double) Math.round((Main.householdLocations[r].getRoomTemperature() - 0.1) * 100) / 100;
-                            } else {
-                                roundedTemp = (double) Math.round((Main.householdLocations[r].getRoomTemperature() + 0.1) * 100) / 100;
-                            }
-                            try {
-                                Main.householdLocations[r].setRoomTemperature(roundedTemp);
-                                Controller.appendMessageToConsole("SHH: Room #" + roomID + " temperature changed to " + roundedTemp + "°C");
-                            } catch (Exception e) {}
-                            finally {
-                                try {
-                                    Thread.sleep((long) (1000 / Controller.simulationTimeSpeed));
-                                } catch (Exception e) {}
-                            }
-                        }
-                        Main.shhModule.setHAVCsystemPaused(true);
-                    }
+                    Main.householdLocations[r].startThreadToAdjustRoomTemp(newTemp);
                     break;
                 }
             }
             catch (Exception e){}
         }
+    }
+
+    public static float getSimulationTimeSpeed() {
+        return simulationTimeSpeed;
     }
 }

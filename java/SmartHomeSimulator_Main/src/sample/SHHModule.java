@@ -29,10 +29,6 @@ public class SHHModule extends Module {
     private boolean isWinter;
     private boolean isSummer;
 
-    private SHHZoneThread[] zoneThreads;
-    private boolean HAVCsystemActive;
-    private boolean HAVCsystemPaused;
-    private double TEMP_THRESHOLD;
     private Thread indoorTemperatureThread;
     protected static int MAX_NUMBER_OF_ZONES = 0;
 
@@ -47,11 +43,8 @@ public class SHHModule extends Module {
         this.summerTemperature = 0;
         this.isWinter = false;
         this.isSummer = false;
-        this.HAVCsystemActive = false;
-        this.HAVCsystemPaused = false;
         this.currentNumberOfZones = 0;
         this.zones = null;
-        this.zoneThreads = null;
         SHHZoneConfigPane = new AnchorPane();
         SHHZoneConfigScene = new Scene(SHHZoneConfigPane, 600,900);
     }
@@ -72,14 +65,14 @@ public class SHHModule extends Module {
                         catch (Exception e){}
                     }
                     setIndoorTemperature(averageTemperatureOfRooms / Main.householdLocations.length);
-                    System.out.println("DEBUG INDOOR TEMP: indoor temp == "+this.indoorTemperature);
+                    //System.out.println("DEBUG INDOOR TEMP: indoor temp == "+this.indoorTemperature);
                     if (this.indoorTemperature <= 0) {
                         Controller.appendMessageToConsole("WARNING [SHH]: Indoor temperature <= 0°C -- pipes might burst...");
                     }
                 }
                 catch (Exception e){}
                 finally {
-                    try {Thread.sleep((long) (1000 / Controller.simulationTimeSpeed));} catch (Exception e){}
+                    try {Thread.sleep((long) (1 / Controller.simulationTimeSpeed));} catch (Exception e){}
                 }
             }
         });
@@ -167,14 +160,6 @@ public class SHHModule extends Module {
             }
         });
 
-        Button toggleHAVCButton = new Button("HAVC Off");
-        toggleHAVCButton.setTranslateX(300); toggleHAVCButton.setTranslateY(95);
-        toggleHAVCButton.setId("toggleHAVCButton");
-        toggleHAVCButton.setOnAction(e->{
-            setHAVCsystemActive(false);
-            setHAVCsystemPaused(false);
-            System.out.println("By button click, HAVC false");});
-
         Button configWinterSummerTemp = new Button("Configure\nWinter or\nSummer Temp.\nSettings");
         configWinterSummerTemp.setId("configSummerWeatherTempButton");
         configWinterSummerTemp.setTranslateX(380); configWinterSummerTemp.setTranslateY(30);
@@ -187,7 +172,7 @@ public class SHHModule extends Module {
         if (Main.numberOfTimesSHHModuleCreated==0) {
             pane.getChildren().addAll(awayModeSHHLabel, outdoorTempSHHLabel,
                     winterTempSHHLabel, summerTempSHHLabel, maxNumOfZonesSHHLabel,
-                    currentNumOfZonesSHHLabel, toggleHAVCButton, borderLine1, configZoneButton, zonesLabel, nullHouseError, configWinterSummerTemp);
+                    currentNumOfZonesSHHLabel, borderLine1, configZoneButton, zonesLabel, nullHouseError, configWinterSummerTemp);
         }
 
         Main.numberOfTimesSHHModuleCreated++;
@@ -437,13 +422,6 @@ public class SHHModule extends Module {
         tempStage.setScene(new Scene(tempPane, 300, 300));
         tempStage.show();
         //////////
-    }
-
-    public boolean isHAVCsystemPaused() {
-        return HAVCsystemPaused;
-    }
-    public void setHAVCsystemPaused(boolean HAVCsystemPaused) {
-        this.HAVCsystemPaused = HAVCsystemPaused;
     }
 
     private static int nextDestinationZoneID = -1;
@@ -772,13 +750,6 @@ public class SHHModule extends Module {
         changeSHHTempLabel("summerTempSHHLabel", summerTemperature);
     }
 
-    public double getTEMP_THRESHOLD() {
-        return TEMP_THRESHOLD;
-    }
-    public void setTEMP_THRESHOLD(double TEMP_THRESHOLD) {
-        this.TEMP_THRESHOLD = TEMP_THRESHOLD;
-    }
-
     public Zone[] getZones() {
         return zones;
     }
@@ -786,46 +757,25 @@ public class SHHModule extends Module {
         this.zones = zones;
     }
 
-    public boolean isHAVCsystemActive() {
-        return HAVCsystemActive;
-    }
-    public void setHAVCsystemActive(boolean HAVCsystemActive) {
-        this.HAVCsystemActive = HAVCsystemActive;
-    }
-
     public void overrideZoneTemperature(int zoneID, double newTemp) {
         for (int z = 0; z < this.zones.length; z++) {
             try {
                 if (this.zones[z].getZoneID() == zoneID) {
 
-                    // check if newTemp has a difference of at least 1 degree from the initial temperature...
-                    double tempDifference = (newTemp - this.zones[z].getZoneTemperature());
-                    double absoluteTempDifference = (tempDifference < 0 ? (tempDifference * -1) : (tempDifference * 1));
-
-                    if (absoluteTempDifference >= 1) {
-
-                        this.HAVCsystemActive = true;
-                        double roundedTemp;
-
-                        while (this.zones[z].getZoneTemperature() != newTemp) {
-
-                            if (newTemp < this.zones[z].getZoneTemperature()) {
-                                roundedTemp = (double) Math.round((this.zones[z].getZoneTemperature() - 0.1) * 100) / 100;
-                            } else {
-                                roundedTemp = (double) Math.round((this.zones[z].getZoneTemperature() + 0.1) * 100) / 100;
-                            }
-                            try {
-
-                                this.zones[z].setZoneTemperature(roundedTemp);
-                                this.zones[z].overrideZoneRoomTemperaturesInHouse(roundedTemp);
-                                Controller.appendMessageToConsole("SHH: Zone #" + zoneID + " temperature changed to " + roundedTemp + "°C");
-                            }
-                            catch (Exception e) {}
-                            finally {
-                                try { Thread.sleep((long) (1 / Controller.simulationTimeSpeed)); } catch (Exception e) {}
+                    for (int r_id = 0; r_id < this.zones[z].getZoneRoomIDs().length; r_id++) {
+                        try {
+                            for (int hl = 0; hl < Main.householdLocations.length; hl++) {
+                                try {
+                                    if (Main.householdLocations[hl].getRoomID()==r_id) {
+                                        this.zones[z].setZoneTemperature(newTemp);
+                                        //Main.householdLocations[hl].startThreadToAdjustRoomTemp(newTemp);
+                                        break;
+                                    }
+                                }
+                                catch (Exception e){}
                             }
                         }
-                        this.HAVCsystemPaused = true;
+                        catch (Exception e){}
                     }
                     break;
                 }
@@ -834,46 +784,7 @@ public class SHHModule extends Module {
         }
         notifyToOpenZoneWindows(zoneID);
     }
-    public boolean isRoomTempInBetweenQuartDegreeBounds(int zoneID, int roomID) {
-        boolean yes = false;
-        try {
-            boolean roomIsInZone = false;
-            for (int z = 0; z < this.zones.length; z++) {
-                if (this.zones[z].getZoneID() == zoneID) {
-                    for (int r = 0; r < this.zones[z].getZoneRoomIDs().length; r++) {
-                        if (this.zones[z].getZoneRoomIDs()[r]==roomID) {
-                            roomIsInZone = true;
-                            break;
-                        }
-                    }
 
-                    if (!roomIsInZone) {
-                        throw new Exception("ERROR [SHH]: Room #"+roomID+" is not in Zone "+zoneID);
-                    }
-
-                    for (int roomIndex = 0; roomIndex < this.zones[z].getZoneRoomIDs().length; roomIndex++) {
-                        try {
-                            for (int houseroomIndex = 0; houseroomIndex < Main.getHouseholdLocations().length; houseroomIndex++) {
-                                if (Main.getHouseholdLocations()[houseroomIndex].getRoomID() == roomID) {
-                                    double temperature = Main.getHouseholdLocations()[houseroomIndex].getRoomTemperature();
-                                    double lowerBound = (double) Math.round((temperature-0.25)*100)/100;
-                                    double upperBound = (double) Math.round((temperature+0.25)*100)/100;
-                                    yes = ((temperature >= (lowerBound)) && (temperature <= upperBound));
-                                    break;
-                                }
-                            }
-                        }
-                        catch (Exception e){}
-                    }
-                    break;
-                }
-            }
-        }
-        catch (Exception e){
-            Controller.appendMessageToConsole(e.getMessage());
-        }
-        return yes;
-    }
     public void overrideTempInSpecificRoomInZone(int zoneID, int roomID, double newTemp) {
         try {
             boolean roomIsInZone = false;
@@ -902,6 +813,7 @@ public class SHHModule extends Module {
             Controller.appendMessageToConsole(e.getMessage());
         }
     }
+
     public void setAllZoneTempsToSummerTemp() {
         for (int z = 0; z < this.zones.length; z++) {
             try {
@@ -1084,32 +996,9 @@ public class SHHModule extends Module {
             newZone.overrideZoneRoomTemperaturesInHouse(Main.outsideTemperature);
             incrementNumberOfZones();
             updateSHSModuleWithZones();
-
-            try {
-                addNewZoneThread(newZone);
-            }
-            catch (Exception e){}
-
         }
         catch (Exception e){
             Controller.appendMessageToConsole(e.getMessage());
-        }
-    }
-    public void addNewZoneThread(Zone zone) {
-        if (this.zoneThreads == null) {
-            this.zoneThreads = new SHHZoneThread[1];
-            this.zoneThreads[0] = new SHHZoneThread(zone);
-        }
-        else {
-            SHHZoneThread[] tempThreadArray = new SHHZoneThread[this.zoneThreads.length + 1];
-            for (int zt = 0; zt < this.zoneThreads.length; zt++) {
-                try {
-                    tempThreadArray[zt] = this.zoneThreads[zt];
-                }
-                catch (Exception e){}
-            }
-            tempThreadArray[tempThreadArray.length - 1] = new SHHZoneThread(zone);
-            this.zoneThreads = tempThreadArray;
         }
     }
     public void updateSHSModuleWithZones() {
