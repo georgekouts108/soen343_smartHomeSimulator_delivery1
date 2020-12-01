@@ -438,7 +438,6 @@ public class SHHModule extends Module {
                 "select ONLY ONE zone where you would like to move those rooms, and click \"Confirm\"");
         hostPane.getChildren().add(instructionsLabel);
 
-
         int transX = 0, transY = 50;
         for (int z = 0; z <= this.zones.length; z++) {
             AnchorPane zonePane = new AnchorPane();
@@ -566,11 +565,6 @@ public class SHHModule extends Module {
             hostPane.getChildren().add(zonePane);
         }
 
-        Button closeButton = new Button("Close");
-        closeButton.setTranslateY(80); closeButton.setTranslateX(760);
-        closeButton.setOnAction(e->tempStage.close());
-        hostPane.getChildren().add(closeButton);
-
         Button confirmButton = new Button("Confirm");
         confirmButton.setTranslateY(50); confirmButton.setTranslateX(760);
         confirmButton.setOnAction(e->{
@@ -618,9 +612,136 @@ public class SHHModule extends Module {
         });
         hostPane.getChildren().add(confirmButton);
 
+        Button moreOptionsButton = new Button("Set Time\nPeriods");
+        moreOptionsButton.setTranslateY(130); moreOptionsButton.setTranslateX(760);
+        moreOptionsButton.setOnAction(e->{
+            tempStage.close();
+            openUpZoneConfigurationPanel_TimePeriods();
+        });
+        hostPane.getChildren().add(moreOptionsButton);
+
+        Button closeButton = new Button("Close");
+        closeButton.setTranslateY(130); closeButton.setTranslateX(760);
+        closeButton.setOnAction(e->tempStage.close());
+        hostPane.getChildren().add(closeButton);
+
         tempStage.setScene(new Scene(hostPane, 850, 1000));
         tempStage.show();
     }
+
+    public void openUpZoneConfigurationPanel_TimePeriods() {
+        Stage tempStage = new Stage();
+        tempStage.setResizable(false);
+        tempStage.setTitle("Configure Zone Time Periods");
+
+        AnchorPane hostPane = new AnchorPane();
+
+        Label instructionsLabel = new Label();
+        instructionsLabel.setText("For each zone, enter a temperature and a range of hours when you would\n" +
+                "like that zone to automatically take on that temperature.");
+        hostPane.getChildren().add(instructionsLabel);
+
+        int transX = 0, transY = 50;
+        for (int z = 0; z < this.zones.length; z++) {
+            AnchorPane zonePane = new AnchorPane();
+            zonePane.setPrefWidth(250);
+            zonePane.setPrefHeight(250);
+            zonePane.setStyle("-fx-border-color:black;");
+
+            switch (z+1) {
+                case 1: transY = 50; transX = 0; break;
+                case 2: transY = 50; transX = 250; break;
+                case 3: transY = 50; transX = 500; break;
+                case 4: transY = 300; transX = 0; break;
+                case 5: transY = 300; transX = 250; break;
+                case 6: transY = 300; transX = 500; break;
+                case 7: transY = 550; transX = 0; break;
+                case 8: transY = 550; transX = 250; break;
+                case 9: transY = 550; transX = 500; break;
+            }
+
+            zonePane.setId("zone#"+this.zones[z].getZoneID()+"timePeriodConfigPane");
+            Label zoneLabel = new Label("Zone #"+this.zones[z].getZoneID());
+            zoneLabel.setTranslateX(20); zoneLabel.setTranslateY(10);
+            zonePane.getChildren().add(zoneLabel);
+
+            Line line = new Line();
+            line.setEndX(0); line.setEndX(250);
+            line.setTranslateY(30);
+            zonePane.getChildren().add(line);
+
+            int translateY = 35, translateX = 20;
+            for (int per = 1; per <= 3; per++) {
+                Label labelPeriod = new Label("Period "+per+"\n\nFrom:                to ");
+                labelPeriod.setTranslateY(translateY);
+                labelPeriod.setTranslateX(translateX);
+
+                TextField tempField = new TextField();
+                tempField.setId("period"+per+"_tempField_zone#"+this.zones[z].getZoneID());
+                tempField.setTranslateX(translateX + 60);
+                tempField.setTranslateY(translateY);
+                tempField.setPromptText("temp");
+                tempField.setPrefWidth(50);
+
+                TextField lowerHourBoundInput = new TextField();
+                lowerHourBoundInput.setId("period"+per+"_lowerHourBound__zone#"+this.zones[z].getZoneID());
+                lowerHourBoundInput.setPrefWidth(40);
+                lowerHourBoundInput.setTranslateY(translateY+35);
+                lowerHourBoundInput.setTranslateX(translateX+50);
+
+                TextField upperHourBoundInput = new TextField();
+                upperHourBoundInput.setId("period"+per+"_upperHourBound__zone#"+this.zones[z].getZoneID());
+                upperHourBoundInput.setPrefWidth(40);
+                upperHourBoundInput.setTranslateY(translateY+35);
+                upperHourBoundInput.setTranslateX(translateX+110);
+
+                Button confirmButton = new Button("Set");
+                confirmButton.setTranslateY(translateY+35);
+                confirmButton.setTranslateX(translateX+160);
+                /**todo: set on action */
+
+                if (per < 3) {
+                    Line borderLine = new Line();
+                    borderLine.setEndX(250);
+                    borderLine.setStartX(0);
+
+                    switch (per) {
+                        case 1:
+                            borderLine.setTranslateY(100);
+                            break;
+                        case 2:
+                            borderLine.setTranslateY(180);
+                            break;
+                    }
+                    zonePane.getChildren().add(borderLine);
+                }
+
+                zonePane.getChildren().addAll(labelPeriod, tempField, lowerHourBoundInput, upperHourBoundInput, confirmButton);
+                translateY += 75;
+            }
+
+            zonePane.setTranslateX(transX);
+            zonePane.setTranslateY(transY);
+            hostPane.getChildren().add(zonePane);
+        }
+
+        Button goBackButton = new Button("Go Back");
+        goBackButton.setTranslateY(120); goBackButton.setTranslateX(760);
+        goBackButton.setOnAction(e->{
+            tempStage.close();
+            openUpZoneConfigurationPanel_UPDATED();
+        });
+        hostPane.getChildren().add(goBackButton);
+
+        Button closeButton = new Button("Close");
+        closeButton.setTranslateY(80); closeButton.setTranslateX(760);
+        closeButton.setOnAction(e->tempStage.close());
+        hostPane.getChildren().add(closeButton);
+
+        tempStage.setScene(new Scene(hostPane, 850, 1000));
+        tempStage.show();
+    }
+
     public Room[] deleteRoomsFromZones(int[] roomsToBeMoved) {
         Room[] roomsArray = new Room[roomsToBeMoved.length];
 
