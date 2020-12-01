@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class SHHModule extends Module {
 
+    private static boolean awayModeON = false;
     private static Stage SHHZoneConfigStage;
     private static Scene SHHZoneConfigScene;
     private static AnchorPane SHHZoneConfigPane;
@@ -758,59 +759,62 @@ public class SHHModule extends Module {
     }
 
     public void overrideZoneTemperature(int zoneID, double newTemp) {
-        for (int z = 0; z < this.zones.length; z++) {
-            try {
-                if (this.zones[z].getZoneID() == zoneID) {
-
-                    for (int r_id = 0; r_id < this.zones[z].getZoneRoomIDs().length; r_id++) {
-                        try {
-                            for (int hl = 0; hl < Main.householdLocations.length; hl++) {
-                                try {
-                                    if (Main.householdLocations[hl].getRoomID()==r_id) {
-                                        this.zones[z].setZoneTemperature(newTemp);
-                                        //Main.householdLocations[hl].startThreadToAdjustRoomTemp(newTemp);
-                                        break;
-                                    }
-                                }
-                                catch (Exception e){}
-                            }
-                        }
-                        catch (Exception e){}
-                    }
-                    break;
-                }
-            }
-            catch (Exception e){}
-        }
-        notifyToOpenZoneWindows(zoneID);
-    }
-
-    public void overrideTempInSpecificRoomInZone(int zoneID, int roomID, double newTemp) {
-        try {
-            boolean roomIsInZone = false;
+        if (!awayModeON) {
             for (int z = 0; z < this.zones.length; z++) {
-                if (this.zones[z].getZoneID() == zoneID) {
-                    for (int r = 0; r < this.zones[z].getZoneRoomIDs().length; r++) {
-                        if (this.zones[z].getZoneRoomIDs()[r]==roomID) {
-                            roomIsInZone = true;
-                            break;
-                        }
-                    }
+                try {
+                    if (this.zones[z].getZoneID() == zoneID) {
 
-                    if (roomIsInZone) {
-                        this.zones[z].overrideSpecificRoomTemperature(roomID, newTemp);
-                        Controller.appendMessageToConsole("SHH: Room #"+roomID+" in Zone #"+zoneID+" temperature changed to "+newTemp+"°C");
+                        for (int r_id = 0; r_id < this.zones[z].getZoneRoomIDs().length; r_id++) {
+                            try {
+                                for (int hl = 0; hl < Main.householdLocations.length; hl++) {
+                                    try {
+                                        if (Main.householdLocations[hl].getRoomID()==r_id) {
+                                            this.zones[z].setZoneTemperature(newTemp);
+                                            break;
+                                        }
+                                    }
+                                    catch (Exception e){}
+                                }
+                            }
+                            catch (Exception e){}
+                        }
+                        break;
                     }
-                    else {
-                        throw new Exception("ERROR [SHH]: Room #"+roomID+" is not in Zone "+zoneID);
-                    }
-                    break;
                 }
+                catch (Exception e){}
             }
             notifyToOpenZoneWindows(zoneID);
         }
-        catch (Exception e){
-            Controller.appendMessageToConsole(e.getMessage());
+    }
+
+    public void overrideTempInSpecificRoomInZone(int zoneID, int roomID, double newTemp) {
+        if (!awayModeON) {
+            try {
+                boolean roomIsInZone = false;
+                for (int z = 0; z < this.zones.length; z++) {
+                    if (this.zones[z].getZoneID() == zoneID) {
+                        for (int r = 0; r < this.zones[z].getZoneRoomIDs().length; r++) {
+                            if (this.zones[z].getZoneRoomIDs()[r]==roomID) {
+                                roomIsInZone = true;
+                                break;
+                            }
+                        }
+
+                        if (roomIsInZone) {
+                            this.zones[z].overrideSpecificRoomTemperature(roomID, newTemp);
+                            Controller.appendMessageToConsole("SHH: Room #"+roomID+" in Zone #"+zoneID+" temperature changed to "+newTemp+"°C");
+                        }
+                        else {
+                            throw new Exception("ERROR [SHH]: Room #"+roomID+" is not in Zone "+zoneID);
+                        }
+                        break;
+                    }
+                }
+                notifyToOpenZoneWindows(zoneID);
+            }
+            catch (Exception e){
+                Controller.appendMessageToConsole(e.getMessage());
+            }
         }
     }
 
@@ -845,6 +849,10 @@ public class SHHModule extends Module {
                 }
                 catch (Exception e){}
             }
+            awayModeON = true;
+        }
+        else {
+            awayModeON = false;
         }
     }
     public void notifyToOpenZoneWindows(int zoneID) {
@@ -1045,7 +1053,15 @@ public class SHHModule extends Module {
                         try {
                             int newTemperature = Integer.parseInt(changeZoneTempTF.getText());
                             overrideZoneTemperature(this.zones[finalZ].getZoneID(), newTemperature);
-                            changeZoneInfoPane(zonePane, newTemperature, this.zones[finalZ]);
+                            if (!awayModeON) {
+                                changeZoneInfoPane(zonePane, newTemperature, this.zones[finalZ]);
+                            }
+                            else {
+                                Controller.appendMessageToConsole("Cannot manually change zone "+this.zones[finalZ].getZoneID()+" temp "+
+                                        "during Away mode");
+                                changeZoneTempTF.clear();
+                                changeZoneTempTF.setPromptText("Change");
+                            }
                         }
                         catch (Exception ex){
                             Controller.appendMessageToConsole("Invalid attempt to change temperature of Zone "+
@@ -1103,11 +1119,20 @@ public class SHHModule extends Module {
                                                 try {
                                                     int newTemperature = Integer.parseInt(textField.getText());
                                                     overrideTempInSpecificRoomInZone(this.zones[finalZ].getZoneID(), Main.householdLocations[finalH].getRoomID(), newTemperature);
-                                                    changeZoneInfoPaneSpecificRoom(zonePane, newTemperature, this.zones[finalZ], Main.householdLocations[finalH].getRoomID());
+                                                    if (!awayModeON) {
+                                                        changeZoneInfoPaneSpecificRoom(zonePane, newTemperature, this.zones[finalZ], Main.householdLocations[finalH].getRoomID());
+                                                    }
+                                                    else {
+                                                        Controller.appendMessageToConsole("Cannot change temp of Room #"+
+                                                                Main.householdLocations[finalH].getRoomID()+" in zone "+this.zones[finalZ].getZoneID()+ " " +
+                                                                "during Away mode");
+                                                        textField.clear();
+                                                        textField.setPromptText("New temp");
+                                                    }
                                                 }
                                                 catch (Exception exception) {
                                                     Controller.appendMessageToConsole("Invalid attempt to change temperature of Room #"+
-                                                            Main.householdLocations[finalH].getRoomID()+" in "+this.zones[finalZ].getZoneID());
+                                                            Main.householdLocations[finalH].getRoomID()+" in zone "+this.zones[finalZ].getZoneID());
                                                     textField.clear();
                                                     textField.setPromptText("New temp");
                                                 }

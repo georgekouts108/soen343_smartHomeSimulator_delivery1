@@ -74,7 +74,6 @@ public class Zone {
         this.zoneRoomIDs = tempZoneRoomsArray;
     }
 
-
     public void overrideSpecificRoomTemperature(int roomID, double newTemperature) {
         for (int roomIndex = 0; roomIndex < this.zoneRoomIDs.length; roomIndex++) {
             if (this.zoneRoomIDs[roomIndex] == roomID) {

@@ -328,7 +328,7 @@ public class Room {
                             Controller.appendMessageToConsole("SHH: Room #" + this.roomID + " temperature changed to " + roundedTemp + "°C");
                         } catch (Exception e) {}
                         finally {
-                            try { Thread.sleep(1000 / (long) Controller.getSimulationTimeSpeed()); } catch (Exception e) {}
+                            try { Thread.sleep(1 / (long) Controller.getSimulationTimeSpeed()); } catch (Exception e) {}
                         }
                     }
 
@@ -362,7 +362,7 @@ public class Room {
                         System.out.println(this.roomTemperature);
                     } catch (Exception e) {
                     } finally {
-                        try { Thread.sleep(1000 / (long) Controller.getSimulationTimeSpeed()); } catch (Exception e) {}
+                        try { Thread.sleep(1 / (long) Controller.getSimulationTimeSpeed()); } catch (Exception e) {}
                     }
                 }
             }

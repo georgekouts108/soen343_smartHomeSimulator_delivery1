@@ -32,6 +32,7 @@ import javax.swing.text.html.ImageView;
 import java.awt.*;
 import java.io.*;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -1655,8 +1656,10 @@ public class Controller {
 
                     Main.currentActiveProfile.setAway(true);
                     SHSHelpers.setIs_away(true);
+
                     Main.shhModule.notifySHSOFAwayMode();
                     Main.shhModule.changeSHHAwayModeLabel(true);
+
                     // close all windows;
                     for (int room = 0; room < Main.householdLocations.length; room++) {
                         try {
@@ -1704,8 +1707,10 @@ public class Controller {
 
                     Main.currentActiveProfile.setAway(false);
                     SHSHelpers.setIs_away(false);
+
                     Main.shhModule.notifySHSOFAwayMode();
                     Main.shhModule.changeSHHAwayModeLabel(false);
+
                     // unlock all doors (except the garage, backyard, and entrance)
                     for (int room = 0; room < Main.householdLocations.length; room++) {
                         try {
@@ -1981,22 +1986,26 @@ public class Controller {
      */
     public static void appendMessageToConsole(String message) {
 
-        for (int a = 0; a < Main.getMain_dashboard().getChildren().size(); a++) {
+        for (int a = 0; a < Main.main_dashboard.getChildren().size(); a++) {
             try {
-                if (Main.getMain_dashboard().getChildren().get(a).getId().equals("OutputConsole")) {
-                    TextArea textArea = (TextArea) Main.getMain_dashboard().getChildren().get(a);
-                    try {
-                        textArea.appendText(LocalDateTime.now().toString().substring(0, 10) + " " +
-                                LocalDateTime.now().toString().substring(11, 19) + " -- " + message + "\n");
-                    }
-                    catch (Exception e){}
-                    Main.getMain_dashboard().getChildren().set(a, textArea);
+                if (Main.main_dashboard.getChildren().get(a).getId().equals("OutputConsole")) {
+                    TextArea textArea = (TextArea) Main.main_dashboard.getChildren().get(a);
+                    String date = LocalDateTime.now().toLocalDate().toString();
+                    //String time = LocalDateTime.now().toLocalTime().toString().substring(0,8);
+                    String output = date + " " + " -- " + message + "\n";
+                    appendMessageToLogFile(output);
+//                    try {
+//                        //textArea.appendText(output);
+//                    }
+//                    catch (NullPointerException n){}
+//                    catch (ArrayIndexOutOfBoundsException b) {}
+//                    catch (Exception e) {}
+
+                    Main.main_dashboard.getChildren().set(a, textArea);
                     break;
                 }
             }catch (Exception e){}
         }
-        appendMessageToLogFile(LocalDateTime.now().toString().substring(0,10)+ " "+
-                LocalDateTime.now().toString().substring(11,19)+" -- "+message+"\n");
     }
 
     /**
