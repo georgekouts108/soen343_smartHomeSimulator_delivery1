@@ -698,7 +698,22 @@ public class SHHModule extends Module {
                 Button confirmButton = new Button("Set");
                 confirmButton.setTranslateY(translateY+35);
                 confirmButton.setTranslateX(translateX+160);
-                /**todo: set on action */
+
+                int finalZ = z;
+                int finalPer = per;
+                confirmButton.setOnAction(e->{
+                    try {
+                        int lowerHour = Integer.parseInt(lowerHourBoundInput.getText());
+                        int upperHour = Integer.parseInt(upperHourBoundInput.getText());
+                        double periodTemp = Double.parseDouble(tempField.getText());
+                        this.zones[finalZ].setTimePeriodRangeAndTemperature(lowerHour, upperHour, finalPer, periodTemp);
+                    }
+                    catch (Exception ex){
+                        upperHourBoundInput.clear();
+                        lowerHourBoundInput.clear();
+                        tempField.clear();
+                    }
+                });
 
                 if (per < 3) {
                     Line borderLine = new Line();
@@ -1123,8 +1138,10 @@ public class SHHModule extends Module {
 
             // all rooms in the new zone take on the outdoor temperature
             newZone.overrideZoneRoomTemperaturesInHouse(Main.outsideTemperature);
+            newZone.initZoneTimePeriodSet();
             incrementNumberOfZones();
             updateSHSModuleWithZones();
+
         }
         catch (Exception e){
             Controller.appendMessageToConsole(e.getMessage());

@@ -9,11 +9,16 @@ public class Zone {
     private double zoneTemperature;
     private int[] zoneRoomIDs;
     private int zoneID;
+    private ZoneTimePeriodSet timePeriodSet;
 
     public Zone() {
         this.zoneTemperature = SHSHelpers.getOutsideTemperature();
         this.zoneID = (ZONE_ID++);
         this.zoneRoomIDs = null;
+    }
+
+    public void initZoneTimePeriodSet() {
+        this.timePeriodSet = new ZoneTimePeriodSet(this.zoneID);
     }
 
     public static int getStaticZoneId() {
@@ -98,5 +103,9 @@ public class Zone {
                 }
             }
         }
+    }
+
+    public void setTimePeriodRangeAndTemperature(int lowerBound, int upperBound, int periodNumber, double zoneTemperature) {
+        this.timePeriodSet.setPeriodHoursAndTemperature(lowerBound, upperBound, periodNumber, zoneTemperature);
     }
 }
