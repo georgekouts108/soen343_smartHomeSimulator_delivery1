@@ -59,6 +59,9 @@ public class Controller {
     protected static Thread simulationTimeThread = null;
     protected static float simulationTimeSpeed = 1; /** NOTE: this is a divisor */
 
+    // will be used by SHH module
+    protected static int currentSimulationHour;
+
 
     /**
      * Display the local date and time in the main dashboard
@@ -107,6 +110,9 @@ public class Controller {
                     int finalSecond = second;
                     int finalHour = hour;
                     int finalMinute = minute;
+
+                    currentSimulationHour = finalHour % 24; // needed by SHH module
+
                     Platform.runLater(()->timeText.setText("Time "+(finalHour)%24+":"+(finalMinute)%60+":"+ finalSecond%60));
                     Thread.sleep((long) (1000/timeSpeed));
                 }
@@ -130,6 +136,9 @@ public class Controller {
                         minute = 0;
                         second = 0;
                     }
+
+                    currentSimulationHour = finalHour % 24; // needed by SHH module
+
                     Platform.runLater(()->timeText.setText("Time "+(finalHour%24)+":"+(finalMinute%60)+":"+ finalSecond%60));
                     Thread.sleep((long) (1000/timeSpeed));
                 }
@@ -1991,15 +2000,17 @@ public class Controller {
                 if (Main.main_dashboard.getChildren().get(a).getId().equals("OutputConsole")) {
                     TextArea textArea = (TextArea) Main.main_dashboard.getChildren().get(a);
                     String date = LocalDateTime.now().toLocalDate().toString();
-                    //String time = LocalDateTime.now().toLocalTime().toString().substring(0,8);
-                    String output = date + " " + " -- " + message + "\n";
+                    String time = LocalDateTime.now().getHour()+":"+LocalDateTime.now().getMinute()+":"+
+                            Math.round(LocalDateTime.now().getSecond());
+
+                    String output = date + " " + time + " -- " + message + "\n";
                     appendMessageToLogFile(output);
-//                    try {
-//                        //textArea.appendText(output);
-//                    }
-//                    catch (NullPointerException n){}
-//                    catch (ArrayIndexOutOfBoundsException b) {}
-//                    catch (Exception e) {}
+                    //try {
+                        //textArea.appendText(output);
+                    //}
+                    //catch (NullPointerException n){}
+                    //catch (ArrayIndexOutOfBoundsException b) {}
+                    //catch (Exception e) {}
 
                     Main.main_dashboard.getChildren().set(a, textArea);
                     break;
@@ -2214,4 +2225,6 @@ public class Controller {
     public static float getSimulationTimeSpeed() {
         return simulationTimeSpeed;
     }
+
+
 }

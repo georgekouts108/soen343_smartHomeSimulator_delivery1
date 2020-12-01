@@ -15,12 +15,17 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class SHHModule extends Module {
 
+    private static int nextDestinationZoneID = -1;
     private static boolean awayModeON = false;
     private static Stage SHHZoneConfigStage;
     private static Scene SHHZoneConfigScene;
     private static AnchorPane SHHZoneConfigPane;
     private static int numberOfTimesZoneConfigSelected = 0;
 
+    private Month winterMonthLowerBound;
+    private Month winterMonthUpperBound;
+    private Month summerMonthLowerBound;
+    private Month summerMonthUpperBound;
     private int currentNumberOfZones;
     private double outdoorTemperature;
     private double indoorTemperature;
@@ -79,7 +84,6 @@ public class SHHModule extends Module {
         });
         this.indoorTemperatureThread.start();
     }
-
 
     public void setMaxNumOfZones(int max) {
         MAX_NUMBER_OF_ZONES = max;
@@ -150,7 +154,7 @@ public class SHHModule extends Module {
         configZoneButton.setTranslateX(300); configZoneButton.setTranslateY(30);
         configZoneButton.setOnAction(e->{
             if (Main.householdLocations != null) {
-                openUpZoneConfigurationPanel_UPDATED();
+                openUpZoneConfigurationPanel();
             }
             else {
                 new Thread(()->{
@@ -215,11 +219,6 @@ public class SHHModule extends Module {
         tempStage.setScene(new Scene(tempPane, 500, 300));
         tempStage.show();
     }
-
-    private Month winterMonthLowerBound;
-    private Month winterMonthUpperBound;
-    private Month summerMonthLowerBound;
-    private Month summerMonthUpperBound;
 
     public boolean isWinter() {
         try {
@@ -425,8 +424,7 @@ public class SHHModule extends Module {
         //////////
     }
 
-    private static int nextDestinationZoneID = -1;
-    public void openUpZoneConfigurationPanel_UPDATED() {
+    public void openUpZoneConfigurationPanel() {
         Stage tempStage = new Stage();
         tempStage.setResizable(false);
         tempStage.setTitle("Relocate Rooms Around Zones");
@@ -613,7 +611,7 @@ public class SHHModule extends Module {
         hostPane.getChildren().add(confirmButton);
 
         Button moreOptionsButton = new Button("Set Time\nPeriods");
-        moreOptionsButton.setTranslateY(130); moreOptionsButton.setTranslateX(760);
+        moreOptionsButton.setTranslateY(200); moreOptionsButton.setTranslateX(760);
         moreOptionsButton.setOnAction(e->{
             tempStage.close();
             openUpZoneConfigurationPanel_TimePeriods();
@@ -680,18 +678,28 @@ public class SHHModule extends Module {
                 tempField.setId("period"+per+"_tempField_zone#"+this.zones[z].getZoneID());
                 tempField.setTranslateX(translateX + 60);
                 tempField.setTranslateY(translateY);
-                tempField.setPromptText("temp");
+                tempField.setPromptText(""+this.zones[z].getPeriodTemperature(per));
                 tempField.setPrefWidth(50);
 
                 TextField lowerHourBoundInput = new TextField();
                 lowerHourBoundInput.setId("period"+per+"_lowerHourBound__zone#"+this.zones[z].getZoneID());
                 lowerHourBoundInput.setPrefWidth(40);
+
+                if (!(this.zones[z].getPeriodHours(per)==null)) {
+                    lowerHourBoundInput.setPromptText(""+this.zones[z].getPeriodHours(per)[0]);
+                }
+
                 lowerHourBoundInput.setTranslateY(translateY+35);
                 lowerHourBoundInput.setTranslateX(translateX+50);
 
                 TextField upperHourBoundInput = new TextField();
                 upperHourBoundInput.setId("period"+per+"_upperHourBound__zone#"+this.zones[z].getZoneID());
                 upperHourBoundInput.setPrefWidth(40);
+
+                if (!(this.zones[z].getPeriodHours(per)==null)) {
+                    upperHourBoundInput.setPromptText(""+this.zones[z].getPeriodHours(per)[1]);
+                }
+
                 upperHourBoundInput.setTranslateY(translateY+35);
                 upperHourBoundInput.setTranslateX(translateX+110);
 
@@ -706,9 +714,15 @@ public class SHHModule extends Module {
                         int lowerHour = Integer.parseInt(lowerHourBoundInput.getText());
                         int upperHour = Integer.parseInt(upperHourBoundInput.getText());
                         double periodTemp = Double.parseDouble(tempField.getText());
+
                         this.zones[finalZ].setTimePeriodRangeAndTemperature(lowerHour, upperHour, finalPer, periodTemp);
+
+                        tempField.setPromptText(""+this.zones[finalZ].getPeriodTemperature(finalPer));
+                        lowerHourBoundInput.setPromptText(""+this.zones[finalZ].getPeriodHours(finalPer)[0]);
+                        upperHourBoundInput.setPromptText(""+this.zones[finalZ].getPeriodHours(finalPer)[1]);
                     }
                     catch (Exception ex){
+                        System.out.println("errorrrrrrr -- "+ex.getMessage());
                         upperHourBoundInput.clear();
                         lowerHourBoundInput.clear();
                         tempField.clear();
@@ -744,7 +758,7 @@ public class SHHModule extends Module {
         goBackButton.setTranslateY(120); goBackButton.setTranslateX(760);
         goBackButton.setOnAction(e->{
             tempStage.close();
-            openUpZoneConfigurationPanel_UPDATED();
+            openUpZoneConfigurationPanel();
         });
         hostPane.getChildren().add(goBackButton);
 
@@ -1138,7 +1152,9 @@ public class SHHModule extends Module {
 
             // all rooms in the new zone take on the outdoor temperature
             newZone.overrideZoneRoomTemperaturesInHouse(Main.outsideTemperature);
+
             newZone.initZoneTimePeriodSet();
+
             incrementNumberOfZones();
             updateSHSModuleWithZones();
 

@@ -108,4 +108,12 @@ public class Zone {
     public void setTimePeriodRangeAndTemperature(int lowerBound, int upperBound, int periodNumber, double zoneTemperature) {
         this.timePeriodSet.setPeriodHoursAndTemperature(lowerBound, upperBound, periodNumber, zoneTemperature);
     }
+
+    public int[] getPeriodHours(int period) {
+        return this.timePeriodSet.getPeriodHours(period);
+    }
+
+    public double getPeriodTemperature(int period) {
+        return this.timePeriodSet.getPeriodTemperature(period);
+    }
 }
