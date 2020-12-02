@@ -384,7 +384,7 @@ public class SHHModule extends Module {
                     catch (Exception e){}
                 }
             }
-            notifySHSOFAwayMode();
+            notifySHHOFAwayMode();
             notifyToOpenAllZoneWindows();
         }
         catch (Exception e){
@@ -417,7 +417,7 @@ public class SHHModule extends Module {
                         if (pane.getChildren().get(f).getId().equals("winterTempSHHLabel")) {
                             Label label = (Label) pane.getChildren().get(f);
                             setWinterTemperature(Double.parseDouble(winterTempTextField.getText()));
-                            notifySHSOFAwayMode();
+                            notifySHHOFAwayMode();
                             label.setText("Winter temp (AWAY mode only): "+this.winterTemperature+"°C");
                             pane.getChildren().set(f, label);
                             break;
@@ -444,7 +444,7 @@ public class SHHModule extends Module {
                         if (pane.getChildren().get(f).getId().equals("summerTempSHHLabel")) {
                             Label label = (Label) pane.getChildren().get(f);
                             setSummerTemperature(Double.parseDouble(summerTempTextField.getText()));
-                            notifySHSOFAwayMode();
+                            notifySHHOFAwayMode();
                             label.setText("Summer temp (AWAY mode only): "+this.summerTemperature+"°C");
                             pane.getChildren().set(f, label);
                             break;
@@ -650,7 +650,7 @@ public class SHHModule extends Module {
             else {
                 Controller.appendMessageToConsole("ERROR [SHH]: Failed to change Zones of Rooms");
             }
-            notifySHSOFAwayMode();
+            notifySHHOFAwayMode();
             tempStage.close();
         });
         hostPane.getChildren().add(confirmButton);
@@ -1139,7 +1139,7 @@ public class SHHModule extends Module {
     /**
      * give the SHH module the signal whenever the AWAY mode is toggled on or off, and adjust temperatures as needed
      */
-    public void notifySHSOFAwayMode() { /**todo: change name to 'notifySHHOFAwayMode()'*/
+    public void notifySHHOFAwayMode() {
         if (SHSHelpers.isIs_away()) {
             if (Main.shhModule.isSummer()) {
                 try {

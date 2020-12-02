@@ -2209,6 +2209,10 @@ public class Controller {
         }
     }
 
+    /**
+     * Automatically lock or unlock all air conditioners in the house (during AWAY mode)
+     * @param state
+     */
     public static void awayModeAutoLockOrUnlockAllAirConditioners(boolean state) {
         for (int room = 0; room < Main.householdLocations.length; room++) {
             try {
@@ -2221,8 +2225,6 @@ public class Controller {
             catch (Exception e){}
         }
     }
-
-
 
     /**
      * change a specific room's temperature
