@@ -381,6 +381,16 @@ public class Controller {
                                 label.setText("Outside Temp.\n" + tempText.getCharacters().toString() + "°C");
                                 Main.main_dashboard.getChildren().set(i, label);
                                 Main.shhModule.changeSHHTempLabel("outdoorTempSHHLabel", Double.parseDouble(tempText.getCharacters().toString()));
+
+                                for (int z = 0; z < Main.shhModule.getZones().length; z++) {
+                                    try {
+                                        Main.shhModule.overrideZoneTemperature(
+                                                Main.shhModule.getZones()[z].getZoneID(),
+                                                Main.outsideTemperature);
+                                    }
+                                    catch (Exception ex){}
+                                }
+
                                 break;
                             }
                         }
@@ -1663,7 +1673,7 @@ public class Controller {
                     Main.currentActiveProfile.setAway(true);
                     SHSHelpers.setIs_away(true);
 
-                    Main.shhModule.notifySHSOFAwayMode();
+                    Main.shhModule.notifySHHOFAwayMode();
                     Main.shhModule.changeSHHAwayModeLabel(true);
                     awayModeAutoLockOrUnlockAllAirConditioners(true);
 
@@ -1715,7 +1725,7 @@ public class Controller {
                     Main.currentActiveProfile.setAway(false);
                     SHSHelpers.setIs_away(false);
 
-                    Main.shhModule.notifySHSOFAwayMode();
+                    Main.shhModule.notifySHHOFAwayMode();
                     Main.shhModule.changeSHHAwayModeLabel(false);
                     awayModeAutoLockOrUnlockAllAirConditioners(false);
 
