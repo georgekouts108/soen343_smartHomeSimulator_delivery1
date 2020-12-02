@@ -242,19 +242,47 @@ public class SHHModule extends Module {
     }
 
     /**
+     * Helper method to check if a month's numerical value falls within a specified month range
+     * @param lowerMonth
+     * @param upperMonth
+     * @param value
+     * @return
+     */
+    public boolean isMonthValueInRange(int lowerMonth, int upperMonth, int value) {
+
+        String months = "";
+        int nextNumber = lowerMonth % 12;
+        while (nextNumber != upperMonth) {
+            months += nextNumber+"_";
+            nextNumber = (nextNumber + 1) % 12;
+        }
+        months += upperMonth;
+
+        String[] stringIntegers = months.split("_");
+        int[] finalArray = new int[stringIntegers.length];
+
+        for (int i = 0; i < stringIntegers.length; i++) {
+            finalArray[i] = Integer.parseInt(stringIntegers[i]);
+        }
+
+        boolean inRange = false;
+        for (int t = 0; t < finalArray.length; t++) {
+            if (finalArray[t] == value) {
+                inRange = true;
+                break;
+            }
+        }
+
+        return inRange;
+    }
+
+    /**
      * check to see if the simulation month falls within the winter months
      * @return
      */
     public boolean isWinter() {
-        try {
-            int winterLB_Value = this.winterMonthLowerBound.getValue();
-            int winterUB_Value = this.winterMonthUpperBound.getValue();
-            int simMonth_Value = Main.shsModule.simulationMonth.getValue();
-            return (simMonth_Value <= winterUB_Value && simMonth_Value >= winterLB_Value);
-        }
-        catch (Exception e){
-            return false;
-        }
+        return isMonthValueInRange(this.winterMonthLowerBound.getValue(), this.winterMonthUpperBound.getValue(),
+                Main.shsModule.simulationMonth.getValue());
     }
 
     /**
@@ -262,15 +290,8 @@ public class SHHModule extends Module {
      * @return
      */
     public boolean isSummer() {
-        try {
-            int summerLB_Value = this.summerMonthLowerBound.getValue();
-            int summerUB_Value = this.summerMonthUpperBound.getValue();
-            int simMonth_Value = Main.shsModule.simulationMonth.getValue();
-            return (simMonth_Value <= summerUB_Value && simMonth_Value >= summerLB_Value);
-        }
-        catch (Exception e){
-            return false;
-        }
+        return isMonthValueInRange(this.summerMonthLowerBound.getValue(), this.summerMonthUpperBound.getValue(),
+                Main.shsModule.simulationMonth.getValue());
     }
 
     /**
@@ -390,6 +411,7 @@ public class SHHModule extends Module {
                     catch (Exception e){}
                 }
             }
+
             notifySHHOFAwayMode();
             notifyToOpenAllZoneWindows();
         }

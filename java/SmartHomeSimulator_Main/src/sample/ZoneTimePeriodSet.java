@@ -272,27 +272,8 @@ public class ZoneTimePeriodSet {
     public boolean doesTimeRangeOverlapWithOther(int inputLowerHour, int inputUpperHour, int otherLowerHour, int otherUpperHour) {
         boolean overlaps = false;
 
-        int inputAbsoluteDiff = inputLowerHour - inputUpperHour;
-        inputAbsoluteDiff = ( (inputAbsoluteDiff >= 0) ? inputAbsoluteDiff : inputAbsoluteDiff*-1);
-
-        int otherAbsoluteDiff = otherLowerHour - otherUpperHour;
-        otherAbsoluteDiff = ( (otherAbsoluteDiff >= 0) ? otherAbsoluteDiff : otherAbsoluteDiff*-1);
-
-        int[] otherHourRange = new int[24 - otherAbsoluteDiff + 1];
-        int[] inputHourRange = new int[24 - inputAbsoluteDiff + 1];
-
-        /**todo: fix*/
-        int currentOtherHour = otherLowerHour;
-        for (int i = 0; i < otherHourRange.length; i++) {
-            otherHourRange[i] = (currentOtherHour % 24);
-            currentOtherHour = (currentOtherHour + 1) % 24;
-        }
-
-        int currentInputHour = inputLowerHour;
-        for (int i = 0; i < inputHourRange.length; i++) {
-            inputHourRange[i] = (inputLowerHour % 24);
-            currentInputHour = (currentInputHour + 1) % 24;
-        }
+        int[] otherHourRange = getHoursArray(otherLowerHour, otherUpperHour);
+        int[] inputHourRange = getHoursArray(inputLowerHour, inputUpperHour);
 
         for (int inputHours = 0; inputHours < inputHourRange.length; inputHours++) {
             for (int otherHours = 0; otherHours < otherHourRange.length; otherHours++) {
@@ -307,5 +288,32 @@ public class ZoneTimePeriodSet {
         }
 
         return overlaps;
+    }
+
+    /**
+     * Helper method for obtaining a list of integers corresponding to the hours in a specified hour range.
+     * For example: 22 --> 5 returns an array {22, 23, 0, 1, 2, 3, 4, 5}
+     * @param lowerHour
+     * @param upperHour
+     * @return
+     */
+    public int[] getHoursArray(int lowerHour, int upperHour) {
+
+        String hours = "";
+        int nextNumber = lowerHour % 24;
+        while (nextNumber != upperHour) {
+            hours += nextNumber+"_";
+            nextNumber = (nextNumber + 1) % 24;
+        }
+        hours += upperHour;
+
+        String[] stringIntegers = hours.split("_");
+        int[] finalArray = new int[stringIntegers.length];
+
+        for (int i = 0; i < stringIntegers.length; i++) {
+            finalArray[i] = Integer.parseInt(stringIntegers[i]);
+        }
+
+        return finalArray;
     }
 }
