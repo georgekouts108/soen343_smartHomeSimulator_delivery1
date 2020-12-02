@@ -321,8 +321,8 @@ public class Room {
                         }
                     }
 
-                    /**todo: figure out the right time to set this value to true*/
-                    this.HAVC_Paused = true; // the heater is now idle at the desired temperature, until temp is changed again
+
+                    startThreadToSetHAVCtoPaused(); /**todo: might need to fix... */
                     updateRoomHAVCstatus();
                 }
                 catch (Exception e){}
@@ -352,12 +352,41 @@ public class Room {
                         System.out.println(this.roomTemperature);
                     } catch (Exception e) {
                     } finally {
-                        try { Thread.sleep(1000 / (long) Controller.getSimulationTimeSpeed()); } catch (Exception e) {}
+                        try { Thread.sleep(1 / (long) Controller.getSimulationTimeSpeed()); } catch (Exception e) {}
                     }
                 }
             }
             catch (Exception e){}
         }).start();
+    }
+
+    /**
+     * Begin a thread for pausing the HAVC
+     */
+    public void startThreadToSetHAVCtoPaused() {
+        /**todo: might need to change... */
+        this.HAVC_Paused = true;
+
+        new Thread(()->{
+            try {
+                while (true) {
+                    try {
+                        System.out.println(this.HAVC_Paused);
+                        if (isRoomTempInBetweenQuartDegreeBounds()) {
+                            this.HAVC_Paused = false;
+                            break;
+                        }
+                    }
+                    catch(Exception e){}
+                    finally {
+                        try { Thread.sleep(1 / (long) Controller.getSimulationTimeSpeed()); } catch (Exception e) {}
+                    }
+                }
+
+                System.out.println(this.HAVC_Paused);
+            }
+            catch (Exception e){}
+        });
     }
 
     /**

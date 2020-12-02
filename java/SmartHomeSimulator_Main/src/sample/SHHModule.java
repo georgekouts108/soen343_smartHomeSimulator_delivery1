@@ -1214,11 +1214,11 @@ public class SHHModule extends Module {
                                             break;
                                         }
                                     } catch (Exception F) {
-                                        System.out.println("EXCEPTION F: " + F.getMessage());
+                                        System.out.println();
                                     }
                                 }
                             } catch (Exception G) {
-                                System.out.println("EXCEPTION G: " + G.getMessage());
+                                System.out.println();
                             }
                         }
                         break;
