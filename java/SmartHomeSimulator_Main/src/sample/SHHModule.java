@@ -1,5 +1,6 @@
 package sample;
 import house.*;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -96,9 +97,13 @@ public class SHHModule extends Module {
         currentNumOfZonesSHHLabel.setId("currentNumOfZonesLabel");
         currentNumOfZonesSHHLabel.setTranslateY(100);
 
+        Label indoorTemperatureLabel = new Label("Indoor temperature: "+indoorTemperature+"°C");
+        indoorTemperatureLabel.setId("indoorTemperatureLabel");
+        indoorTemperatureLabel.setTranslateY(120);
+
         Line borderLine1 = new Line();
         borderLine1.setStartX(0); borderLine1.setEndX(500);
-        borderLine1.setTranslateY(120);
+        borderLine1.setTranslateY(150);
 
         Label nullHouseError = new Label("ERROR: House layout null");
         nullHouseError.setTranslateX(300); nullHouseError.setTranslateY(10);
@@ -127,11 +132,11 @@ public class SHHModule extends Module {
         
         Label zonesLabel = new Label("Zones");
         zonesLabel.setId("zonesLabel");
-        zonesLabel.setTranslateY(130);
+        zonesLabel.setTranslateY(170);
 
         if (Main.numberOfTimesSHHModuleCreated==0) {
             pane.getChildren().addAll(awayModeSHHLabel, outdoorTempSHHLabel,
-                    winterTempSHHLabel, summerTempSHHLabel, maxNumOfZonesSHHLabel,
+                    winterTempSHHLabel, summerTempSHHLabel, maxNumOfZonesSHHLabel, indoorTemperatureLabel,
                     currentNumOfZonesSHHLabel, borderLine1, configZoneButton, zonesLabel, nullHouseError, configWinterSummerTemp);
         }
 
@@ -163,6 +168,7 @@ public class SHHModule extends Module {
                         catch (Exception e){}
                     }
                     setIndoorTemperature(averageTemperatureOfRooms / Main.householdLocations.length);
+                    Platform.runLater(()->changeSHHTempLabel("indoorTemperatureLabel", indoorTemperature));
                     //System.out.println("DEBUG INDOOR TEMP: indoor temp == "+this.indoorTemperature);
                     if (this.indoorTemperature <= 0) {
                         Controller.appendMessageToConsole("WARNING [SHH]: Indoor temperature <= 0°C -- pipes might burst...");
@@ -1236,6 +1242,9 @@ public class SHHModule extends Module {
                     else if (tempLabel.getText().contains("Outdoor")) {
                         tempLabel.setText("Outdoor temperature: "+newTemp+"°C");
                     }
+                    else if (tempLabel.getText().contains("Indoor")) {
+                        tempLabel.setText("Indoor temperature: "+newTemp+"°C");
+                    }
                     Main.SHH_MODULE.getChildren().set(e, tempLabel);
                     break;
                 }
@@ -1356,7 +1365,7 @@ public class SHHModule extends Module {
             catch (Exception e){}
         }
 
-        int transY = 150; int transX = 250;
+        int transY = 150; int transX = 50;
         for (int z = 0; z < this.zones.length; z++) {
             try {
                 Button zoneInfoButton = new Button("Zone "+this.zones[z].getZoneID());
@@ -1506,7 +1515,7 @@ public class SHHModule extends Module {
                     zoneStage.show();
                 });
                 Main.SHH_MODULE.getChildren().add(zoneInfoButton);
-                transY+=40;
+                transY+=30;
             }
             catch (Exception e){}
         }

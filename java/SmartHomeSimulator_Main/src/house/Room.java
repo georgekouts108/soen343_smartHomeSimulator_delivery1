@@ -1,4 +1,5 @@
 package house;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -351,7 +352,7 @@ public class Room {
                         System.out.println(this.roomTemperature);
                     } catch (Exception e) {
                     } finally {
-                        try { Thread.sleep(1 / (long) Controller.getSimulationTimeSpeed()); } catch (Exception e) {}
+                        try { Thread.sleep(1000 / (long) Controller.getSimulationTimeSpeed()); } catch (Exception e) {}
                     }
                 }
             }
