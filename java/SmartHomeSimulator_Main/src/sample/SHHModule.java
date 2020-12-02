@@ -416,7 +416,7 @@ public class SHHModule extends Module {
                     try {
                         if (pane.getChildren().get(f).getId().equals("winterTempSHHLabel")) {
                             Label label = (Label) pane.getChildren().get(f);
-                            this.winterTemperature = Integer.parseInt(winterTempTextField.getText());
+                            setWinterTemperature(Double.parseDouble(winterTempTextField.getText()));
                             notifySHSOFAwayMode();
                             label.setText("Winter temp (AWAY mode only): "+this.winterTemperature+"°C");
                             pane.getChildren().set(f, label);
@@ -443,7 +443,7 @@ public class SHHModule extends Module {
                     try {
                         if (pane.getChildren().get(f).getId().equals("summerTempSHHLabel")) {
                             Label label = (Label) pane.getChildren().get(f);
-                            this.summerTemperature = Integer.parseInt(summerTempTextField.getText());
+                            setSummerTemperature(Double.parseDouble(summerTempTextField.getText()));
                             notifySHSOFAwayMode();
                             label.setText("Summer temp (AWAY mode only): "+this.summerTemperature+"°C");
                             pane.getChildren().set(f, label);
@@ -987,6 +987,11 @@ public class SHHModule extends Module {
      * @param winterTemperature
      */
     public void setWinterTemperature(double winterTemperature) {
+
+        /**TODO: Put the contents of this method inside an IF condition;
+         *  the condition is that Main.currentActiveProfile
+         *  has permission to change a room's temperature */
+
         this.winterTemperature = winterTemperature;
         changeSHHTempLabel("winterTempSHHLabel", winterTemperature);
     }
@@ -1004,6 +1009,11 @@ public class SHHModule extends Module {
      * @param summerTemperature
      */
     public void setSummerTemperature(double summerTemperature) {
+
+        /**TODO: Put the contents of this method inside an IF condition;
+         *  the condition is that Main.currentActiveProfile
+         *  has permission to change a room's temperature */
+
         this.summerTemperature = summerTemperature;
         changeSHHTempLabel("summerTempSHHLabel", summerTemperature);
     }
@@ -1066,6 +1076,12 @@ public class SHHModule extends Module {
      * @param newTemp
      */
     public void overrideTempInSpecificRoomInZone(int zoneID, int roomID, double newTemp) {
+
+
+        /**TODO: Put the contents of this method inside an IF condition;
+         *  the condition is that Main.currentActiveProfile
+         *  has permission to change a room's temperature */
+
         if (!awayModeON) {
             try {
                 boolean roomIsInZone = false;
@@ -1280,6 +1296,10 @@ public class SHHModule extends Module {
      */
     public void createNewZone(Room[] roomArray) {
         try {
+
+            /**TODO: Surround the contents of this TRY block with an IF condition;
+             *  the condition is that Main.currentActiveProfile has permission to add a new zone */
+
             if (currentNumberOfZones == MAX_NUMBER_OF_ZONES) {
                 Controller.appendMessageToConsole("ERROR [SHH]: Max # of zones cannot be exceeded");
                 return;
@@ -1364,7 +1384,7 @@ public class SHHModule extends Module {
                     changeZoneTempButton.setTranslateX(110); changeZoneTempButton.setTranslateY(30);
                     changeZoneTempButton.setOnAction(e->{
                         try {
-                            int newTemperature = Integer.parseInt(changeZoneTempTF.getText());
+                            double newTemperature = Double.parseDouble(changeZoneTempTF.getText());
                             overrideZoneTemperature(this.zones[finalZ].getZoneID(), newTemperature);
                             if (!awayModeON) {
                                 changeZoneInfoPane(zonePane, newTemperature, this.zones[finalZ]);
@@ -1430,7 +1450,7 @@ public class SHHModule extends Module {
 
                                             changeSpecRoomTempButton.setOnAction(ev->{
                                                 try {
-                                                    int newTemperature = Integer.parseInt(textField.getText());
+                                                    double newTemperature = Double.parseDouble(textField.getText());
                                                     overrideTempInSpecificRoomInZone(this.zones[finalZ].getZoneID(), Main.householdLocations[finalH].getRoomID(), newTemperature);
                                                     if (!awayModeON) {
                                                         changeZoneInfoPaneSpecificRoom(zonePane, newTemperature, this.zones[finalZ], Main.householdLocations[finalH].getRoomID());
