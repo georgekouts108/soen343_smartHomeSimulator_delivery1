@@ -22,6 +22,9 @@ import sample.*;
  */
 public class SHSHelpers {
 
+    public static void setShhModuleObject(SHHModule shh) {
+        Main.shhModule = shh;
+    }
     public static SHCModule getShcModuleObject() {
         return Main.shcModule;
     }

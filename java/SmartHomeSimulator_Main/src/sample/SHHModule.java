@@ -188,18 +188,21 @@ public class SHHModule extends Module {
      * @param max
      */
     public void setMaxNumOfZones(int max) {
-        MAX_NUMBER_OF_ZONES = max;
-        for (int elem = 0; elem < Main.SHH_MODULE.getChildren().size(); elem++) {
-            try {
-                if (Main.SHH_MODULE.getChildren().get(elem).getId().equals("maxNumOfZonesLabel")) {
-                    Label maxNumOfZonesSHHLabel = (Label) Main.SHH_MODULE.getChildren().get(elem);
-                    maxNumOfZonesSHHLabel.setText("Maximum number of zones allowed: "+MAX_NUMBER_OF_ZONES);
-                    Main.SHH_MODULE.getChildren().set(elem,maxNumOfZonesSHHLabel);
-                    break;
+        try {
+            MAX_NUMBER_OF_ZONES = max;
+            for (int elem = 0; elem < Main.SHH_MODULE.getChildren().size(); elem++) {
+                try {
+                    if (Main.SHH_MODULE.getChildren().get(elem).getId().equals("maxNumOfZonesLabel")) {
+                        Label maxNumOfZonesSHHLabel = (Label) Main.SHH_MODULE.getChildren().get(elem);
+                        maxNumOfZonesSHHLabel.setText("Maximum number of zones allowed: "+MAX_NUMBER_OF_ZONES);
+                        Main.SHH_MODULE.getChildren().set(elem,maxNumOfZonesSHHLabel);
+                        break;
+                    }
                 }
+                catch (Exception e){}
             }
-            catch (Exception e){}
         }
+        catch (Exception e){}
     }
 
     /**
