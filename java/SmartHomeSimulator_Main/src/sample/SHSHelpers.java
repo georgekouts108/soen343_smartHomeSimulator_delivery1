@@ -13,6 +13,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.time.Month;
 
 import sample.*;
 
@@ -21,6 +22,14 @@ import sample.*;
  * graphics or elements to help especially with any JUnit tests
  */
 public class SHSHelpers {
+
+    public static Month getSimulationMonth() {
+        return Main.shsModule.simulationMonth;
+    }
+
+    public static void setSimulationMonth(Month m) {
+        Main.shsModule.simulationMonth = m;
+    }
 
     public static void setShhModuleObject(SHHModule shh) {
         Main.shhModule = shh;
