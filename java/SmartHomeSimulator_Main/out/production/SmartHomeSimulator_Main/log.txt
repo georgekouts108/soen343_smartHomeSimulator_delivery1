@@ -1,0 +1,577 @@
+2020-12-01 23:37:8 -- SHP -- AWAY mode set to ON
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 15.1°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 15.1°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 15.2°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 15.1°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 15.2°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 15.3°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 15.2°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 15.2°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 15.2°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 15.1°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 15.3°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 15.1°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 15.1°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 15.1°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 15.3°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 15.3°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 15.3°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 15.3°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 15.4°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 15.3°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 15.4°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 15.4°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 15.4°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 15.5°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 15.3°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 15.5°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 15.4°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 15.4°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 15.5°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 15.4°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 15.5°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 15.5°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 15.5°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 15.2°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 15.4°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 15.5°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 15.2°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 15.5°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 15.1°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 15.6°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 15.6°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 15.6°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 15.2°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 15.6°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 15.7°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 15.7°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 15.6°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 15.7°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 15.6°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 15.8°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 15.6°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 15.7°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 15.6°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 15.9°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 15.7°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 15.7°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 15.8°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 15.8°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 15.8°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 16.1°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 16.1°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 15.7°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 16.0°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 16.2°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 15.8°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 15.7°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 16.1°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 16.1°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 15.8°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 15.9°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 16.0°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 16.2°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 15.8°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 15.9°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 15.8°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 15.8°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 16.3°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 15.9°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 16.0°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 15.9°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 16.0°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 16.0°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 16.0°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 16.0°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 16.0°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 15.9°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 16.4°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 16.1°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 15.9°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 16.3°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 16.2°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 16.3°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 16.4°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 16.2°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 16.2°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 16.3°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 16.2°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 16.4°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 16.1°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 16.3°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 16.3°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 16.3°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 16.4°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 16.5°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 16.3°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 16.1°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 16.4°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 16.2°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 16.4°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 15.9°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 16.6°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 16.7°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 16.5°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 16.4°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 16.2°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 16.5°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 16.6°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 16.5°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 16.5°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 16.6°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 16.6°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 16.8°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 16.4°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 16.7°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 16.6°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 16.1°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 16.5°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 16.5°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 16.7°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 16.7°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 16.6°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 16.5°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 16.7°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 16.8°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 16.7°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 16.6°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 16.6°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 16.7°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 16.8°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 16.8°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 16.9°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 16.9°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 16.7°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 16.8°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 16.8°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 16.9°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 16.9°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 16.8°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 17.0°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 17.0°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 17.0°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 16.9°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 16.9°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 16.8°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 17.0°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 16.9°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 17.1°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 16.9°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 17.1°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 16.9°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 17.0°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 17.0°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 17.1°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 17.2°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 17.2°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 17.0°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 17.3°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 17.2°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 17.1°C
+2020-12-01 23:37:8 -- SHH -- AC in masterbedroom locked by SHH.
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 17.1°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 17.4°C
+2020-12-01 23:37:8 -- SHH -- AC in bedroom locked by SHH.
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 17.5°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 17.0°C
+2020-12-01 23:37:8 -- SHH -- AC in living room locked by SHH.
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 17.1°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 17.2°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 17.2°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 17.4°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 17.1°C
+2020-12-01 23:37:8 -- SHH -- AC in kitchen locked by SHH.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 17.3°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 17.3°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 17.3°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 17.3°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 17.5°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 17.2°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 17.3°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 17.1°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 17.2°C
+2020-12-01 23:37:8 -- SHP -- Window #6 in masterbedroom closed.
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 17.2°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 17.3°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 17.5°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 17.6°C
+2020-12-01 23:37:8 -- SHP -- Window #8 in masterbedroom closed.
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 17.4°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 17.3°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 17.4°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 17.6°C
+2020-12-01 23:37:8 -- SHP -- Window #10 in masterbedroom closed.
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 17.6°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 17.5°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 17.5°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 17.7°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 17.4°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 17.4°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 17.4°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 17.4°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 17.7°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 17.6°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 17.5°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 17.8°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 17.6°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 17.7°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 17.6°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 17.5°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 17.6°C
+2020-12-01 23:37:8 -- SHP -- Window #17 in bedroom closed.
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 17.8°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 17.8°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 17.5°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 17.9°C
+2020-12-01 23:37:8 -- SHP -- Window #19 in bedroom closed.
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 17.7°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 17.9°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 18.0°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 17.8°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 17.7°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 17.7°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 17.6°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 17.9°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 18.1°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 17.9°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 18.2°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 17.9°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 17.8°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 17.7°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 17.8°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 18.0°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 18.0°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 17.8°C
+2020-12-01 23:37:8 -- SHP -- Window #26 in living room closed.
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 18.1°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 18.0°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 18.0°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 17.9°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 17.9°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 17.7°C
+2020-12-01 23:37:8 -- SHP -- Window #28 in living room closed.
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 18.2°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 17.8°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 18.1°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 18.0°C
+2020-12-01 23:37:8 -- SHP -- Window #30 in living room closed.
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 17.9°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 18.0°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 18.1°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 18.2°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 18.3°C
+2020-12-01 23:37:8 -- SHP -- Window #32 in living room closed.
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 18.1°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 18.1°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 18.3°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 18.0°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 18.4°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 18.4°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 18.2°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 18.1°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 18.1°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 18.5°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 18.3°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 18.3°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 18.2°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 18.1°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 18.2°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 18.4°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 18.2°C
+2020-12-01 23:37:8 -- SHP -- Window #38 in bathroom closed.
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 18.3°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 18.5°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 18.3°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 18.7°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 18.2°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 18.4°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 18.5°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 18.3°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 18.6°C
+2020-12-01 23:37:8 -- SHP -- Window #45 in kitchen closed.
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 18.6°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 18.7°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 18.4°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 18.5°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 18.6°C
+2020-12-01 23:37:8 -- SHP -- Window #47 in kitchen closed.
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 18.8°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 18.9°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 18.6°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 18.5°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 18.4°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 18.6°C
+2020-12-01 23:37:8 -- SHP -- Window #49 in kitchen closed.
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 18.5°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 18.6°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 18.7°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 18.9°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 18.8°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 18.5°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 18.8°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 18.3°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 18.4°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 18.7°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 18.4°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 18.5°C
+2020-12-01 23:37:8 -- SHP -- Window #55 in garage closed.
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 18.7°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 18.9°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 18.8°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 18.7°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 18.6°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 18.6°C
+2020-12-01 23:37:8 -- SHP -- Window #57 in garage closed.
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 19.0°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 18.8°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 19.1°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 19.0°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 18.7°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 18.6°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 18.7°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 18.8°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 19.2°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 18.9°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 18.9°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 19.0°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 18.8°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 19.1°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 19.0°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 18.9°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 19.0°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 19.1°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 18.8°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 19.2°C
+2020-12-01 23:37:8 -- SHP -- Window #67 in entrance closed.
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 19.1°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 18.9°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 19.1°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 19.0°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 19.2°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 19.3°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 19.0°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 19.2°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 19.2°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 19.6°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 19.3°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 19.1°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 19.3°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 19.5°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 19.3°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 19.4°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 19.4°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 19.5°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 19.0°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 19.4°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 18.9°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 19.2°C
+2020-12-01 23:37:8 -- SHP -- Door #6 to masterbedroom closed.
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 19.5°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 19.6°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 19.3°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 19.6°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 19.4°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 19.2°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 19.1°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 19.1°C
+2020-12-01 23:37:8 -- SHP -- Door #6 to masterbedroom locked.
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 19.7°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 19.2°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 19.5°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 19.4°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 19.3°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 19.7°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 19.8°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 19.6°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 19.5°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 19.7°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 19.5°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 19.6°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 19.5°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 19.3°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 19.6°C
+2020-12-01 23:37:8 -- SHP -- Door #17 to bedroom closed.
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 19.7°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 19.3°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 19.4°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 19.9°C
+2020-12-01 23:37:8 -- SHP -- Door #17 to bedroom locked.
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 19.4°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 19.8°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 19.4°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 19.7°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 19.8°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 19.5°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 19.6°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 19.6°C
+2020-12-01 23:37:8 -- SHP -- Door #26 to living room closed.
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 19.8°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 19.9°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 19.7°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 20.0°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 20.0°C
+2020-12-01 23:37:8 -- SHP -- Door #26 to living room locked.
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 20.1°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 20.0°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 19.9°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 19.8°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 20.2°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 19.9°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 20.0°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 19.9°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 19.7°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 20.3°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 19.7°C
+2020-12-01 23:37:8 -- SHP -- Door #38 to bathroom closed.
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 20.1°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 19.9°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 20.2°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 20.3°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 20.2°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 20.0°C
+2020-12-01 23:37:8 -- SHP -- Door #38 to bathroom locked.
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 20.1°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 19.8°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 20.3°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 20.1°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 19.8°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 20.0°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 19.9°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 20.4°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 20.4°C
+2020-12-01 23:37:8 -- SHP -- Door #45 to kitchen closed.
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 19.8°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 20.1°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 19.9°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 20.3°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 20.1°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 20.0°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 20.1°C
+2020-12-01 23:37:8 -- SHP -- Door #45 to kitchen locked.
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 20.2°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 20.0°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 20.3°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 20.2°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 20.2°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 20.5°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 20.3°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 20.6°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 20.4°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 20.1°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 20.5°C
+2020-12-01 23:37:8 -- SHP -- Door #55 to garage closed.
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 20.4°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 20.5°C
+2020-12-01 23:37:8 -- SHP -- Door #55 to garage locked.
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 20.3°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 20.5°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 20.4°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 20.6°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 20.5°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 20.7°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 20.7°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 20.8°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 20.9°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 20.4°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 20.6°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 20.4°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 20.3°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 20.2°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 20.7°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 20.6°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 20.2°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 20.7°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 20.8°C
+2020-12-01 23:37:8 -- SHH: Room #8 temperature changed to 21.0°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 20.4°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 20.8°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 20.6°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 20.8°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 20.9°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 20.7°C
+2020-12-01 23:37:8 -- SHP -- Door #67 to entrance closed.
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 20.8°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 20.9°C
+2020-12-01 23:37:8 -- SHP -- Door #67 to entrance locked.
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 20.8°C
+2020-12-01 23:37:8 -- SHH: Room #6 temperature changed to 21.0°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 20.7°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 20.8°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 20.6°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 20.9°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 20.9°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 21.0°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 20.5°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 20.9°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 20.8°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 20.9°C
+2020-12-01 23:37:8 -- SHH: Room #1 temperature changed to 21.0°C
+2020-12-01 23:37:8 -- SHH: Room #4 temperature changed to 21.0°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 20.6°C
+2020-12-01 23:37:8 -- SHH: Room #7 temperature changed to 21.0°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 20.7°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 20.5°C
+2020-12-01 23:37:8 -- SHH: Room #2 temperature changed to 20.6°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 21.0°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 20.5°C
+2020-12-01 23:37:8 -- SHH: Room #3 temperature changed to 20.7°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 20.9°C
+2020-12-01 23:37:8 -- SHH: Room #5 temperature changed to 21.0°C
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in masterbedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in living room.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in bedroom.
+2020-12-01 23:37:8 -- [Edit Context] -- A.C automatically triggered in kitchen.
+2020-12-01 23:37:32 -- SHC -- Failed attempt to disable locked AC in Room #1
+2020-12-01 23:37:34 -- SHC -- Failed attempt to disable locked AC in Room #1

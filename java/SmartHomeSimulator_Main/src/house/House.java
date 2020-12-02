@@ -631,11 +631,18 @@ public class House {
                 else {
                     if(Main.getCurrentActiveProfile().getPermAC() == true ||
                             (Main.getCurrentActiveProfile().getPermACLocation() == true &&
-                                    SHSHelpers.getCurrentLocation()!=null && SHSHelpers.getCurrentLocation().getName().toLowerCase() == room.getName())) {
-                        room.getAc().setState(false);
-                        setIconVisibility(room, "AC", false);
-                        Controller.appendMessageToConsole("SHC -- AC turned off in Room #" + room.getRoomID() + " " + room.getName());
-                        room.startThreadToSetRoomTempToOutdoorTemp();
+                                    SHSHelpers.getCurrentLocation()!=null && SHSHelpers.getCurrentLocation().getName().toLowerCase() == room.getName()))
+                    {
+                        if (!room.getAc().isLocked()) {
+                            room.getAc().setState(false);
+                            setIconVisibility(room, "AC", false);
+                            Controller.appendMessageToConsole("SHC -- AC turned off in Room #" + room.getRoomID() + " " + room.getName());
+                            room.startThreadToSetRoomTempToOutdoorTemp();
+                        }
+                        else {
+                            acCheckbox.setSelected(true);
+                            Controller.appendMessageToConsole("SHC -- Failed attempt to disable locked AC in Room #" + room.getRoomID());
+                        }
                     }
                     else{
                         acCheckbox.setSelected(true);

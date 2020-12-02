@@ -1665,6 +1665,7 @@ public class Controller {
 
                     Main.shhModule.notifySHSOFAwayMode();
                     Main.shhModule.changeSHHAwayModeLabel(true);
+                    awayModeAutoLockOrUnlockAllAirConditioners(true);
 
                     // close all windows;
                     for (int room = 0; room < Main.householdLocations.length; room++) {
@@ -1716,6 +1717,7 @@ public class Controller {
 
                     Main.shhModule.notifySHSOFAwayMode();
                     Main.shhModule.changeSHHAwayModeLabel(false);
+                    awayModeAutoLockOrUnlockAllAirConditioners(false);
 
                     // unlock all doors (except the garage, backyard, and entrance)
                     for (int room = 0; room < Main.householdLocations.length; room++) {
@@ -2206,6 +2208,21 @@ public class Controller {
             catch (Exception e){}
         }
     }
+
+    public static void awayModeAutoLockOrUnlockAllAirConditioners(boolean state) {
+        for (int room = 0; room < Main.householdLocations.length; room++) {
+            try {
+                if (!(Main.householdLocations[room].getAc()==null)) {
+                    Main.householdLocations[room].getAc().setLocked(state);
+                    Controller.appendMessageToConsole("SHH -- AC in "+
+                            Main.householdLocations[room].getName() + " locked by SHH.");
+                }
+            }
+            catch (Exception e){}
+        }
+    }
+
+
 
     /**
      * change a specific room's temperature

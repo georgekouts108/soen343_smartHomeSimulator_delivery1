@@ -8,6 +8,7 @@ import house.*;
 public class AirConditioner extends Utility {
 
     private double temperatureSetting; // the temperature level of the A.C. (in Celcius)
+    private boolean isLocked;
 
     /**
      * Air conditioner constructor
@@ -15,6 +16,15 @@ public class AirConditioner extends Utility {
     public AirConditioner() {
         super();
         this.temperatureSetting = 0; // A.C. is initially turned off
+        this.isLocked = false;
+    }
+
+    public boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(boolean locked) {
+        isLocked = locked;
     }
 
     /**
