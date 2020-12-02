@@ -1,6 +1,9 @@
 package sample;
 import house.*;
 
+/**
+ * Class for zone time periods
+ */
 public class ZoneTimePeriodSet {
 
     private int zoneID;
@@ -13,6 +16,10 @@ public class ZoneTimePeriodSet {
     private String hoursPeriod3;
     private String[] timePeriods;
 
+    /**
+     * Constructor for a Zone time period set
+     * @param zoneID
+     */
     public ZoneTimePeriodSet(int zoneID) {
         this.zoneID = zoneID;
         this.hoursPeriod1 = "";
@@ -27,6 +34,10 @@ public class ZoneTimePeriodSet {
         triggerTimePeriodThread();
     }
 
+    /**
+     * Return a zone's temperature
+     * @return
+     */
     public double getZoneTemperature() {
         double temp = 0;
         for (int z = 0; z < Main.shhModule.getZones().length; z++) {
@@ -41,6 +52,11 @@ public class ZoneTimePeriodSet {
         return temp;
     }
 
+    /**
+     * return the hour range for a specific time period
+     * @param period
+     * @return
+     */
     public int[] getPeriodHours(int period) {
         int[] hours = null;
 
@@ -76,6 +92,11 @@ public class ZoneTimePeriodSet {
         return hours;
     }
 
+    /**
+     * get the temperature which a zone is set to for a specific period
+     * @param period
+     * @return
+     */
     public double getPeriodTemperature(int period) {
         double temp = 0;
         switch (period - 1) {
@@ -92,6 +113,13 @@ public class ZoneTimePeriodSet {
         return temp;
     }
 
+    /**
+     * mutate a zone's temperature preference along with the period's hour bounds for automatically setting it
+     * @param lowerBound
+     * @param upperBound
+     * @param periodNumber
+     * @param periodTemperature
+     */
     public void setPeriodHoursAndTemperature(int lowerBound, int upperBound, int periodNumber, double periodTemperature) {
 
         if (upperBound > 23 || lowerBound > 23 || upperBound < 0 || lowerBound < 0) {
@@ -166,6 +194,9 @@ public class ZoneTimePeriodSet {
         }
     }
 
+    /**
+     * Start a continuous thread that will automatically update zone temperatures based on the current simulation time
+     */
     public void triggerTimePeriodThread() {
         new Thread(()->{
             while (true) {
@@ -219,11 +250,25 @@ public class ZoneTimePeriodSet {
         }).start();
     }
 
+    /**
+     * checks if the hour of the current simulation time is within the bounds of a specific period
+     * @param lowerHourBound
+     * @param upperHourBound
+     * @return
+     */
     public boolean isSimHourWithinRange(int lowerHourBound, int upperHourBound) {
         int simulationHour = Controller.currentSimulationHour;
         return (simulationHour >= lowerHourBound && simulationHour <= upperHourBound);
     }
 
+    /**
+     * compares a configured hour time range with another to check for any overlaps
+     * @param inputLowerHour
+     * @param inputUpperHour
+     * @param otherLowerHour
+     * @param otherUpperHour
+     * @return
+     */
     public boolean doesTimeRangeOverlapWithOther(int inputLowerHour, int inputUpperHour, int otherLowerHour, int otherUpperHour) {
         boolean overlaps = false;
 

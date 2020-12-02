@@ -128,28 +128,6 @@ public class Main extends Application {
     protected static House house;
 
     /**
-     * Access the default house's array of Rooms
-     * @return
-     */
-    public static Room[] getHouseholdLocations() {
-        return householdLocations;
-    }
-
-    /**
-     * Access the UI of the main dashboard
-     * @return
-     */
-    public static AnchorPane getMain_dashboard() {return main_dashboard;}
-
-    /**
-     * Access the current active profile
-     * @return
-     */
-    public static UserProfile getCurrentActiveProfile() {
-        return currentActiveProfile;
-    }
-
-    /**
      * START method for the JavaFX Application "Smart Home Simulator"
      * @param primaryStage
      * @throws Exception
@@ -201,43 +179,6 @@ public class Main extends Application {
 
         String profilesTxt = "src/profiles.txt";
         loadProfilesFromFile(profilesTxt);
-    }
-
-    /**
-     * Load profiles from a file with pre-saved permissions
-     * @param file
-     */
-    public static void loadProfilesFromFile(String file){
-
-        File profiles = new File(file);
-        Scanner sc;
-        try {
-            sc = new Scanner(profiles);
-
-            while(sc.hasNext()){
-
-                //each line in file wil be a profile. example: child,false,true,false,...
-                String[] profileParams = sc.nextLine().split(",");
-                String newType = profileParams[0];
-
-                boolean newPermLights = Boolean.parseBoolean(profileParams[1]);
-                boolean newPermLightsLocation = Boolean.parseBoolean(profileParams[2]);
-
-                boolean newPermDoors = Boolean.parseBoolean(profileParams[3]);
-                boolean newPermDoorsLocation = Boolean.parseBoolean(profileParams[4]);
-
-                boolean newPermWindows = Boolean.parseBoolean(profileParams[5]);
-                boolean newPermWindowsLocation = Boolean.parseBoolean(profileParams[6]);
-
-                boolean newPermAC = Boolean.parseBoolean(profileParams[7]);
-                boolean newPermACLocation = Boolean.parseBoolean(profileParams[8]);
-                Controller.createNewProfile(newType,newPermLights,newPermLightsLocation,newPermDoors,newPermDoorsLocation,newPermWindows,newPermWindowsLocation,newPermAC,newPermACLocation);
-            }
-            sc.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -639,5 +580,64 @@ public class Main extends Application {
         Tab shsTab = new Tab("SHS", SHS_MODULE); shsTab.setId("shsTab");
         modules.getTabs().addAll(shsTab, shcTab, shpTab, shhTab);
         return modules;
+    }
+
+    /**
+     * Access the default house's array of Rooms
+     * @return
+     */
+    public static Room[] getHouseholdLocations() {
+        return householdLocations;
+    }
+
+    /**
+     * Access the UI of the main dashboard
+     * @return
+     */
+    public static AnchorPane getMain_dashboard() {return main_dashboard;}
+
+    /**
+     * Access the current active profile
+     * @return
+     */
+    public static UserProfile getCurrentActiveProfile() {
+        return currentActiveProfile;
+    }
+
+    /**
+     * Load profiles from a file with pre-saved permissions
+     * @param file
+     */
+    public static void loadProfilesFromFile(String file){
+
+        File profiles = new File(file);
+        Scanner sc;
+        try {
+            sc = new Scanner(profiles);
+
+            while(sc.hasNext()){
+
+                //each line in file wil be a profile. example: child,false,true,false,...
+                String[] profileParams = sc.nextLine().split(",");
+                String newType = profileParams[0];
+
+                boolean newPermLights = Boolean.parseBoolean(profileParams[1]);
+                boolean newPermLightsLocation = Boolean.parseBoolean(profileParams[2]);
+
+                boolean newPermDoors = Boolean.parseBoolean(profileParams[3]);
+                boolean newPermDoorsLocation = Boolean.parseBoolean(profileParams[4]);
+
+                boolean newPermWindows = Boolean.parseBoolean(profileParams[5]);
+                boolean newPermWindowsLocation = Boolean.parseBoolean(profileParams[6]);
+
+                boolean newPermAC = Boolean.parseBoolean(profileParams[7]);
+                boolean newPermACLocation = Boolean.parseBoolean(profileParams[8]);
+                Controller.createNewProfile(newType,newPermLights,newPermLightsLocation,newPermDoors,newPermDoorsLocation,newPermWindows,newPermWindowsLocation,newPermAC,newPermACLocation);
+            }
+            sc.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

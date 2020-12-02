@@ -8,7 +8,6 @@ import sample.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * House class
@@ -942,6 +941,10 @@ public class House {
         catch(Exception e){}
     }
 
+    /**
+     * Automatically open all windows in a room, if there are any
+     * @param room
+     */
     public void autoOpenWindows(Room room) {
         try {
             for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {
@@ -985,6 +988,11 @@ public class House {
         }catch (Exception ex){}
     }
 
+    /**
+     * Automatically turn on or off a room's Air Conditioner
+     * @param room
+     * @param state
+     */
     public void autoTurnOnOffAC(Room room, boolean state) {
         try {
             for (int lay = 0; lay < this.layout.getChildren().size(); lay++) {

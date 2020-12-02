@@ -285,22 +285,10 @@ public class Room {
         this.roomTemperature = roomTemperature;
     }
 
-    public boolean isHAVC_Working() {
-        return HAVC_Working;
-    }
-    public void setHAVC_Working(boolean HAVC_Working) {
-        this.HAVC_Working = HAVC_Working;
-    }
-    public boolean isHAVC_Paused() {
-        return HAVC_Paused;
-    }
-    public void setHAVC_Paused(boolean HAVC_Paused) {
-        this.HAVC_Paused = HAVC_Paused;
-    }
-
-    // call this method whenever:
-        // (1) you want to override a specific room temperature in a zone
-        // (2) you want to change a zone temperature that overrides all its rooms' temperatures to that value
+    /**
+     * trigger a command to gradually adjust a room's temperature to a new, manually set desired temperature
+     * @param newTemp
+     */
     public void startThreadToAdjustRoomTemp(double newTemp) {
 
         double tempDifference = (newTemp - this.getRoomTemperature());
@@ -341,8 +329,9 @@ public class Room {
         }
     }
 
-    // call this method whenever:
-        // (1) the selected AC icon in a room is deselected
+    /**
+     * trigger a command to gradually adjust a room's temperature to the temperature outside
+     */
     public void startThreadToSetRoomTempToOutdoorTemp() {
         new Thread(()-> {
             try {
@@ -370,12 +359,19 @@ public class Room {
         }).start();
     }
 
+    /**
+     * Check if a room's temperature is within +- 0.25 degrees Celsius
+     * @return
+     */
     public boolean isRoomTempInBetweenQuartDegreeBounds() {
         double lowerBound = (double) Math.round((roomTemperature - 0.25) * 100) / 100;
         double upperBound = (double) Math.round((roomTemperature + 0.25) * 100) / 100;
         return ((roomTemperature >= (lowerBound)) && (roomTemperature <= upperBound));
     }
 
+    /**
+     * notify a room object whenever its HAVC is (un)paused or becomes (in)active
+     */
     public void updateRoomHAVCstatus() {
         try {
             if (this.HAVC_Paused || this.HAVC_Working) {

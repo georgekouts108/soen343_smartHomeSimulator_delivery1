@@ -38,10 +38,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 import java.util.Scanner;
-
 import sample.Main.*;
-
-//import static sample.SHPModule.setTimeToAlert;
 
 /**
  * Controller class for Smart Home Simulator
@@ -2210,6 +2207,11 @@ public class Controller {
         }
     }
 
+    /**
+     * change a specific room's temperature
+     * @param roomID
+     * @param newTemp
+     */
     public static void changeSpecificRoomTemperature(int roomID, double newTemp) {
         for (int r = 0; r < Main.householdLocations.length; r++) {
             try {
@@ -2222,9 +2224,11 @@ public class Controller {
         }
     }
 
+    /**
+     * return the simulation time speed
+     * @return
+     */
     public static float getSimulationTimeSpeed() {
         return simulationTimeSpeed;
     }
-
-
 }

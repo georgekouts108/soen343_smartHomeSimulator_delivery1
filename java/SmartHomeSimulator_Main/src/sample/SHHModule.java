@@ -55,51 +55,6 @@ public class SHHModule extends Module {
         SHHZoneConfigScene = new Scene(SHHZoneConfigPane, 600,900);
     }
 
-    public void setIndoorTemperature(double newTemperature) {
-        this.indoorTemperature = newTemperature;
-    }
-
-    public void startIndoorTempThread() {
-        this.indoorTemperatureThread = new Thread(()->{
-            while (true) {
-                try {
-                    double averageTemperatureOfRooms = 0;
-                    for (int location = 0; location < Main.householdLocations.length; location++) {
-                        try {
-                            averageTemperatureOfRooms += Main.householdLocations[location].getRoomTemperature();
-                        }
-                        catch (Exception e){}
-                    }
-                    setIndoorTemperature(averageTemperatureOfRooms / Main.householdLocations.length);
-                    //System.out.println("DEBUG INDOOR TEMP: indoor temp == "+this.indoorTemperature);
-                    if (this.indoorTemperature <= 0) {
-                        Controller.appendMessageToConsole("WARNING [SHH]: Indoor temperature <= 0°C -- pipes might burst...");
-                    }
-                }
-                catch (Exception e){}
-                finally {
-                    try {Thread.sleep((long) (1 / Controller.simulationTimeSpeed));} catch (Exception e){}
-                }
-            }
-        });
-        this.indoorTemperatureThread.start();
-    }
-
-    public void setMaxNumOfZones(int max) {
-        MAX_NUMBER_OF_ZONES = max;
-        for (int elem = 0; elem < Main.SHH_MODULE.getChildren().size(); elem++) {
-            try {
-                if (Main.SHH_MODULE.getChildren().get(elem).getId().equals("maxNumOfZonesLabel")) {
-                    Label maxNumOfZonesSHHLabel = (Label) Main.SHH_MODULE.getChildren().get(elem);
-                    maxNumOfZonesSHHLabel.setText("Maximum number of zones allowed: "+MAX_NUMBER_OF_ZONES);
-                    Main.SHH_MODULE.getChildren().set(elem,maxNumOfZonesSHHLabel);
-                    break;
-                }
-            }
-            catch (Exception e){}
-        }
-    }
-
     /**
      * Generate a module by creating and returning a local AnchorPane
      * @return
@@ -184,6 +139,66 @@ public class SHHModule extends Module {
         return pane;
     }
 
+    /**
+     * set the indoor temperature (a pre-computed value that constantly updates during the simulation)
+     * @param newTemperature
+     */
+    public void setIndoorTemperature(double newTemperature) {
+        this.indoorTemperature = newTemperature;
+    }
+
+    /**
+     * trigger a thread that, every millisecond, updates the indoor temperature by reassigning it to
+     * the average temperature of all rooms in the house
+     */
+    public void startIndoorTempThread() {
+        this.indoorTemperatureThread = new Thread(()->{
+            while (true) {
+                try {
+                    double averageTemperatureOfRooms = 0;
+                    for (int location = 0; location < Main.householdLocations.length; location++) {
+                        try {
+                            averageTemperatureOfRooms += Main.householdLocations[location].getRoomTemperature();
+                        }
+                        catch (Exception e){}
+                    }
+                    setIndoorTemperature(averageTemperatureOfRooms / Main.householdLocations.length);
+                    //System.out.println("DEBUG INDOOR TEMP: indoor temp == "+this.indoorTemperature);
+                    if (this.indoorTemperature <= 0) {
+                        Controller.appendMessageToConsole("WARNING [SHH]: Indoor temperature <= 0°C -- pipes might burst...");
+                    }
+                }
+                catch (Exception e){}
+                finally {
+                    try {Thread.sleep((long) (1 / Controller.simulationTimeSpeed));} catch (Exception e){}
+                }
+            }
+        });
+        this.indoorTemperatureThread.start();
+    }
+
+    /**
+     * Set the maximum number of zones
+     * @param max
+     */
+    public void setMaxNumOfZones(int max) {
+        MAX_NUMBER_OF_ZONES = max;
+        for (int elem = 0; elem < Main.SHH_MODULE.getChildren().size(); elem++) {
+            try {
+                if (Main.SHH_MODULE.getChildren().get(elem).getId().equals("maxNumOfZonesLabel")) {
+                    Label maxNumOfZonesSHHLabel = (Label) Main.SHH_MODULE.getChildren().get(elem);
+                    maxNumOfZonesSHHLabel.setText("Maximum number of zones allowed: "+MAX_NUMBER_OF_ZONES);
+                    Main.SHH_MODULE.getChildren().set(elem,maxNumOfZonesSHHLabel);
+                    break;
+                }
+            }
+            catch (Exception e){}
+        }
+    }
+
+    /**
+     * show the user interface for configuring the month ranges for Winter and Summer
+     */
     public void configureWinterSummerMonths() {
         Stage tempStage = new Stage();
         tempStage.setTitle("Winter/Summer Temp Settings");
@@ -220,6 +235,10 @@ public class SHHModule extends Module {
         tempStage.show();
     }
 
+    /**
+     * check to see if the simulation month falls within the winter months
+     * @return
+     */
     public boolean isWinter() {
         try {
             int winterLB_Value = this.winterMonthLowerBound.getValue();
@@ -231,6 +250,11 @@ public class SHHModule extends Module {
             return false;
         }
     }
+
+    /**
+     * check to see if the simulation month falls within the summer months
+     * @return
+     */
     public boolean isSummer() {
         try {
             int summerLB_Value = this.summerMonthLowerBound.getValue();
@@ -242,6 +266,13 @@ public class SHHModule extends Module {
             return false;
         }
     }
+
+    /**
+     * A helper method that returns a Month name based on the month number as a parameter
+     * (example: value==12 returns 'Month.DECEMBER')
+     * @param value
+     * @return
+     */
     public Month identifyMonth(int value) {
         try {
             Month month;
@@ -269,6 +300,14 @@ public class SHHModule extends Module {
 
     }
 
+    /**
+     * configure the month ranges for Winter and Summer.
+     *
+     * When the range for one of two seasons is set, the opposite season's range automatically
+     * assumes the remaining months in the year.
+     * @param textField
+     * @param summer
+     */
     public void setWeatherMonthRange(TextField textField, boolean summer) {
         try {
             String input = textField.getText();
@@ -352,8 +391,12 @@ public class SHHModule extends Module {
             Controller.appendMessageToConsole("Failed attempt to set Winter or Summer Months.");
         }
     }
+
+    /**
+     * show the user interface for configuring the default temperatures for Winter and Summer during AWAY mode
+     * @param pane
+     */
     public void popupWinterSummerTempSettingsStage(AnchorPane pane) {
-        //////////
         Stage tempStage = new Stage();
         tempStage.setTitle("Winter/Summer Temp Settings");
         tempStage.setResizable(false);
@@ -421,9 +464,11 @@ public class SHHModule extends Module {
                 summerTempTextField, winterTempTextField, confirmSummerTemp, confirmWinterTemp, closeButton);
         tempStage.setScene(new Scene(tempPane, 300, 300));
         tempStage.show();
-        //////////
     }
 
+    /**
+     * show the user interface for creating new zones or moving rooms around existing zones
+     */
     public void openUpZoneConfigurationPanel() {
         Stage tempStage = new Stage();
         tempStage.setResizable(false);
@@ -627,6 +672,9 @@ public class SHHModule extends Module {
         tempStage.show();
     }
 
+    /**
+     * show the user interface for setting 1 to 3 time periods and their temperature settings
+     */
     public void openUpZoneConfigurationPanel_TimePeriods() {
         Stage tempStage = new Stage();
         tempStage.setResizable(false);
@@ -771,6 +819,11 @@ public class SHHModule extends Module {
         tempStage.show();
     }
 
+    /**
+     * delete an array of rooms, based on their room IDs
+     * @param roomsToBeMoved
+     * @return
+     */
     public Room[] deleteRoomsFromZones(int[] roomsToBeMoved) {
         Room[] roomsArray = new Room[roomsToBeMoved.length];
 
@@ -794,6 +847,12 @@ public class SHHModule extends Module {
         catch (Exception e){}
         return roomsArray;
     }
+
+    /**
+     * remove a room from a zone
+     * @param roomID
+     * @param zoneID
+     */
     public void removeRoomFromZone(int roomID, int zoneID) {
         for (int z = 0; z < zones.length; z++) {
             try {
@@ -805,6 +864,12 @@ public class SHHModule extends Module {
             catch (Exception e){}
         }
     }
+
+    /**
+     * return the zone ID of the zone where a room, identified by room ID, is part of
+     * @param roomID
+     * @return
+     */
     public int getZoneOfRoom(int roomID) {
         int zoneID = 0;
         boolean zoneFound = false;
@@ -825,6 +890,12 @@ public class SHHModule extends Module {
         }
         return zoneID;
     }
+
+    /**
+     * return an integer array of room IDs of rooms that are to be relocated to another zone, new or existing
+     * @param hostPane
+     * @return
+     */
     public int[] getRoomIDsToMoveInAnotherZone(AnchorPane hostPane) {
         String roomIDsString = "";
         try {
@@ -872,42 +943,93 @@ public class SHHModule extends Module {
         }
     }
 
+    /**
+     * return the current number of zones in the SHH module
+     * @return
+     */
     public int getCurrentNumberOfZones() {
         return currentNumberOfZones;
     }
+
+    /**
+     * when a new zone is added, increment the number of zones by 1
+     */
     public void incrementNumberOfZones() {
         this.currentNumberOfZones++;
     }
 
+    /**
+     * get the outdoor temperature
+     * @return
+     */
     public double getOutdoorTemperature() {
         return outdoorTemperature;
     }
+
+    /**
+     * set the outdoor temperature
+     * @param outdoorTemperature
+     */
     public void setOutdoorTemperature(double outdoorTemperature) {
         this.outdoorTemperature = outdoorTemperature;
     }
 
+    /**
+     * get the default winter temperature for AWAY mode
+     * @return
+     */
     public double getWinterTemperature() {
         return winterTemperature;
     }
+
+    /**
+     * set the default winter temperature for AWAY mode
+     * @param winterTemperature
+     */
     public void setWinterTemperature(double winterTemperature) {
         this.winterTemperature = winterTemperature;
         changeSHHTempLabel("winterTempSHHLabel", winterTemperature);
     }
+
+    /**
+     * get the default summer temperature for AWAY mode
+     * @return
+     */
     public double getSummerTemperature() {
         return summerTemperature;
     }
+
+    /**
+     * set the default summer temperature for AWAY mode
+     * @param summerTemperature
+     */
     public void setSummerTemperature(double summerTemperature) {
         this.summerTemperature = summerTemperature;
         changeSHHTempLabel("summerTempSHHLabel", summerTemperature);
     }
 
+    /**
+     * return an array of the zones within the SHH module
+     * @return
+     */
     public Zone[] getZones() {
         return zones;
     }
+
+    /**
+     * set the array of zones in the SHH module
+     * @param zones
+     */
     public void setZones(Zone[] zones) {
         this.zones = zones;
     }
 
+    /**
+     * override a zone's temperature (which all of its rooms will take on as a result), but
+     * only if the simulation is in AWAY mode
+     * @param zoneID
+     * @param newTemp
+     */
     public void overrideZoneTemperature(int zoneID, double newTemp) {
         if (!awayModeON) {
             for (int z = 0; z < this.zones.length; z++) {
@@ -937,6 +1059,12 @@ public class SHHModule extends Module {
         }
     }
 
+    /**
+     * override a specific room's temperature in a zone
+     * @param zoneID
+     * @param roomID
+     * @param newTemp
+     */
     public void overrideTempInSpecificRoomInZone(int zoneID, int roomID, double newTemp) {
         if (!awayModeON) {
             try {
@@ -968,6 +1096,9 @@ public class SHHModule extends Module {
         }
     }
 
+    /**
+     * Adjust the temperature of each zone to the default summer temperature during AWAY mode
+     */
     public void setAllZoneTempsToSummerTemp() {
         for (int z = 0; z < this.zones.length; z++) {
             try {
@@ -976,6 +1107,10 @@ public class SHHModule extends Module {
             catch (Exception e){}
         }
     }
+
+    /**
+     * Adjust the temperature of each zone to the default winter temperature during AWAY mode
+     */
     public void setAllZoneTempsToWinterTemp() {
         for (int z = 0; z < this.zones.length; z++) {
             try {
@@ -985,6 +1120,9 @@ public class SHHModule extends Module {
         }
     }
 
+    /**
+     * give the SHH module the signal whenever the AWAY mode is toggled on or off, and adjust temperatures as needed
+     */
     public void notifySHSOFAwayMode() { /**todo: change name to 'notifySHHOFAwayMode()'*/
         if (SHSHelpers.isIs_away()) {
             if (Main.shhModule.isSummer()) {
@@ -1005,13 +1143,17 @@ public class SHHModule extends Module {
             awayModeON = false;
         }
     }
+
+    /**
+     * automatically open all windows is a specific zone when the outside temperature is cooler than the zone's temperature
+     * @param zoneID
+     */
     public void notifyToOpenZoneWindows(int zoneID) {
         try {
             double outdoorTemp = Main.outsideTemperature;
             for (int z = 0; z < this.zones.length; z++) {
                 try {
                     if (this.zones[z].getZoneID() == zoneID) {
-                        /////
                         for (int room = 0; room < this.zones[z].getZoneRoomIDs().length; room++) {
                             try {
                                 for (int h = 0; h < Main.householdLocations.length; h++) {
@@ -1035,7 +1177,6 @@ public class SHHModule extends Module {
                                 System.out.println("EXCEPTION G: " + G.getMessage());
                             }
                         }
-                        /////
                         break;
                     }
                 }
@@ -1044,6 +1185,10 @@ public class SHHModule extends Module {
         }
         catch (Exception e){}
     }
+
+    /**
+     * automatically open all windows in all zones when the outside temperature is cooler than inside
+     */
     public void notifyToOpenAllZoneWindows() {
         try {
             for (int z = 0 ; z < this.zones.length; z++) {
@@ -1056,6 +1201,11 @@ public class SHHModule extends Module {
         catch (Exception e){}
     }
 
+    /**
+     * update a temperature label in the SHH user interface
+     * @param labelID
+     * @param newTemp
+     */
     public void changeSHHTempLabel(String labelID, double newTemp) {
         for (int e = 0; e < Main.SHH_MODULE.getChildren().size(); e++) {
             try {
@@ -1077,6 +1227,11 @@ public class SHHModule extends Module {
             catch (Exception ex){}
         }
     }
+
+    /**
+     * update the AWAY mode status label in the SHH user interface
+     * @param isAwayModeOn
+     */
     public void changeSHHAwayModeLabel(boolean isAwayModeOn) {
         for (int e = 0; e < Main.SHH_MODULE.getChildren().size(); e++) {
             try {
@@ -1119,8 +1274,8 @@ public class SHHModule extends Module {
 
     /***
      * Create a brand new Zone that will hold the rooms in the Room[] array parameter.
-     * This method will also be used when first uploading the house layout, placing all
-     * household locations in one zone by default
+     * This method will also be used when first uploading a house layout, placing all
+     * household locations in a single, first zone by default.
      * @param roomArray
      */
     public void createNewZone(Room[] roomArray) {
@@ -1163,6 +1318,10 @@ public class SHHModule extends Module {
             Controller.appendMessageToConsole(e.getMessage());
         }
     }
+
+    /**
+     * Update the user interface of the SHH module when a new zone has been added
+     */
     public void updateSHSModuleWithZones() {
 
         for (int elem = 0; elem < Main.SHH_MODULE.getChildren().size(); elem++) {
@@ -1333,6 +1492,12 @@ public class SHHModule extends Module {
         }
     }
 
+    /**
+     * update the user interface of a specific Zone's information after that zone's temperature has been mutated
+     * @param pane
+     * @param temperature
+     * @param zone
+     */
     public void changeZoneInfoPane(AnchorPane pane, double temperature, Zone zone) {
         for (int el = 0; el < pane.getChildren().size(); el++) {
             if (pane.getChildren().get(el).getId().equals("zone"+zone.getZoneID()+"tempLabel")) {
@@ -1373,6 +1538,15 @@ public class SHHModule extends Module {
             catch (Exception e){}
         }
     }
+
+    /**
+     * update the user interface of a specific Zone's information after a specific room in that zone
+     * has its temperature overridden
+     * @param pane
+     * @param temperature
+     * @param zone
+     * @param roomID
+     */
     public void changeZoneInfoPaneSpecificRoom(AnchorPane pane, double temperature, Zone zone, int roomID) {
         // for each room in the zone...
         for (int r = 0; r < zone.getZoneRoomIDs().length; r++) {
