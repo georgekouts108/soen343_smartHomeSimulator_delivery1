@@ -82,14 +82,6 @@ public class House {
     }
 
     /**
-     * Accessor for a house's number of rooms
-     * @return
-     */
-    public int getNumOfRooms() {
-        return numOfRooms;
-    }
-
-    /**
      * Accessor for a house's array of Room objects
      * @return
      */

@@ -26,11 +26,9 @@ public class SHSHelpers {
     public static Month getSimulationMonth() {
         return Main.shsModule.simulationMonth;
     }
-
     public static void setSimulationMonth(Month m) {
         Main.shsModule.simulationMonth = m;
     }
-
     public static void setShhModuleObject(SHHModule shh) {
         Main.shhModule = shh;
     }
@@ -305,7 +303,6 @@ public class SHSHelpers {
     public static void setHouse(House house) {
         Main.house = house;
     }
-
     public static void setShpModuleObject(SHPModule shp) {
     }
 }

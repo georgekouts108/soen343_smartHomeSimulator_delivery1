@@ -7,15 +7,13 @@ import house.Room;
  */
 public class Door extends Utility {
 
-    private Sensor sensor; // a door's sensor
-    private boolean isLocked; // is a door locked?
+    private boolean isLocked;
 
     /**
      * Door constructor
      */
     public Door() {
         super();
-        this.sensor = new Sensor();
         this.isLocked = false;
     }
 
@@ -49,14 +47,6 @@ public class Door extends Utility {
      */
     public void setLocked(boolean locked) {
         isLocked = locked;
-    }
-
-    /**
-     * Get a door's Sensor object instance.
-     * @return
-     */
-    public Sensor getSensor() {
-        return this.sensor;
     }
 
     /**

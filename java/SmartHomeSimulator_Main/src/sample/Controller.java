@@ -59,7 +59,6 @@ public class Controller {
     // will be used by SHH module
     protected static int currentSimulationHour;
 
-
     /**
      * Display the local date and time in the main dashboard
      * @param dateText

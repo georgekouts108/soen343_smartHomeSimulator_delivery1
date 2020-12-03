@@ -229,7 +229,7 @@ public class SHPModule extends Module {
      * Return the current number of motion detectors on in the house
      * @return
      */
-    public int getNumberOfMDsOn(){return numberOfMDsOn;};
+    public int getNumberOfMDsOn(){return numberOfMDsOn;}
 
     /**
      * Notify the SHP module of any motion detectors triggered during AWAY mode

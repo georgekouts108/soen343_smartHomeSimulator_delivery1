@@ -18,11 +18,6 @@ public class SHHModule extends Module {
 
     private static int nextDestinationZoneID = -1;
     private static boolean awayModeON = false;
-    private static Stage SHHZoneConfigStage;
-    private static Scene SHHZoneConfigScene;
-    private static AnchorPane SHHZoneConfigPane;
-    private static int numberOfTimesZoneConfigSelected = 0;
-
     private Month winterMonthLowerBound;
     private Month winterMonthUpperBound;
     private Month summerMonthLowerBound;
@@ -35,7 +30,6 @@ public class SHHModule extends Module {
     private Zone[] zones;
     private boolean isWinter;
     private boolean isSummer;
-
     private Thread indoorTemperatureThread;
     protected static int MAX_NUMBER_OF_ZONES = 0;
 
@@ -52,8 +46,6 @@ public class SHHModule extends Module {
         this.isSummer = false;
         this.currentNumberOfZones = 0;
         this.zones = null;
-        SHHZoneConfigPane = new AnchorPane();
-        SHHZoneConfigScene = new Scene(SHHZoneConfigPane, 600,900);
     }
 
     /**
@@ -1295,31 +1287,6 @@ public class SHHModule extends Module {
             }
             catch (Exception ex){}
         }
-    }
-
-    /**
-     * Check if a Room is a member of an existing Zone
-     * @param room
-     * @return
-     */
-    public boolean isRoomInAzone(Room room) {
-        boolean inAzone = false;
-        try {
-            if (this.zones == null) {
-                throw new Exception();
-            }
-
-            for (int z = 0; z < this.zones.length; z++) {
-                for (int roomIndex = 0; roomIndex < this.zones[z].getZoneRoomIDs().length; roomIndex++) {
-                    if (this.zones[z].getZoneRoomIDs()[roomIndex] == room.getRoomID()) {
-                        inAzone = true;
-                        break;
-                    }
-                }
-            }
-        }
-        catch (Exception e){}
-        return inAzone;
     }
 
     /***

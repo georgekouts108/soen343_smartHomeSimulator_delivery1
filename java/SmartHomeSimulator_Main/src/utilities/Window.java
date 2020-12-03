@@ -6,7 +6,6 @@ import house.*;
  */
 public class Window extends Utility {
 
-    private Sensor sensor; // a window's sensor
     private boolean isBlocked;
 
     /**
@@ -14,7 +13,6 @@ public class Window extends Utility {
      */
     public Window() {
         super();
-        this.sensor = new Sensor();
         this.isBlocked = false;
     }
 
@@ -48,14 +46,6 @@ public class Window extends Utility {
      */
     public boolean getState() {
         return super.getState();
-    }
-
-    /**
-     * Retrieve a window's Sensor object instance.
-     * @return
-     */
-    public Sensor getSensor() {
-        return this.sensor;
     }
 
     /**

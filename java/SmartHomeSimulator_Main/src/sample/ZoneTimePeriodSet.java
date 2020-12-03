@@ -10,7 +10,6 @@ public class ZoneTimePeriodSet {
     private double temperaturePeriod1;
     private double temperaturePeriod2;
     private double temperaturePeriod3;
-
     private String hoursPeriod1;
     private String hoursPeriod2;
     private String hoursPeriod3;
