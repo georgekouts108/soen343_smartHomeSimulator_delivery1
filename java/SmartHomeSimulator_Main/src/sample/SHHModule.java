@@ -18,10 +18,10 @@ public class SHHModule extends Module {
 
     private static int nextDestinationZoneID = -1;
     private static boolean awayModeON = false;
-    private Month winterMonthLowerBound;
-    private Month winterMonthUpperBound;
-    private Month summerMonthLowerBound;
-    private Month summerMonthUpperBound;
+    private Month winterMonthLowerBound = null;
+    private Month winterMonthUpperBound = null;
+    private Month summerMonthLowerBound = null;
+    private Month summerMonthUpperBound = null;
     private int currentNumberOfZones;
     private double outdoorTemperature;
     private double indoorTemperature;
@@ -161,7 +161,6 @@ public class SHHModule extends Module {
                     }
                     setIndoorTemperature(averageTemperatureOfRooms / Main.householdLocations.length);
                     Platform.runLater(()->changeSHHTempLabel("indoorTemperatureLabel", indoorTemperature));
-                    //System.out.println("DEBUG INDOOR TEMP: indoor temp == "+this.indoorTemperature);
                     if (this.indoorTemperature <= 0) {
                         Controller.appendMessageToConsole("WARNING [SHH]: Indoor temperature <= 0°C -- pipes might burst...");
                     }
@@ -276,6 +275,10 @@ public class SHHModule extends Module {
      * @return
      */
     public boolean isWinter() {
+        if (this.winterMonthUpperBound==null || this.winterMonthLowerBound==null || Main.shsModule.simulationMonth==null) {
+            return false;
+        }
+
         return isMonthValueInRange(this.winterMonthLowerBound.getValue(), this.winterMonthUpperBound.getValue(),
                 Main.shsModule.simulationMonth.getValue());
     }
@@ -285,6 +288,10 @@ public class SHHModule extends Module {
      * @return
      */
     public boolean isSummer() {
+        if (this.summerMonthUpperBound==null || this.summerMonthLowerBound==null || Main.shsModule.simulationMonth==null) {
+            return false;
+        }
+
         return isMonthValueInRange(this.summerMonthLowerBound.getValue(), this.summerMonthUpperBound.getValue(),
                 Main.shsModule.simulationMonth.getValue());
     }
@@ -410,9 +417,7 @@ public class SHHModule extends Module {
             notifySHHOFAwayMode();
             notifyToOpenAllZoneWindows();
         }
-        catch (Exception e){
-            Controller.appendMessageToConsole("Failed attempt to set Winter or Summer Months.");
-        }
+        catch (Exception e){}
     }
 
     /**
@@ -1119,7 +1124,6 @@ public class SHHModule extends Module {
 
                         if (roomIsInZone) {
                             this.zones[z].overrideSpecificRoomTemperature(roomID, newTemp);
-                            Controller.appendMessageToConsole("SHH: Room #"+roomID+" in Zone #"+zoneID+" temperature changed to "+newTemp+"°C");
                         }
                         else {
                             throw new Exception("ERROR [SHH]: Room #"+roomID+" is not in Zone "+zoneID);
@@ -1199,7 +1203,7 @@ public class SHHModule extends Module {
                                     try {
                                         if (Main.householdLocations[h].getRoomID() == this.zones[z].getZoneRoomIDs()[room]) {
                                             double roomTemp = Main.householdLocations[h].getRoomTemperature();
-                                            if ((outdoorTemp < roomTemp) && Main.shhModule.isSummer() && !SHSHelpers.isIs_away()) {
+                                            if ((outdoorTemp < roomTemp) && isSummer() && !SHSHelpers.isIs_away()) {
                                                 try {
                                                     /**todo: fix repetition bug (implementation okay) */
                                                     Main.house.autoOpenWindows(Main.householdLocations[h]);
@@ -1388,7 +1392,10 @@ public class SHHModule extends Module {
                             double newTemperature = Double.parseDouble(changeZoneTempTF.getText());
                             overrideZoneTemperature(this.zones[finalZ].getZoneID(), newTemperature);
                             if (!awayModeON) {
-                                changeZoneInfoPane(zonePane, newTemperature, this.zones[finalZ]);
+                                try {
+                                    changeZoneInfoPane(zonePane, newTemperature, this.zones[finalZ]);
+                                }
+                                catch (Exception ex){}
                             }
                             else {
                                 Controller.appendMessageToConsole("Cannot manually change zone "+this.zones[finalZ].getZoneID()+" temp "+

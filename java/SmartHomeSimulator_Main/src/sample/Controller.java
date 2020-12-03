@@ -46,7 +46,6 @@ import sample.Main.*;
 public class Controller {
 
     protected static int pixelY = 70;
-    protected static int numberOfTimesProfileHyperlinkClicked = 0;
     protected static int numberOfTimesEditContextLinkStage1Accessed = 0;
     protected static int numberOfTimesEditContextLinkStage2Accessed = 0;
     protected static int numberOfTimesAwayLightsPanelAccessed = 0;
@@ -54,7 +53,7 @@ public class Controller {
     protected static CheckBox[] profileCheckboxes;
     protected static CheckBox[] roomCheckboxes;
     protected static Thread simulationTimeThread = null;
-    protected static float simulationTimeSpeed = 1; /** NOTE: this is a divisor */
+    protected static float simulationTimeSpeed = 1; // NOTE: this is a divisor
 
     // will be used by SHH module
     protected static int currentSimulationHour;
@@ -2006,22 +2005,19 @@ public class Controller {
         for (int a = 0; a < Main.main_dashboard.getChildren().size(); a++) {
             try {
                 if (Main.main_dashboard.getChildren().get(a).getId().equals("OutputConsole")) {
-                    TextArea textArea = (TextArea) Main.main_dashboard.getChildren().get(a);
-                    String date = LocalDateTime.now().toLocalDate().toString();
-                    String time = LocalDateTime.now().getHour()+":"+LocalDateTime.now().getMinute()+":"+
-                            Math.round(LocalDateTime.now().getSecond());
+                    try {
+                        TextArea textArea = (TextArea) Main.main_dashboard.getChildren().get(a);
+                        String date = LocalDateTime.now().toLocalDate().toString();
+                        String time = LocalDateTime.now().getHour()+":"+LocalDateTime.now().getMinute()+":"+
+                                Math.round(LocalDateTime.now().getSecond());
 
-                    String output = date + " " + time + " -- " + message + "\n";
-                    appendMessageToLogFile(output);
-                    //try {
-                        //textArea.appendText(output);
-                    //}
-                    //catch (NullPointerException n){}
-                    //catch (ArrayIndexOutOfBoundsException b) {}
-                    //catch (Exception e) {}
-
-                    Main.main_dashboard.getChildren().set(a, textArea);
-                    break;
+                        String output = date + " " + time + " -- " + message + "\n";
+                        appendMessageToLogFile(output);
+                        textArea.appendText(output);
+                        Main.main_dashboard.getChildren().set(a, textArea);
+                        break;
+                    }
+                    catch (Exception E){}
                 }
             }catch (Exception e){}
         }

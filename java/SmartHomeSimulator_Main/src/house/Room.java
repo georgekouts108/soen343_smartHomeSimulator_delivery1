@@ -314,7 +314,6 @@ public class Room {
                         }
                         try {
                             this.setRoomTemperature(roundedTemp);
-                            Controller.appendMessageToConsole("SHH: Room #" + this.roomID + " temperature changed to " + roundedTemp + "°C");
                         } catch (Exception e) {}
                         finally {
                             try { Thread.sleep(1 / (long) Controller.getSimulationTimeSpeed()); } catch (Exception e) {}
@@ -371,7 +370,6 @@ public class Room {
             try {
                 while (true) {
                     try {
-                        System.out.println(this.HAVC_Paused);
                         if (isRoomTempInBetweenQuartDegreeBounds() || !this.HAVC_Paused) {
                             this.HAVC_Paused = false;
                             break;
@@ -382,8 +380,6 @@ public class Room {
                         try { Thread.sleep(1 / (long) Controller.getSimulationTimeSpeed()); } catch (Exception e) {}
                     }
                 }
-
-                System.out.println(this.HAVC_Paused);
             }
             catch (Exception e){}
         }).start();

@@ -1015,12 +1015,6 @@ public class House {
                                     }
                                     catch(Exception e){}
                                 }
-                                if (room.getAc().getState()) {
-                                    Controller.appendMessageToConsole("[Edit Context] -- A.C automatically triggered in "+room.getName()+".");
-                                }
-                                else {
-                                    Controller.appendMessageToConsole("[Edit Context] -- A.C automatically deactivated in "+room.getName()+".");
-                                }
                             }
                         }
                         catch(Exception e){}
