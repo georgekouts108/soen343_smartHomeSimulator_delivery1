@@ -29,6 +29,14 @@ public class UserProfile {
     private boolean permAC;
     private boolean permACLocation;
 
+    /**TODO:
+     *  - create a boolean "permSetAway" (permission to turn on Away mode in SHP)
+     *  - create a boolean "permCreateZone" (permission to create a new zone in SHH)
+     *  - create a boolean "permRoomTemp" (permission to override temperature in specific rooms in SHH)
+     *  - create a boolean "permSeasonWeather" (permission to set the default temp for Winter and Summer for away mode in SHH)
+     *  - create only getter methods for each of these, and initialize the permissions in the constructor
+     *  */
+
     /**
      * UserProfile constructor
      * @param type

@@ -201,8 +201,13 @@ public class Main extends Application {
 
         Label profileListLabel = new Label();
         profileListLabel.setId("profileListLabel");
-        profileListLabel.setTranslateX(350); profileListLabel.setTranslateY(40);
+        profileListLabel.setTranslateX(350); profileListLabel.setTranslateY(20);
         profileListLabel.setText("LIST OF PROFILES:");
+
+        Label customPermissionsLabel = new Label();
+        customPermissionsLabel.setId("customPermissionsLabel");
+        customPermissionsLabel.setTranslateX(55); customPermissionsLabel.setTranslateY(20);
+        customPermissionsLabel.setText("Set Permissions for new profile:");
 
         TextField newProfileTextField = new TextField(); newProfileTextField.setPromptText("Parent, Child, Guest or Stranger");
         newProfileTextField.setId("newProfileTextField");
@@ -211,35 +216,38 @@ public class Main extends Application {
 
         CheckBox cbPermL = new CheckBox("Lights");
         cbPermL.setId("lightsPermissionCB");
-        cbPermL.setTranslateX(5+150); cbPermL.setTranslateY(100);
+        cbPermL.setTranslateX(5+50); cbPermL.setTranslateY(50);
 
         CheckBox cbPermLL = new CheckBox("Lights (L)");
         cbPermLL.setId("lightsLocationPermissionCB");
-        cbPermLL.setTranslateX(100+150); cbPermLL.setTranslateY(100);
+        cbPermLL.setTranslateX(100+50); cbPermLL.setTranslateY(50);
 
         CheckBox cbPermD = new CheckBox("Doors");
         cbPermD.setId("DoorsPermissionCB");
-        cbPermD.setTranslateX(5+150); cbPermD.setTranslateY(150);
+        cbPermD.setTranslateX(5+50); cbPermD.setTranslateY(80);
 
         CheckBox cbPermDL = new CheckBox("Doors (L)");
         cbPermDL.setId("DoorsLocationPermissionCB");
-        cbPermDL.setTranslateX(100+150); cbPermDL.setTranslateY(150);
+        cbPermDL.setTranslateX(100+50); cbPermDL.setTranslateY(80);
 
         CheckBox cbPermW = new CheckBox("Windows");
         cbPermW.setId("WindowsPermissionCB");
-        cbPermW.setTranslateX(5+150); cbPermW.setTranslateY(200);
+        cbPermW.setTranslateX(5+50); cbPermW.setTranslateY(110);
 
         CheckBox cbPermWL = new CheckBox("Windows (L)");
         cbPermWL.setId("WindowsLocationPermissionCB");
-        cbPermWL.setTranslateX(100+150); cbPermWL.setTranslateY(200);
+        cbPermWL.setTranslateX(100+50); cbPermWL.setTranslateY(110);
 
         CheckBox cbPermAC = new CheckBox("AC");
         cbPermAC.setId("ACPermissionCB");
-        cbPermAC.setTranslateX(5+150); cbPermAC.setTranslateY(250);
+        cbPermAC.setTranslateX(5+50); cbPermAC.setTranslateY(140);
 
         CheckBox cbPermACL = new CheckBox("AC (L)");
         cbPermACL.setId("ACLocationPermissionCB");
-        cbPermACL.setTranslateX(100+150); cbPermACL.setTranslateY(250);
+        cbPermACL.setTranslateX(100+50); cbPermACL.setTranslateY(140);
+
+        /**TODO: add 4 extra checkboxes for the 4 new permissions (see TODO
+         *  comments in UserProfile class*/
 
         Button addButton = new Button("Add new\nProfile");
         addButton.setId("addNewProfileButton");
@@ -250,6 +258,7 @@ public class Main extends Application {
             Main.profileSelection.getChildren().add(addButton);
             Main.profileSelection.getChildren().add(newProfileTextField);
             Main.profileSelection.getChildren().add(profileListLabel);
+            Main.profileSelection.getChildren().add(customPermissionsLabel);
             Main.profileSelection.getChildren().add(closeButton);
             Main.profileSelection.getChildren().add(cbPermL);
             Main.profileSelection.getChildren().add(cbPermLL);
@@ -610,6 +619,8 @@ public class Main extends Application {
      */
     public static void loadProfilesFromFile(String file){
 
+        /**TODO: initialize the 4 extra permissions for SHP and SHH*/
+
         File profiles = new File(file);
         Scanner sc;
         try {
@@ -632,6 +643,8 @@ public class Main extends Application {
 
                 boolean newPermAC = Boolean.parseBoolean(profileParams[7]);
                 boolean newPermACLocation = Boolean.parseBoolean(profileParams[8]);
+
+                /**TODO: edit this method so it also sets the 4 extra permissions */
                 Controller.createNewProfile(newType,newPermLights,newPermLightsLocation,newPermDoors,newPermDoorsLocation,newPermWindows,newPermWindowsLocation,newPermAC,newPermACLocation);
             }
             sc.close();

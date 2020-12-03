@@ -372,7 +372,7 @@ public class Room {
                 while (true) {
                     try {
                         System.out.println(this.HAVC_Paused);
-                        if (isRoomTempInBetweenQuartDegreeBounds()) {
+                        if (isRoomTempInBetweenQuartDegreeBounds() || !this.HAVC_Paused) {
                             this.HAVC_Paused = false;
                             break;
                         }
@@ -386,7 +386,7 @@ public class Room {
                 System.out.println(this.HAVC_Paused);
             }
             catch (Exception e){}
-        });
+        }).start();
     }
 
     /**
