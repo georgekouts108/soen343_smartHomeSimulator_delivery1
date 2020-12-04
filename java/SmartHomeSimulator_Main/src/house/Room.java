@@ -320,8 +320,7 @@ public class Room {
                         }
                     }
 
-
-                    startThreadToSetHAVCtoPaused(); /**todo: might need to fix... */
+                    startThreadToSetHAVCtoPaused();
                     updateRoomHAVCstatus();
                 }
                 catch (Exception e){}
@@ -363,7 +362,6 @@ public class Room {
      * Begin a thread for pausing the HAVC
      */
     public void startThreadToSetHAVCtoPaused() {
-        /**todo: might need to change... */
         this.HAVC_Paused = true;
 
         new Thread(()->{
@@ -402,7 +400,6 @@ public class Room {
         try {
             if (this.HAVC_Paused || this.HAVC_Working) {
                 SHSHelpers.getHouse().autoTurnOnOffAC(this, true);
-
             }
             else {
                 SHSHelpers.getHouse().autoTurnOnOffAC(this, false);

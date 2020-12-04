@@ -69,17 +69,21 @@ public class SHSModule extends Module {
                 try {
                     if (Main.main_dashboard.getChildren().get(a).getId().equals("locationLabel")) {
                         Label updatedLabel = (Label) Main.main_dashboard.getChildren().get(a);
-                        if (locationMenu.getValue()!=null) {
+                        if (locationMenu.getValue() != null) {
                             updatedLabel.setText("House\nLocation:\n" + locationMenu.getValue().toString());
                             Main.house.setLocation(locationMenu.getValue().toString());
                             Main.main_dashboard.getChildren().set(a, updatedLabel);
                         }
+                        else {
+                            throw new SHSException("ERROR [SHS]: You did not select a location");
+                        }
 
                         break;
                     }
-                } catch(Exception ex){}
+                }
+                catch (SHSException s){Controller.appendMessageToConsole(s.getMessage());}
+                catch(Exception ex){}
             }
-
         });
         if ((Main.currentActiveProfile==null)) {
             confirmLocationButton.setDisable(true);
@@ -152,7 +156,6 @@ public class SHSModule extends Module {
         confirmTimeButton.setTranslateX(190); confirmTimeButton.setTranslateY(435);
         confirmTimeButton.setTextAlignment(TextAlignment.CENTER);
         confirmTimeButton.setOnAction(e -> {
-            simulationMonth = datePicker.getValue().getMonth();
             Controller.simulationTimeThread = new Thread(()-> {
 
             int indexOfSimDateLabel = 0, indexOfSimTimeLabel = 0;
@@ -164,7 +167,8 @@ public class SHSModule extends Module {
                     } else if (Main.main_dashboard.getChildren().get(a).getId().equals("simulationTime")) {
                         indexOfSimTimeLabel = a;
                     }
-                }catch (Exception excep){}
+                }
+                catch (Exception excep){}
             }
             sample.Controller.CurrentDateSimulation(datePicker, (Label) Main.main_dashboard.getChildren().get(indexOfSimDateLabel),
                     (Label) Main.main_dashboard.getChildren().get(indexOfSimTimeLabel), hourField, minuteField, Controller.simulationTimeSpeed);
@@ -191,6 +195,7 @@ public class SHSModule extends Module {
                     setTimeLabel, hourField, colon, minuteField, confirmTimeButton, line2, setHouseLocationLabel,
                     confirmLocationButton, locationMenu);
         }catch (Exception e){}
+
         Main.numberOfTimesSHSModuleCreated++;
 
         return shsModule;

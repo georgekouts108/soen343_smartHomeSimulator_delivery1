@@ -134,9 +134,6 @@ public class SHSHelpers {
     public static int getTimeLimitBeforeAlert() {
         return Main.timeLimitBeforeAlert;
     }
-    public static TextArea getSuspBox() {
-        return Main.suspBox;
-    }
     public static int getNumberOfProfiles() {
         return Main.numberOfProfiles;
     }
@@ -257,9 +254,6 @@ public class SHSHelpers {
     }
     public static void setTimeLimitBeforeAlert(int timeLimitBeforeAlert) {
         Main.timeLimitBeforeAlert = timeLimitBeforeAlert;
-    }
-    public static void setSuspBox(TextArea suspBox) {
-        Main.suspBox = suspBox;
     }
     public static void setNumberOfProfiles(int numberOfProfiles) {
         Main.numberOfProfiles = numberOfProfiles;

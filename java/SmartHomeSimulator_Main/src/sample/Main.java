@@ -80,7 +80,6 @@ public class Main extends Application {
     /**G.U.I ELEMENTS FOR THE SHP MODULE */
     protected static boolean is_away;
     protected static int timeLimitBeforeAlert = 0;
-    protected static TextArea suspBox;
     protected static AnchorPane SHP_LightsConfigAWAYmode;
     protected static Scene SHP_LightsConfigAWAYscene;
 
@@ -155,6 +154,8 @@ public class Main extends Application {
         main_stage.setScene(dashboardScene);
         main_stage.show();
 
+        /**TODO: [IMPORTANT] -- Please change this path name to the path name of the txt file 'profiles.txt' on whatever PC
+         *  is used for compiling this application */
         String profilesTxt = "C:\\Users\\Lucas\\IdeaProjects\\soen343_team5_SmartHomeSimulator\\java\\SmartHomeSimulator_Main\\src\\profiles.txt";
         loadProfilesFromFile(profilesTxt);
     }
@@ -374,36 +375,45 @@ public class Main extends Application {
         chooseFileButton.setId("chooseFileButton");
         chooseFileButton.setTranslateY(300); chooseFileButton.setTranslateX(900);
         chooseFileButton.setOnAction(e -> {
-            houseLayoutFile = fileChooser.showOpenDialog(main_stage);
-            if (houseLayoutFile != null) {
-                houseLayoutFileName = houseLayoutFile.getName();
-                houseLayoutFilePathName = houseLayoutFile.getPath();
-                houseLayoutFile.setReadOnly();
-                try {
-                    house = new House(houseLayoutFilePathName);
-                } catch (FileNotFoundException fileNotFoundException) {
-                    fileNotFoundException.printStackTrace();
+            try {
+                houseLayoutFile = fileChooser.showOpenDialog(main_stage);
+                if (houseLayoutFile != null) {
+                    houseLayoutFileName = houseLayoutFile.getName();
+                    houseLayoutFilePathName = houseLayoutFile.getPath();
+                    houseLayoutFile.setReadOnly();
+                    try {
+                        house = new House(houseLayoutFilePathName);
+                    } catch (FileNotFoundException fileNotFoundException) {
+                        fileNotFoundException.printStackTrace();
+                    }
+                    householdLocations = house.getRooms();
+                    houseLayout = house.getLayout();
+                    houseLayout.setPrefHeight(675);
+                    houseLayout.setPrefWidth(675);
+                    houseLayout.setId("houseLayout");
+                    houseLayout.setTranslateX(615);
+                    houseLayout.setTranslateY(10);
+                    houseLayout.setDisable(true);
+                    main_dashboard.getChildren().remove(chooseFileButton);
+                    main_dashboard.getChildren().add(houseLayout);
+
+                    Main.shhModule.setMaxNumOfZones(householdLocations.length);
+
+                    // create an initial SHH zone that contains all rooms in the house
+                    Main.shhModule.createNewZone(householdLocations);
+
+                    Main.shhModule.startIndoorTempThread();
+
+                    createMainDashboardNecessities();
                 }
-                householdLocations = house.getRooms();
-                houseLayout = house.getLayout();
-                houseLayout.setPrefHeight(675);
-                houseLayout.setPrefWidth(675);
-                houseLayout.setId("houseLayout");
-                houseLayout.setTranslateX(615);
-                houseLayout.setTranslateY(10);
-                houseLayout.setDisable(true);
-                main_dashboard.getChildren().remove(chooseFileButton);
-                main_dashboard.getChildren().add(houseLayout);
-
-                Main.shhModule.setMaxNumOfZones(householdLocations.length);
-
-                // create an initial SHH zone that contains all rooms in the house
-                Main.shhModule.createNewZone(householdLocations);
-
-                Main.shhModule.startIndoorTempThread();
-
-                createMainDashboardNecessities();
+                else {
+                    throw new SHSException("ERROR [SHS]: House layout file is null");
+                }
             }
+            catch (SHSException s){
+                Controller.appendMessageToConsole(s.getMessage());
+            }
+            catch (Exception ex){}
         });
 
         modulesInterface = createModuleInterface();
@@ -573,6 +583,7 @@ public class Main extends Application {
      * @return
      */
     public static TabPane createModuleInterface() {
+
         TabPane modules = new TabPane();
 
         SHS_MODULE = shsModule.generateModule();
@@ -585,6 +596,7 @@ public class Main extends Application {
         Tab shhTab = new Tab("SHH", SHH_MODULE); shhTab.setId("shhTab");
         Tab shsTab = new Tab("SHS", SHS_MODULE); shsTab.setId("shsTab");
         modules.getTabs().addAll(shsTab, shcTab, shpTab, shhTab);
+
         return modules;
     }
 

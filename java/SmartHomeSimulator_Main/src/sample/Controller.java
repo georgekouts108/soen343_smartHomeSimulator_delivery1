@@ -90,8 +90,17 @@ public class Controller {
      * @param hourField
      * @param minuteField
      */
-    public static void CurrentDateSimulation(DatePicker datePicker, Label dateText, Label timeText, TextField hourField, TextField minuteField, float timeSpeed){
-        try{
+    public static void CurrentDateSimulation(DatePicker datePicker, Label dateText, Label timeText,
+                                             TextField hourField, TextField minuteField, float timeSpeed)
+    {
+        try {
+
+            if (hourField.getText().equals("") || minuteField.getText().equals("") || datePicker.getValue().equals(null)) {
+                throw new SHSException("ERROR [SHS]: You either did not enter an hour, minute nor date for simulation time");
+            }
+
+            Main.shsModule.simulationMonth = datePicker.getValue().getMonth();
+
             int second = 0;
             int minute;
             int hour;
@@ -138,7 +147,9 @@ public class Controller {
                     Thread.sleep((long) (1000/timeSpeed));
                 }
             }
-        }catch (Exception e){
+        }
+        catch (SHSException s){Controller.appendMessageToConsole(s.getMessage());}
+        catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -268,7 +279,7 @@ public class Controller {
      * Create or update the default scene for editing the context of the simulation.
      */
     public static void generateEditContextScene() {
-        //try {
+
         if (numberOfTimesEditContextLinkStage1Accessed == 0) {
 
             DatePicker datePicker = new DatePicker();
@@ -391,9 +402,17 @@ public class Controller {
 
                                 break;
                             }
+                            else {
+                                throw new SHSException("You left the text field empty for outdoor temperature.");
+                            }
                         }
                     }
-                } catch (Exception err) {
+                }
+                catch (SHSException S){
+                    appendMessageToConsole(S.getMessage());
+                }
+
+                catch (Exception err) {
                     appendMessageToConsole("There was an error while modifying the outdoor temperature.");
                 }
             });
@@ -433,15 +452,21 @@ public class Controller {
                         if ((Main.currentActiveProfile != null)) {
                             if (Main.currentLocation == null) {
 
-                                if (Main.house.areDoorsLocked(Main.householdLocations[fr])) {
-                                    appendMessageToConsole("ERROR: Profile #" + Main.currentActiveProfile.getProfileID() +
-                                            " tried entering " + Main.householdLocations[fr].getName() + " when locked.");
+                                try {
+                                    if (Main.house.areDoorsLocked(Main.householdLocations[fr])) {
+                                        throw new SHSException("ERROR: Profile #" + Main.currentActiveProfile.getProfileID() +
+                                                " tried entering " + Main.householdLocations[fr].getName() + " when locked.");
+
+                                    }
+                                }
+                                catch (SHSException s) {
+                                    appendMessageToConsole(s.getMessage());
                                     return;
                                 }
 
                                 Main.householdLocations[fr].setNumberOfPeopleInside(Main.householdLocations[fr].getNumberOfPeopleInside() + 1);
 
-                                // put that for loop here
+
                                 for (int i = 0; i < Main.editContextLayout.getChildren().size(); i++) {
                                     try {
                                         if (Main.editContextLayout.getChildren().get(i).getId().equals("numOfPeopleOutside")) {
@@ -457,16 +482,20 @@ public class Controller {
                                             Main.editContextLayout.getChildren().set(i, label);
                                             break;
                                         }
-                                    } catch (Exception ex) {
-                                    }
+                                    } catch (Exception ex) {}
                                 }
-                            } else {
+                            }
+                            else {
                                 if (!(Main.currentLocation == Main.householdLocations[fr])) {
 
-                                    // if the destination room is locked, do not enter
-                                    if (Main.house.areDoorsLocked(Main.householdLocations[fr])) {
-                                        appendMessageToConsole("ERROR: Profile #"+Main.currentActiveProfile.getProfileID()+
-                                                " tried entering "+Main.householdLocations[fr].getName()+" when locked.");
+                                    try {
+                                        if (Main.house.areDoorsLocked(Main.householdLocations[fr])) {
+                                            throw new SHSException("ERROR: Profile #" + Main.currentActiveProfile.getProfileID() +
+                                                    " tried entering " + Main.householdLocations[fr].getName() + " when locked.");
+                                        }
+                                    }
+                                    catch (SHSException s) {
+                                        appendMessageToConsole(s.getMessage());
                                         return;
                                     }
 
@@ -542,8 +571,7 @@ public class Controller {
                                     Main.editContextLayout.getChildren().set(i, label);
                                     break;
                                 }
-                            } catch (Exception ex) {
-                            }
+                            } catch (Exception ex) {}
                         }
                     });
                     Main.editContextLayout.getChildren().addAll(hyp, l1);
@@ -863,7 +891,8 @@ public class Controller {
                         Main.editContextLayout2.getChildren().set(a, b);
                         break;
                     }
-                }catch(Exception e){}
+                }
+                catch(Exception e){}
             }
         }
         numberOfTimesEditContextLinkStage2Accessed++;
@@ -876,8 +905,8 @@ public class Controller {
      */
     public static void relocateProfile(CheckBox[] profileBoxes, CheckBox[] roomBoxes) {
         try {
-            // find the profile checkbox that was selected
-            for (int pcb = 0; pcb < profileBoxes.length; pcb++) { // exactly 1 checkbox in this array must be selected
+            // find the profile checkboxes that were selected
+            for (int pcb = 0; pcb < profileBoxes.length; pcb++) {
                 try {
                     if (profileBoxes[pcb].isSelected()) {
 
@@ -978,10 +1007,15 @@ public class Controller {
                                                             else {
                                                                 if (Main.householdLocations[r].getRoomID() == selectedRoomID) {
 
-                                                                    // if the destination room is locked, do not enter
-                                                                    if (Main.house.areDoorsLocked(Main.householdLocations[r])) {
-                                                                        appendMessageToConsole("ERROR: Profile #"+Main.profiles[up].getProfileID()+
-                                                                                " tried entering "+Main.householdLocations[r].getName()+" when locked.");
+                                                                    try {
+                                                                        // if the destination room is locked, do not enter
+                                                                        if (Main.house.areDoorsLocked(Main.householdLocations[r])) {
+                                                                            throw new SHSException("ERROR: Profile #"+Main.profiles[up].getProfileID()+
+                                                                                    " tried entering "+Main.householdLocations[r].getName()+" when locked.");
+                                                                        }
+                                                                    }
+                                                                    catch (SHSException e){
+                                                                        appendMessageToConsole(e.getMessage());
                                                                         return;
                                                                     }
 
@@ -1143,7 +1177,8 @@ public class Controller {
                             }
                         }
                     }
-                }catch (Exception e){}
+                }
+                catch (Exception e){}
             }
         } catch (Exception e){}
     }
@@ -1155,8 +1190,8 @@ public class Controller {
      */
     public static void createNewProfile(TextField textField, CheckBox pL, CheckBox pLL,
                                         CheckBox pD, CheckBox pDL, CheckBox pW, CheckBox pWL,
-                                        CheckBox pAC, CheckBox pACL, CheckBox pSA, CheckBox pCZ, CheckBox pRT, CheckBox pSW) {
-
+                                        CheckBox pAC, CheckBox pACL, CheckBox pSA, CheckBox pCZ, CheckBox pRT, CheckBox pSW)
+    {
         UserProfile newProfile;
 
         try {
@@ -1189,8 +1224,6 @@ public class Controller {
                     throw new Exception("Invalid");
             }
 
-
-
             // UPDATE THE PROFILE OBJECT ARRAY
             if (Main.profiles == null) {
                 Main.profiles = new UserProfile[1];
@@ -1221,12 +1254,9 @@ public class Controller {
                 Main.profileLinks = templink;
             }
             Main.profileBox.setScene(Main.profileScene);
-
             saveProfileToFile(newProfile);
         }
-        catch(Exception ex){
-            //System.out.println(ex.getMessage());
-        }
+        catch(Exception ex){}
     }
 
     /**
@@ -1355,7 +1385,8 @@ public class Controller {
                     + "Room Temp: " + newProfile.getPermRoomTemp() + ","        //11
                     + "Season: " + newProfile.getPermSeasonWeather());       //index 12 of the split array
 
-        }catch(IOException ioe){
+        }
+        catch(IOException ioe) {
             System.out.println("Exception occurred:");
             ioe.printStackTrace();
         }
@@ -1394,10 +1425,10 @@ public class Controller {
                 accept.setTranslateX(30); accept.setTranslateY(170);
                 int finalProf = prof;
                 accept.setOnAction(e->{
-                    String updatedType = "";
+                    String updatedType;
                     try {
                         if (!(editTextField.getText().length() == 1)) {
-                            throw new Exception("Invalid");
+                            throw new SHSException("Invalid");
                         }
                         else {
                             switch (editTextField.getText().charAt(0)) {
@@ -1437,6 +1468,10 @@ public class Controller {
                         Main.profileSelection.getChildren().removeAll(cancel, accept, editPromptLabel, editTextField);
                         Main.profileBox.setScene(Main.profileScene);
                     }
+                    catch (SHSException S) {
+                        System.out.println(S.getMessage());
+                    }
+
                     catch(Exception ex){
                         System.out.println(ex.getMessage());
                     }
@@ -1525,9 +1560,11 @@ public class Controller {
                 Main.numberOfProfiles--;
                 Main.profileBox.setScene(Main.profileScene);
             } else {
-                System.out.println("cannot delete if logged in!");
+                throw new SHSException("cannot delete if logged in!");
             }
-        }catch (Exception e){}
+        }
+        catch (SHSException S){System.out.println(S.getMessage());}
+        catch (Exception e){}
     }
 
     /**
@@ -1537,7 +1574,7 @@ public class Controller {
      */
     public static Hyperlink generateProfileHyperlink(UserProfile userProfile) {
 
-        int translateX = Main.LOGINPAGE_HEIGHT/2;
+        int translateX = Main.LOGINPAGE_HEIGHT / 2;
 
         Hyperlink hyperlink = new Hyperlink();
         hyperlink.setId("hyperlinkForProfile"+userProfile.getProfileID());
@@ -1555,8 +1592,15 @@ public class Controller {
                 editLink.setId("editLinkForProfile"+userProfile.getProfileID());
                 editLink.setTranslateX((Main.LOGINPAGE_HEIGHT/2)+175); editLink.setTranslateY(hyperlink.getTranslateY());
                 editLink.setOnAction(act -> {
-                    if (!userProfile.isLoggedIn()) {
-                        Controller.editProfile(userProfile, hyperlink, editLink);
+                    try {
+                        if (!userProfile.isLoggedIn()) {
+                            Controller.editProfile(userProfile, hyperlink, editLink);
+                        }
+                        else {
+                            throw new SHSException("Must be logged out before editing your profile");
+                        }
+                    }catch (SHSException s) {
+                        appendMessageToConsole(s.getMessage());
                     }
                 });
 
@@ -1591,12 +1635,18 @@ public class Controller {
                 deleteLink.setId("deleteLinkForProfile"+userProfile.getProfileID());
                 deleteLink.setTranslateX((Main.LOGINPAGE_HEIGHT/2)+100); deleteLink.setTranslateY(hyperlink.getTranslateY());
                 deleteLink.setOnAction(act -> {
-
-                    if (!userProfile.isLoggedIn())
-                    {
-                        Main.profileSelection.getChildren().removeAll(editLink, loginLink, deleteLink);
-                        Controller.deleteProfile(userProfile,hyperlink);
-                        userProfile.setTimesHyperlinkClicked(0);
+                    try {
+                        if (!userProfile.isLoggedIn()) {
+                            Main.profileSelection.getChildren().removeAll(editLink, loginLink, deleteLink);
+                            Controller.deleteProfile(userProfile, hyperlink);
+                            userProfile.setTimesHyperlinkClicked(0);
+                        }
+                        else {
+                            throw new SHSException("Must be logged out before deleting your profile");
+                        }
+                    }
+                    catch (SHSException s) {
+                        appendMessageToConsole(s.getMessage());
                     }
                 });
 
@@ -1619,13 +1669,9 @@ public class Controller {
                     }
                 }
             }
-
-            userProfile.setTimesHyperlinkClicked(userProfile.getTimesHyperlinkClicked()+1);
-
+            userProfile.setTimesHyperlinkClicked(userProfile.getTimesHyperlinkClicked() + 1);
         });
-
         Main.profileSelection.getChildren().add(hyperlink);
-
         return hyperlink;
     }
 
@@ -1659,7 +1705,7 @@ public class Controller {
                                                         Main.householdLocations[room].getName() + " unlocked.");
 
                                             }
-                                        } catch (Exception e) { }
+                                        } catch (Exception e) {}
                                     }
                                 }catch (Exception E){}
                             }
@@ -1672,9 +1718,11 @@ public class Controller {
                         }
                         break;
                     }
-                } catch (Exception e) {}
+                }
+                catch (Exception e) {}
             }
-        }catch(Exception exc){}
+        }
+        catch(Exception exc){}
     }
 
     /**
@@ -1786,13 +1834,17 @@ public class Controller {
                     Main.shhModule.notifyToOpenAllZoneWindows();
                 }
                 else {
-                    throw new Exception("ERROR [SHP]: All profiles must be outside house\nbefore turning AWAY mode on.");
+                    throw new SHSException("ERROR [SHP]: All profiles must be outside house\nbefore turning AWAY mode on.");
                 }
             }
             else {
-                throw new Exception("ERROR [SHP]: Permission denied to set Away mode.");
+                throw new SHSException("ERROR [SHP]: Permission denied to set Away mode.");
             }
 
+        }
+        catch (SHSException s) {
+            tb.setSelected(false);
+            appendMessageToConsole(s.getMessage());
         }
         catch(Exception e) {
             tb.setSelected(false);
@@ -1849,7 +1901,8 @@ public class Controller {
                     Main.main_dashboard.getChildren().set(8, tabPane3);
                 }
 
-            } catch (Exception e){}
+            }
+            catch (Exception e){}
         }
     }
 
@@ -2009,8 +2062,8 @@ public class Controller {
         try {
             String content = textField.getText();
 
-            if (content.length() != 1) {
-                throw new Exception();
+            if (content.length() < 1) {
+                throw new SHSException("Invalid: must enter a valid time");
             }
             else {
                 char character = content.charAt(0);
@@ -2085,6 +2138,7 @@ public class Controller {
         float Multiplier = Float.parseFloat(multiplier);
         simulationTimeSpeed = Multiplier;
         System.out.println("Test " + Multiplier);
+
         //grab thread or info that is already shown in sim time, and speed it up...
         //i.e. make use of currentDateSimulation method
 
@@ -2093,7 +2147,6 @@ public class Controller {
         Label simTimeLabel = null;
         TextField hourF = null;
         TextField minuteF = null;
-
 
         // find the datePicker
         for (int dp = 0; dp < Main.SHS_MODULE.getChildren().size(); dp++) {
@@ -2128,23 +2181,26 @@ public class Controller {
 
                                                                     break;
                                                                 }
-                                                            } catch (Exception ex) { }
+                                                            }
+                                                            catch (Exception ex) { }
                                                         }
                                                         break;
                                                     }
-                                                } catch (Exception ex) { }
+                                                }
+                                                catch (Exception ex) { }
                                             }
                                             break;
                                         }
-                                    } catch (Exception ex) { }
+                                    } catch (Exception ex) {}
                                 }
                                 break;
                             }
-                        } catch (Exception ex) { }
+                        } catch (Exception ex) {}
                     }
                     break;
                 }
-            }catch (Exception ex){}
+            }
+            catch (Exception ex){}
         }
 
         DatePicker finalDatePick = datePick;
@@ -2182,7 +2238,8 @@ public class Controller {
                                         Main.house.setIconVisibility(Main.householdLocations[room], "Light", state);
                                     }
                                 }
-                            } catch (Exception e) {}
+                            }
+                            catch (Exception e) {}
                         }
                     } catch (Exception e) {}
                 }

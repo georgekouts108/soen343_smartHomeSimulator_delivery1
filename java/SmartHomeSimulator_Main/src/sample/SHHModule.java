@@ -162,8 +162,11 @@ public class SHHModule extends Module {
                     setIndoorTemperature(averageTemperatureOfRooms / Main.householdLocations.length);
                     Platform.runLater(()->changeSHHTempLabel("indoorTemperatureLabel", indoorTemperature));
                     if (this.indoorTemperature <= 0) {
-                        Controller.appendMessageToConsole("WARNING [SHH]: Indoor temperature <= 0°C -- pipes might burst...");
+                        throw new SHSException("WARNING [SHH]: Indoor temperature <= 0°C -- pipes might burst...");
                     }
+                }
+                catch (SHSException S){
+                    Controller.appendMessageToConsole(S.getMessage());
                 }
                 catch (Exception e){}
                 finally {
@@ -306,8 +309,8 @@ public class SHHModule extends Module {
      * @return
      */
     public Month identifyMonth(int value) {
+        Month month;
         try {
-            Month month;
             switch (value) {
                 case 1: month = Month.JANUARY; break;
                 case 2: month = Month.FEBRUARY; break;
@@ -322,14 +325,17 @@ public class SHHModule extends Module {
                 case 11: month = Month.NOVEMBER; break;
                 case 12: month = Month.DECEMBER; break;
                 default:
-                    throw new Exception();
+                    throw new SHSException("Invalid month value");
             }
             return month;
         }
-        catch (Exception e){
+        catch (SHSException s) {
+            Controller.appendMessageToConsole(s.getMessage());
             return null;
         }
-
+        catch (Exception e) {
+            return null;
+        }
     }
 
     /**
@@ -499,9 +505,10 @@ public class SHHModule extends Module {
                 tempStage.show();
             }
             else {
-                throw new Exception("ERROR [SHH]: Permission denied to configure seasonal temperature settings.");
+                throw new SHSException("ERROR [SHH]: Permission denied to configure seasonal temperature settings.");
             }
         }
+        catch (SHSException s){Controller.appendMessageToConsole(s.getMessage());}
         catch (Exception e){}
     }
 
@@ -652,54 +659,57 @@ public class SHHModule extends Module {
         confirmButton.setOnAction(e->{
             int[] roomsToBeMoved = getRoomIDsToMoveInAnotherZone(hostPane);
             Room[] roomsDeletedFromExistingZones;
-            if (roomsToBeMoved!=null) {
-                switch (nextDestinationZoneID) {
-                    case -1:
-                        Controller.appendMessageToConsole("ERROR [SHH]: Failed to change Zones of Rooms");
-                        break;
-                    case 0:
-                        if (currentNumberOfZones != MAX_NUMBER_OF_ZONES) {
-                            try {
-                                if (Main.currentActiveProfile.getPermCreateZone()) {
-                                    roomsDeletedFromExistingZones = deleteRoomsFromZones(roomsToBeMoved);
-                                    createNewZone(roomsDeletedFromExistingZones);
-                                }
-                                else {
-                                    throw new Exception("ERROR [SHH]: Permission denied to create new zones");
-                                }
-                            }
-                            catch (Exception exception){
-                                Controller.appendMessageToConsole(exception.getMessage());
-                            }
-
-                        }
-                        nextDestinationZoneID = -1;
-                        break;
-                    default:
-                        roomsDeletedFromExistingZones = deleteRoomsFromZones(roomsToBeMoved);
-                        for (int z = 0; z < zones.length; z++) {
-                            try {
-                                if (zones[z].getZoneID()==nextDestinationZoneID) {
-                                    for (int r = 0; r < roomsDeletedFromExistingZones.length; r++) {
-                                        try {
-                                            zones[z].addRoomToZone(roomsDeletedFromExistingZones[r]);
-                                            overrideTempInSpecificRoomInZone(zones[z].getZoneID(),
-                                                    roomsDeletedFromExistingZones[r].getRoomID(), zones[z].getZoneTemperature());
-                                        }
-                                        catch (Exception f){}
+            try {
+                if (roomsToBeMoved != null) {
+                    switch (nextDestinationZoneID) {
+                        case -1:
+                            Controller.appendMessageToConsole("ERROR [SHH]: Failed to change Zones of Rooms");
+                            break;
+                        case 0:
+                            if (currentNumberOfZones != MAX_NUMBER_OF_ZONES) {
+                                try {
+                                    if (Main.currentActiveProfile.getPermCreateZone()) {
+                                        roomsDeletedFromExistingZones = deleteRoomsFromZones(roomsToBeMoved);
+                                        createNewZone(roomsDeletedFromExistingZones);
+                                    } else {
+                                        throw new SHSException("ERROR [SHH]: Permission denied to create new zones");
                                     }
-                                    break;
+                                } catch (SHSException s) {
+                                    Controller.appendMessageToConsole(s.getMessage());
+                                } catch (Exception exception) {
+                                    Controller.appendMessageToConsole(exception.getMessage());
+                                }
+
+                            }
+                            nextDestinationZoneID = -1;
+                            break;
+                        default:
+                            roomsDeletedFromExistingZones = deleteRoomsFromZones(roomsToBeMoved);
+                            for (int z = 0; z < zones.length; z++) {
+                                try {
+                                    if (zones[z].getZoneID() == nextDestinationZoneID) {
+                                        for (int r = 0; r < roomsDeletedFromExistingZones.length; r++) {
+                                            try {
+                                                zones[z].addRoomToZone(roomsDeletedFromExistingZones[r]);
+                                                overrideTempInSpecificRoomInZone(zones[z].getZoneID(),
+                                                        roomsDeletedFromExistingZones[r].getRoomID(), zones[z].getZoneTemperature());
+                                            } catch (Exception f) {
+                                            }
+                                        }
+                                        break;
+                                    }
+                                } catch (Exception ex1) {
                                 }
                             }
-                            catch (Exception ex1){}
-                        }
-                        nextDestinationZoneID = -1;
-                        break;
+                            nextDestinationZoneID = -1;
+                            break;
+                    }
+                } else {
+                    throw new SHSException("ERROR [SHH]: Failed to change Zones of Rooms");
                 }
             }
-            else {
-                Controller.appendMessageToConsole("ERROR [SHH]: Failed to change Zones of Rooms");
-            }
+            catch (SHSException S){Controller.appendMessageToConsole(S.getMessage());}
+
             notifySHHOFAwayMode();
             tempStage.close();
         });
@@ -1058,12 +1068,18 @@ public class SHHModule extends Module {
      * @param summerTemperature
      */
     public void setSummerTemperature(double summerTemperature) {
-
-        //if current user has permission to change seasonal temperature
-        if(Main.currentActiveProfile.getPermSeasonWeather()){
-            this.summerTemperature = summerTemperature;
-            changeSHHTempLabel("summerTempSHHLabel", summerTemperature);
+        try {
+            //if current user has permission to change seasonal temperature
+            if(Main.currentActiveProfile.getPermSeasonWeather()){
+                this.summerTemperature = summerTemperature;
+                changeSHHTempLabel("summerTempSHHLabel", summerTemperature);
+            }
+            else {
+                throw new SHSException("ERROR [SHH]: Permission denied to set season temperature settings");
+            }
         }
+        catch (SHSException s){Controller.appendMessageToConsole(s.getMessage());}
+        catch (Exception e){}
     }
 
     /**
@@ -1089,32 +1105,39 @@ public class SHHModule extends Module {
      * @param newTemp
      */
     public void overrideZoneTemperature(int zoneID, double newTemp) {
-        if (!awayModeON) {
-            for (int z = 0; z < this.zones.length; z++) {
-                try {
-                    if (this.zones[z].getZoneID() == zoneID) {
+        try {
+            if (!awayModeON) {
+                for (int z = 0; z < this.zones.length; z++) {
+                    try {
+                        if (this.zones[z].getZoneID() == zoneID) {
 
-                        for (int r_id = 0; r_id < this.zones[z].getZoneRoomIDs().length; r_id++) {
-                            try {
-                                for (int hl = 0; hl < Main.householdLocations.length; hl++) {
-                                    try {
-                                        if (Main.householdLocations[hl].getRoomID()==r_id) {
-                                            this.zones[z].setZoneTemperature(newTemp);
-                                            break;
+                            for (int r_id = 0; r_id < this.zones[z].getZoneRoomIDs().length; r_id++) {
+                                try {
+                                    for (int hl = 0; hl < Main.householdLocations.length; hl++) {
+                                        try {
+                                            if (Main.householdLocations[hl].getRoomID() == r_id) {
+                                                this.zones[z].setZoneTemperature(newTemp);
+                                                break;
+                                            }
+                                        } catch (Exception e) {
                                         }
                                     }
-                                    catch (Exception e){}
+                                } catch (Exception e) {
                                 }
                             }
-                            catch (Exception e){}
+                            break;
                         }
-                        break;
+                    } catch (Exception e) {
                     }
                 }
-                catch (Exception e){}
+                notifyToOpenZoneWindows(zoneID);
             }
-            notifyToOpenZoneWindows(zoneID);
+            else {
+                throw new SHSException("ERROR [SHH]: Cannot override a zone temperature during Away mode");
+            }
         }
+        catch (SHSException s){Controller.appendMessageToConsole(s.getMessage());}
+        catch (Exception e){}
     }
 
     /**
@@ -1124,34 +1147,37 @@ public class SHHModule extends Module {
      * @param newTemp
      */
     public void overrideTempInSpecificRoomInZone(int zoneID, int roomID, double newTemp) {
-
-        if (!awayModeON) {
-            try {
-                boolean roomIsInZone = false;
-                for (int z = 0; z < this.zones.length; z++) {
-                    if (this.zones[z].getZoneID() == zoneID) {
-                        for (int r = 0; r < this.zones[z].getZoneRoomIDs().length; r++) {
-                            if (this.zones[z].getZoneRoomIDs()[r]==roomID) {
-                                roomIsInZone = true;
-                                break;
+        try {
+            if (!awayModeON) {
+                try {
+                    boolean roomIsInZone = false;
+                    for (int z = 0; z < this.zones.length; z++) {
+                        if (this.zones[z].getZoneID() == zoneID) {
+                            for (int r = 0; r < this.zones[z].getZoneRoomIDs().length; r++) {
+                                if (this.zones[z].getZoneRoomIDs()[r] == roomID) {
+                                    roomIsInZone = true;
+                                    break;
+                                }
                             }
-                        }
 
-                        if (roomIsInZone) {
-                            this.zones[z].overrideSpecificRoomTemperature(roomID, newTemp);
+                            if (roomIsInZone) {
+                                this.zones[z].overrideSpecificRoomTemperature(roomID, newTemp);
+                            } else {
+                                throw new Exception("ERROR [SHH]: Room #" + roomID + " is not in Zone " + zoneID);
+                            }
+                            break;
                         }
-                        else {
-                            throw new Exception("ERROR [SHH]: Room #"+roomID+" is not in Zone "+zoneID);
-                        }
-                        break;
                     }
+                    notifyToOpenZoneWindows(zoneID);
+                } catch (Exception e) {
+                    Controller.appendMessageToConsole(e.getMessage());
                 }
-                notifyToOpenZoneWindows(zoneID);
-            }
-            catch (Exception e){
-                Controller.appendMessageToConsole(e.getMessage());
+            } else {
+                throw new SHSException("ERROR [SHH]: Cannot override a zone temperature during Away mode");
             }
         }
+        catch (SHSException s){Controller.appendMessageToConsole(s.getMessage());}
+        catch (Exception e){}
     }
 
     /**
@@ -1220,20 +1246,17 @@ public class SHHModule extends Module {
                                             double roomTemp = Main.householdLocations[h].getRoomTemperature();
                                             if ((outdoorTemp < roomTemp) && isSummer() && !SHSHelpers.isIs_away()) {
                                                 try {
-                                                    /**todo: fix repetition bug (implementation okay) */
                                                     Main.house.autoOpenWindows(Main.householdLocations[h]);
                                                 }
                                                 catch (Exception e){}
                                             }
                                             break;
                                         }
-                                    } catch (Exception F) {
-                                        System.out.println();
                                     }
+                                    catch (Exception F) {}
                                 }
-                            } catch (Exception G) {
-                                System.out.println();
                             }
+                            catch (Exception G) {}
                         }
                         break;
                     }
@@ -1406,11 +1429,15 @@ public class SHHModule extends Module {
                                 catch (Exception ex){}
                             }
                             else {
-                                Controller.appendMessageToConsole("Cannot manually change zone "+this.zones[finalZ].getZoneID()+" temp "+
+                                throw new SHSException("Cannot manually change zone "+this.zones[finalZ].getZoneID()+" temp "+
                                         "during Away mode");
-                                changeZoneTempTF.clear();
-                                changeZoneTempTF.setPromptText("Change");
                             }
+                        }
+                        catch (SHSException s){
+                            Controller.appendMessageToConsole("Cannot manually change zone "+this.zones[finalZ].getZoneID()+" temp "+
+                                    "during Away mode");
+                            changeZoneTempTF.clear();
+                            changeZoneTempTF.setPromptText("Change");
                         }
                         catch (Exception ex){
                             Controller.appendMessageToConsole("Invalid attempt to change temperature of Zone "+
@@ -1506,9 +1533,10 @@ public class SHHModule extends Module {
                                                     changeRoomTempStage.show();
                                                 }
                                                 else {
-                                                    throw new Exception("ERROR [SHH]: Permission denied for manually modifying specific room temperatures.");
+                                                    throw new SHSException("ERROR [SHH]: Permission denied for manually modifying specific room temperatures.");
                                                 }
                                             }
+                                            catch (SHSException s){Controller.appendMessageToConsole(s.getMessage());}
                                             catch (Exception ex){}
                                         });
 

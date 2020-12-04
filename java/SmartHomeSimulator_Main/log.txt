@@ -1,0 +1,1 @@
+2020-12-04 5:35:43 -- ERROR [SHS]: You either did not enter an hour, minute nor date for simulation time

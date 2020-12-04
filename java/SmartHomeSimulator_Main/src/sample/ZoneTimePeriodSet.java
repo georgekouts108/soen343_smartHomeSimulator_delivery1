@@ -120,76 +120,80 @@ public class ZoneTimePeriodSet {
      * @param periodTemperature
      */
     public void setPeriodHoursAndTemperature(int lowerBound, int upperBound, int periodNumber, double periodTemperature) {
+        try {
+            if (upperBound > 23 || lowerBound > 23 || upperBound < 0 || lowerBound < 0) {
+                throw new SHSException("The entered time period is out of bounds");
+            }
 
-        if (upperBound > 23 || lowerBound > 23 || upperBound < 0 || lowerBound < 0) {
-            return;
+            int p1_lower = 0, p1_upper = 0;
+            String[] period1bounds = null;
+            if (!this.hoursPeriod1.equals("")) { period1bounds = this.hoursPeriod1.split(","); }
+            if (!(period1bounds == null)) {
+                p1_lower = Integer.parseInt(period1bounds[0]);
+                p1_upper = Integer.parseInt(period1bounds[1]);
+            }
+
+            int p2_lower = 0, p2_upper = 0;
+            String[] period2bounds = null;
+            if (!this.hoursPeriod2.equals("")) { period2bounds = this.hoursPeriod2.split(","); }
+            if (!(period2bounds == null)) {
+                p2_lower = Integer.parseInt(period2bounds[0]);
+                p2_upper = Integer.parseInt(period2bounds[1]);
+            }
+
+            int p3_lower = 0, p3_upper = 0;
+            String[] period3bounds = null;
+            if (!this.hoursPeriod3.equals("")) { period3bounds = this.hoursPeriod3.split(","); }
+            if (!(period3bounds == null)) {
+                p3_lower = Integer.parseInt(period3bounds[0]);
+                p3_upper = Integer.parseInt(period3bounds[1]);
+            }
+
+            boolean overlapsWithP1 = false, overlapsWithP2 = false, overlapsWithP3 = false;
+
+            switch (periodNumber - 1) {
+                case 0:
+                    if (!(period2bounds==null)) { overlapsWithP2 = doesTimeRangeOverlapWithOther(lowerBound, upperBound, p2_lower, p2_upper); }
+                    if (!(period3bounds==null)) { overlapsWithP3 = doesTimeRangeOverlapWithOther(lowerBound, upperBound, p3_lower, p3_upper); }
+
+                    if (!overlapsWithP2 && !overlapsWithP3) {
+                        this.temperaturePeriod1 = periodTemperature;
+                        this.hoursPeriod1 = lowerBound+","+upperBound;
+                        this.timePeriods[0] = hoursPeriod1;
+                    }
+                    else {
+                        System.out.println("Overlap error");
+                    }
+                    break;
+                case 1:
+                    if (!(period1bounds==null)) { overlapsWithP1 = doesTimeRangeOverlapWithOther(lowerBound, upperBound, p1_lower, p1_upper); }
+                    if (!(period3bounds==null)) { overlapsWithP3 = doesTimeRangeOverlapWithOther(lowerBound, upperBound, p3_lower, p3_upper); }
+
+                    if (!overlapsWithP1 && !overlapsWithP3) {
+                        this.temperaturePeriod2 = periodTemperature;
+                        this.hoursPeriod2 = lowerBound+","+upperBound;
+                        this.timePeriods[1] = hoursPeriod2;
+                    }
+                    else {
+                        System.out.println("Overlap error");
+                    }
+                    break;
+                case 2:
+                    if (!(period1bounds==null)) { overlapsWithP1 = doesTimeRangeOverlapWithOther(lowerBound, upperBound, p1_lower, p1_upper); }
+                    if (!(period2bounds==null)) { overlapsWithP2 = doesTimeRangeOverlapWithOther(lowerBound, upperBound, p2_lower, p2_upper); }
+                    if (!overlapsWithP1 && !overlapsWithP2) {
+                        this.temperaturePeriod3 = periodTemperature;
+                        this.hoursPeriod3 = lowerBound+","+upperBound;
+                        this.timePeriods[2] = hoursPeriod3;
+                    }
+                    else {
+                        System.out.println("Overlap error");
+                    }
+                    break;
+            }
         }
-
-        int p1_lower = 0, p1_upper = 0;
-        String[] period1bounds = null;
-        if (!this.hoursPeriod1.equals("")) { period1bounds = this.hoursPeriod1.split(","); }
-        if (!(period1bounds == null)) {
-            p1_lower = Integer.parseInt(period1bounds[0]);
-            p1_upper = Integer.parseInt(period1bounds[1]);
-        }
-
-        int p2_lower = 0, p2_upper = 0;
-        String[] period2bounds = null;
-        if (!this.hoursPeriod2.equals("")) { period2bounds = this.hoursPeriod2.split(","); }
-        if (!(period2bounds == null)) {
-            p2_lower = Integer.parseInt(period2bounds[0]);
-            p2_upper = Integer.parseInt(period2bounds[1]);
-        }
-
-        int p3_lower = 0, p3_upper = 0;
-        String[] period3bounds = null;
-        if (!this.hoursPeriod3.equals("")) { period3bounds = this.hoursPeriod3.split(","); }
-        if (!(period3bounds == null)) {
-            p3_lower = Integer.parseInt(period3bounds[0]);
-            p3_upper = Integer.parseInt(period3bounds[1]);
-        }
-
-        boolean overlapsWithP1 = false, overlapsWithP2 = false, overlapsWithP3 = false;
-
-        switch (periodNumber - 1) {
-            case 0:
-                if (!(period2bounds==null)) { overlapsWithP2 = doesTimeRangeOverlapWithOther(lowerBound, upperBound, p2_lower, p2_upper); }
-                if (!(period3bounds==null)) { overlapsWithP3 = doesTimeRangeOverlapWithOther(lowerBound, upperBound, p3_lower, p3_upper); }
-
-                if (!overlapsWithP2 && !overlapsWithP3) {
-                    this.temperaturePeriod1 = periodTemperature;
-                    this.hoursPeriod1 = lowerBound+","+upperBound;
-                    this.timePeriods[0] = hoursPeriod1;
-                }
-                else {
-                    System.out.println("Overlap error");
-                }
-                break;
-            case 1:
-                if (!(period1bounds==null)) { overlapsWithP1 = doesTimeRangeOverlapWithOther(lowerBound, upperBound, p1_lower, p1_upper); }
-                if (!(period3bounds==null)) { overlapsWithP3 = doesTimeRangeOverlapWithOther(lowerBound, upperBound, p3_lower, p3_upper); }
-
-                if (!overlapsWithP1 && !overlapsWithP3) {
-                    this.temperaturePeriod2 = periodTemperature;
-                    this.hoursPeriod2 = lowerBound+","+upperBound;
-                    this.timePeriods[1] = hoursPeriod2;
-                }
-                else {
-                    System.out.println("Overlap error");
-                }
-                break;
-            case 2:
-                if (!(period1bounds==null)) { overlapsWithP1 = doesTimeRangeOverlapWithOther(lowerBound, upperBound, p1_lower, p1_upper); }
-                if (!(period2bounds==null)) { overlapsWithP2 = doesTimeRangeOverlapWithOther(lowerBound, upperBound, p2_lower, p2_upper); }
-                if (!overlapsWithP1 && !overlapsWithP2) {
-                    this.temperaturePeriod3 = periodTemperature;
-                    this.hoursPeriod3 = lowerBound+","+upperBound;
-                    this.timePeriods[2] = hoursPeriod3;
-                }
-                else {
-                    System.out.println("Overlap error");
-                }
-                break;
+        catch (SHSException s){
+            Controller.appendMessageToConsole(s.getMessage());
         }
     }
 

@@ -82,30 +82,6 @@ public class SHPModule extends Module {
             confirmButton.setDisable(true);
         }
 
-        Line line = new Line(); line.setStartX(0);line.setEndX(500); line.setTranslateY(120);
-
-        Label suspiciousLabel = new Label("Suspicious Activity Log");
-        suspiciousLabel.setTranslateY(120); suspiciousLabel.setTranslateX(50);
-
-        Main.suspBox = new TextArea();
-        Main.suspBox.setPrefHeight(253);
-        Main.suspBox.setPrefWidth(357);
-        Main.suspBox.setTranslateX(50);
-        Main.suspBox.setTranslateY(140);
-        Main.suspBox.setWrapText(true);
-
-        if ((Main.currentActiveProfile==null)) {
-            Main.suspBox.setDisable(true);
-        }
-        else {
-            if (Main.simulationIsOn) {
-                Main.suspBox.setDisable(true);
-            }
-            else {
-                Main.suspBox.setDisable(false);
-            }
-        }
-
         ToggleButton tb = new ToggleButton();
         tb.setId("setAwayModeButton");
         tb.setText("Turn ON Away Mode");
@@ -116,7 +92,7 @@ public class SHPModule extends Module {
         awayLightsButton.setTranslateX(380); awayLightsButton.setTranslateY(50);
         awayLightsButton.setOnAction(e->Controller.configureAwayLights());
 
-        shpPane.getChildren().addAll(tb, confirmButton, Main.suspBox, suspiciousLabel, line, timeLimit, timeBox, warningText, awayLightsButton);
+        shpPane.getChildren().addAll(tb, confirmButton, timeLimit, timeBox, warningText, awayLightsButton);
         Main.numberOfTimesSHPModuleCreated++;
         return shpPane;
     }
@@ -237,8 +213,6 @@ public class SHPModule extends Module {
      * (or cancel this thread is all motion detectors are off again during AWAY mode)
      */
     public void getNotified() {
-
-        /**if MDs are triggered during AWAY mode, call the method to count down the alert timer*/
         if (SHSHelpers.isIs_away()) {
             if (Main.house.anyMDsOn()) {
                 Controller.appendMessageToConsole("CRITICAL [SHP]: One or more motion detectors are illegitimately triggered");
@@ -250,7 +224,6 @@ public class SHPModule extends Module {
                 Controller.appendMessageToConsole("Alarm deactivated.");
             }
         }
-
     }
 
     /**
@@ -261,7 +234,7 @@ public class SHPModule extends Module {
 
         if (trigger) {
             final int[] secondsBeforeAlert = {timeToAlert * 60};
-            Controller.appendMessageToConsole("WARNING: The authorities will be alerted in " + secondsBeforeAlert[0]/60 + " minute(s)...");
+            Controller.appendMessageToConsole("SHP WARNING: The authorities will be alerted in " + secondsBeforeAlert[0]/60 + " minute(s)...");
 
             this.alertTimeThread = new Thread(() -> {
                 int second = 0;
