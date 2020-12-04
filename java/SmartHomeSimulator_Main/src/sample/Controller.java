@@ -1341,7 +1341,8 @@ public class Controller {
      */
     public static void saveProfileToFile(UserProfile newProfile) {
         try{
-            /**todo: put the 'profiles.txt' file in src directory*/
+            /**TODO: [IMPORTANT] -- Please change this path name to the path name of the txt file 'profiles.txt' on whatever PC
+             *  is used for compiling this application */
             File file =new File("C:\\Users\\Lucas\\IdeaProjects\\soen343_team5_SmartHomeSimulator\\java\\SmartHomeSimulator_Main\\src\\profiles.txt");
 
             if(!file.exists()){
