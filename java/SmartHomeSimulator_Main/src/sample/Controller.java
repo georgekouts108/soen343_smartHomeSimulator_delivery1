@@ -1311,8 +1311,8 @@ public class Controller {
      */
     public static void saveProfileToFile(UserProfile newProfile) {
         try{
-            /**todo: put the 'profiles.txt' file is src directory*/
-            File file =new File("src/profiles.txt");
+            /**todo: put the 'profiles.txt' file in src directory*/
+            File file =new File("C:\\Users\\Lucas\\IdeaProjects\\soen343_team5_SmartHomeSimulator\\java\\SmartHomeSimulator_Main\\src\\profiles.txt");
 
             if(!file.exists()){
                 file.createNewFile();
@@ -1322,11 +1322,38 @@ public class Controller {
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
 
-            pw.println(newProfile.getType().toLowerCase() + "," + newProfile.getPermLights() + "," + newProfile.getPermLightsLocation() + "," + newProfile.getPermDoors() + "," + newProfile.getPermDoorsLocation() + "," + newProfile.getPermWindows() + "," + newProfile.getPermWindowsLocation() + "," + newProfile.getPermAC() + "," + newProfile.getPermACLocation());
+            pw.println(newProfile.getType().toLowerCase() + "," //index 0 of the split array
+                    + newProfile.getPermLights() + ","          //1
+                    + newProfile.getPermLightsLocation() + ","  //2
+                    + newProfile.getPermDoors() + ","           //3
+                    + newProfile.getPermDoorsLocation() + ","   //4
+                    + newProfile.getPermWindows() + ","         //5
+                    + newProfile.getPermWindowsLocation() + "," //6
+                    + newProfile.getPermAC() + ","              //7
+                    + newProfile.getPermACLocation() + ","      //8
+                    + newProfile.getPermSetAway() + ","         //9
+                    + newProfile.getPermCreateZone() + ","      //10
+                    + newProfile.getPermRoomTemp() + ","        //11
+                    + newProfile.getPermSeasonWeather());       //index 12 of the split array
 
             pw.close();
 
             System.out.println("Data successfully appended at the end of file");
+            System.out.println("Data Saved:");
+
+            System.out.println("Type: " + newProfile.getType().toLowerCase() + "," //index 0 of the split array
+                    + "L: " + newProfile.getPermLights() + ","          //1
+                    + "LL: " + newProfile.getPermLightsLocation() + ","  //2
+                    + "D: " + newProfile.getPermDoors() + ","           //3
+                    + "DL: " + newProfile.getPermDoorsLocation() + ","   //4
+                    + "W: " + newProfile.getPermWindows() + ","         //5
+                    + "WL: " + newProfile.getPermWindowsLocation() + "," //6
+                    + "AC: " + newProfile.getPermAC() + ","              //7
+                    + "ACL: " + newProfile.getPermACLocation() + ","      //8
+                    + "Away: " + newProfile.getPermSetAway() + ","         //9
+                    + "Zone: " + newProfile.getPermCreateZone() + ","      //10
+                    + "Room Temp: " + newProfile.getPermRoomTemp() + ","        //11
+                    + "Season: " + newProfile.getPermSeasonWeather());       //index 12 of the split array
 
         }catch(IOException ioe){
             System.out.println("Exception occurred:");
@@ -1492,7 +1519,7 @@ public class Controller {
                 for (int p = 0; p < Main.profiles.length; p++) {
                     Main.profiles[p].setProfileID(p + 1);
                 }
-                UserProfile.setstaticProfileId(UserProfile.getstaticProfileId() - 1);
+                UserProfile.setStaticProfileId(UserProfile.getStaticProfileId() - 1);
 
                 Main.profileSelection.getChildren().removeAll(hyperlink);
                 Main.numberOfProfiles--;

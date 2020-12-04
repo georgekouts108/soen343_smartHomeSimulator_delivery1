@@ -1,44 +1,22 @@
 package sample;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
-import utilities.*;
 import house.*;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import sample.Controller.*;
-import sample.Main.*;
-import javax.sound.sampled.Control;
-import javax.swing.*;
-import java.awt.*;
+
 import java.io.*;
-import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Scanner;
-import java.util.concurrent.*;
-import java.io.*;
 
 /**
  * Main class for the Smart Home Simulator application
@@ -137,7 +115,7 @@ public class Main extends Application {
 
         shpModule.startTimeBoundaryThread();
 
-        logFile = new File("src/log.txt");
+        logFile = new File("log.txt");
         if (logFile.exists()) {
             logFile.createNewFile();
         }
@@ -177,7 +155,7 @@ public class Main extends Application {
         main_stage.setScene(dashboardScene);
         main_stage.show();
 
-        String profilesTxt = "src/profiles.txt";
+        String profilesTxt = "C:\\Users\\Lucas\\IdeaProjects\\soen343_team5_SmartHomeSimulator\\java\\SmartHomeSimulator_Main\\src\\profiles.txt";
         loadProfilesFromFile(profilesTxt);
     }
 
@@ -250,13 +228,13 @@ public class Main extends Application {
         cbPermAwayMode.setId("AwayPermissionCB");
         cbPermAwayMode.setTranslateX(5+50); cbPermAwayMode.setTranslateY(170);
 
-        CheckBox cbPermRoomTemp = new CheckBox("Room Temp");
-        cbPermRoomTemp.setId("RoomTempPermissionCB");
-        cbPermRoomTemp.setTranslateX(100+50); cbPermRoomTemp.setTranslateY(170);
-
         CheckBox cbPermAddZone = new CheckBox("Add Zone");
         cbPermAddZone.setId("AddZonePermissionCB");
-        cbPermAddZone.setTranslateX(5+50); cbPermAddZone.setTranslateY(200);
+        cbPermAddZone.setTranslateX(100+50); cbPermAddZone.setTranslateY(170);
+
+        CheckBox cbPermRoomTemp = new CheckBox("Room Temp");
+        cbPermRoomTemp.setId("RoomTempPermissionCB");
+        cbPermRoomTemp.setTranslateX(5+50); cbPermRoomTemp.setTranslateY(200);
 
         CheckBox cbPermSeasonTemp = new CheckBox("Season Temp");
         cbPermSeasonTemp.setId("seasonTempPermissionCB");
@@ -267,7 +245,7 @@ public class Main extends Application {
         addButton.setTranslateX(40); addButton.setTranslateY(350);
         addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField, cbPermL,
                 cbPermLL, cbPermD, cbPermDL, cbPermW, cbPermWL, cbPermAC, cbPermACL,
-                cbPermAwayMode, cbPermAddZone, cbPermSeasonTemp, cbPermRoomTemp));
+                cbPermAwayMode, cbPermAddZone, cbPermRoomTemp, cbPermSeasonTemp));
 
         if (numberOfTimesProfilePageSelected == 0) {
             Main.profileSelection.getChildren().add(addButton);
@@ -668,7 +646,7 @@ public class Main extends Application {
 
                 Controller.createNewProfile(newType, newPermLights, newPermLightsLocation, newPermDoors,
                         newPermDoorsLocation, newPermWindows, newPermWindowsLocation, newPermAC,
-                        newPermACLocation, newPermSetAway, newPermCreateZone, newPermRoomTemp, newPermSeasonTemp);
+                        newPermACLocation, newPermSetAway,newPermCreateZone, newPermRoomTemp, newPermSeasonTemp);
             }
             sc.close();
 

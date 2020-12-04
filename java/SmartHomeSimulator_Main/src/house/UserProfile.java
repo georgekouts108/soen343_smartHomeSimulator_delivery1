@@ -29,17 +29,10 @@ public class UserProfile {
     private boolean permAC;
     private boolean permACLocation;
 
-    private boolean permSetAway; // pSA
-    private boolean permCreateZone; // pCZ
-    private boolean permRoomTemp; // pRT
-    private boolean permSeasonWeather; // pSW
-    /**TODO:
-     *  - create a boolean "permSetAway" (permission to turn on Away mode in SHP)
-     *  - create a boolean "permCreateZone" (permission to create a new zone in SHH)
-     *  - create a boolean "permRoomTemp" (permission to override temperature in specific rooms in SHH)
-     *  - create a boolean "permSeasonWeather" (permission to set the default temp for Winter and Summer for away mode in SHH)
-     *  - create only getter methods for each of these, and initialize the permissions in the constructor
-     *  */
+    private boolean permSetAway; // pSA, permission to turn on Away mode in SHP
+    private boolean permCreateZone; // pCZ, permission to create a new zone in SHH
+    private boolean permRoomTemp; // pRT, permission to override temperature in specific rooms in SHH
+    private boolean permSeasonWeather; // pSW, permission to set the default temp for Winter and Summer for away mode in SHH
 
     /**
      * UserProfile constructor
@@ -170,7 +163,7 @@ public class UserProfile {
      * Return the count for profile ID's
      * @return
      */
-    public static int getstaticProfileId() {
+    public static int getStaticProfileId() {
         return PROFILE_ID;
     }
 
@@ -178,7 +171,7 @@ public class UserProfile {
      * Mutate the count for profile ID's
      * @param profileId
      */
-    public static void setstaticProfileId(int profileId) {
+    public static void setStaticProfileId(int profileId) {
         PROFILE_ID = profileId;
     }
 

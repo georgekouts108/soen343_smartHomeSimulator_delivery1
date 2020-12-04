@@ -432,6 +432,9 @@ public class SHHModule extends Module {
                 tempStage.setResizable(false);
                 AnchorPane tempPane = new AnchorPane();
 
+                Label inputInfo = new Label("Only one input required. The other season will automatically be determined.");
+                inputInfo.setTranslateX(50); inputInfo.setTranslateY(30);
+
                 Label setWinterTempLabel = new Label("Winter Temp: ");
                 setWinterTempLabel.setTranslateX(50); setWinterTempLabel.setTranslateY(80);
                 TextField winterTempTextField = new TextField();
@@ -973,7 +976,7 @@ public class SHHModule extends Module {
         catch (Exception e){}
 
         if (!roomIDsString.equals("")) {
-            String[] stringIDsArray = (roomIDsString.strip()).split(" ");
+            String[] stringIDsArray = (roomIDsString.trim()).split(" ");
 
             for (int s = 0; s < stringIDsArray.length; s++) {
                 System.out.println("DEBUG -- " + stringIDsArray[s]);
@@ -1035,12 +1038,11 @@ public class SHHModule extends Module {
      */
     public void setWinterTemperature(double winterTemperature) {
 
-        /**TODO: Put the contents of this method inside an IF condition;
-         *  the condition is that Main.currentActiveProfile
-         *  has permission to change a room's temperature */
-
-        this.winterTemperature = winterTemperature;
-        changeSHHTempLabel("winterTempSHHLabel", winterTemperature);
+        //if current user has permission to change seasonal temperature
+        if(Main.currentActiveProfile.getPermSeasonWeather()){
+            this.winterTemperature = winterTemperature;
+            changeSHHTempLabel("winterTempSHHLabel", winterTemperature);
+        }
     }
 
     /**
@@ -1057,12 +1059,11 @@ public class SHHModule extends Module {
      */
     public void setSummerTemperature(double summerTemperature) {
 
-        /**TODO: Put the contents of this method inside an IF condition;
-         *  the condition is that Main.currentActiveProfile
-         *  has permission to change a room's temperature */
-
-        this.summerTemperature = summerTemperature;
-        changeSHHTempLabel("summerTempSHHLabel", summerTemperature);
+        //if current user has permission to change seasonal temperature
+        if(Main.currentActiveProfile.getPermSeasonWeather()){
+            this.summerTemperature = summerTemperature;
+            changeSHHTempLabel("summerTempSHHLabel", summerTemperature);
+        }
     }
 
     /**
