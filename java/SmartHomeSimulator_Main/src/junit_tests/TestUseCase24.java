@@ -33,6 +33,6 @@ public class TestUseCase24 extends ApplicationTest {
         SHSHelpers.setOutsideTemperature(20);
         shhModule.getZones()[0].setZoneTemperature(25);
         shhModule.notifyToOpenAllZoneWindows();
-        Assert.assertNotNull(shhModule);    
+        Assert.assertNotNull(shhModule);
     }
 }
