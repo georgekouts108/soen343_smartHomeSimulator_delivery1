@@ -127,18 +127,34 @@ public class UserProfile {
         return permACLocation;
     }
 
+    /**
+     * return a user permission to set Away mode
+     * @return
+     */
     public boolean getPermSetAway() {
         return permSetAway;
     }
 
+    /**
+     * return a user permission to change the temperature of individual rooms
+     * @return
+     */
     public boolean getPermRoomTemp() {
         return permRoomTemp;
     }
 
+    /**
+     * return a user permission to configure the temperature for winter or summer
+     * @return
+     */
     public boolean getPermSeasonWeather() {
         return permSeasonWeather;
     }
 
+    /**
+     * return a user permission to create a new zone
+     * @return
+     */
     public boolean getPermCreateZone() {
         return permCreateZone;
     }
