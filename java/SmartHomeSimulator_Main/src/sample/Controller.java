@@ -1666,107 +1666,110 @@ public class Controller {
                 }catch (Exception e){}
             }
 
-            /**TODO: in this "if" statement, add an extra condition
-             *  that will look at the currentActiveProfile's type; if
-             *  the profile type is GUEST or STRANGER, throw an exception
-             *  and do NOT turn on away mode. Only Parents and Children can do that.*/
+            if (Main.currentActiveProfile.getPermSetAway()) {
 
-            if ((numOfPeopleOutside == Main.profiles.length)) {
+                if ((numOfPeopleOutside == Main.profiles.length)) {
 
-                if (tb.isSelected()) {
-                    tb.setText("Turn OFF Away Mode");
-                    Main.main_stage.setTitle("Smart Home Simulator -- logged in as #" +
-                            Main.currentActiveProfile.getProfileID() + " \"" + Main.currentActiveProfile.getType().toUpperCase() +
-                            "\" {AWAY MODE ON}");
-                    appendMessageToConsole("SHP -- AWAY mode set to ON");
+                    if (tb.isSelected()) {
+                        tb.setText("Turn OFF Away Mode");
+                        Main.main_stage.setTitle("Smart Home Simulator -- logged in as #" +
+                                Main.currentActiveProfile.getProfileID() + " \"" + Main.currentActiveProfile.getType().toUpperCase() +
+                                "\" {AWAY MODE ON}");
+                        appendMessageToConsole("SHP -- AWAY mode set to ON");
 
-                    Main.currentActiveProfile.setAway(true);
-                    SHSHelpers.setIs_away(true);
+                        Main.currentActiveProfile.setAway(true);
+                        SHSHelpers.setIs_away(true);
 
-                    Main.shhModule.notifySHHOFAwayMode();
-                    Main.shhModule.changeSHHAwayModeLabel(true);
-                    awayModeAutoLockOrUnlockAllAirConditioners(true);
+                        Main.shhModule.notifySHHOFAwayMode();
+                        Main.shhModule.changeSHHAwayModeLabel(true);
+                        awayModeAutoLockOrUnlockAllAirConditioners(true);
 
-                    // close all windows;
-                    for (int room = 0; room < Main.householdLocations.length; room++) {
-                        try {
-                            for (int win = 0; win < Main.householdLocations[room].getWindowCollection().length; win++) {
-                                try {
-                                    Main.householdLocations[room].getWindowCollection()[win].setState(false);
-                                    appendMessageToConsole("SHP -- Window #" +
-                                            Main.householdLocations[room].getWindowCollection()[win].getUtilityID() + " in " +
-                                            Main.householdLocations[room].getName() + " closed.");
-                                }catch (Exception e){}
-                            }
-                            Main.house.setIconVisibility(Main.householdLocations[room], "Window", false);
-                        }catch(Exception e){}
-                    }
-
-                    // close and lock all doors
-                    for (int room = 0; room < Main.householdLocations.length; room++) {
-                        try {
-                            for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
-                                try {
-                                    Main.householdLocations[room].getDoorCollection()[door].setState(false);
-                                    appendMessageToConsole("SHP -- Door #" +
-                                            Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
-                                            Main.householdLocations[room].getName() + " closed.");
-                                    Main.householdLocations[room].getDoorCollection()[door].setLocked(true);
-                                    appendMessageToConsole("SHP -- Door #" +
-                                            Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
-                                            Main.householdLocations[room].getName() + " locked.");
+                        // close all windows;
+                        for (int room = 0; room < Main.householdLocations.length; room++) {
+                            try {
+                                for (int win = 0; win < Main.householdLocations[room].getWindowCollection().length; win++) {
+                                    try {
+                                        Main.householdLocations[room].getWindowCollection()[win].setState(false);
+                                        appendMessageToConsole("SHP -- Window #" +
+                                                Main.householdLocations[room].getWindowCollection()[win].getUtilityID() + " in " +
+                                                Main.householdLocations[room].getName() + " closed.");
+                                    }catch (Exception e){}
                                 }
-                                catch (Exception e){}
-                            }
-                            Main.house.setIconVisibility(Main.householdLocations[room], "Door", false);
+                                Main.house.setIconVisibility(Main.householdLocations[room], "Window", false);
+                            }catch(Exception e){}
                         }
-                        catch (Exception e){}
-                    }
 
-                    updateSHPModule(true);
-                }
-                else {
-                    tb.setText("Turn ON Away Mode");
-                    Main.main_stage.setTitle("Smart Home Simulator -- logged in as #" +
-                            Main.currentActiveProfile.getProfileID() + " \"" + Main.currentActiveProfile.getType().toUpperCase() +
-                            "\" {AWAY MODE OFF}");
-                    appendMessageToConsole("SHP -- AWAY mode set to OFF");
-
-                    Main.currentActiveProfile.setAway(false);
-                    SHSHelpers.setIs_away(false);
-
-                    Main.shhModule.notifySHHOFAwayMode();
-                    Main.shhModule.changeSHHAwayModeLabel(false);
-                    awayModeAutoLockOrUnlockAllAirConditioners(false);
-
-                    // unlock all doors (except the garage, backyard, and entrance)
-                    for (int room = 0; room < Main.householdLocations.length; room++) {
-                        try {
-                            for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
-                                try {
-                                    if (!Main.householdLocations[room].getName().equals("entrance") &&
-                                            !Main.householdLocations[room].getName().equals("backyard") &&
-                                            !Main.householdLocations[room].getName().equals("garage")) {
-                                        Main.householdLocations[room].getDoorCollection()[door].setLocked(false);
+                        // close and lock all doors
+                        for (int room = 0; room < Main.householdLocations.length; room++) {
+                            try {
+                                for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
+                                    try {
+                                        Main.householdLocations[room].getDoorCollection()[door].setState(false);
                                         appendMessageToConsole("SHP -- Door #" +
                                                 Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
-                                                Main.householdLocations[room].getName() + " unlocked.");
+                                                Main.householdLocations[room].getName() + " closed.");
+                                        Main.householdLocations[room].getDoorCollection()[door].setLocked(true);
+                                        appendMessageToConsole("SHP -- Door #" +
+                                                Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
+                                                Main.householdLocations[room].getName() + " locked.");
                                     }
-                                } catch (Exception e) {}
+                                    catch (Exception e){}
+                                }
+                                Main.house.setIconVisibility(Main.householdLocations[room], "Door", false);
                             }
+                            catch (Exception e){}
                         }
-                        catch (Exception e){}
+
+                        updateSHPModule(true);
                     }
-                    updateSHPModule(false);
+                    else {
+                        tb.setText("Turn ON Away Mode");
+                        Main.main_stage.setTitle("Smart Home Simulator -- logged in as #" +
+                                Main.currentActiveProfile.getProfileID() + " \"" + Main.currentActiveProfile.getType().toUpperCase() +
+                                "\" {AWAY MODE OFF}");
+                        appendMessageToConsole("SHP -- AWAY mode set to OFF");
+
+                        Main.currentActiveProfile.setAway(false);
+                        SHSHelpers.setIs_away(false);
+
+                        Main.shhModule.notifySHHOFAwayMode();
+                        Main.shhModule.changeSHHAwayModeLabel(false);
+                        awayModeAutoLockOrUnlockAllAirConditioners(false);
+
+                        // unlock all doors (except the garage, backyard, and entrance)
+                        for (int room = 0; room < Main.householdLocations.length; room++) {
+                            try {
+                                for (int door = 0; door < Main.householdLocations[room].getDoorCollection().length; door++) {
+                                    try {
+                                        if (!Main.householdLocations[room].getName().equals("entrance") &&
+                                                !Main.householdLocations[room].getName().equals("backyard") &&
+                                                !Main.householdLocations[room].getName().equals("garage")) {
+                                            Main.householdLocations[room].getDoorCollection()[door].setLocked(false);
+                                            appendMessageToConsole("SHP -- Door #" +
+                                                    Main.householdLocations[room].getWindowCollection()[door].getUtilityID() + " to " +
+                                                    Main.householdLocations[room].getName() + " unlocked.");
+                                        }
+                                    } catch (Exception e) {}
+                                }
+                            }
+                            catch (Exception e){}
+                        }
+                        updateSHPModule(false);
+                    }
+                    Main.shhModule.notifyToOpenAllZoneWindows();
                 }
-                Main.shhModule.notifyToOpenAllZoneWindows();
+                else {
+                    throw new Exception("ERROR [SHP]: All profiles must be outside house\nbefore turning AWAY mode on.");
+                }
             }
             else {
-                throw new Exception();
+                throw new Exception("ERROR [SHP]: Permission denied to set Away mode.");
             }
-        } catch(Exception e) {
+
+        }
+        catch(Exception e) {
             tb.setSelected(false);
-            appendMessageToConsole("ERROR [SHP]: All profiles must be outside house\nbefore turning AWAY mode on.");
+            appendMessageToConsole(e.getMessage());
         }
     }
 

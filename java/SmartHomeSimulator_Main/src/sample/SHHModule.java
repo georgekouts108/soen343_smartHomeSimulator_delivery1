@@ -425,73 +425,81 @@ public class SHHModule extends Module {
      * @param pane
      */
     public void popupWinterSummerTempSettingsStage(AnchorPane pane) {
-        Stage tempStage = new Stage();
-        tempStage.setTitle("Winter/Summer Temp Settings");
-        tempStage.setResizable(false);
-        AnchorPane tempPane = new AnchorPane();
+        try {
+            if (Main.currentActiveProfile.getPermSeasonWeather()) {
+                Stage tempStage = new Stage();
+                tempStage.setTitle("Winter/Summer Temp Settings");
+                tempStage.setResizable(false);
+                AnchorPane tempPane = new AnchorPane();
 
-        Label setWinterTempLabel = new Label("Winter Temp: ");
-        setWinterTempLabel.setTranslateX(50); setWinterTempLabel.setTranslateY(80);
-        TextField winterTempTextField = new TextField();
-        winterTempTextField.setTranslateY(100); winterTempTextField.setTranslateX(50);
-        winterTempTextField.setPromptText("degrees °C");
-        winterTempTextField.setPrefWidth(90);
-        Button confirmWinterTemp = new Button("Confirm");
-        confirmWinterTemp.setTranslateY(100); confirmWinterTemp.setTranslateX(160);
-        confirmWinterTemp.setOnAction(ev1->{
-            try {
-                for (int f = 0; f < pane.getChildren().size(); f++) {
+                Label setWinterTempLabel = new Label("Winter Temp: ");
+                setWinterTempLabel.setTranslateX(50); setWinterTempLabel.setTranslateY(80);
+                TextField winterTempTextField = new TextField();
+                winterTempTextField.setTranslateY(100); winterTempTextField.setTranslateX(50);
+                winterTempTextField.setPromptText("degrees °C");
+                winterTempTextField.setPrefWidth(90);
+                Button confirmWinterTemp = new Button("Confirm");
+                confirmWinterTemp.setTranslateY(100); confirmWinterTemp.setTranslateX(160);
+                confirmWinterTemp.setOnAction(ev1->{
                     try {
-                        if (pane.getChildren().get(f).getId().equals("winterTempSHHLabel")) {
-                            Label label = (Label) pane.getChildren().get(f);
-                            setWinterTemperature(Double.parseDouble(winterTempTextField.getText()));
-                            notifySHHOFAwayMode();
-                            label.setText("Winter temp (AWAY mode only): "+this.winterTemperature+"°C");
-                            pane.getChildren().set(f, label);
-                            break;
+                        for (int f = 0; f < pane.getChildren().size(); f++) {
+                            try {
+                                if (pane.getChildren().get(f).getId().equals("winterTempSHHLabel")) {
+                                    Label label = (Label) pane.getChildren().get(f);
+                                    setWinterTemperature(Double.parseDouble(winterTempTextField.getText()));
+                                    notifySHHOFAwayMode();
+                                    label.setText("Winter temp (AWAY mode only): "+this.winterTemperature+"°C");
+                                    pane.getChildren().set(f, label);
+                                    break;
+                                }
+                            }
+                            catch (Exception foo){}
                         }
                     }
-                    catch (Exception foo){}
-                }
-            }
-            catch (Exception ex1){}
-        });
+                    catch (Exception ex1){}
+                });
 
-        Label setSummerTempLabel = new Label("Summer Temp: ");
-        setSummerTempLabel.setTranslateX(50); setSummerTempLabel.setTranslateY(140);
-        TextField summerTempTextField = new TextField();
-        summerTempTextField.setTranslateY(160); summerTempTextField.setTranslateX(50);
-        summerTempTextField.setPromptText("degrees °C");
-        summerTempTextField.setPrefWidth(90);
-        Button confirmSummerTemp = new Button("Confirm");
-        confirmSummerTemp.setTranslateY(160); confirmSummerTemp.setTranslateX(160);
-        confirmSummerTemp.setOnAction(ev1->{
-            try {
-                for (int f = 0; f < pane.getChildren().size(); f++) {
+                Label setSummerTempLabel = new Label("Summer Temp: ");
+                setSummerTempLabel.setTranslateX(50); setSummerTempLabel.setTranslateY(140);
+                TextField summerTempTextField = new TextField();
+                summerTempTextField.setTranslateY(160); summerTempTextField.setTranslateX(50);
+                summerTempTextField.setPromptText("degrees °C");
+                summerTempTextField.setPrefWidth(90);
+                Button confirmSummerTemp = new Button("Confirm");
+                confirmSummerTemp.setTranslateY(160); confirmSummerTemp.setTranslateX(160);
+                confirmSummerTemp.setOnAction(ev1->{
                     try {
-                        if (pane.getChildren().get(f).getId().equals("summerTempSHHLabel")) {
-                            Label label = (Label) pane.getChildren().get(f);
-                            setSummerTemperature(Double.parseDouble(summerTempTextField.getText()));
-                            notifySHHOFAwayMode();
-                            label.setText("Summer temp (AWAY mode only): "+this.summerTemperature+"°C");
-                            pane.getChildren().set(f, label);
-                            break;
+                        for (int f = 0; f < pane.getChildren().size(); f++) {
+                            try {
+                                if (pane.getChildren().get(f).getId().equals("summerTempSHHLabel")) {
+                                    Label label = (Label) pane.getChildren().get(f);
+                                    setSummerTemperature(Double.parseDouble(summerTempTextField.getText()));
+                                    notifySHHOFAwayMode();
+                                    label.setText("Summer temp (AWAY mode only): "+this.summerTemperature+"°C");
+                                    pane.getChildren().set(f, label);
+                                    break;
+                                }
+                            }
+                            catch (Exception foo){}
                         }
                     }
-                    catch (Exception foo){}
-                }
+                    catch (Exception ex1){}
+                });
+
+                Button closeButton = new Button("Return");
+                closeButton.setOnAction(e->tempStage.close());
+                closeButton.setTranslateY(250); closeButton.setTranslateX(100);
+
+                tempPane.getChildren().addAll(setSummerTempLabel, setWinterTempLabel,
+                        summerTempTextField, winterTempTextField, confirmSummerTemp, confirmWinterTemp, closeButton);
+                tempStage.setScene(new Scene(tempPane, 300, 300));
+                tempStage.show();
             }
-            catch (Exception ex1){}
-        });
-
-        Button closeButton = new Button("Return");
-        closeButton.setOnAction(e->tempStage.close());
-        closeButton.setTranslateY(250); closeButton.setTranslateX(100);
-
-        tempPane.getChildren().addAll(setSummerTempLabel, setWinterTempLabel,
-                summerTempTextField, winterTempTextField, confirmSummerTemp, confirmWinterTemp, closeButton);
-        tempStage.setScene(new Scene(tempPane, 300, 300));
-        tempStage.show();
+            else {
+                throw new Exception("ERROR [SHH]: Permission denied to configure seasonal temperature settings.");
+            }
+        }
+        catch (Exception e){}
     }
 
     /**
@@ -648,8 +656,19 @@ public class SHHModule extends Module {
                         break;
                     case 0:
                         if (currentNumberOfZones != MAX_NUMBER_OF_ZONES) {
-                            roomsDeletedFromExistingZones = deleteRoomsFromZones(roomsToBeMoved);
-                            createNewZone(roomsDeletedFromExistingZones);
+                            try {
+                                if (Main.currentActiveProfile.getPermCreateZone()) {
+                                    roomsDeletedFromExistingZones = deleteRoomsFromZones(roomsToBeMoved);
+                                    createNewZone(roomsDeletedFromExistingZones);
+                                }
+                                else {
+                                    throw new Exception("ERROR [SHH]: Permission denied to create new zones");
+                                }
+                            }
+                            catch (Exception exception){
+                                Controller.appendMessageToConsole(exception.getMessage());
+                            }
+
                         }
                         nextDestinationZoneID = -1;
                         break;
@@ -1105,11 +1124,6 @@ public class SHHModule extends Module {
      */
     public void overrideTempInSpecificRoomInZone(int zoneID, int roomID, double newTemp) {
 
-
-        /**TODO: Put the contents of this method inside an IF condition;
-         *  the condition is that Main.currentActiveProfile
-         *  has permission to change a room's temperature */
-
         if (!awayModeON) {
             try {
                 boolean roomIsInZone = false;
@@ -1301,10 +1315,6 @@ public class SHHModule extends Module {
      */
     public void createNewZone(Room[] roomArray) {
         try {
-
-            /**TODO: Surround the contents of this TRY block with an IF condition;
-             *  the condition is that Main.currentActiveProfile has permission to add a new zone */
-
             if (currentNumberOfZones == MAX_NUMBER_OF_ZONES) {
                 Controller.appendMessageToConsole("ERROR [SHH]: Max # of zones cannot be exceeded");
                 return;
@@ -1332,12 +1342,9 @@ public class SHHModule extends Module {
 
             // all rooms in the new zone take on the outdoor temperature
             newZone.overrideZoneRoomTemperaturesInHouse(Main.outsideTemperature);
-
             newZone.initZoneTimePeriodSet();
-
             incrementNumberOfZones();
             updateSHSModuleWithZones();
-
         }
         catch (Exception e){
             Controller.appendMessageToConsole(e.getMessage());
@@ -1438,61 +1445,70 @@ public class SHHModule extends Module {
 
                                         int finalH = h;
                                         tempHypLink.setOnAction(e->{
-                                            Stage changeRoomTempStage = new Stage();
-                                            changeRoomTempStage.setTitle("Change Room #"+Main.householdLocations[finalH].getRoomID() +" 's temperature");
-                                            changeRoomTempStage.setResizable(false);
-                                            AnchorPane changeRoomTempPane = new AnchorPane();
+                                            try {
+                                                if (Main.currentActiveProfile.getPermRoomTemp()) {
 
-                                            TextField textField = new TextField();
-                                            textField.setId("changeTempSpecRoom#"+Main.householdLocations[finalH].getRoomID());
-                                            textField.setTranslateY(30);
-                                            textField.setTranslateX(20);
-                                            textField.setPrefWidth(80);
-                                            textField.setPromptText("New temp");
-                                            changeRoomTempPane.getChildren().add(textField);
+                                                    Stage changeRoomTempStage = new Stage();
+                                                    changeRoomTempStage.setTitle("Change Room #"+Main.householdLocations[finalH].getRoomID() +" 's temperature");
+                                                    changeRoomTempStage.setResizable(false);
+                                                    AnchorPane changeRoomTempPane = new AnchorPane();
 
-                                            Button changeSpecRoomTempButton = new Button("Change");
-                                            changeSpecRoomTempButton.setId("changeTempButtonSpecRoom#"+Main.householdLocations[finalH].getRoomID());
-                                            changeSpecRoomTempButton.setTranslateY(30);
-                                            changeSpecRoomTempButton.setTranslateX(120);
+                                                    TextField textField = new TextField();
+                                                    textField.setId("changeTempSpecRoom#"+Main.householdLocations[finalH].getRoomID());
+                                                    textField.setTranslateY(30);
+                                                    textField.setTranslateX(20);
+                                                    textField.setPrefWidth(80);
+                                                    textField.setPromptText("New temp");
+                                                    changeRoomTempPane.getChildren().add(textField);
 
-                                            changeSpecRoomTempButton.setOnAction(ev->{
-                                                try {
-                                                    double newTemperature = Double.parseDouble(textField.getText());
-                                                    overrideTempInSpecificRoomInZone(this.zones[finalZ].getZoneID(), Main.householdLocations[finalH].getRoomID(), newTemperature);
-                                                    if (!awayModeON) {
-                                                        changeZoneInfoPaneSpecificRoom(zonePane, newTemperature, this.zones[finalZ], Main.householdLocations[finalH].getRoomID());
-                                                    }
-                                                    else {
-                                                        Controller.appendMessageToConsole("Cannot change temp of Room #"+
-                                                                Main.householdLocations[finalH].getRoomID()+" in zone "+this.zones[finalZ].getZoneID()+ " " +
-                                                                "during Away mode");
+                                                    Button changeSpecRoomTempButton = new Button("Change");
+                                                    changeSpecRoomTempButton.setId("changeTempButtonSpecRoom#"+Main.householdLocations[finalH].getRoomID());
+                                                    changeSpecRoomTempButton.setTranslateY(30);
+                                                    changeSpecRoomTempButton.setTranslateX(120);
+
+                                                    changeSpecRoomTempButton.setOnAction(ev->{
+                                                        try {
+                                                            double newTemperature = Double.parseDouble(textField.getText());
+                                                            overrideTempInSpecificRoomInZone(this.zones[finalZ].getZoneID(), Main.householdLocations[finalH].getRoomID(), newTemperature);
+                                                            if (!awayModeON) {
+                                                                changeZoneInfoPaneSpecificRoom(zonePane, newTemperature, this.zones[finalZ], Main.householdLocations[finalH].getRoomID());
+                                                            }
+                                                            else {
+                                                                Controller.appendMessageToConsole("Cannot change temp of Room #"+
+                                                                        Main.householdLocations[finalH].getRoomID()+" in zone "+this.zones[finalZ].getZoneID()+ " " +
+                                                                        "during Away mode");
+                                                                textField.clear();
+                                                                textField.setPromptText("New temp");
+                                                            }
+                                                        }
+                                                        catch (Exception exception) {
+                                                            Controller.appendMessageToConsole("Invalid attempt to change temperature of Room #"+
+                                                                    Main.householdLocations[finalH].getRoomID()+" in zone "+this.zones[finalZ].getZoneID());
+                                                            textField.clear();
+                                                            textField.setPromptText("New temp");
+                                                        }
+                                                    });
+
+                                                    changeRoomTempPane.getChildren().add(changeSpecRoomTempButton);
+
+                                                    Button closeButton = new Button("Close");
+                                                    closeButton.setId("closeButtonForChangeTempPaneSpecRoom#"+Main.householdLocations[finalH].getRoomID());
+                                                    closeButton.setTranslateY(300); closeButton.setTranslateX(175);
+                                                    closeButton.setOnAction(ev->{
                                                         textField.clear();
                                                         textField.setPromptText("New temp");
-                                                    }
+                                                        changeRoomTempStage.close();
+                                                    });
+                                                    changeRoomTempPane.getChildren().add(closeButton);
+
+                                                    changeRoomTempStage.setScene(new Scene(changeRoomTempPane, 350,350));
+                                                    changeRoomTempStage.show();
                                                 }
-                                                catch (Exception exception) {
-                                                    Controller.appendMessageToConsole("Invalid attempt to change temperature of Room #"+
-                                                            Main.householdLocations[finalH].getRoomID()+" in zone "+this.zones[finalZ].getZoneID());
-                                                    textField.clear();
-                                                    textField.setPromptText("New temp");
+                                                else {
+                                                    throw new Exception("ERROR [SHH]: Permission denied for manually modifying specific room temperatures.");
                                                 }
-                                            });
-
-                                            changeRoomTempPane.getChildren().add(changeSpecRoomTempButton);
-
-                                            Button closeButton = new Button("Close");
-                                            closeButton.setId("closeButtonForChangeTempPaneSpecRoom#"+Main.householdLocations[finalH].getRoomID());
-                                            closeButton.setTranslateY(300); closeButton.setTranslateX(175);
-                                            closeButton.setOnAction(ev->{
-                                                textField.clear();
-                                                textField.setPromptText("New temp");
-                                                changeRoomTempStage.close();
-                                            });
-                                            changeRoomTempPane.getChildren().add(closeButton);
-
-                                            changeRoomTempStage.setScene(new Scene(changeRoomTempPane, 350,350));
-                                            changeRoomTempStage.show();
+                                            }
+                                            catch (Exception ex){}
                                         });
 
                                         zonePane.getChildren().add(tempHypLink);

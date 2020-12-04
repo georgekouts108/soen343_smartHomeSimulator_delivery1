@@ -134,6 +134,22 @@ public class UserProfile {
         return permACLocation;
     }
 
+    public boolean getPermSetAway() {
+        return permSetAway;
+    }
+
+    public boolean getPermRoomTemp() {
+        return permRoomTemp;
+    }
+
+    public boolean getPermSeasonWeather() {
+        return permSeasonWeather;
+    }
+
+    public boolean getPermCreateZone() {
+        return permCreateZone;
+    }
+
     /**
      * Check to see if a user is Away from home
      * @return
