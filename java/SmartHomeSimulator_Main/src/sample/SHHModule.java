@@ -205,6 +205,9 @@ public class SHHModule extends Module {
         tempStage.setResizable(false);
         AnchorPane tempPane = new AnchorPane();
 
+        Label inputInfo = new Label("Only one input required.\nThe other season will automatically be determined.");
+        inputInfo.setTranslateY(10); inputInfo.setTranslateX(10);
+
         Label setWinterMonthRange = new Label("Winter Months: ");
         setWinterMonthRange.setTranslateX(50); setWinterMonthRange.setTranslateY(80);
         TextField winterMonthsTempTextField = new TextField();
@@ -229,7 +232,7 @@ public class SHHModule extends Module {
         closeButton.setOnAction(e->tempStage.close());
         closeButton.setTranslateY(250); closeButton.setTranslateX(100);
 
-        tempPane.getChildren().addAll(closeButton, setWinterMonthRange, winterMonthsTempTextField,
+        tempPane.getChildren().addAll(closeButton, setWinterMonthRange, winterMonthsTempTextField, inputInfo,
                 setSummerMonthRange, summerMonthsTempTextField, confirmSummerMonthRange, confirmWinterMonthRange);
         tempStage.setScene(new Scene(tempPane, 500, 300));
         tempStage.show();
@@ -431,9 +434,6 @@ public class SHHModule extends Module {
                 tempStage.setTitle("Winter/Summer Temp Settings");
                 tempStage.setResizable(false);
                 AnchorPane tempPane = new AnchorPane();
-
-                Label inputInfo = new Label("Only one input required. The other season will automatically be determined.");
-                inputInfo.setTranslateX(50); inputInfo.setTranslateY(30);
 
                 Label setWinterTempLabel = new Label("Winter Temp: ");
                 setWinterTempLabel.setTranslateX(50); setWinterTempLabel.setTranslateY(80);
