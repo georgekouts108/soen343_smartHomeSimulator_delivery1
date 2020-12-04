@@ -218,7 +218,7 @@ public class Main extends Application {
         cbPermL.setId("lightsPermissionCB");
         cbPermL.setTranslateX(5+50); cbPermL.setTranslateY(50);
 
-        CheckBox cbPermLL = new CheckBox("Lights (L)");
+        CheckBox cbPermLL = new CheckBox("Lights (Location only)");
         cbPermLL.setId("lightsLocationPermissionCB");
         cbPermLL.setTranslateX(100+50); cbPermLL.setTranslateY(50);
 
@@ -226,7 +226,7 @@ public class Main extends Application {
         cbPermD.setId("DoorsPermissionCB");
         cbPermD.setTranslateX(5+50); cbPermD.setTranslateY(80);
 
-        CheckBox cbPermDL = new CheckBox("Doors (L)");
+        CheckBox cbPermDL = new CheckBox("Doors (Location only)");
         cbPermDL.setId("DoorsLocationPermissionCB");
         cbPermDL.setTranslateX(100+50); cbPermDL.setTranslateY(80);
 
@@ -234,7 +234,7 @@ public class Main extends Application {
         cbPermW.setId("WindowsPermissionCB");
         cbPermW.setTranslateX(5+50); cbPermW.setTranslateY(110);
 
-        CheckBox cbPermWL = new CheckBox("Windows (L)");
+        CheckBox cbPermWL = new CheckBox("Windows (Location only)");
         cbPermWL.setId("WindowsLocationPermissionCB");
         cbPermWL.setTranslateX(100+50); cbPermWL.setTranslateY(110);
 
@@ -242,17 +242,31 @@ public class Main extends Application {
         cbPermAC.setId("ACPermissionCB");
         cbPermAC.setTranslateX(5+50); cbPermAC.setTranslateY(140);
 
-        CheckBox cbPermACL = new CheckBox("AC (L)");
+        CheckBox cbPermACL = new CheckBox("AC (Location only)");
         cbPermACL.setId("ACLocationPermissionCB");
         cbPermACL.setTranslateX(100+50); cbPermACL.setTranslateY(140);
 
-        /**TODO: add 4 extra checkboxes for the 4 new permissions (see TODO
-         *  comments in UserProfile class*/
+        CheckBox cbPermAwayMode = new CheckBox("Away");
+        cbPermAwayMode.setId("AwayPermissionCB");
+        cbPermAwayMode.setTranslateX(5+50); cbPermAwayMode.setTranslateY(170);
 
+        CheckBox cbPermRoomTemp = new CheckBox("Room Temp");
+        cbPermRoomTemp.setId("RoomTempPermissionCB");
+        cbPermRoomTemp.setTranslateX(100+50); cbPermRoomTemp.setTranslateY(170);
+
+        CheckBox cbPermAddZone = new CheckBox("Add Zone");
+        cbPermAddZone.setId("AddZonePermissionCB");
+        cbPermAddZone.setTranslateX(5+50); cbPermAddZone.setTranslateY(200);
+
+        CheckBox cbPermSeasonTemp = new CheckBox("Season Temp");
+        cbPermSeasonTemp.setId("seasonTempPermissionCB");
+        cbPermSeasonTemp.setTranslateX(100+50); cbPermSeasonTemp.setTranslateY(200);
+        
         Button addButton = new Button("Add new\nProfile");
         addButton.setId("addNewProfileButton");
         addButton.setTranslateX(40); addButton.setTranslateY(350);
-        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField, cbPermL, cbPermLL, cbPermD, cbPermDL, cbPermW, cbPermWL, cbPermAC, cbPermACL));
+        addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField, cbPermL,
+                cbPermLL, cbPermD, cbPermDL, cbPermW, cbPermWL, cbPermAC, cbPermACL));
 
         if (numberOfTimesProfilePageSelected == 0) {
             Main.profileSelection.getChildren().add(addButton);
@@ -268,6 +282,10 @@ public class Main extends Application {
             Main.profileSelection.getChildren().add(cbPermWL);
             Main.profileSelection.getChildren().add(cbPermAC);
             Main.profileSelection.getChildren().add(cbPermACL);
+            Main.profileSelection.getChildren().add(cbPermAddZone);
+            Main.profileSelection.getChildren().add(cbPermAwayMode);
+            Main.profileSelection.getChildren().add(cbPermRoomTemp);
+            Main.profileSelection.getChildren().add(cbPermSeasonTemp);
         }
         numberOfTimesProfilePageSelected++;
     }
