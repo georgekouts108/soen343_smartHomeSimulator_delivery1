@@ -261,12 +261,13 @@ public class Main extends Application {
         CheckBox cbPermSeasonTemp = new CheckBox("Season Temp");
         cbPermSeasonTemp.setId("seasonTempPermissionCB");
         cbPermSeasonTemp.setTranslateX(100+50); cbPermSeasonTemp.setTranslateY(200);
-        
+
         Button addButton = new Button("Add new\nProfile");
         addButton.setId("addNewProfileButton");
         addButton.setTranslateX(40); addButton.setTranslateY(350);
         addButton.setOnAction(e -> Controller.createNewProfile(newProfileTextField, cbPermL,
-                cbPermLL, cbPermD, cbPermDL, cbPermW, cbPermWL, cbPermAC, cbPermACL));
+                cbPermLL, cbPermD, cbPermDL, cbPermW, cbPermWL, cbPermAC, cbPermACL,
+                cbPermAwayMode, cbPermAddZone, cbPermSeasonTemp, cbPermRoomTemp));
 
         if (numberOfTimesProfilePageSelected == 0) {
             Main.profileSelection.getChildren().add(addButton);
@@ -637,8 +638,6 @@ public class Main extends Application {
      */
     public static void loadProfilesFromFile(String file){
 
-        /**TODO: initialize the 4 extra permissions for SHP and SHH*/
-
         File profiles = new File(file);
         Scanner sc;
         try {
@@ -662,8 +661,14 @@ public class Main extends Application {
                 boolean newPermAC = Boolean.parseBoolean(profileParams[7]);
                 boolean newPermACLocation = Boolean.parseBoolean(profileParams[8]);
 
-                /**TODO: edit this method so it also sets the 4 extra permissions */
-                Controller.createNewProfile(newType,newPermLights,newPermLightsLocation,newPermDoors,newPermDoorsLocation,newPermWindows,newPermWindowsLocation,newPermAC,newPermACLocation);
+                boolean newPermSetAway = Boolean.parseBoolean(profileParams[9]);
+                boolean newPermCreateZone = Boolean.parseBoolean(profileParams[10]);
+                boolean newPermRoomTemp = Boolean.parseBoolean(profileParams[11]);
+                boolean newPermSeasonTemp = Boolean.parseBoolean(profileParams[12]);
+
+                Controller.createNewProfile(newType, newPermLights, newPermLightsLocation, newPermDoors,
+                        newPermDoorsLocation, newPermWindows, newPermWindowsLocation, newPermAC,
+                        newPermACLocation, newPermSetAway, newPermCreateZone, newPermRoomTemp, newPermSeasonTemp);
             }
             sc.close();
 

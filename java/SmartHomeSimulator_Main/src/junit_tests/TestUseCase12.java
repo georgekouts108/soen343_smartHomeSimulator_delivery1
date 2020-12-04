@@ -45,13 +45,17 @@ public class TestUseCase12 extends ApplicationTest {
     boolean pWL = true;
     boolean pAC = true;
     boolean pACL = true;
+    boolean pSA = true;
+    boolean pCZ = true;
+    boolean pRT = true;
+    boolean pSW = true;
 
     /**
      * Test the saving of user profiles and permissions into a text file
      */
     @org.junit.Test
     public void testCase12() {
-        UserProfile parent = new UserProfile("parent", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
+        UserProfile parent = new UserProfile("parent", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL, !pSA, !pCZ, !pRT, !pSW);
         Controller.saveProfileToFile(parent);
         File file = new File("src/profiles.txt");
         if (file.exists()) {
@@ -61,7 +65,7 @@ public class TestUseCase12 extends ApplicationTest {
                 while (s.hasNextLine()) {
                     String member = s.nextLine();
                     if (member.contains(parent.getType()+","+!pL+","+!pLL+","+!pD+","+
-                            !pDL+","+!pW+","+!pWL+","+!pAC+","+!pACL)) {
+                            !pDL+","+!pW+","+!pWL+","+!pAC+","+!pACL+","+!pSA+","+!pCZ+","+!pRT+","+!pSW)) {
                         present = true;
                         break;
                     }

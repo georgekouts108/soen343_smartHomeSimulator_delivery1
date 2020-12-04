@@ -29,6 +29,10 @@ public class UserProfile {
     private boolean permAC;
     private boolean permACLocation;
 
+    private boolean permSetAway; // pSA
+    private boolean permCreateZone; // pCZ
+    private boolean permRoomTemp; // pRT
+    private boolean permSeasonWeather; // pSW
     /**TODO:
      *  - create a boolean "permSetAway" (permission to turn on Away mode in SHP)
      *  - create a boolean "permCreateZone" (permission to create a new zone in SHH)
@@ -42,7 +46,9 @@ public class UserProfile {
      * @param type
      *
      */
-    public UserProfile(String type, boolean pL, boolean pLL, boolean pD, boolean pDL, boolean pW, boolean pWL, boolean pAC, boolean pACL) {
+    public UserProfile(String type, boolean pL, boolean pLL, boolean pD,
+                       boolean pDL, boolean pW, boolean pWL, boolean pAC,
+                       boolean pACL, boolean pSA, boolean pCZ, boolean pRT, boolean pSW) {
         this.type = type;
         this.loggedIn = false;
         this.profileID = (PROFILE_ID++);
@@ -57,6 +63,11 @@ public class UserProfile {
         this.permWindowsLocation = pWL;
         this.permAC = pAC;
         this.permACLocation = pACL;
+
+        this.permSetAway = pSA;
+        this.permCreateZone = pCZ;
+        this.permRoomTemp = pRT;
+        this.permSeasonWeather = pSW;
     }
 
     /**

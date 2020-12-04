@@ -40,6 +40,10 @@ public class TestUseCase11 extends ApplicationTest {
     boolean pWL = true;
     boolean pAC = true;
     boolean pACL = true;
+    boolean pSA = true;
+    boolean pCZ = true;
+    boolean pRT = true;
+    boolean pSW = true;
 
 
     /**todo: implement*/
@@ -50,8 +54,8 @@ public class TestUseCase11 extends ApplicationTest {
      */
     @org.junit.Test
     public void WindowPermissions(){
-        UserProfile parent = new UserProfile("parent", pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
-        UserProfile child = new UserProfile("child", pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
+        UserProfile parent = new UserProfile("parent", pL, pLL, pD, pDL, pW, pWL, pAC, pACL, pSA, pCZ, pRT, pSW);
+        UserProfile child = new UserProfile("child", pL, pLL, pD, pDL, pW, pWL, pAC, pACL, pSA, pCZ, pRT, pSW);
 
         Assert.assertTrue(parent.getPermWindows());
         Assert.assertTrue(parent.getPermWindowsLocation());
@@ -64,8 +68,8 @@ public class TestUseCase11 extends ApplicationTest {
      */
     @org.junit.Test
     public void WindowPermissionsFail(){
-        UserProfile parent = new UserProfile("parent", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
-        UserProfile child = new UserProfile("child", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
+        UserProfile parent = new UserProfile("parent", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL, !pSA, !pCZ, !pRT, !pSW);
+        UserProfile child = new UserProfile("child", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL, !pSA, !pCZ, !pRT, !pSW);
 
         Assert.assertFalse(parent.getPermWindowsLocation());
         Assert.assertFalse(parent.getPermWindows());
@@ -78,8 +82,8 @@ public class TestUseCase11 extends ApplicationTest {
      */
     @org.junit.Test
     public void DoorPermissions(){
-        UserProfile parent = new UserProfile("parent", pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
-        UserProfile child = new UserProfile("child", pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
+        UserProfile parent = new UserProfile("parent", pL, pLL, pD, pDL, pW, pWL, pAC, pACL, pSA, pCZ, pRT, pSW);
+        UserProfile child = new UserProfile("child", pL, pLL, pD, pDL, pW, pWL, pAC, pACL, pSA, pCZ, pRT, pSW);
 
         Assert.assertTrue(parent.getPermDoors());
         Assert.assertTrue(parent.getPermDoorsLocation());
@@ -92,8 +96,8 @@ public class TestUseCase11 extends ApplicationTest {
      */
     @org.junit.Test
     public void DoorPermissionsFail(){
-        UserProfile parent = new UserProfile("parent", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
-        UserProfile child = new UserProfile("child", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
+        UserProfile parent = new UserProfile("parent", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL, !pSA, !pCZ, !pRT, !pSW);
+        UserProfile child = new UserProfile("child", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL, !pSA, !pCZ, !pRT, !pSW);
 
         Assert.assertFalse(parent.getPermDoors());
         Assert.assertFalse(parent.getPermDoorsLocation());
@@ -106,8 +110,8 @@ public class TestUseCase11 extends ApplicationTest {
      */
     @org.junit.Test
     public void LightPermissions(){
-        UserProfile parent = new UserProfile("parent", pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
-        UserProfile child = new UserProfile("child", pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
+        UserProfile parent = new UserProfile("parent", pL, pLL, pD, pDL, pW, pWL, pAC, pACL, pSA, pCZ, pRT, pSW);
+        UserProfile child = new UserProfile("child", pL, pLL, pD, pDL, pW, pWL, pAC, pACL, pSA, pCZ, pRT, pSW);
 
         Assert.assertTrue(parent.getPermLights());
         Assert.assertTrue(parent.getPermLightsLocation());
@@ -120,8 +124,8 @@ public class TestUseCase11 extends ApplicationTest {
      */
     @org.junit.Test
     public void LightPermissionsFail(){
-        UserProfile parent = new UserProfile("parent", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
-        UserProfile child = new UserProfile("child", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL);
+        UserProfile parent = new UserProfile("parent", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL, !pSA, !pCZ, !pRT, !pSW);
+        UserProfile child = new UserProfile("child", !pL, !pLL, !pD, !pDL, !pW, !pWL, !pAC, !pACL, !pSA, !pCZ, !pRT, !pSW);
 
         Assert.assertFalse(parent.getPermLights());
         Assert.assertFalse(parent.getPermLightsLocation());

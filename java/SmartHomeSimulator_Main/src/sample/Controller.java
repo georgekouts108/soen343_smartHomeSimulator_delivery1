@@ -1153,7 +1153,9 @@ public class Controller {
      * @param textField
      *
      */
-    public static void createNewProfile(TextField textField, CheckBox pL, CheckBox pLL, CheckBox pD, CheckBox pDL, CheckBox pW, CheckBox pWL, CheckBox pAC, CheckBox pACL) {
+    public static void createNewProfile(TextField textField, CheckBox pL, CheckBox pLL,
+                                        CheckBox pD, CheckBox pDL, CheckBox pW, CheckBox pWL,
+                                        CheckBox pAC, CheckBox pACL, CheckBox pSA, CheckBox pCZ, CheckBox pRT, CheckBox pSW) {
 
         UserProfile newProfile;
 
@@ -1161,19 +1163,27 @@ public class Controller {
             switch (textField.getText().toLowerCase()) {
                 case "stranger":
                     newProfile = new UserProfile("Stranger",
-                            pL.isSelected(), pLL.isSelected(), pD.isSelected(), pDL.isSelected(), pW.isSelected(), pWL.isSelected(), pAC.isSelected(), pACL.isSelected());
+                            pL.isSelected(), pLL.isSelected(), pD.isSelected(), pDL.isSelected(),
+                            pW.isSelected(), pWL.isSelected(), pAC.isSelected(), pACL.isSelected(),
+                            pSA.isSelected(), pCZ.isSelected(), pRT.isSelected(), pSW.isSelected());
                     break;
                 case "guest":
                     newProfile = new UserProfile("Guest",
-                            pL.isSelected(), pLL.isSelected(), pD.isSelected(), pDL.isSelected(), pW.isSelected(), pWL.isSelected(), pAC.isSelected(), pACL.isSelected());
+                            pL.isSelected(), pLL.isSelected(), pD.isSelected(), pDL.isSelected(),
+                            pW.isSelected(), pWL.isSelected(), pAC.isSelected(), pACL.isSelected(),
+                            pSA.isSelected(), pCZ.isSelected(), pRT.isSelected(), pSW.isSelected());
                     break;
                 case "child":
                     newProfile = new UserProfile("Child",
-                            pL.isSelected(), pLL.isSelected(), pD.isSelected(), pDL.isSelected(), pW.isSelected(), pWL.isSelected(), pAC.isSelected(), pACL.isSelected());
+                            pL.isSelected(), pLL.isSelected(), pD.isSelected(), pDL.isSelected(),
+                            pW.isSelected(), pWL.isSelected(), pAC.isSelected(), pACL.isSelected(),
+                            pSA.isSelected(), pCZ.isSelected(), pRT.isSelected(), pSW.isSelected());
                     break;
                 case "parent":
                     newProfile = new UserProfile("Parent",
-                            pL.isSelected(), pLL.isSelected(), pD.isSelected(), pDL.isSelected(), pW.isSelected(), pWL.isSelected(), pAC.isSelected(), pACL.isSelected());
+                            pL.isSelected(), pLL.isSelected(), pD.isSelected(), pDL.isSelected(),
+                            pW.isSelected(), pWL.isSelected(), pAC.isSelected(), pACL.isSelected(),
+                            pSA.isSelected(), pCZ.isSelected(), pRT.isSelected(), pSW.isSelected());
                     break;
                 default:
                     throw new Exception("Invalid");
@@ -1231,7 +1241,9 @@ public class Controller {
      * @param pAC
      * @param pACL
      */
-    public static void createNewProfile(String newType, boolean pL, boolean pLL, boolean pD, boolean pDL, boolean pW, boolean pWL, boolean pAC, boolean pACL) {
+    public static void createNewProfile(String newType, boolean pL, boolean pLL, boolean pD,
+                                        boolean pDL, boolean pW, boolean pWL, boolean pAC, boolean pACL,
+                                        boolean pSA, boolean pCZ, boolean pRT, boolean pSW) {
 
         UserProfile newProfile;
 
@@ -1239,19 +1251,19 @@ public class Controller {
                 switch (newType) {
                     case "stranger":
                         newProfile = new UserProfile("Stranger",
-                                pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
+                                pL, pLL, pD, pDL, pW, pWL, pAC, pACL, pSA, pCZ, pRT, pSW);
                         break;
                     case "guest":
                         newProfile = new UserProfile("Guest",
-                                pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
+                                pL, pLL, pD, pDL, pW, pWL, pAC, pACL, pSA, pCZ, pRT, pSW);
                         break;
                     case "child":
                         newProfile = new UserProfile("Child",
-                                pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
+                                pL, pLL, pD, pDL, pW, pWL, pAC, pACL, pSA, pCZ, pRT, pSW);
                         break;
                     case "parent":
                         newProfile = new UserProfile("Parent",
-                                pL, pLL, pD, pDL, pW, pWL, pAC, pACL);
+                                pL, pLL, pD, pDL, pW, pWL, pAC, pACL, pSA, pCZ, pRT, pSW);
                         break;
                     default:
                         throw new Exception("Invalid");
