@@ -994,7 +994,9 @@ public class House {
                                     throw new SHSException("SHH -- Blocked Window #" +
                                             room.getWindowCollection()[l].getUtilityID() + " in " + room.getName() + " attempted to open.");
                                 }
-                            } catch (SHSException e) {Controller.appendMessageToConsole(e.getMessage());}
+                            }
+                            catch (SHSException e) {Controller.appendMessageToConsole(e.getMessage());}
+                            catch (Exception e) {Controller.appendMessageToConsole(e.getMessage());}
                         }
                         this.layout.getChildren().set(lay, room_layout);
                         break;

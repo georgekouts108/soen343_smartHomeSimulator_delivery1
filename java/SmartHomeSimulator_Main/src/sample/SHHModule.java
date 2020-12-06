@@ -166,7 +166,11 @@ public class SHHModule extends Module {
                     }
                 }
                 catch (SHSException S){
-                    Controller.appendMessageToConsole(S.getMessage());
+                    try {
+                        Controller.appendMessageToConsole(S.getMessage());
+                    }
+                    catch (Exception e){}
+
                 }
                 catch (Exception e){}
                 finally {
@@ -251,9 +255,13 @@ public class SHHModule extends Module {
     public boolean isMonthValueInRange(int lowerMonth, int upperMonth, int value) {
 
         String months = "";
-        int nextNumber = lowerMonth % 12;
-        while (nextNumber != upperMonth) {
+        int nextNumber = lowerMonth;
+        while ((nextNumber % 12) != (upperMonth % 12)) {
             months += nextNumber+"_";
+
+            if (nextNumber + 1 == 12) {
+                months+="12_";
+            }
             nextNumber = (nextNumber + 1) % 12;
         }
         months += upperMonth;
@@ -294,6 +302,7 @@ public class SHHModule extends Module {
      * @return
      */
     public boolean isSummer() {
+
         if (this.summerMonthUpperBound==null || this.summerMonthLowerBound==null || Main.shsModule.simulationMonth==null) {
             return false;
         }
@@ -988,10 +997,6 @@ public class SHHModule extends Module {
         if (!roomIDsString.equals("")) {
             String[] stringIDsArray = (roomIDsString.trim()).split(" ");
 
-            for (int s = 0; s < stringIDsArray.length; s++) {
-                System.out.println("DEBUG -- " + stringIDsArray[s]);
-            }
-
             int[] ids = new int[stringIDsArray.length];
             for (int i = 0; i < ids.length; i++) {
                 ids[i] = Integer.parseInt(stringIDsArray[i]);
@@ -1130,8 +1135,13 @@ public class SHHModule extends Module {
                     } catch (Exception e) {
                     }
                 }
-                notifyToOpenZoneWindows(zoneID);
+                try {
+                    notifyToOpenZoneWindows(zoneID);
+                }
+                catch (Exception e){}
+
             }
+
             else {
                 throw new SHSException("ERROR [SHH]: Cannot override a zone temperature during Away mode");
             }
@@ -1177,7 +1187,7 @@ public class SHHModule extends Module {
             }
         }
         catch (SHSException s){Controller.appendMessageToConsole(s.getMessage());}
-        catch (Exception e){}
+        catch (Exception e){System.out.println("exceptionnnnn: "+e.getMessage());}
     }
 
     /**

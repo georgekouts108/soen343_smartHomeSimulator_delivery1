@@ -1759,6 +1759,7 @@ public class Controller {
                         Main.shhModule.notifySHHOFAwayMode();
                         Main.shhModule.changeSHHAwayModeLabel(true);
                         awayModeAutoLockOrUnlockAllAirConditioners(true);
+                        //Main.shhModule.notifyToOpenAllZoneWindows();
 
                         // close all windows;
                         for (int room = 0; room < Main.householdLocations.length; room++) {
@@ -1811,6 +1812,7 @@ public class Controller {
                         Main.shhModule.notifySHHOFAwayMode();
                         Main.shhModule.changeSHHAwayModeLabel(false);
                         awayModeAutoLockOrUnlockAllAirConditioners(false);
+                        //Main.shhModule.notifyToOpenAllZoneWindows();
 
                         // unlock all doors (except the garage, backyard, and entrance)
                         for (int room = 0; room < Main.householdLocations.length; room++) {

@@ -1,1 +1,2 @@
-2020-12-04 5:35:43 -- ERROR [SHS]: You either did not enter an hour, minute nor date for simulation time
+2020-12-05 23:37:35 -- ERROR [SHS]: House layout file is null
+2020-12-05 23:37:43 -- ERROR [SHS]: House layout file is null
